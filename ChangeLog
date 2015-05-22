@@ -1,4 +1,7 @@
 2015-05-22 Giuseppe Salamanna <salaman AT cern.ch>
+	* Update README instructions to point to new common area
+	
+2015-05-22 Giuseppe Salamanna <salaman AT cern.ch>
 	* First import into common area atlasphys-hsg8/browser/Physics/Higgs/HSG8/AnalysisCode/multileptons/xAOD
 	* Add trigger decision tool config, trigger decisions and associated PS
 	

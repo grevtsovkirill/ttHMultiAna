@@ -1,0 +1,11 @@
+>> setupATLAS
+>> rcSetup Top,2.3.11
+>> rc find_packages
+>> rc compile
+>> svn co svn+ssh://svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/multileptons/xAOD/ttHMultiAna/trunk ttHMultilepton
+>> rc find_packages
+>> rc compile
+>> mkdir Run
+>> cd Run
+>> echo [INPUT XADO/DXAOD ROOT FILE PATH] > infile_htop.txt
+>> top-xaod ../ttHMultilepton/share/ssdil-cuts-mc15.txt  infile_htop.txt
