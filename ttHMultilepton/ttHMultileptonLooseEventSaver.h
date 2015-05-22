@@ -1,0 +1,135 @@
+#ifndef TTHMULTILEPTONLOOSEEVENTSAVER_H_
+#define TTHMULTILEPTONLOOSEEVENTSAVER_H_
+
+#include "TopAnalysis/EventSaverFlatNtuple.h"
+#include "ttHMultilepton/TreeAssist.h"
+#include "TrigConfxAOD/xAODConfigTool.h"
+#include "TrigDecisionTool/TrigDecisionTool.h"
+
+using namespace Trig;
+using namespace TrigConf;
+using namespace xAOD;
+
+class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
+ public:
+  //Default - so root can load based on a name
+  ttHMultileptonLooseEventSaver();
+  
+  //Default - so we can clean up
+  ~ttHMultileptonLooseEventSaver();
+  
+  //Run once at the start of the job
+  virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches);
+  
+  //Run for every event (in every systematic) that needs saving
+  void saveEvent(const top::Event& event);
+
+  void finalize();
+  
+ private:
+  ///The file where everything goes
+  TFile* m_outputFile;
+
+  xAODConfigTool configTool;
+  TrigDecisionTool trigDecTool;
+
+  ///A simple way to write out branches, without having to worry about the type.
+  std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
+
+  ///names of the passed / failed branches.
+  std::vector<std::string> m_extraBranches;
+
+  ///Decisions on if the event passed / failed a particular selection.
+  std::vector<int> m_selectionDecisions;
+
+  //some event weights
+  float m_mcWeight;
+  float m_pileup_weight;
+
+  //event info
+  unsigned int m_eventNumber;
+  unsigned int m_runNumber;
+  unsigned int m_mcChannelNumber;
+  float m_mu;
+
+  //trigger info
+  //single e
+  unsigned int HLT_e26_tight_iloose;
+  unsigned int HLT_e26_lhtight_iloose;
+  unsigned int HLT_e60_medium;
+  unsigned int HLT_e60_lhmedium;
+  unsigned int HLT_e24_tight_iloose;
+  unsigned int HLT_e24_lhtight_iloose;
+
+  unsigned int HLT_e24_tight_iloose_L1EM20VH;
+  unsigned int HLT_e140_loose;
+  unsigned int HLT_e24_lhtight_iloose_L1EM20VH;
+  unsigned int HLT_e140_lhloose;
+
+  //single mu
+  unsigned int HLT_mu26_imedium;
+  unsigned int HLT_mu50;
+  unsigned int HLT_mu24_imedium;
+
+  //dilepton
+  //e-e
+  unsigned int HLT_2e12_loose_L12EM10VH;
+  unsigned int HLT_2e12_lhloose_L12EM10VH;
+
+  //mu-mu
+  unsigned int HLT_2mu14;
+  unsigned int HLT_2mu10;
+
+  //e-mu
+  unsigned int HLT_e17_loose_mu14;
+  unsigned int HLT_e17_lhloose_mu14;
+  unsigned int HLT_e7_medium_mu24;
+  unsigned int HLT_e7_lhmedium_mu24;
+
+  //Associated pre-scales
+  float HLT_e26_tight_iloose_PS;
+  float HLT_e26_lhtight_iloose_PS;
+  float HLT_e60_medium_PS;
+  float HLT_e60_lhmedium_PS;
+  float HLT_e24_tight_iloose_PS;
+  float HLT_e24_lhtight_iloose_PS;
+  float HLT_e24_tight_iloose_L1EM20VH_PS;
+  float HLT_e140_loose_PS;
+  float HLT_e24_lhtight_iloose_L1EM20VH_PS;
+  float HLT_e140_lhloose_PS;
+  float HLT_mu26_imedium_PS;
+  float HLT_mu50_PS;
+  float HLT_mu24_imedium_PS;
+  float HLT_2e12_loose_L12EM10VH_PS;
+  float HLT_2e12_lhloose_L12EM10VH_PS;
+  float HLT_2mu14_PS;
+  float HLT_2mu10_PS;
+  float HLT_e17_loose_mu14_PS;
+  float HLT_e17_lhloose_mu14_PS;
+  float HLT_e7_medium_mu24_PS;
+  float HLT_e7_lhmedium_mu24_PS;
+  //end trigger
+  
+  //met
+  float m_met_met;
+  float m_met_phi;
+  
+  //MC
+  std::vector<float> m_mc_pt;
+  std::vector<float> m_mc_eta;
+  std::vector<float> m_mc_phi;
+  std::vector<float> m_mc_e;
+  std::vector<int> m_mc_pdgId;
+  std::vector<int> m_mc_status;
+  std::vector<int> m_mc_parentPdgId;
+
+  #ifndef __CINT__ 
+  std::vector<VectorWrapperCollection> vec_electron_wrappers;
+  std::vector<VectorWrapperCollection> vec_muon_wrappers;
+  std::vector<VectorWrapperCollection> vec_jet_wrappers;
+  #endif
+
+  ClassDef(ttHMultileptonLooseEventSaver, 0);
+};
+
+#endif

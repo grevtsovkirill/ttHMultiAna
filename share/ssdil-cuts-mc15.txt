@@ -1,0 +1,111 @@
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
+
+EventInfoName EventInfo
+ElectronCollectionName Electrons
+MuonCollectionName Muons
+JetCollectionName AntiKt4EMTopoJets
+LargeJetCollectionName None
+LargeJetSubstructure None
+TauCollectionName None
+PhotonCollectionName None
+METCollectionName MET_Reference_AntiKt4EMTopo
+
+TruthCollectionName TruthParticles
+TruthJetCollectionName AntiKt4TruthJets
+TopPartonHistory ttbar
+PDFInfo False
+
+ObjectSelectionName ttHMultileptonObjectLoader
+#OutputFormat top::EventSaverFlatNtuple
+OutputFormat ttHMultileptonEventSaver
+OutputEvents SelectedEvents
+OutputFilename output_ttHSSdil.root
+PerfStats No
+
+CalculateSF False
+Systematics Nominal
+
+ElectronID LHMedium
+ElectronIDLoose LHLoose
+LooseMETCollectionName MET_Reference_AntiKt4LCTopo
+FakesControlRegionDoLooseMC True 
+OverlapRemovalLeptonDef Tight 
+ApplyElectronInJetSubtraction False
+
+SELECTION ee
+INITIAL
+GRL data/TopAnalysis/data12_8TeV.periodB_DetStatus-v61-pro16_DQDefects-00-01-00_PHYS_StandardGRL_All_Good.xml
+#HFOR
+#LAR
+#TRIGDEC HLT_e24_medium_iloose HLT_e60_medium1
+#PV #Not required in Run-II
+EL_N 10000 >= 1
+EL_N 10000 >= 2
+#EL_TRIGGER_MATCH
+#EMU_OVERLAP
+JETCLEAN MediumBad
+#MET > 60000
+#JET_N 25000 >= 1
+#JET_N 25000 >= 2
+EL_N 10000 == 2
+MU_N 10000 == 0
+SS
+#MLL > 15000
+#MLLWIN 80000 100000
+#TRUTH_MATCH
+#MV1_N 0.5 >= 1
+EXAMPLEPLOTS
+#PRINT
+SAVE
+
+SELECTION mumu
+INITIAL
+GRL data/TopAnalysis/data12_8TeV.periodB_DetStatus-v61-pro16_DQDefects-00-01-00_PHYS_StandardGRL_All_Good.xml
+#HFOR
+#LAR
+#TRIGDEC HLT_mu50 HLT_mu20_iloose_mu8noL1 
+#PV #Not required in Run-II
+MU_N 10000 >= 1
+MU_N 10000 >= 2
+#EL_TRIGGER_MATCH
+#EMU_OVERLAP
+JETCLEAN MediumBad
+#MET > 60000
+#JET_N 25000 >= 1
+#JET_N 25000 >= 2
+MU_N 10000 == 2
+EL_N 10000 == 0
+SS
+#MLL > 15000
+#MLLWIN 80000 100000
+#TRUTH_MATCH
+#MV1_N 0.5 >= 1
+EXAMPLEPLOTS
+#PRINT
+SAVE
+
+SELECTION emu
+INITIAL
+GRL data/TopAnalysis/data12_8TeV.periodB_DetStatus-v61-pro16_DQDefects-00-01-00_PHYS_StandardGRL_All_Good.xml
+#HFOR
+#LAR
+#TRIGDEC HLT_e24_medium_iloose HLT_e60_medium1 HLT_mu50 HLT_mu20_iloose_mu8noL1 
+#PV #Not required in Run-II
+EL_N_OR_MU_N 10000 >= 1
+EL_N 10000 >= 1
+MU_N 10000 >= 1
+#EL_TRIGGER_MATCH
+#EMU_OVERLAP
+JETCLEAN MediumBad
+#HT > 120000
+#JET_N 25000 >= 1
+#JET_N 25000 >= 2
+EL_N 10000 == 1
+MU_N 10000 == 1
+SS
+#MLL > 15000
+#TRUTH_MATCH
+#MV1_N 0.5 >= 1
+EXAMPLEPLOTS
+#PRINT
+SAVE

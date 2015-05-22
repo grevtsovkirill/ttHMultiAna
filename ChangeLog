@@ -1,0 +1,24 @@
+2015-05-22 Giuseppe Salamanna <salaman AT cern.ch>
+	* First import into common area atlasphys-hsg8/browser/Physics/Higgs/HSG8/AnalysisCode/multileptons/xAOD
+	* Add trigger decision tool config, trigger decisions and associated PS
+	
+2015-05-09 Peter Onyisi <ponyisi AT cern.ch>
+	* Catch exceptions for variables that don't actually exist in input, log failure but
+	  keep going
+	* Make Wrap functionality simpler (-> Wrap2).  Now type of output tree variable is
+	  inferred from return type of lambda functions.
+
+2015-05-06 Kun LIU <kliu@cern.ch>
+	* update for Giuseppe Salamanna
+	* add variables for met, muons and electrons and truth info.
+
+2015-05-06 Peter Onyisi <ponyisi AT cern.ch>
+	* Change electron decoration bool -> short
+
+2015-05-04 Peter Onyisi <ponyisi AT cern.ch>
+	* revert overlap removal change for loose selection (where no OR should be applied)
+	* Implement electron LH information storage through aux decoration
+
+2015-05-04 Kun LIU <kliu@cern.ch>
+	* first verson for rel20 MC15, updated from 'ttHMultiAna-00-00-01-branch'
+	* using recommended overlap removal 'top::OverlapRemovalASG()'

@@ -1,0 +1,34 @@
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
+
+EventInfoName EventInfo
+TruthCollectionName None
+ElectronCollectionName ElectronCollection
+MuonCollectionName Muons
+JetCollectionName AntiKt4LCTopoJets
+LargeJetCollectionName None
+LargeJetSubstructure None
+TauCollectionName None
+PhotonCollectionName None
+#METCollectionName MET_RefFinalFix
+METCollectionName MET_RefFinal
+
+#ObjectSelectionName top::ObjectLoaderStandardCuts
+ObjectSelectionName ttHMultileptonLooseObjectLoader
+#OutputFormat top::EventSaverFlatNtuple
+OutputFormat ttHMultileptonLooseEventSaver
+OutputFilename output.root
+PerfStats No
+
+CalculateSF False
+Systematics Nominal
+
+ElectronID LHLoose
+ElectronIDLoose LHLoose
+FakesControlRegionDoLooseMC False
+OverlapRemovalLeptonDef Tight
+
+# Don't be clever
+SELECTION loose
+INITIAL
+TTHMULTILEP
+SAVE
