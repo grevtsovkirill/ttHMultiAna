@@ -8,4 +8,4 @@
 >> mkdir Run
 >> cd Run
 >> echo [INPUT XADO/DXAOD ROOT FILE PATH] > infile_htop.txt
->> top-xaod ../ttHMultilepton/share/ssdil-cuts-mc15.txt  infile_htop.txt
+>> top-xaod ../ttHMultilepton/share/generic_config-mc15.txt  infile_htop.txt
