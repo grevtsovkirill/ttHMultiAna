@@ -17,7 +17,8 @@ class VectorWrapper {
     virtual void clear() = 0;
   };
   template<typename U, typename V> struct Model : Concept {
-    typedef U (*locfcntype)(const V &); 
+    //    typedef U (*locfcntype)(const V &); 
+    typedef std::function<U(const V&)> locfcntype;
     explicit Model(locfcntype fcn, top::TreeManager& tree, const char* brname): vector(new std::vector<U>()), fcn(fcn), index(0), instance(0), brname(brname), errored(false) { tree.makeOutputVariable(*vector, brname); }
     virtual void set_current_entry(int index, const void* instance) { this->index=index; this->instance=static_cast<const V*>(instance);}
     virtual void push_to_stack() { 
@@ -45,7 +46,8 @@ class VectorWrapper {
   };
   boost::scoped_ptr<Concept> object;
 public:
-  template<typename U, typename V> explicit VectorWrapper(U (*fcn)(const V &), top::TreeManager& tree, const char* brname) : object(new Model<U,V>(fcn, tree, brname)) {}
+  //  template<typename U, typename V> explicit VectorWrapper(U (*fcn)(const V &), top::TreeManager& tree, const char* brname) : object(new Model<U,V>(fcn, tree, brname)) {}
+  template<typename U, typename V> explicit VectorWrapper(std::function<U(const V &)> fcn, top::TreeManager& tree, const char* brname) : object(new Model<U,V>(fcn, tree, brname)) {}
   void push_to_stack() { object->push_to_stack(); }
   void set_current_entry(int index, const void* instance) { object->set_current_entry(index, instance); }
   void* get_vector_ptr() { return object->get_vector_ptr(); }

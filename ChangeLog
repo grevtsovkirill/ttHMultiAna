@@ -1,3 +1,8 @@
+2015-05-28 Giuseppe Salamanna <salaman AT cern.ch>
+	* Wrap2 et al. now use std::function.  This means you can use capturing lambdas
+	to define variables (Peter).
+	* Added some  more muon variables, among which quality flags
+	
 2015-05-22 Giuseppe Salamanna <salaman AT cern.ch>
 	* Update README instructions to point to new common area
 	

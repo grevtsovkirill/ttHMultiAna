@@ -1,4 +1,5 @@
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
+
 #include "TopEvent/Event.h"
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
@@ -57,7 +58,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   HLT_e7_medium_mu24_PS(-99.),
   HLT_e7_lhmedium_mu24_PS(-99.),
   configTool("xAODConfigTool"),
-  trigDecTool("TrigDecTool") {
+  trigDecTool("TrigDecTool"),
+  muonSelection("MuonSelection")
+{
 }
 
 ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
@@ -102,11 +105,13 @@ template<typename ClassType, typename ReturnType, typename... Args>
 struct function_traits<ReturnType(ClassType::*)(Args...) const>
 {
   typedef ReturnType (*pointer)(Args...);
+  typedef std::function<ReturnType(Args...)> function; 
 };
 
 template<typename VEC, typename FCN,  typename TM> void Wrap2(VEC& vec, FCN lambda, TM& systematicTree, const char* branch) {
   // cast away the crud from around the lambda
-  vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::pointer>(lambda), systematicTree, branch));
+  //vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::pointer>(lambda), systematicTree, branch));
+  vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::function>(lambda), systematicTree, branch)); 
 }
 
 void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) {
@@ -135,13 +140,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_met_phi, "met_phi");
     
     //truth information
-    systematicTree->makeOutputVariable(m_mc_pt, "mc_pt");
-    systematicTree->makeOutputVariable(m_mc_eta, "mc_eta");
-    systematicTree->makeOutputVariable(m_mc_phi, "mc_phi");
-    systematicTree->makeOutputVariable(m_mc_e, "mc_e");
-    systematicTree->makeOutputVariable(m_mc_pdgId, "mc_pdgId");
-    systematicTree->makeOutputVariable(m_mc_parentPdgId, "mc_parentPdgId");
-    systematicTree->makeOutputVariable(m_mc_status, "mc_status");
+    systematicTree->makeOutputVariable(m_mc_pt, "m_truth_pt");
+    systematicTree->makeOutputVariable(m_mc_eta, "m_truth_eta");
+    systematicTree->makeOutputVariable(m_mc_phi, "m_truth_phi");
+    systematicTree->makeOutputVariable(m_mc_e, "m_truth_e");
+    systematicTree->makeOutputVariable(m_mc_pdgId, "m_truth_pdgId");
+    systematicTree->makeOutputVariable(m_mc_parentPdgId, "m_truth_parentPdgId");
+    systematicTree->makeOutputVariable(m_mc_status, "m_truth_status");
+    systematicTree->makeOutputVariable(m_mc_barcode, "m_truth_barcode");
     
     //TRIGGER PART
     // Trigger decision tool. 
@@ -199,70 +205,74 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
 
     std::vector<VectorWrapper*> elevec;    
-    //    elevec.push_back(Wrap(E2F, [](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"));
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (int) (11*ele.charge()); }, *systematicTree, "electron_ID");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float sin_Th = sin(2*atan(exp(-ele.eta()))); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta");
+    //Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (11*ele.charge()); }, *systematicTree, "electron_ID");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float sin_Th = sin(2*atan(exp(-ele.eta()))); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta");
 
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "electron_Etcone20");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "electron_Etcone30");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "electron_Etcone40");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "electron_ptcone20");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "electron_ptcone30");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "electron_ptcone40");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "electron_topoetcone20");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "electron_topoetcone30");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone40); return iso; }, *systematicTree, "electron_topoetcone40");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "electron_Etcone20");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "electron_Etcone30");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "electron_Etcone40");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "electron_ptcone20");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "electron_ptcone30");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "electron_ptcone40");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "electron_topoetcone20");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "electron_topoetcone30");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone40); return iso; }, *systematicTree, "electron_topoetcone40");
     //miniiso
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "electron_ptvarcone20");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "electron_ptvarcone30");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "electron_ptvarcone40");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
-    Wrap2(elevec, [](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "electron_ptvarcone20");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "electron_ptvarcone30");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "electron_ptvarcone40");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
     
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
     // Muons
+    top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
+    top::check( muonSelection.setProperty( "MaxEta", 2.5 ), "muonSelection tool could not set max eta");
+    top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
+   
     std::vector<VectorWrapper*> muvec;
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (float) mu.pt(); }, *systematicTree, "muon_pt");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (float) mu.e(); }, *systematicTree, "muon_E");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return mu.auxdata<float>("InnerDetectorPt"); }, *systematicTree, "muon_PtID");
-    // is this actually ME ?
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (int) mu.author(); }, *systematicTree, "muon_author");
-
-    //CP::MuonSelectionTool m_muonSelection("MuonSelection"); m_muonSelection.setProperty( "MaxEta", 2.5 );  m_muonSelection.setProperty( "MuQuality", 1);
-    //Wrap2(muvec, [](const xAOD::Muon& mu) { return (int) m_muonSelection.getQuality(mu); }, *systematicTree, "muon_quality");
-
-    Wrap2(muvec, [](const xAOD::Muon& mu) { return (int) (13*mu.charge()); }, *systematicTree, "muon_ID");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float sin_Th = sin(2*atan(exp(-mu.eta()))); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
-    //Wrap2(muvec, [](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
-    //Wrap2(muvec, [](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "muon_Etcone20");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "muon_Etcone30");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "muon_Etcone40");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "muon_ptcone20");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "muon_ptcone30");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "muon_ptcone40");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.pt(); }, *systematicTree, "muon_pt");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.e(); }, *systematicTree, "muon_E");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { bool isqual = false; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose)  isqual=true; return (bool) isqual;},*systematicTree, "muon_isLoose");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { bool isqual = false; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium) isqual=true; return (bool) isqual;},*systematicTree, "muon_isMedium");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { bool isqual = false; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight)  isqual=true; return (bool) isqual;},*systematicTree, "muon_isTight");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdata<float>("InnerDetectorPt"); }, *systematicTree, "muon_PtID");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.author(); }, *systematicTree, "muon_author");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (13*mu.charge()); }, *systematicTree, "muon_ID");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float sin_Th = sin(2*atan(exp(-mu.eta()))); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float qOverPSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { uint8_t numberOfPrecisionLayers = mu.uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers); return (uint8_t) (numberOfPrecisionLayers); }, *systematicTree, "muon_numPrecLayers");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "muon_Etcone20");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "muon_Etcone30");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "muon_Etcone40");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "muon_ptcone20");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "muon_ptcone30");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "muon_ptcone40");
     // topoiso
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "muon_topoetcone20");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "muon_topoetcone30");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); return iso; }, *systematicTree, "muon_topoetcone40");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "muon_topoetcone20");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "muon_topoetcone30");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); return iso; }, *systematicTree, "muon_topoetcone40");
     // miniiso
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "muon_ptvarcone20");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
-    Wrap2(muvec, [](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "muon_ptvarcone20");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
 
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
 
@@ -298,6 +308,39 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_pileup_weight = 0.;
   if (top::ScaleFactorRetriever::hasPileupSF(event))
     m_pileup_weight = top::ScaleFactorRetriever::pileupSF(event);
+
+  //met
+  m_met_met = event.m_met->met();
+  m_met_phi = event.m_met->phi();
+  
+  //MC particle
+  /**
+  if (event.m_truth != nullptr) {
+    unsigned int i = 0;
+    unsigned int truthSize = event.m_truth->size();
+    m_mc_pt.resize(truthSize);
+    m_mc_eta.resize(truthSize);
+    m_mc_phi.resize(truthSize);
+    m_mc_e.resize(truthSize);
+    m_mc_pdgId.resize(truthSize);
+    m_mc_parentPdgId.resize(truthSize);
+    m_mc_status.resize(truthSize);
+    m_mc_barcode.resize(truthSize);
+    for (const xAOD::TruthParticle*  mcPtr : *event.m_truth) {
+      if(mcPtr->pt()<5000.) continue;
+      m_mc_pt[i] = mcPtr->pt();
+      m_mc_eta[i] = mcPtr->eta();
+      m_mc_phi[i] = mcPtr->phi();
+      m_mc_e[i] = mcPtr->e();
+      m_mc_pdgId[i] = mcPtr->pdgId();
+      m_mc_status[i] = mcPtr->status();
+      m_mc_barcode[i] = mcPtr->barcode(); 
+      if(mcPtr->parent()) m_mc_parentPdgId[i] = mcPtr->parent()->pdgId();
+      else m_mc_parentPdgId[i] = 99999.;
+      ++i;
+      }
+      }
+  */
 
   //Trigger INFO
   HLT_e26_tight_iloose = 0;

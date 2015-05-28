@@ -5,10 +5,13 @@
 #include "ttHMultilepton/TreeAssist.h"
 #include "TrigConfxAOD/xAODConfigTool.h"
 #include "TrigDecisionTool/TrigDecisionTool.h"
+#include "MuonSelectorTools/MuonSelectionTool.h"
+
 
 using namespace Trig;
 using namespace TrigConf;
 using namespace xAOD;
+using namespace CP;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  public:
@@ -32,6 +35,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   xAODConfigTool configTool;
   TrigDecisionTool trigDecTool;
+
+  MuonSelectionTool muonSelection;
 
   ///A simple way to write out branches, without having to worry about the type.
   std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
@@ -121,6 +126,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_mc_e;
   std::vector<int> m_mc_pdgId;
   std::vector<int> m_mc_status;
+  std::vector<int> m_mc_barcode;
   std::vector<int> m_mc_parentPdgId;
 
   #ifndef __CINT__ 
