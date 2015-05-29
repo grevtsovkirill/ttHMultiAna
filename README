@@ -1,5 +1,12 @@
 >> setupATLAS
->> rcSetup Top,2.3.11
+>> rcSetup Top,2.3.11 
+
+**************
+Note -- if you already have ttHMultilepton checked out locally AND wish to set up both RC and the grid-related accoutrements, you can do: 
+>> cp ttHMultilepton/setupRCandGrid.sh .
+>> source setupRCandGrid.sh
+**************
+
 >> rc find_packages
 >> rc compile
 >> svn co svn+ssh://svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/multileptons/xAOD/ttHMultiAna/trunk ttHMultilepton

@@ -1,3 +1,7 @@
+2015-05-29 Giuseppe Salamanna <salaman AT cern.ch>
+	* Adding a setup script for grid: setupRCandGrid.sh
+	* Updated README instructions
+	
 2015-05-28 Giuseppe Salamanna <salaman AT cern.ch>
 	* Moved to using theta() from TrackParticle class to 
 	compute lepton z0sinTh
