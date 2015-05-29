@@ -133,6 +133,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<VectorWrapperCollection> vec_electron_wrappers;
   std::vector<VectorWrapperCollection> vec_muon_wrappers;
   std::vector<VectorWrapperCollection> vec_jet_wrappers;
+  std::vector<VectorWrapperCollection> vec_tau_wrappers;
   #endif
 
   ClassDef(ttHMultileptonLooseEventSaver, 0);

@@ -15,6 +15,7 @@
 #include "TopObjectSelectionTools/IsolationTools.h"
 #include "TopObjectSelectionTools/MuonDC14.h"
 #include "TopObjectSelectionTools/JetDC14.h"
+#include "TopObjectSelectionTools/TauDC14.h"
 #include "TopObjectSelectionTools/OverlapRemovalASG.h"
 
 //Run once at the start of the program to setup our object selection (and overlap removal)
@@ -46,6 +47,7 @@ top::TopObjectSelection* ttHMultileptonObjectLoader::init(std::shared_ptr<top::T
 
   objectSelection->muonSelection(new top::MuonDC14(10000., 2.5, nullptr)); //new top::ApproxPTVarCone(0.05, 0.)));
   objectSelection->jetSelection(new top::JetDC14(25000., 2.5, 0.5));
+  objectSelection->tauSelection(new top::TauDC14(10000., false, TauAnalysisTools::JETID::JETIDBDTMEDIUM, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::ELEID::ELEIDBDTMEDIUM));
   
   //objectSelection->overlapRemovalPreSelection(nullptr);
   objectSelection->overlapRemovalPostSelection(new top::OverlapRemovalASG());

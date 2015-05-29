@@ -13,7 +13,7 @@
 void DummyOverlapRemoval::overlapremoval(const xAOD::PhotonContainer* /* ph */,
 					 const xAOD::ElectronContainer* el,
 					 const xAOD::MuonContainer* mu,
-					 const xAOD::TauJetContainer* /* tau */,
+					 const xAOD::TauJetContainer* tau,
 					 const xAOD::JetContainer* jet,
 					 const xAOD::JetContainer* ljet,
 					 std::vector<unsigned int>& goodPhotons,
@@ -28,9 +28,9 @@ void DummyOverlapRemoval::overlapremoval(const xAOD::PhotonContainer* /* ph */,
   
     // Work internally with std::list
     // What passed the pre-overlap removal selection?
-    std::vector<unsigned int> IN_el,IN_mu,IN_jet,IN_ljet;
-    std::list<unsigned int> l_el,l_mu,l_jet,l_ljet;
-    unsigned int index_el(0),index_mu(0),index_jet(0),index_ljet(0);
+    std::vector<unsigned int> IN_el,IN_mu,IN_jet,IN_ljet,IN_tau;
+    std::list<unsigned int> l_el,l_mu,l_jet,l_ljet,l_tau;
+    unsigned int index_el(0),index_mu(0),index_jet(0),index_ljet(0),index_tau(0);
 
     if (el) {
       for( auto x : *el ){
@@ -72,16 +72,28 @@ void DummyOverlapRemoval::overlapremoval(const xAOD::PhotonContainer* /* ph */,
       }
     }
 
+    if (tau) {
+      for( auto x : *tau ){
+	if( x->auxdataConst< char >(passTopCuts) == 1 ){
+	  IN_tau.push_back(index_tau);
+	  l_tau.push_back(index_tau);
+	}
+	++index_tau;
+      }
+    }
+    
     // Save what's left of the std::lists into the OUT vectors;
     goodElectrons.clear();
     goodMuons.clear();
     goodJets.clear();
     goodLargeRJets.clear();
+    goodTaus.clear();
 
     for( auto i : l_el  ){goodElectrons.push_back(i); }
     for( auto i : l_mu  ){goodMuons.push_back(i); }
     for( auto i : l_jet ){goodJets.push_back(i);}
-    for( auto i : l_ljet ){goodLargeRJets.push_back(i);}
+    for( auto i : l_ljet){goodLargeRJets.push_back(i);}
+    for( auto i : l_tau ){goodTaus.push_back(i);}
   }
 
   void DummyOverlapRemoval::print(std::ostream& os) const {
