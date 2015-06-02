@@ -6,7 +6,7 @@
 #include "TrigConfxAOD/xAODConfigTool.h"
 #include "TrigDecisionTool/TrigDecisionTool.h"
 #include "MuonSelectorTools/MuonSelectionTool.h"
-
+#include "xAODEgamma/EgammaxAODHelpers.h"
 
 using namespace Trig;
 using namespace TrigConf;
@@ -35,7 +35,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   xAODConfigTool configTool;
   TrigDecisionTool trigDecTool;
-
   MuonSelectionTool muonSelection;
 
   ///A simple way to write out branches, without having to worry about the type.

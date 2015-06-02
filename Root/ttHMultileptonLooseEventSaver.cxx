@@ -212,6 +212,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (11*ele.charge()); }, *systematicTree, "electron_ID");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0PV");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta");
     //Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); return (float) (z0); }, *systematicTree, "electron_z0");
@@ -232,12 +233,17 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
-    
+ //truth origin HERE
+    //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
+    //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::EgammaHelpers::getParticleTruthOrigin(&ele); }, *systematicTree, "electron_truthOrig");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::EgammaHelpers::getParticleTruthType(&ele); }, *systematicTree, "electron_truthType");
+
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
     // Muons
     top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
-    top::check( muonSelection.setProperty( "MaxEta", 2.5 ), "muonSelection tool could not set max eta");
+    top::check( muonSelection.setProperty( "MaxEta", 2.7 ), "muonSelection tool could not set max eta");
     top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
    
     std::vector<VectorWrapper*> muvec;
@@ -245,14 +251,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.e(); }, *systematicTree, "muon_E");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { bool isqual = false; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose)  isqual=true; return (bool) isqual;},*systematicTree, "muon_isLoose");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { bool isqual = false; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium) isqual=true; return (bool) isqual;},*systematicTree, "muon_isMedium");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { bool isqual = false; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight)  isqual=true; return (bool) isqual;},*systematicTree, "muon_isTight");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { unsigned short int isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(mu))  isqual=1; return (unsigned short int) isqual;},*systematicTree, "muon_isLoose");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { unsigned short int isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu)) isqual=1; return (unsigned short int) isqual;},*systematicTree, "muon_isMedium");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { unsigned short int isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))  isqual=1; return (unsigned short int) isqual;},*systematicTree, "muon_isTight");    
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdata<float>("InnerDetectorPt"); }, *systematicTree, "muon_PtID");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.author(); }, *systematicTree, "muon_author");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.muonType(); }, *systematicTree, "muon_type");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (13*mu.charge()); }, *systematicTree, "muon_ID");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  return (float) (d0); }, *systematicTree, "muon_d0PV");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta");
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); return (float) (z0); }, *systematicTree, "muon_z0");
@@ -276,7 +284,53 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
 
+    //truth origin HERE
+    //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon. 
+    //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
+    //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	const xAOD::TruthParticle* matched_truth_muon=0;
+	int mu_type = -99;
+	if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+	  ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+	  if(link.isValid()){
+	    matched_truth_muon = *link;
+	    mu_type = matched_truth_muon->auxdata<int>("truthType");
+	  }
+	} return (int) mu_type; }, *systematicTree, "muon_truthType");
+    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	const xAOD::TruthParticle* matched_truth_muon=0;
+	int mu_orig = -99;
+	if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+	  ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+	  if(link.isValid()){
+	    matched_truth_muon = *link;
+	    mu_orig = matched_truth_muon->auxdata<int>("truthOrigin");
+	  }
+	} return (int) mu_orig; }, *systematicTree, "muon_truthOrigin");
+    
+    //There is a second way to get truth type for all muons, from track particle. See diffs from https://twiki.cern.ch/twiki/bin/view/Atlas/XAODMuon#How_to_retrieve_truth_type_and_o
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	const xAOD::TrackParticle* idtp=0;
+	int mu_type = -99;
+	ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+	if(idtpLink.isValid()){
+	  idtp = *idtpLink;
+	  mu_type = idtp->auxdata<int>("truthType");
+	} return (int) mu_type; }, *systematicTree, "muon_trackType");
+    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	const xAOD::TrackParticle* idtp=0;
+	int mu_orig = -99;
+	ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+	if(idtpLink.isValid()){
+	  idtp = *idtpLink;
+	  mu_orig = idtp->auxdata<int>("truthOrigin");
+	} return (int) mu_orig; }, *systematicTree, "muon_trackOrigin");
+    
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
+  
 
     // Jets
     std::vector<VectorWrapper*> jetvec;
