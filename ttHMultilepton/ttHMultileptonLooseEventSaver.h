@@ -56,6 +56,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   unsigned int m_mcChannelNumber;
   float m_mu;
 
+  //met
+  float m_met_met;
+  float m_met_phi;
+
   //trigger info
   //single e
   unsigned int HLT_e26_tight_iloose;
@@ -113,10 +117,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float HLT_e7_medium_mu24_PS;
   float HLT_e7_lhmedium_mu24_PS;
   //end trigger
-  
-  //met
-  float m_met_met;
-  float m_met_phi;
   
   //MC
   std::vector<float> m_mc_pt;

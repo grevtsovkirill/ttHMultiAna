@@ -1,3 +1,10 @@
+2015-06-03 Rustem Ospanov <rustem at cern.ch>
+	* Fill truth branches only for selected truth particles
+	* Change muon ID and n prec hits variables to short
+	* Fix compilation warnings from ordering of varibles in ctor
+	* Change PtME to PtMS
+	* Save loose muons with eta up to 2.7
+	
 2015-06-02 Giuseppe Salamanna <salaman AT cern.ch>
 	* Added truth origin and type for leptons (from MCTruthClassifier)
 	* Changed muon quality type to unsigned short int from bool

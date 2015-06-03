@@ -9,6 +9,12 @@
 #include "TFile.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
+  m_outputFile(0),
+  configTool("xAODConfigTool"),
+  trigDecTool("TrigDecTool"),
+  muonSelection("MuonSelection"),
+  m_mcWeight(0.),
+  m_pileup_weight(0.),
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
@@ -56,10 +62,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   HLT_e17_loose_mu14_PS(-99.),
   HLT_e17_lhloose_mu14_PS(-99.),
   HLT_e7_medium_mu24_PS(-99.),
-  HLT_e7_lhmedium_mu24_PS(-99.),
-  configTool("xAODConfigTool"),
-  trigDecTool("TrigDecTool"),
-  muonSelection("MuonSelection")
+  HLT_e7_lhmedium_mu24_PS(-99.)
 {
 }
 
@@ -140,14 +143,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_met_phi, "met_phi");
     
     //truth information
-    systematicTree->makeOutputVariable(m_mc_pt, "m_truth_pt");
-    systematicTree->makeOutputVariable(m_mc_eta, "m_truth_eta");
-    systematicTree->makeOutputVariable(m_mc_phi, "m_truth_phi");
-    systematicTree->makeOutputVariable(m_mc_e, "m_truth_e");
-    systematicTree->makeOutputVariable(m_mc_pdgId, "m_truth_pdgId");
+    systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
+    systematicTree->makeOutputVariable(m_mc_eta,         "m_truth_eta");
+    systematicTree->makeOutputVariable(m_mc_phi,         "m_truth_phi");
+    systematicTree->makeOutputVariable(m_mc_e,           "m_truth_e");
+    systematicTree->makeOutputVariable(m_mc_pdgId,       "m_truth_pdgId");
     systematicTree->makeOutputVariable(m_mc_parentPdgId, "m_truth_parentPdgId");
-    systematicTree->makeOutputVariable(m_mc_status, "m_truth_status");
-    systematicTree->makeOutputVariable(m_mc_barcode, "m_truth_barcode");
+    systematicTree->makeOutputVariable(m_mc_status,      "m_truth_status");
+    systematicTree->makeOutputVariable(m_mc_barcode,     "m_truth_barcode");
     
     //TRIGGER PART
     // Trigger decision tool. 
@@ -251,11 +254,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.e(); }, *systematicTree, "muon_E");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { unsigned short int isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(mu))  isqual=1; return (unsigned short int) isqual;},*systematicTree, "muon_isLoose");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { unsigned short int isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu)) isqual=1; return (unsigned short int) isqual;},*systematicTree, "muon_isMedium");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { unsigned short int isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))  isqual=1; return (unsigned short int) isqual;},*systematicTree, "muon_isTight");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdata<float>("InnerDetectorPt"); }, *systematicTree, "muon_PtID");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { short isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(mu))  isqual=1; return (short) isqual;},*systematicTree, "muon_isLoose");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { short isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu)) isqual=1; return (short) isqual;},*systematicTree, "muon_isMedium");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { short isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))  isqual=1; return (short) isqual;},*systematicTree, "muon_isTight");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("InnerDetectorPt"); },    *systematicTree, "muon_PtID");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtMS");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.author(); }, *systematicTree, "muon_author");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.muonType(); }, *systematicTree, "muon_type");
@@ -268,7 +271,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float qOverPSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { uint8_t numberOfPrecisionLayers = mu.uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers); return (uint8_t) (numberOfPrecisionLayers); }, *systematicTree, "muon_numPrecLayers");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (short) mu.uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers); }, *systematicTree, "muon_numPrecLayers");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "muon_Etcone20");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "muon_Etcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "muon_Etcone40");
@@ -392,28 +395,28 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   
   //MC particle
   if (event.m_truth != nullptr) {
-    unsigned int i = 0;
-    unsigned int truthSize = event.m_truth->size();
-    m_mc_pt.resize(truthSize);
-    m_mc_eta.resize(truthSize);
-    m_mc_phi.resize(truthSize);
-    m_mc_e.resize(truthSize);
-    m_mc_pdgId.resize(truthSize);
-    m_mc_parentPdgId.resize(truthSize);
-    m_mc_status.resize(truthSize);
-    m_mc_barcode.resize(truthSize);
+    m_mc_pt         .clear();
+    m_mc_eta        .clear();
+    m_mc_phi        .clear();
+    m_mc_e          .clear();
+    m_mc_pdgId      .clear();
+    m_mc_parentPdgId.clear();
+    m_mc_status     .clear();
+    m_mc_barcode    .clear();
+
     for (const xAOD::TruthParticle*  mcPtr : *event.m_truth) {
       if(mcPtr->pt()<5000.) continue;
-      m_mc_pt[i] = mcPtr->pt();
-      m_mc_eta[i] = mcPtr->eta();
-      m_mc_phi[i] = mcPtr->phi();
-      m_mc_e[i] = mcPtr->e();
-      m_mc_pdgId[i] = mcPtr->pdgId();
-      m_mc_status[i] = mcPtr->status();
-      m_mc_barcode[i] = mcPtr->barcode(); 
-      if(mcPtr->parent()) m_mc_parentPdgId[i] = mcPtr->parent()->pdgId();
-      else m_mc_parentPdgId[i] = 99999.;
-      ++i;
+
+      m_mc_pt     .push_back(mcPtr->pt());
+      m_mc_eta    .push_back(mcPtr->eta());
+      m_mc_phi    .push_back(mcPtr->phi());
+      m_mc_e      .push_back(mcPtr->e());
+      m_mc_pdgId  .push_back(mcPtr->pdgId());
+      m_mc_status .push_back(mcPtr->status());
+      m_mc_barcode.push_back(mcPtr->barcode()); 
+
+      if(mcPtr->parent()) m_mc_parentPdgId.push_back(mcPtr->parent()->pdgId());
+      else                m_mc_parentPdgId.push_back(99999.);
     }
   }
   
