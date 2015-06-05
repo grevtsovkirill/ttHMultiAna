@@ -1,3 +1,6 @@
+2015-06-05 Giuseppe Salamanna <salaman AT cern.ch>
+	* Added electron cluster eta and run/evt/mc channel nrs
+	
 2015-06-03 Rustem Ospanov <rustem at cern.ch>
 	* Fill truth branches only for selected truth particles
 	* Change muon ID and n prec hits variables to short

@@ -211,6 +211,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->eta(); }, *systematicTree, "electron_ClEta");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
@@ -388,6 +389,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_pileup_weight = 0.;
   if (top::ScaleFactorRetriever::hasPileupSF(event))
     m_pileup_weight = top::ScaleFactorRetriever::pileupSF(event);
+
+  //event info
+  m_eventNumber = event.m_info->eventNumber();
+  m_runNumber = event.m_info->runNumber();
+  m_mcChannelNumber = 0;
+  if (top::isSimulation(event))
+    m_mcChannelNumber = event.m_info->mcChannelNumber();
+  m_mu = event.m_info->averageInteractionsPerCrossing();
 
   //met
   m_met_met = event.m_met->met();
