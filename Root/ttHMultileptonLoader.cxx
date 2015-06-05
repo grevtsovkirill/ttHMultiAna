@@ -8,7 +8,7 @@
  * So if it comes across the word "EVEN" it'll make and return a new EvenNumberSelector object (which
  * you just wrote above).
  */
-top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& /*name*/, const std::string& line, TFile* /*outputFile*/, EL::Worker* /*wk*/) {
+top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& /*name*/, const std::string& line, TFile* /*outputFile*/, std::shared_ptr<top::TopConfig> /*config*/, EL::Worker* /*wk*/) {
   if (line.find("MLLSFWIN") == 0){
     MLLSFWinSelector *mllsf = new MLLSFWinSelector();
     return mllsf;

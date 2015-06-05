@@ -10,7 +10,7 @@
    class ttHMultileptonLoader : public top::ToolLoaderBase {
    public:
        //This is a factory for making tools that exist in your package.
-     top::EventSelectorBase* initTool(const std::string& name, const std::string& line, TFile* outputFile, EL::Worker* wk = nullptr);
+     top::EventSelectorBase* initTool(const std::string& name, const std::string& line, TFile* outputFile, std::shared_ptr<top::TopConfig> config, EL::Worker* wk = nullptr);
    
        //Magic root stuff
        ClassDef(ttHMultileptonLoader, 0)

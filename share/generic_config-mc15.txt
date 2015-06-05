@@ -36,6 +36,8 @@ TauJetID JetBDTSigMedium
 TauEVetoID EleBDTMedium
 TauJetIDBkg None
 
+TruthBlockInfo True
+
 # Don't be clever
 SELECTION loose
 INITIAL
