@@ -1,5 +1,6 @@
 2015-06-05 David Hohn <david.hohn@cern.ch>
 	* update to Top,2.3.13, needed for a newer version of TauTruthMatchingTool
+	* implement TauTruthMatchingTool, fix type of some tau variables
 	
 2015-06-05 Giuseppe Salamanna <salaman AT cern.ch>
 	* Added electron cluster eta and run/evt/mc channel nrs

@@ -13,6 +13,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   configTool("xAODConfigTool"),
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
+  tauTruthMatching("TauTruthMatchingTool"),
   m_mcWeight(0.),
   m_pileup_weight(0.),
   m_eventNumber(0),
@@ -360,12 +361,12 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Taus
     std::vector<VectorWrapper*> tauvec;
     std::string tauprefix = "tau_";
-    Wrap2(tauvec, [=](const xAOD::TauJet& tau) {return tau.pt(); }, *systematicTree, std::string(tauprefix+"pt").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.eta(); }, *systematicTree, std::string(tauprefix+"eta").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.phi(); }, *systematicTree, std::string(tauprefix+"phi").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.e(); }, *systematicTree, std::string(tauprefix+"E").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.pt(); }, *systematicTree, std::string(tauprefix+"pt").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.eta(); }, *systematicTree, std::string(tauprefix+"eta").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.phi(); }, *systematicTree, std::string(tauprefix+"phi").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); }, *systematicTree, std::string(tauprefix+"E").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); }, *systematicTree, std::string(tauprefix+"charge").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.nTracks(); }, *systematicTree, std::string(tauprefix+"nTracks").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); }, *systematicTree, std::string(tauprefix+"nTracks").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); }, *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTEleScore); }, *systematicTree, std::string(tauprefix+"BDTEleScore").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); }, *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
@@ -374,8 +375,25 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTLoose); }, *systematicTree, std::string(tauprefix+"EleBDTLoose").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTMedium); }, *systematicTree, std::string(tauprefix+"EleBDTMedium").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTTight); }, *systematicTree, std::string(tauprefix+"EleBDTTight").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
+    //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
+    //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
+
+    top::check( tauTruthMatching.initialize() ,"TauTruthMatchingTool not initialised.");
+    top::check( tauTruthMatching.setProperty("OutputLevel", MSG::INFO), "TauTruthMatchingTool OutputLevel not set");
+    //top::check( tauTruthMatching.setProperty("TruthMuonContainerName", "MuonTruthParticles"), "TauTruthMatchingTool set TruthMuonContainerName failed.");
+    //top::check( tauTruthMatching.setProperty("TruthElectronContainerName", "ElectronTruthParticles"), "TauTruthMatchingTool set TruthElectronContainerName failed.");
+    
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	const xAOD::TruthParticle* truthTau = tauTruthMatching.getTruth(tau);
+	return (short) tau.auxdata<bool>("IsTruthMatched");
+      }, *systematicTree, std::string(tauprefix+"isTruthMatched").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	const xAOD::TruthParticle* truthTau = tauTruthMatching.getTruth(tau);
+	if(truthTau!=nullptr) return (short) truthTau->auxdata<bool>("IsHadronicTau");
+	else return short(0);
+      }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
+    
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
   }
 }
@@ -560,6 +578,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     HLT_e7_lhmedium_mu24_PS = trigDecTool.getPrescale( "HLT_e7_lhmedium_mu24");
   }
 
+  //tau tool needs this in every event
+  top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
+  
   /**
   auto cg = trigDecTool.getChainGroup("HLT_e26_lhtight_iloose");
   auto fc = cg->features();

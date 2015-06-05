@@ -7,6 +7,7 @@
 #include "TrigDecisionTool/TrigDecisionTool.h"
 #include "MuonSelectorTools/MuonSelectionTool.h"
 #include "xAODEgamma/EgammaxAODHelpers.h"
+#include "TauAnalysisTools/TauTruthMatchingTool.h"
 
 using namespace Trig;
 using namespace TrigConf;
@@ -36,7 +37,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   xAODConfigTool configTool;
   TrigDecisionTool trigDecTool;
   MuonSelectionTool muonSelection;
-
+  TauAnalysisTools::TauTruthMatchingTool tauTruthMatching;
+  
   ///A simple way to write out branches, without having to worry about the type.
   std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
 
