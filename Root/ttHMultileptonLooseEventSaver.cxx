@@ -213,7 +213,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     
     std::vector<VectorWrapper*> elevec;    
-    //Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->eta(); }, *systematicTree, "electron_ClEta");
@@ -242,7 +241,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
- //truth origin HERE
+    //truth origin HERE
     //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
     if (0) {
@@ -298,7 +297,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon. 
     //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
-    if (0) {
     Wrap2(muvec, [=](const xAOD::Muon& mu) { 
 	const xAOD::TruthParticle* matched_truth_muon=0;
 	int mu_type = -99;
@@ -322,24 +320,24 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	} return (int) mu_orig; }, *systematicTree, "muon_truthOrigin");
     
       //There is a second way to get truth type for all muons, from track particle. See diffs from https://twiki.cern.ch/twiki/bin/view/Atlas/XAODMuon#How_to_retrieve_truth_type_and_o
-      Wrap2(muvec, [=](const xAOD::Muon& mu) { 
-	  const xAOD::TrackParticle* idtp=0;
-	  int mu_type = -99;
-	  ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
-	  if(idtpLink.isValid()){
-	    idtp = *idtpLink;
-	    mu_type = idtp->auxdata<int>("truthType");
-	  } return (int) mu_type; }, *systematicTree, "muon_trackType");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	const xAOD::TrackParticle* idtp=0;
+	int mu_type = -99;
+	ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+	if(idtpLink.isValid()){
+	  idtp = *idtpLink;
+	  mu_type = idtp->auxdata<int>("truthType");
+	} return (int) mu_type; }, *systematicTree, "muon_trackType");
       
-      Wrap2(muvec, [=](const xAOD::Muon& mu) { 
-	  const xAOD::TrackParticle* idtp=0;
-	  int mu_orig = -99;
-	  ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
-	  if(idtpLink.isValid()){
-	    idtp = *idtpLink;
-	    mu_orig = idtp->auxdata<int>("truthOrigin");
-	  } return (int) mu_orig; }, *systematicTree, "muon_trackOrigin");
-    }
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	const xAOD::TrackParticle* idtp=0;
+	int mu_orig = -99;
+	ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+	if(idtpLink.isValid()){
+	  idtp = *idtpLink;
+	  mu_orig = idtp->auxdata<int>("truthOrigin");
+	} return (int) mu_orig; }, *systematicTree, "muon_trackOrigin");
+    
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
   
 
@@ -386,7 +384,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
 
-    if (0) {
     top::check( tauTruthMatching.initialize() ,"TauTruthMatchingTool not initialised.");
     top::check( tauTruthMatching.setProperty("OutputLevel", MSG::INFO), "TauTruthMatchingTool OutputLevel not set");
     //top::check( tauTruthMatching.setProperty("TruthMuonContainerName", "MuonTruthParticles"), "TauTruthMatchingTool set TruthMuonContainerName failed.");
@@ -404,13 +401,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     	} 
     	return short(0);
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
-    }    
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
   
-    } 
+  } 
 }
 
 void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
+  if (event.m_ttreeIndex >= m_treeManagers.size()) {
+    // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
+    return;
+  }
   m_mcWeight = 0.;
   if (top::isSimulation(event))
     m_mcWeight = event.m_info->mcEventWeight();
@@ -622,11 +622,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   // }
 
 
-  //vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
-  //vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
-  //vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
-  //vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
-  std::cout << m_eventNumber << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
+  vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
+  vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
+  vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
+  vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
+  //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
   m_treeManagers[event.m_ttreeIndex]->fill();
 
 

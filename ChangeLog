@@ -1,3 +1,6 @@
+2015-06-08 Peter Onyisi <ponyisi AT cern.ch>
+	* Enable running on data (do not try to make loose tree)
+
 2015-06-08 David Hohn <david.hohn@cern.ch>
 	* protect data from TauTruthMatchingTool
 	
