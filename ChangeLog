@@ -1,3 +1,6 @@
+2015-06-08 David Hohn <david.hohn@cern.ch>
+	* protect data from TauTruthMatchingTool
+	
 2015-06-05 David Hohn <david.hohn@cern.ch>
 	* update to Top,2.3.13, needed for a newer version of TauTruthMatchingTool
 	* implement TauTruthMatchingTool, fix type of some tau variables

@@ -384,14 +384,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //top::check( tauTruthMatching.setProperty("TruthElectronContainerName", "ElectronTruthParticles"), "TauTruthMatchingTool set TruthElectronContainerName failed.");
     
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-	const xAOD::TruthParticle* truthTau = tauTruthMatching.getTruth(tau);
-	return (short) tau.auxdata<bool>("IsTruthMatched");
+    	if(tau.isAvailable<bool>("IsTruthMatched")) return (short) tau.auxdata<bool>("IsTruthMatched");
+    	else return short(0);
       }, *systematicTree, std::string(tauprefix+"isTruthMatched").c_str());
 
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-	const xAOD::TruthParticle* truthTau = tauTruthMatching.getTruth(tau);
-	if(truthTau!=nullptr) return (short) truthTau->auxdata<bool>("IsHadronicTau");
-	else return short(0);
+    	if(tau.isAvailable<bool>("IsTruthMatched")) {
+    	  const xAOD::TruthParticle* truthTau = tau.auxdata<const xAOD::TruthParticle*>("TruthTau");
+    	  if(truthTau!=nullptr) return (short) truthTau->auxdata<bool>("IsHadronicTau");
+    	} 
+    	return short(0);
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
     
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
@@ -579,7 +581,12 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //tau tool needs this in every event
-  top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
+  if( top::isSimulation(event) ) {
+    top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
+    for( auto tau : event.m_tauJets) {
+      tauTruthMatching.getTruth(*tau);
+    }
+  }
   
   /**
   auto cg = trigDecTool.getChainGroup("HLT_e26_lhtight_iloose");
