@@ -28,6 +28,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //Run for every event (in every systematic) that needs saving
   void saveEvent(const top::Event& event);
 
+  // IGNORE
+  virtual void saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent);
+
   void finalize();
   
  private:
