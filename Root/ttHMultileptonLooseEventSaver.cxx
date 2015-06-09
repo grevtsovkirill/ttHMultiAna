@@ -20,6 +20,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_runNumber(0),
   m_mcChannelNumber(0),
   m_mu(0),
+  m_mu_ac(0),
   m_met_met(0.),
   m_met_phi(0.),
   HLT_e26_tight_iloose(0),
@@ -137,10 +138,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
 
     //event info
-    systematicTree->makeOutputVariable(m_eventNumber, "eventNumber");
-    systematicTree->makeOutputVariable(m_runNumber, "runNumber");
-    systematicTree->makeOutputVariable(m_mcChannelNumber, "mcChannelNumber");
-    systematicTree->makeOutputVariable(m_mu, "mu");
+    systematicTree->makeOutputVariable(m_eventNumber, "EventNumber");
+    systematicTree->makeOutputVariable(m_runNumber, "RunNumber");
+    systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
+    systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
+    systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
 
     //met
     systematicTree->makeOutputVariable(m_met_met, "met_met");
@@ -425,7 +427,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mcChannelNumber = 0;
   if (top::isSimulation(event))
     m_mcChannelNumber = event.m_info->mcChannelNumber();
-  m_mu = event.m_info->averageInteractionsPerCrossing();
+  m_mu     = event.m_info->averageInteractionsPerCrossing();
+  m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
 
   //met
   m_met_met = event.m_met->met();

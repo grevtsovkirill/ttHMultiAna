@@ -1,3 +1,7 @@
+2015-06-09 Giuseppe Salamanna <salaman AT cern.ch>
+	* Change of variable names for EventNumber,RunNumber,averageIntPerXing,mc_channel_number
+	and addition of actualIntPerXing - using same naming as Run 1
+	
 2015-06-08 Peter Onyisi <ponyisi AT cern.ch>
 	* Enable running on data (do not try to make loose tree)
 
