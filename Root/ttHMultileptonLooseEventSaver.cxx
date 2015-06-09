@@ -145,8 +145,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
 
     //met
-    systematicTree->makeOutputVariable(m_met_met, "met_met");
-    systematicTree->makeOutputVariable(m_met_phi, "met_phi");
+    systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
+    systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
     
     //truth information
     systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
