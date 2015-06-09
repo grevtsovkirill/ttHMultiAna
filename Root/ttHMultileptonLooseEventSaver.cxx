@@ -593,12 +593,12 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //tau tool needs this in every event
-  if( top::isSimulation(event) ) {
-    top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
-    for( auto tau : event.m_tauJets) {
-      tauTruthMatching.getTruth(*tau);
-    }
-  }
+  // if( top::isSimulation(event) ) {
+  //   top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
+  //   for( auto tau : event.m_tauJets) {
+  //     tauTruthMatching.getTruth(*tau);
+  //   }
+  // }
   
   /**
   auto cg = trigDecTool.getChainGroup("HLT_e26_lhtight_iloose");
