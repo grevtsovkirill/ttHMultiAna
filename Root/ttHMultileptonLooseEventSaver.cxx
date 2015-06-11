@@ -157,7 +157,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mc_parentPdgId, "m_truth_parentPdgId");
     systematicTree->makeOutputVariable(m_mc_status,      "m_truth_status");
     systematicTree->makeOutputVariable(m_mc_barcode,     "m_truth_barcode");
-    
+
+    //truthEvent information
+    systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
+    systematicTree->makeOutputVariable(m_PDFinfo_x2,        "m_mcevt_pdf_x2");
+    systematicTree->makeOutputVariable(m_PDFinfo_id1,       "m_mcevt_pdf_id1");
+    systematicTree->makeOutputVariable(m_PDFinfo_id2,       "m_mcevt_pdf_id2");
+    systematicTree->makeOutputVariable(m_PDFinfo_scalePDF,  "m_mcevt_pdf_scale");
+    systematicTree->makeOutputVariable(m_PDFinfo_pdf1,      "m_mcevt_pdf_pdf1");
+    systematicTree->makeOutputVariable(m_PDFinfo_pdf2,      "m_mcevt_pdf_pdf2");
+
     //TRIGGER PART
     // Trigger decision tool. 
     ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
@@ -294,6 +303,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "muon_ptvarcone20");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
+    //Trigger matching
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu26_imedium")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu26_imedium"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu26_imedium");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu50")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu50");
+
 
     //truth origin HERE
     //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon. 
@@ -447,7 +460,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
     for (const xAOD::TruthParticle*  mcPtr : *event.m_truth) {
       if(mcPtr->pt()<5000.) continue;
-
       m_mc_pt     .push_back(mcPtr->pt());
       m_mc_eta    .push_back(mcPtr->eta());
       m_mc_phi    .push_back(mcPtr->phi());
@@ -455,9 +467,45 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_mc_pdgId  .push_back(mcPtr->pdgId());
       m_mc_status .push_back(mcPtr->status());
       m_mc_barcode.push_back(mcPtr->barcode()); 
-
       if(mcPtr->parent()) m_mc_parentPdgId.push_back(mcPtr->parent()->pdgId());
       else                m_mc_parentPdgId.push_back(99999.);
+    }
+  }
+
+  //TruthEvent info here (pdf, MC weights, etc)
+  if (event.m_truthEvent != nullptr) {
+    unsigned int i(0);
+    unsigned int truthEventSize = event.m_truthEvent->size();
+    m_PDFinfo_x1.resize(truthEventSize);
+    m_PDFinfo_x2.resize(truthEventSize);
+    m_PDFinfo_id1.resize(truthEventSize);
+    m_PDFinfo_id2.resize(truthEventSize);
+    m_PDFinfo_scalePDF.resize(truthEventSize);
+    m_PDFinfo_pdf1.resize(truthEventSize);
+    m_PDFinfo_pdf2.resize(truthEventSize);
+    for (const auto* const tePtr : *event.m_truthEvent) {
+      std::string PDFinfoVarName="x1";
+      if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
+	m_PDFinfo_x1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+      PDFinfoVarName="x2";
+      if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
+	m_PDFinfo_x2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+      PDFinfoVarName="id1";
+      if (event.m_truthEvent->isAvailable<int>(PDFinfoVarName))
+	m_PDFinfo_id1[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
+      PDFinfoVarName="id2";
+      if (event.m_truthEvent->isAvailable<int>(PDFinfoVarName))
+	m_PDFinfo_id2[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
+      PDFinfoVarName="scalePDF";
+      if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
+	m_PDFinfo_scalePDF[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+      PDFinfoVarName="pdf1";
+      if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
+	m_PDFinfo_pdf1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+      PDFinfoVarName="pdf2";
+      if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
+	m_PDFinfo_pdf2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+      ++i;
     }
   }
   
@@ -590,7 +638,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if( trigDecTool.isPassed( "HLT_e7_lhmedium_mu24" ) ){
     HLT_e7_lhmedium_mu24 = 1;
     HLT_e7_lhmedium_mu24_PS = trigDecTool.getPrescale( "HLT_e7_lhmedium_mu24");
-  }
+  }  //END trigger info
 
   //tau tool needs this in every event
   // if( top::isSimulation(event) ) {
@@ -600,30 +648,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //   }
   // }
   
-  /**
-  auto cg = trigDecTool.getChainGroup("HLT_e26_lhtight_iloose");
-  auto fc = cg->features();
-  auto eleFeatureContainers = fc.containerFeature<TrigElectronContainer>();
-  std::cout << "OK2" << std::endl;
-  for(auto econt : eleFeatureContainers) {
-    std::cout << "OK3" << std::endl;
-    for (auto e : *econt.cptr()) {
-      std::cout << "OK4" << std::endl;
-      std::cout << "    -> ele pt = " << e->pt()/1000.0 << " [GeV]" << std::endl;
-      std::cout << "OK5" << std::endl;
-    }
-  }
-  std::cout << "OK6" << std::endl;
-  */  
-  //END trigger info
-
-
-
-
   // for (const auto* const elPtr : event.m_electrons) {
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
   // }
-
 
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);

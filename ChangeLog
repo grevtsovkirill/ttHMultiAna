@@ -1,3 +1,9 @@
+2015-06-11 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: Added pdf info (but still always zero -- to be validated)
+	* ttHMultileptonLooseEventSaver.cxx: Added trigger matching variables for two muon items
+	* generic_config-mc15.txt: set PDF info to truth; added trigger dummy selections to 
+	activate trigger matching tool
+	
 2015-06-09 David Hohn <david.hohn@cern.ch>
 	* disabling TauTruthMatchingTool, current version is leaking
 

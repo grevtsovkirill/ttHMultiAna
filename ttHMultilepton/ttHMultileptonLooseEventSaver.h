@@ -129,10 +129,18 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_mc_eta;
   std::vector<float> m_mc_phi;
   std::vector<float> m_mc_e;
-  std::vector<int> m_mc_pdgId;
-  std::vector<int> m_mc_status;
-  std::vector<int> m_mc_barcode;
-  std::vector<int> m_mc_parentPdgId;
+  std::vector<int>   m_mc_pdgId;
+  std::vector<int>   m_mc_status;
+  std::vector<int>   m_mc_barcode;
+  std::vector<int>   m_mc_parentPdgId;
+
+  std::vector<float> m_PDFinfo_x1;
+  std::vector<float> m_PDFinfo_x2;
+  std::vector<int> m_PDFinfo_id1;
+  std::vector<int> m_PDFinfo_id2;   
+  std::vector<float> m_PDFinfo_scalePDF;
+  std::vector<float> m_PDFinfo_pdf1;
+  std::vector<float> m_PDFinfo_pdf2;
 
   #ifndef __CINT__ 
   std::vector<VectorWrapperCollection> vec_electron_wrappers;
