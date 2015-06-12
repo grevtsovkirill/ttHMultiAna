@@ -51,6 +51,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ///Decisions on if the event passed / failed a particular selection.
   std::vector<int> m_selectionDecisions;
 
+  // Method for recording selection pass/fail branches in saveEvent()
+  void recordSelectionDecision(const top::Event& event);
+
   //some event weights
   float m_mcWeight;
   float m_pileup_weight;

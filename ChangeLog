@@ -1,3 +1,7 @@
+2015-06-12 Dave DeMarco <david.demarco@cern.ch> 
+	* ttHMultileptonLooseEventSaver.cxx/h: Pass/fail event selection variables
+	for each event selection region now written to output tree (from EventSaverFlatNtuple)
+
 2015-06-11 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: Added pdf info (but still always zero -- to be validated)
 	* ttHMultileptonLooseEventSaver.cxx: Added trigger matching variables for two muon items

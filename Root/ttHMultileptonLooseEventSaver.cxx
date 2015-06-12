@@ -417,8 +417,23 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     	return short(0);
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
-  
+
+    //Event selection pass/fail branches
+    int index(0);
+    for (const auto& branchName : m_extraBranches) {
+        m_selectionDecisions[index] = 0;
+        systematicTree->makeOutputVariable(m_selectionDecisions[index], branchName);
+        ++index;
+    }
   } 
+}
+
+void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
+  int index(0);
+  for (const auto& branchName : m_extraBranches) {
+    m_selectionDecisions[index] = event.m_info->auxdecor<int>(branchName);
+    ++index;
+  }
 }
 
 void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
@@ -438,10 +453,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
   m_mcChannelNumber = 0;
+
   if (top::isSimulation(event))
     m_mcChannelNumber = event.m_info->mcChannelNumber();
   m_mu     = event.m_info->averageInteractionsPerCrossing();
   m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
+
+  //Event selection variable for each event selection region (pass/fail)
+  recordSelectionDecision(event);
 
   //met
   m_met_met = event.m_met->met();
