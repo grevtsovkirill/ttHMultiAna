@@ -1,3 +1,6 @@
+2015-06-15 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: Fixed pdf info, now ok on those samples for which pdf correctly  filled 
+	
 2015-06-12 Dave DeMarco <david.demarco@cern.ch> 
 	* ttHMultileptonLooseEventSaver.cxx/h: Pass/fail event selection variables
 	for each event selection region now written to output tree (from EventSaverFlatNtuple)

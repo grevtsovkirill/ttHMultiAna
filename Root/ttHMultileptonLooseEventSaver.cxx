@@ -221,7 +221,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(HLT_e7_medium_mu24_PS, "HLT_e7_medium_mu24_PS");
     systematicTree->makeOutputVariable(HLT_e7_lhmedium_mu24_PS, "HLT_e7_lhmedium_mu24_PS");
     //END trigger
-
     
     std::vector<VectorWrapper*> elevec;    
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
@@ -503,25 +502,31 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_PDFinfo_pdf1.resize(truthEventSize);
     m_PDFinfo_pdf2.resize(truthEventSize);
     for (const auto* const tePtr : *event.m_truthEvent) {
-      std::string PDFinfoVarName="x1";
+      std::string PDFinfoVarName="X1";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
 	m_PDFinfo_x1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
-      PDFinfoVarName="x2";
+      
+      PDFinfoVarName="X2";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
 	m_PDFinfo_x2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
-      PDFinfoVarName="id1";
+      
+      PDFinfoVarName="PDGID1";
       if (event.m_truthEvent->isAvailable<int>(PDFinfoVarName))
 	m_PDFinfo_id1[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
-      PDFinfoVarName="id2";
+      
+      PDFinfoVarName="PDGID2";
       if (event.m_truthEvent->isAvailable<int>(PDFinfoVarName))
 	m_PDFinfo_id2[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
-      PDFinfoVarName="scalePDF";
+      
+      PDFinfoVarName="SCALE";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
 	m_PDFinfo_scalePDF[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
-      PDFinfoVarName="pdf1";
+      
+      PDFinfoVarName="PDF1";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
 	m_PDFinfo_pdf1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
-      PDFinfoVarName="pdf2";
+      
+      PDFinfoVarName="PDF2";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
 	m_PDFinfo_pdf2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
       ++i;
