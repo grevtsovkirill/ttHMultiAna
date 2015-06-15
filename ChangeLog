@@ -1,4 +1,9 @@
 2015-06-15 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: jets and taus now follow same Run 1 naming scheme
+	* ttHMultileptonLooseEventSaver.cxx: added empty branches for truth jets (not yet available in top analysis)
+	* ttHMultileptonLooseEventSaver.cxx: reverted change of name for MuonSpectrometerPt
+	
+2015-06-15 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: Fixed pdf info, now ok on those samples for which pdf correctly  filled 
 	
 2015-06-12 Dave DeMarco <david.demarco@cern.ch> 
