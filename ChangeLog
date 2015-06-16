@@ -1,3 +1,6 @@
+2015-06-16 David Hohn <david.hohn@cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: change m_tau_nTracks to numTrack
+
 2015-06-15 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: jets and taus now follow same Run 1 naming scheme
 	* ttHMultileptonLooseEventSaver.cxx: added empty branches for truth jets (not yet available in top analysis)
