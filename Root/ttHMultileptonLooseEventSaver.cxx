@@ -143,6 +143,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
+    systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
 
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
@@ -222,6 +223,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(HLT_e7_lhmedium_mu24_PS, "HLT_e7_lhmedium_mu24_PS");
     //END trigger
     
+
     std::vector<VectorWrapper*> elevec;    
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
@@ -230,10 +232,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
+    //d0  and sig d0 and z0sinTh uncorrected
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0_uncorr");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0_uncorr");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta_uncorr");
-    //Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); return (float) (z0); }, *systematicTree, "electron_z0");
+    //d0 and sig d0 and z0sinTh corrected for PV
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  float phi = ele.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y = d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); return (float) (d0_corr ); }, *systematicTree, "electron_d0PV");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float phi = ele.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y= d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0_corr/err_d0); }, *systematicTree, "electron_sigd0PV");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float z0corr = (z0 - (m_vertices->at(0)->z())); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "electron_z0SinTheta");
 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "electron_Etcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "electron_Etcone30");
@@ -279,10 +285,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.author(); }, *systematicTree, "muon_author");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.muonType(); }, *systematicTree, "muon_type");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (-13*mu.charge()); }, *systematicTree, "muon_ID");
+    //d0  and sig d0 and z0sinTh uncorrected
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  return (float) (d0); }, *systematicTree, "muon_d0_uncorr");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0_uncorr");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta_uncorr");
-    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); return (float) (z0); }, *systematicTree, "muon_z0");
+    //d0 and sig d0 and z0sinTh corrected for PV
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  float phi = mu.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y = d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); return (float) (d0_corr ); }, *systematicTree, "muon_d0PV");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float phi = mu.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y= d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0_corr/err_d0); }, *systematicTree, "muon_sigd0PV");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float z0corr = (z0 - (m_vertices->at(0)->z())); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "muon_z0SinTheta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
@@ -461,11 +471,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
   m_mcChannelNumber = 0;
-
   if (top::isSimulation(event))
     m_mcChannelNumber = event.m_info->mcChannelNumber();
   m_mu     = event.m_info->averageInteractionsPerCrossing();
   m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
+  m_pvNumber = event.m_primaryVertices->size();
 
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
@@ -685,6 +695,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
   // }
 
+  if (event.m_primaryVertices != nullptr) m_vertices = event.m_primaryVertices;
+  
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
   vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);

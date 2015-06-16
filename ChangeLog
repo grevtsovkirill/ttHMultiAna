@@ -1,4 +1,8 @@
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: prelim implementation of d0 and z0 correction for PV position.
+	Note that the corrected d0 is unsigned, needs a final touch!
+	
+2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseObjectLoader.cxx: removed cut on crack regions for electrons
 
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>

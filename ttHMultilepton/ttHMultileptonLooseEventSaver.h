@@ -7,6 +7,7 @@
 #include "TrigDecisionTool/TrigDecisionTool.h"
 #include "MuonSelectorTools/MuonSelectionTool.h"
 #include "xAODEgamma/EgammaxAODHelpers.h"
+#include "xAODTracking/VertexContainer.h"
 #include "TauAnalysisTools/TauTruthMatchingTool.h"
 
 using namespace Trig;
@@ -41,6 +42,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   TrigDecisionTool trigDecTool;
   MuonSelectionTool muonSelection;
   TauAnalysisTools::TauTruthMatchingTool tauTruthMatching;
+  const VertexContainer* m_vertices;
   
   ///A simple way to write out branches, without having to worry about the type.
   std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
@@ -64,6 +66,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   unsigned int m_mcChannelNumber;
   float m_mu;
   float m_mu_ac;
+  int m_pvNumber;
 
   //met
   float m_met_met;
