@@ -1,3 +1,7 @@
+2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: lepton ID branches now follow sign convention of Run 1 and PDG; 
+	z0sinTheta --> z0sinTheta_uncorr as it signals it's not corrected for PV position
+	
 2015-06-16 David Hohn <david.hohn@cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: change m_tau_nTracks to numTrack
 
