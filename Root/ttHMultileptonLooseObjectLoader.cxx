@@ -30,13 +30,13 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
   //configure the electrons, muons, jets, large-R jets
   if (topConfig->electronID().find("LH") == std::string::npos && topConfig->electronIDLoose().find("LH") == std::string::npos) {
     //both the tight and loose user settings do not contain LH -> cut based
-    objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
+    objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), false, topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
   } else if (topConfig->electronID().find("LH") == 0 && topConfig->electronIDLoose().find("LH") == 0) {
     //user wants likelihood electrons
     LikeEnum::Menu operatingPoint = ttHMultilepton::ElectronLikelihoodDC14::textToEgammaEnum(topConfig->electronID());
     LikeEnum::Menu operatingPointLoose = ttHMultilepton::ElectronLikelihoodDC14::textToEgammaEnum(topConfig->electronIDLoose());
     //objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), operatingPoint, operatingPointLoose, new top::StandardIsolation()));
-    objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodDC14(5000., topConfig->electronVetoLArCrack(), operatingPoint, operatingPointLoose, nullptr));
+    objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodDC14(5000., false, operatingPoint, operatingPointLoose, nullptr));
   } else {
     std::cout << "\nHo hum\n";
     std::cout << "Not sure it makes sense to use a mix of LH and cut-based electrons for the tight/loose definitions\n";

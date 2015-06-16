@@ -1,4 +1,7 @@
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseObjectLoader.cxx: removed cut on crack regions for electrons
+
+2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: d0 and sigd0 renamed _uncorr
 	
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
