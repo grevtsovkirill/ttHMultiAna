@@ -57,8 +57,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void recordSelectionDecision(const top::Event& event);
 
   //some event weights
-  float m_mcWeight;
-  float m_pileup_weight;
+  double m_mcWeight;
+  double m_pileup_weight;
 
   //event info
   unsigned int m_eventNumber;
@@ -74,6 +74,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   //trigger info
   //single e
+  /*
   unsigned int HLT_e26_tight_iloose;
   unsigned int HLT_e26_lhtight_iloose;
   unsigned int HLT_e60_medium;
@@ -129,7 +130,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float HLT_e7_medium_mu24_PS;
   float HLT_e7_lhmedium_mu24_PS;
   //end trigger
-  
+  */  
   //MC
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;
@@ -149,6 +150,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_PDFinfo_pdf2;
 
   #ifndef __CINT__ 
+  std::vector<ScalarWrapperCollection> vec_scalar_wrappers;
   std::vector<VectorWrapperCollection> vec_electron_wrappers;
   std::vector<VectorWrapperCollection> vec_muon_wrappers;
   std::vector<VectorWrapperCollection> vec_jet_wrappers;

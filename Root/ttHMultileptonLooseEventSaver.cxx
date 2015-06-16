@@ -22,49 +22,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_mu(0),
   m_mu_ac(0),
   m_met_met(0.),
-  m_met_phi(0.),
-  HLT_e26_tight_iloose(0),
-  HLT_e26_lhtight_iloose(0),
-  HLT_e60_medium(0),
-  HLT_e60_lhmedium(0),
-  HLT_e24_tight_iloose(0),
-  HLT_e24_lhtight_iloose(0),
-  HLT_e24_tight_iloose_L1EM20VH(0),
-  HLT_e140_loose(0),
-  HLT_e24_lhtight_iloose_L1EM20VH(0),
-  HLT_e140_lhloose(0),
-  HLT_mu26_imedium(0),
-  HLT_mu50(0),
-  HLT_mu24_imedium(0),
-  HLT_2e12_loose_L12EM10VH(0),
-  HLT_2e12_lhloose_L12EM10VH(0),
-  HLT_2mu14(0),
-  HLT_2mu10(0),
-  HLT_e17_loose_mu14(0),
-  HLT_e17_lhloose_mu14(0),
-  HLT_e7_medium_mu24(0),
-  HLT_e7_lhmedium_mu24(0),
-  HLT_e26_tight_iloose_PS(-99.),
-  HLT_e26_lhtight_iloose_PS(-99.),
-  HLT_e60_medium_PS(-99.),
-  HLT_e60_lhmedium_PS(-99.),
-  HLT_e24_tight_iloose_PS(-99.),
-  HLT_e24_lhtight_iloose_PS(-99.),
-  HLT_e24_tight_iloose_L1EM20VH_PS(-99.),
-  HLT_e140_loose_PS(-99.),
-  HLT_e24_lhtight_iloose_L1EM20VH_PS(-99.),
-  HLT_e140_lhloose_PS(-99.),
-  HLT_mu26_imedium_PS(-99.),
-  HLT_mu50_PS(-99.),
-  HLT_mu24_imedium_PS(-99.),
-  HLT_2e12_loose_L12EM10VH_PS(-99.),
-  HLT_2e12_lhloose_L12EM10VH_PS(-99.),
-  HLT_2mu14_PS(-99.),
-  HLT_2mu10_PS(-99.),
-  HLT_e17_loose_mu14_PS(-99.),
-  HLT_e17_lhloose_mu14_PS(-99.),
-  HLT_e7_medium_mu24_PS(-99.),
-  HLT_e7_lhmedium_mu24_PS(-99.)
+  m_met_phi(0.)
 {
 }
 
@@ -113,10 +71,14 @@ struct function_traits<ReturnType(ClassType::*)(Args...) const>
   typedef std::function<ReturnType(Args...)> function; 
 };
 
-template<typename VEC, typename FCN,  typename TM> void Wrap2(VEC& vec, FCN lambda, TM& systematicTree, const char* branch) {
+template<typename VEC, typename FCN, typename TM> void Wrap2(VEC& vec, FCN lambda, TM& systematicTree, const char* branch) {
   // cast away the crud from around the lambda
   //vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::pointer>(lambda), systematicTree, branch));
   vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::function>(lambda), systematicTree, branch)); 
+}
+
+template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambda, TM& systematicTree, const char* branch) {
+  vec.push_back(new ScalarWrapper(static_cast<typename function_traits<FCN>::function>(lambda), systematicTree, branch));
 }
 
 void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) {
@@ -138,8 +100,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
 
     //event info
+    std::vector<ScalarWrapper*> scalarvec; 
     systematicTree->makeOutputVariable(m_eventNumber, "EventNumber");
-    systematicTree->makeOutputVariable(m_runNumber, "RunNumber");
+    WrapS(scalarvec, [](const top::Event& event){ return event.m_info->runNumber(); }, *systematicTree, "RunNumber");
+    //    systematicTree->makeOutputVariable(m_runNumber, "RunNumber");
+
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
@@ -179,49 +144,21 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     top::check(trigDecTool.initialize(),"TrigDecTool fails to initialize");    
 
     //Items and their PS
-    systematicTree->makeOutputVariable(HLT_e26_tight_iloose, "HLT_e26_tight_iloose");
-    systematicTree->makeOutputVariable(HLT_e26_lhtight_iloose, "HLT_e26_lhtight_iloose");
-    systematicTree->makeOutputVariable(HLT_e60_medium, "HLT_e60_medium" );
-    systematicTree->makeOutputVariable(HLT_e60_lhmedium, "HLT_e60_lhmedium" );
-    systematicTree->makeOutputVariable(HLT_e24_tight_iloose, "HLT_e24_tight_iloose" );
-    systematicTree->makeOutputVariable(HLT_e24_lhtight_iloose, "HLT_e24_lhtight_iloose" );    
-    systematicTree->makeOutputVariable(HLT_e24_tight_iloose_L1EM20VH, "HLT_e24_tight_iloose_L1EM20VH" );
-    systematicTree->makeOutputVariable(HLT_e140_loose, "HLT_e140_loose" );
-    systematicTree->makeOutputVariable(HLT_e24_lhtight_iloose_L1EM20VH, "HLT_e24_lhtight_iloose_L1EM20VH" );
-    systematicTree->makeOutputVariable(HLT_e140_lhloose, "HLT_e140_lhloose" );
-    systematicTree->makeOutputVariable(HLT_mu26_imedium, "HLT_mu26_imedium" );
-    systematicTree->makeOutputVariable(HLT_mu50, "HLT_mu50" );
-    systematicTree->makeOutputVariable(HLT_mu24_imedium, "HLT_mu24_imedium" );
-    systematicTree->makeOutputVariable(HLT_2e12_loose_L12EM10VH, "HLT_2e12_loose_L12EM10VH" );
-    systematicTree->makeOutputVariable(HLT_2e12_lhloose_L12EM10VH, "HLT_2e12_lhloose_L12EM10VH" );
-    systematicTree->makeOutputVariable(HLT_2mu14, "HLT_2mu14" );
-    systematicTree->makeOutputVariable(HLT_2mu10, "HLT_2mu10" );
-    systematicTree->makeOutputVariable(HLT_e17_loose_mu14, "HLT_e17_loose_mu14" );
-    systematicTree->makeOutputVariable(HLT_e17_lhloose_mu14, "HLT_e17_lhloose_mu14" );
-    systematicTree->makeOutputVariable(HLT_e7_medium_mu24, "HLT_e7_medium_mu24" );
-    systematicTree->makeOutputVariable(HLT_e7_lhmedium_mu24, "HLT_e7_lhmedium_mu24" );
-    systematicTree->makeOutputVariable(HLT_e26_tight_iloose_PS, "HLT_e26_tight_iloose_PS");
-    systematicTree->makeOutputVariable(HLT_e26_lhtight_iloose_PS, "HLT_e26_lhtight_iloose_PS");
-    systematicTree->makeOutputVariable(HLT_e60_medium_PS, "HLT_e60_medium_PS");
-    systematicTree->makeOutputVariable(HLT_e60_lhmedium_PS, "HLT_e60_lhmedium_PS");
-    systematicTree->makeOutputVariable(HLT_e24_tight_iloose_PS, "HLT_e24_tight_iloose_PS");
-    systematicTree->makeOutputVariable(HLT_e24_lhtight_iloose_PS, "HLT_e24_lhtight_iloose_PS");    
-    systematicTree->makeOutputVariable(HLT_e24_tight_iloose_L1EM20VH_PS, "HLT_e24_tight_iloose_L1EM20VH_PS");
-    systematicTree->makeOutputVariable(HLT_e140_loose_PS, "HLT_e140_loose_PS");
-    systematicTree->makeOutputVariable(HLT_e24_lhtight_iloose_L1EM20VH_PS, "HLT_e24_lhtight_iloose_L1EM20VH_PS");
-    systematicTree->makeOutputVariable(HLT_e140_lhloose_PS, "HLT_e140_lhloose_PS");
-    systematicTree->makeOutputVariable(HLT_mu26_imedium_PS, "HLT_mu26_imedium_PS");
-    systematicTree->makeOutputVariable(HLT_mu50_PS, "HLT_mu50_PS");
-    systematicTree->makeOutputVariable(HLT_mu24_imedium_PS, "HLT_mu24_imedium_PS");
-    systematicTree->makeOutputVariable(HLT_2e12_loose_L12EM10VH_PS, "HLT_2e12_loose_L12EM10VH_PS");
-    systematicTree->makeOutputVariable(HLT_2e12_lhloose_L12EM10VH_PS, "HLT_2e12_lhloose_L12EM10VH_PS");
-    systematicTree->makeOutputVariable(HLT_2mu14_PS, "HLT_2mu14_PS");
-    systematicTree->makeOutputVariable(HLT_2mu10_PS, "HLT_2mu10_PS");
-    systematicTree->makeOutputVariable(HLT_e17_loose_mu14_PS, "HLT_e17_loose_mu14_PS");
-    systematicTree->makeOutputVariable(HLT_e17_lhloose_mu14_PS, "HLT_e17_lhloose_mu14_PS");
-    systematicTree->makeOutputVariable(HLT_e7_medium_mu24_PS, "HLT_e7_medium_mu24_PS");
-    systematicTree->makeOutputVariable(HLT_e7_lhmedium_mu24_PS, "HLT_e7_lhmedium_mu24_PS");
+    std::vector<std::string> triggernames{"HLT_e26_tight_iloose", 
+	"HLT_e26_lhtight_iloose", "HLT_e60_medium", "HLT_e60_lhmedium", 
+	"HLT_e24_tight_iloose", "HLT_e24_lhtight_iloose", 
+	"HLT_e24_tight_iloose_L1EM20VH", "HLT_e140_loose", 
+	"HLT_e24_lhtight_iloose_L1EM20VH", "HLT_e24_lhtight_iloose_L1EM20VH", 
+	"HLT_e140_lhloose", "HLT_mu26_imedium", "HLT_mu50", "HLT_mu24_imedium",
+	"HLT_2e12_loose_L12EM10VH", "HLT_2e12_lhloose_L12EM10VH", "HLT_2mu14",
+	"HLT_2mu10", "HLT_e17_loose_mu14", "HLT_e17_lhloose_mu14", 
+	"HLT_e7_medium_mu24", "HLT_e7_lhmedium_mu24"};
+    for (auto trigger : triggernames) {
+      WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
+      WrapS(scalarvec, [=](const top::Event&){ return (float) trigDecTool.getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
+    }
     //END trigger
+    vec_scalar_wrappers.push_back(scalarvec);
     
 
     std::vector<VectorWrapper*> elevec;    
@@ -254,9 +191,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "electron_ptvarcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "electron_ptvarcone30");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "electron_ptvarcone40");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (short) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
     //truth origin HERE
     //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
@@ -276,9 +213,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.e(); }, *systematicTree, "muon_E");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { short isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(mu))  isqual=1; return (short) isqual;},*systematicTree, "muon_isLoose");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { short isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu)) isqual=1; return (short) isqual;},*systematicTree, "muon_isMedium");    
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { short isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))  isqual=1; return (short) isqual;},*systematicTree, "muon_isTight");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(mu))  isqual=1; return isqual;},*systematicTree, "muon_isLoose");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu)) isqual=1; return isqual;},*systematicTree, "muon_isMedium");    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))  isqual=1; return isqual;},*systematicTree, "muon_isTight");    
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("InnerDetectorPt"); },    *systematicTree, "muon_PtID");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
@@ -399,12 +336,12 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); }, *systematicTree, std::string(tauprefix+"numTrack").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); }, *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTEleScore); }, *systematicTree, std::string(tauprefix+"BDTEleScore").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); }, *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); }, *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); }, *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTLoose); }, *systematicTree, std::string(tauprefix+"EleBDTLoose").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTMedium); }, *systematicTree, std::string(tauprefix+"EleBDTMedium").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTTight); }, *systematicTree, std::string(tauprefix+"EleBDTTight").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); }, *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); }, *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); }, *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTLoose); }, *systematicTree, std::string(tauprefix+"EleBDTLoose").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTMedium); }, *systematicTree, std::string(tauprefix+"EleBDTMedium").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::EleBDTTight); }, *systematicTree, std::string(tauprefix+"EleBDTTight").c_str());
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
 
@@ -552,137 +489,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
   
-  //Trigger INFO
-  HLT_e26_tight_iloose = 0;
-  HLT_e26_lhtight_iloose = 0;
-  HLT_e60_medium = 0;
-  HLT_e60_lhmedium = 0;
-  HLT_e24_tight_iloose = 0;
-  HLT_e24_lhtight_iloose = 0;
-  HLT_e24_tight_iloose_L1EM20VH = 0;
-  HLT_e140_loose = 0;
-  HLT_e24_lhtight_iloose_L1EM20VH = 0;
-  HLT_e140_lhloose = 0;
-  HLT_mu26_imedium = 0;
-  HLT_mu50 = 0;
-  HLT_mu24_imedium = 0;
-  HLT_2e12_loose_L12EM10VH = 0;
-  HLT_2e12_lhloose_L12EM10VH = 0;
-  HLT_2mu14 = 0;
-  HLT_2mu10 = 0;
-  HLT_e17_loose_mu14 = 0;
-  HLT_e17_lhloose_mu14 = 0;
-  HLT_e7_medium_mu24 = 0;
-  HLT_e7_lhmedium_mu24 = 0;
-
-  HLT_e26_tight_iloose_PS = -99;
-  HLT_e26_lhtight_iloose_PS = -99;
-  HLT_e60_medium_PS = -99;
-  HLT_e60_lhmedium_PS = -99;
-  HLT_e24_tight_iloose_PS = -99;
-  HLT_e24_lhtight_iloose_PS = -99;
-  HLT_e24_tight_iloose_L1EM20VH_PS = -99;
-  HLT_e140_loose_PS = -99;
-  HLT_e24_lhtight_iloose_L1EM20VH_PS = -99;
-  HLT_e140_lhloose_PS = -99;
-  HLT_mu26_imedium_PS = -99;
-  HLT_mu50_PS = -99;
-  HLT_mu24_imedium_PS = -99;
-  HLT_2e12_loose_L12EM10VH_PS = -99;
-  HLT_2e12_lhloose_L12EM10VH_PS = -99;
-  HLT_2mu14_PS = -99;
-  HLT_2mu10_PS = -99;
-  HLT_e17_loose_mu14_PS = -99;
-  HLT_e17_lhloose_mu14_PS = -99;
-  HLT_e7_medium_mu24_PS = -99;
-  HLT_e7_lhmedium_mu24_PS = -99;
-
-
-  if( trigDecTool.isPassed( "HLT_e26_tight_iloose" ) ){
-    HLT_e26_tight_iloose = 1;
-    HLT_e26_tight_iloose_PS = trigDecTool.getPrescale( "HLT_e26_tight_iloose" );
-  }
-  if( trigDecTool.isPassed( "HLT_e26_lhtight_iloose" ) ){
-    HLT_e26_lhtight_iloose = 1;
-    HLT_e26_lhtight_iloose_PS = trigDecTool.getPrescale( "HLT_e26_lhtight_iloose" );
-  }
-  if( trigDecTool.isPassed( "HLT_e60_medium" ) ){
-    HLT_e60_medium = 1;
-    HLT_e60_medium_PS = trigDecTool.getPrescale( "HLT_e60_medium" );
-  }
-  if( trigDecTool.isPassed( "HLT_e60_lhmedium" ) ){
-    HLT_e60_lhmedium = 1;
-    HLT_e60_lhmedium_PS = trigDecTool.getPrescale( "HLT_e60_lhmedium" );
-  }
-  if( trigDecTool.isPassed( "HLT_e24_tight_iloose" ) ){
-    HLT_e24_tight_iloose = 1;
-    HLT_e24_tight_iloose_PS = trigDecTool.getPrescale( "HLT_e24_tight_iloose");
-  }
-  if( trigDecTool.isPassed( "HLT_e24_lhtight_iloose" ) ){
-    HLT_e24_lhtight_iloose = 1;
-    HLT_e24_lhtight_iloose_PS = trigDecTool.getPrescale( "HLT_e24_lhtight_iloose");
-  }
-  if( trigDecTool.isPassed( "HLT_e24_tight_iloose_L1EM20VH" ) ){
-    HLT_e24_tight_iloose_L1EM20VH = 1;
-    HLT_e24_tight_iloose_L1EM20VH_PS = trigDecTool.getPrescale( "HLT_e24_tight_iloose_L1EM20VH");
-  }
-  if( trigDecTool.isPassed( "HLT_e24_lhtight_iloose_L1EM20VH" ) ){
-    HLT_e24_lhtight_iloose_L1EM20VH = 1;
-    HLT_e24_lhtight_iloose_L1EM20VH_PS = trigDecTool.getPrescale( "HLT_e24_lhtight_iloose_L1EM20VH");
-  }
-  if( trigDecTool.isPassed( "HLT_e140_loose" ) ){
-    HLT_e140_loose = 1;
-    HLT_e140_loose_PS = trigDecTool.getPrescale( "HLT_e140_loose");
-  }
-  if( trigDecTool.isPassed( "HLT_e140_lhloose" ) ){
-    HLT_e140_lhloose = 1;
-    HLT_e140_lhloose_PS = trigDecTool.getPrescale( "HLT_e140_lhloose");
-  }
-  if( trigDecTool.isPassed( "HLT_mu26_imedium" ) ){ 
-    HLT_mu26_imedium = 1;
-    HLT_mu26_imedium_PS = trigDecTool.getPrescale( "HLT_mu26_imedium");
-  }
-  if( trigDecTool.isPassed( "HLT_mu24_imedium" ) ){ 
-    HLT_mu24_imedium = 1;
-    HLT_mu24_imedium_PS = trigDecTool.getPrescale( "HLT_mu24_imedium");
-  }
-  if( trigDecTool.isPassed( "HLT_mu50" ) ){
-    HLT_mu50 = 1;
-    HLT_mu50_PS = trigDecTool.getPrescale( "HLT_mu50"); 
-  }
-  if( trigDecTool.isPassed( "HLT_2e12_loose_L12EM10VH" ) ){
-    HLT_2e12_loose_L12EM10VH = 1;
-    HLT_2e12_loose_L12EM10VH_PS = trigDecTool.getPrescale( "HLT_2e12_loose_L12EM10VH");
-  }
-  if( trigDecTool.isPassed( "HLT_2e12_lhloose_L12EM10VH" ) ){
-    HLT_2e12_lhloose_L12EM10VH = 1;
-    HLT_2e12_lhloose_L12EM10VH_PS = trigDecTool.getPrescale( "HLT_2e12_lhloose_L12EM10VH");
-  }
-  if( trigDecTool.isPassed( "HLT_2mu14" ) ){
-    HLT_2mu14 = 1;
-    HLT_2mu14_PS = trigDecTool.getPrescale( "HLT_2mu14");
-  }
-  if( trigDecTool.isPassed( "HLT_2mu10" ) ){
-    HLT_2mu10 = 1;
-    HLT_2mu10_PS = trigDecTool.getPrescale( "HLT_2mu10");
-  }
-  if( trigDecTool.isPassed( "HLT_e17_loose_mu14" ) ){
-    HLT_e17_loose_mu14 = 1;
-    HLT_e17_loose_mu14_PS = trigDecTool.getPrescale( "HLT_e17_loose_mu14");    
-  }
-  if( trigDecTool.isPassed( "HLT_e17_lhloose_mu14" ) ){
-    HLT_e17_lhloose_mu14 = 1;
-    HLT_e17_lhloose_mu14_PS = trigDecTool.getPrescale( "HLT_e17_lhloose_mu14");    
-  }
-  if( trigDecTool.isPassed( "HLT_e7_medium_mu24" ) ){
-    HLT_e7_medium_mu24 = 1;
-    HLT_e7_medium_mu24_PS = trigDecTool.getPrescale( "HLT_e7_medium_mu24");
-  }
-  if( trigDecTool.isPassed( "HLT_e7_lhmedium_mu24" ) ){
-    HLT_e7_lhmedium_mu24 = 1;
-    HLT_e7_lhmedium_mu24_PS = trigDecTool.getPrescale( "HLT_e7_lhmedium_mu24");
-  }  //END trigger info
-
   //tau tool needs this in every event
   // if( top::isSimulation(event) ) {
   //   top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
@@ -695,8 +501,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
   // }
 
-  if (event.m_primaryVertices != nullptr) m_vertices = event.m_primaryVertices;
+// Probably we want to bomb out if the vertices nonexist?
+  if (event.m_primaryVertices == nullptr) { 
+      std::cerr << "WARNING!! Null vertex container! Expect segfault" << std::endl;
+  }
+  m_vertices = event.m_primaryVertices;
   
+  vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
   vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
