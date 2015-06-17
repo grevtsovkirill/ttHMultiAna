@@ -1,3 +1,8 @@
+2015-06-17 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver.cxx: d0 not corrected for PV, as per ID Tracking recommendations; 
+	z0 corrected for PV, now accessed by checking xAOD::VxType. Added var for N(PU vertices)
+	
+	
 2015-06-16 Peter Onyisi <ponyisi AT cern.ch>
 	* add ScalarWrapper to allow clean adding of non-vector variables
 	* reorganize trigger code for easy extensibility

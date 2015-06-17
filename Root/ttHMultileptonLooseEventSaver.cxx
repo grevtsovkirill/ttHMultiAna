@@ -21,6 +21,8 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_mcChannelNumber(0),
   m_mu(0),
   m_mu_ac(0),
+  m_pvNumber(0),
+  m_puNumber(0),
   m_met_met(0.),
   m_met_phi(0.)
 {
@@ -109,6 +111,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
+    systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
 
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
@@ -169,15 +172,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
-    //d0  and sig d0 and z0sinTh uncorrected
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0_uncorr");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0_uncorr");
+    //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0PV");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV");
+    //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta_uncorr");
-    //d0 and sig d0 and z0sinTh corrected for PV
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  float phi = ele.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y = d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); return (float) (d0_corr ); }, *systematicTree, "electron_d0PV");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float phi = ele.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y= d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0_corr/err_d0); }, *systematicTree, "electron_sigd0PV");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float z0corr = (z0 - (m_vertices->at(0)->z())); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "electron_z0SinTheta");
-
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float vz = ele.trackParticle()->vz(); float z_pv = 0;  
+	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) z_pv = vtx->z(); break; };  
+	  float z0corr = (z0 + vz - z_pv); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "electron_z0SinTheta");    
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "electron_Etcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "electron_Etcone30");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "electron_Etcone40");
@@ -222,14 +224,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.author(); }, *systematicTree, "muon_author");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.muonType(); }, *systematicTree, "muon_type");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (-13*mu.charge()); }, *systematicTree, "muon_ID");
-    //d0  and sig d0 and z0sinTh uncorrected
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  return (float) (d0); }, *systematicTree, "muon_d0_uncorr");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0_uncorr");
+    //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  return (float) (d0); }, *systematicTree, "muon_d0PV");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV");
+    //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta_uncorr");
-    //d0 and sig d0 and z0sinTh corrected for PV
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  float phi = mu.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y = d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); return (float) (d0_corr ); }, *systematicTree, "muon_d0PV");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float phi = mu.phi(); float d0x = d0*cos(phi); float d0x_corr = d0x-(m_vertices->at(0)->x()); float d0y= d0*sin(phi); float d0y_corr = d0y-(m_vertices->at(0)->y()); float d0_corr = sqrt( (d0x_corr*d0x_corr) + (d0y_corr*d0y_corr) ); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0_corr/err_d0); }, *systematicTree, "muon_sigd0PV");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float z0corr = (z0 - (m_vertices->at(0)->z())); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "muon_z0SinTheta");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float vz = mu.primaryTrackParticle()->vz(); float z_pv = 0;  
+	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) z_pv = vtx->z(); break; };  
+	float z0corr = (z0 + vz - z_pv); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "muon_z0SinTheta");
+    
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
@@ -399,7 +402,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mcWeight = 0.;
   if (top::isSimulation(event))
     m_mcWeight = event.m_info->mcEventWeight();
-
+  
   m_pileup_weight = 0.;
   if (top::ScaleFactorRetriever::hasPileupSF(event))
     m_pileup_weight = top::ScaleFactorRetriever::pileupSF(event);
@@ -412,8 +415,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
   m_mu     = event.m_info->averageInteractionsPerCrossing();
   m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
-  m_pvNumber = event.m_primaryVertices->size();
-
+  
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 
@@ -506,6 +508,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       std::cerr << "WARNING!! Null vertex container! Expect segfault" << std::endl;
   }
   m_vertices = event.m_primaryVertices;
+
+  m_pvNumber = 0;
+  m_puNumber = 0;
+  for (const xAOD::Vertex* vtx : *m_vertices){ 
+    if(vtx->vertexType() == xAOD::VxType::PriVtx) m_pvNumber++;
+    else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
+  }
   
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
