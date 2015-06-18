@@ -132,7 +132,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float HLT_e7_lhmedium_mu24_PS;
   //end trigger
   */  
-  //MC
+  //MC  
+  std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;
   std::vector<float> m_mc_phi;
