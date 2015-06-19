@@ -1,4 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
+
 #ifndef __TTH_CODE_TRUTH_SELECTOR_H__
 #define __TTH_CODE_TRUTH_SELECTOR_H__
 
@@ -26,8 +27,10 @@ namespace ttH
     int   barcode;
     int   parentPdgId;  
 
-    std::vector<int> bc_childrens;
-    std::vector<int> bc_parentss;
+    std::vector<int> bc_children;
+    std::vector<int> bc_parents;
+
+    std::string AsStr() const;
   };
 
 
@@ -52,10 +55,15 @@ namespace ttH
     bool IsHadronicTau(const int pdgId, const std::vector<int>& children);
     bool HasThisChild (const int child, const std::vector<int>& children);
 
-    bool IsStable     (const xAOD::TruthParticle& truth) const;
+    bool IsStable(const xAOD::TruthParticle& truth) const;
+    bool IsLepton(const xAOD::TruthParticle& truth) const;
+
+    std::vector<TruthPart> GetParents(const xAOD::TruthParticle &truth);
 
   private:
     
+    bool                                m_debug;
+
     const xAOD::TruthParticleContainer *m_truths;
     
     std::vector<TruthPart>              m_select;

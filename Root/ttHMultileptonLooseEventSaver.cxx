@@ -439,18 +439,21 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mc_status     .clear();
     m_mc_barcode    .clear();
 
-    for (const xAOD::TruthParticle*  mcPtr : *event.m_truth) {
-      if(mcPtr->pt()<5000.) continue;
-      m_mc_m      .push_back(mcPtr->m());
-      m_mc_pt     .push_back(mcPtr->pt());
-      m_mc_eta    .push_back(mcPtr->eta());
-      m_mc_phi    .push_back(mcPtr->phi());
-      m_mc_e      .push_back(mcPtr->e());
-      m_mc_pdgId  .push_back(mcPtr->pdgId());
-      m_mc_status .push_back(mcPtr->status());
-      m_mc_barcode.push_back(mcPtr->barcode()); 
-      if(mcPtr->parent()) m_mc_parentPdgId.push_back(mcPtr->parent()->pdgId());
-      else                m_mc_parentPdgId.push_back(99999.);
+    const std::vector<ttH::TruthPart> selected_truths = truthSelector.SelectTruth(event.m_truth);
+
+    for (const ttH::TruthPart &truth : selected_truths) {
+
+      m_mc_m      .push_back(truth.m);
+      m_mc_pt     .push_back(truth.pt);
+      m_mc_eta    .push_back(truth.eta);
+      m_mc_phi    .push_back(truth.phi);
+      m_mc_e      .push_back(truth.e);
+      m_mc_pdgId  .push_back(truth.pdgId);
+      m_mc_status .push_back(truth.status);
+      m_mc_barcode.push_back(truth.barcode); 
+
+      if(!truth.bc_parents.empty()) m_mc_parentPdgId.push_back(truth.bc_parents.front());
+      else                          m_mc_parentPdgId.push_back(99999.);
     }
   }
 

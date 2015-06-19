@@ -1,14 +1,23 @@
 #ifndef TTHMULTILEPTONLOOSEEVENTSAVER_H_
 #define TTHMULTILEPTONLOOSEEVENTSAVER_H_
 
-#include "TopAnalysis/EventSaverFlatNtuple.h"
-#include "ttHMultilepton/TreeAssist.h"
+
+// Trigger
 #include "TrigConfxAOD/xAODConfigTool.h"
 #include "TrigDecisionTool/TrigDecisionTool.h"
+
+// CP tools
 #include "MuonSelectorTools/MuonSelectionTool.h"
+#include "TauAnalysisTools/TauTruthMatchingTool.h"
+
+// xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
 #include "xAODTracking/VertexContainer.h"
-#include "TauAnalysisTools/TauTruthMatchingTool.h"
+
+// Local and Top analysis
+#include "TopAnalysis/EventSaverFlatNtuple.h"
+#include "ttHMultilepton/TreeAssist.h"
+#include "ttHMultilepton/TruthSelector.h"
 
 using namespace Trig;
 using namespace TrigConf;
@@ -38,10 +47,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ///The file where everything goes
   TFile* m_outputFile;
 
-  xAODConfigTool configTool;
-  TrigDecisionTool trigDecTool;
-  MuonSelectionTool muonSelection;
-  TauAnalysisTools::TauTruthMatchingTool tauTruthMatching;
+  xAODConfigTool                         configTool;
+  TrigDecisionTool                       trigDecTool;
+  MuonSelectionTool                      muonSelection;
+  ttH::TruthSelector                     truthSelector;
+  TauAnalysisTools::TauTruthMatchingTool tauTruthMatching;  
+
   const VertexContainer* m_vertices;
   
   ///A simple way to write out branches, without having to worry about the type.

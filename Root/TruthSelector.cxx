@@ -1,7 +1,10 @@
 // C++
-#include <iostream>
-#include <math.h>
 #include <cstdlib>
+#include <iostream>
+#include <iomanip>
+#include <math.h>
+#include <set>
+#include <sstream>
 
 // Top
 #include "TopEvent/Event.h"
@@ -57,10 +60,36 @@ ttH::TruthPart::TruthPart(const xAOD::TruthParticle &truth):
     eta = truth.eta();
     phi = truth.phi();
   }
+
+  for(size_t i = 0; i < truth.nParents(); ++i) {
+    const xAOD::TruthParticle *p = truth.parent(i);
+    
+    if(p) {
+      bc_parents.push_back(p->barcode());
+    }
+  }
+
+  for(size_t i = 0; i < truth.nChildren(); ++i) {
+    const xAOD::TruthParticle *p = truth.child(i);
+    
+    if(p) {
+      bc_children.push_back(p->barcode());
+    }
+  }
+}
+
+//-------------------------------------------------------------------------
+std::string ttH::TruthPart::AsStr() const
+{
+  stringstream str;
+  str << "pdg ID, status, pt=" << setw(4) << setfill(' ') << ", " << pdgId << setw(4) << setfill(' ') << status << ", " << pt;
+  
+  return str.str();
 }
 
 //-------------------------------------------------------------------------
 ttH::TruthSelector::TruthSelector():
+  m_debug (true),
   m_truths(nullptr)
 {
 }
@@ -87,6 +116,42 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
   m_truths = truths;
 
   for(const xAOD::TruthParticle *ptr: *m_truths) {
+    if(!ptr) {
+      continue;
+    }
+
+    bool pass = false;
+    TruthPart p(*ptr);
+
+    if(IsListA(p.pdgId, p.bc_children)) {
+      pass = true;     
+
+      if(m_debug) {
+	cout << "SelectTruth - select list A: " << p.AsStr() << endl;
+      }
+    }
+
+    if(IsStable(*ptr) && IsLepton(*ptr) && ptr->pt() > 5000.0) {
+      pass = true;
+
+      const std::vector<ttH::TruthPart> parents = GetParents(*ptr);
+
+      if(m_debug) {
+	cout << "SelectTruth - select lepton: " << p.AsStr() << endl;
+
+	for(const ttH::TruthPart &part: parents) {
+	  cout << "              lepton parent: " << part.AsStr() << endl;	
+	}
+	
+	if(parents.empty()) {
+	  cout << "              warning: missing lepton parent" << endl;
+	}
+      }
+    }
+
+    if(pass) {
+      m_select.push_back(p);
+    }
   }
 
   m_truths = nullptr;
@@ -170,6 +235,18 @@ bool ttH::TruthSelector::IsStable(const xAOD::TruthParticle& truth) const
 }
 
 //-------------------------------------------------------------------------
+bool ttH::TruthSelector::IsLepton(const xAOD::TruthParticle& truth) const
+{
+  const int pdgId = std::abs(truth.pdgId());
+
+  if(11 <= pdgId && pdgId <= 16) {
+    return true;
+  }
+
+  return false;
+}
+
+//-------------------------------------------------------------------------
 bool ttH::TruthSelector::HasThisChild(const int childID, const vector<int>& children)
 {
   for(size_t i = 0; i < children.size(); i++) {
@@ -187,4 +264,32 @@ bool ttH::TruthSelector::HasThisChild(const int childID, const vector<int>& chil
   }
 
   return false;
+}
+
+//-------------------------------------------------------------------------
+std::vector<ttH::TruthPart> ttH::TruthSelector::GetParents(const xAOD::TruthParticle &truth)
+{
+  std::set<int> bc_set;
+
+  for(size_t i = 0; i < truth.nParents(); ++i) {
+    const xAOD::TruthParticle *p = truth.parent(i);
+    
+    if(p) {
+      bc_set.insert(p->barcode());
+    }
+  }
+
+  std::vector<ttH::TruthPart> out;
+ 
+  for(const xAOD::TruthParticle *ptr: *m_truths) {
+    if(!ptr) {
+      continue;
+    }
+
+    if(bc_set.count(ptr->barcode())) {
+      out.push_back(TruthPart(*ptr));
+    }
+  }
+
+  return out;
 }
