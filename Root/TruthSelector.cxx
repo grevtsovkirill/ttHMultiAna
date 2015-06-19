@@ -30,7 +30,7 @@ const static int PDG_HIGGS = 25;
 
 const static int NOT_SELECTED = -1;
 
-//-------------------------------------------------------------------------
+//=========================================================================
 ttH::TruthPart::TruthPart():
   m          (0.0),
   pt         (0.0),
@@ -44,7 +44,7 @@ ttH::TruthPart::TruthPart():
 {
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 ttH::TruthPart::TruthPart(const xAOD::TruthParticle &truth):
   m          (truth.m()),
   pt         (truth.pt()),
@@ -78,33 +78,37 @@ ttH::TruthPart::TruthPart(const xAOD::TruthParticle &truth):
   }
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 std::string ttH::TruthPart::AsStr() const
 {
   stringstream str;
-  str << "pdg ID, status, pt=" << setw(4) << setfill(' ') << ", " << pdgId << setw(4) << setfill(' ') << status << ", " << pt;
+  str << "pdg ID, status, barcode, pt=" 
+      << setw(5) << setfill(' ') << std::right << pdgId   << ", "
+      << setw(5) << setfill(' ') << std::right << status  << ", "
+      << setw(9) << setfill(' ') << std::right << barcode << ", "
+      << pt;
   
   return str.str();
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 ttH::TruthSelector::TruthSelector():
   m_debug (true),
   m_truths(nullptr)
 {
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 ttH::TruthSelector::~TruthSelector()
 {
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 void ttH::TruthSelector::Initialize() 
 {
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::TruthParticleContainer *truths)
 {
   m_select.clear();
@@ -115,6 +119,11 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
 
   m_truths = truths;
 
+  if(m_debug) {
+    cout << "-------------------------------------------------------------------------" << endl
+	 << "Number of truth particles: " << m_truths->size() << endl;
+  }
+  
   for(const xAOD::TruthParticle *ptr: *m_truths) {
     if(!ptr) {
       continue;
@@ -123,18 +132,32 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
     bool pass = false;
     TruthPart p(*ptr);
 
+    //-------------------------------------------------------------------------
+    // Select list A particles
+    //
     if(IsListA(p.pdgId, p.bc_children)) {
       pass = true;     
 
+      const std::vector<ttH::TruthPart> children = GetChildren(*ptr);
+      m_select.insert(m_select.end(), children.begin(), children.end());
+
       if(m_debug) {
 	cout << "SelectTruth - select list A: " << p.AsStr() << endl;
+
+	for(const ttH::TruthPart &part: children) {
+	  cout << "              list A child:  " << part.AsStr() << endl;	
+	}
       }
     }
 
+    //-------------------------------------------------------------------------
+    // Select stable leptons and their parents
+    //
     if(IsStable(*ptr) && IsLepton(*ptr) && ptr->pt() > 5000.0) {
       pass = true;
 
       const std::vector<ttH::TruthPart> parents = GetParents(*ptr);
+      m_select.insert(m_select.end(), parents.begin(), parents.end());
 
       if(m_debug) {
 	cout << "SelectTruth - select lepton: " << p.AsStr() << endl;
@@ -154,47 +177,49 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
     }
   }
 
+  PruneSelectedParticles();
+
   m_truths = nullptr;
 
   return m_select;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsGoodTop(const int pdgId, const vector<int>& children) 
 {
-  return pdgId == PDG_TOP && HasThisChild(PDG_W, children) && children.size() >= 2;
+  return std::abs(pdgId) == PDG_TOP && HasThisChild(PDG_W, children) && children.size() >= 2;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsGoodHiggs(const int pdgId, const vector<int>& children)
 {
-  return pdgId == PDG_HIGGS && children.size() >= 2;
+  return std::abs(pdgId) == PDG_HIGGS && children.size() >= 2;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsGoodW(const int pdgId, const vector<int>& children)
 {
-  return pdgId == PDG_W && children.size() >= 2;
+  return std::abs(pdgId) == PDG_W && children.size() >= 2;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsGoodZ(const int pdgId, const vector<int>& children)
 {
-  return pdgId == PDG_Z && children.size() >= 2;
+  return std::abs(pdgId) == PDG_Z && children.size() >= 2;
 }
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsGoodTau(const int pdgId, const vector<int>& children)
 {
-  return pdgId == PDG_TAU && children.size() >= 2 && HasThisChild(PDG_TAU_NEUTRINO, children);
+  return std::abs(pdgId) == PDG_TAU && children.size() >= 2 && HasThisChild(PDG_TAU_NEUTRINO, children);
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsListA(const int pdgId, const vector<int>& children)
 {
   return IsGoodTop(pdgId, children) || IsGoodHiggs(pdgId, children) || IsGoodZ(pdgId, children) || IsGoodW(pdgId, children) || IsGoodTau(pdgId, children);
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsHadronicTau(const int pdgId, const vector<int>& children)
 {
   if(std::abs(pdgId) != PDG_TAU) {
@@ -212,7 +237,7 @@ bool ttH::TruthSelector::IsHadronicTau(const int pdgId, const vector<int>& child
   return HasThisChild(PDG_TAU_NEUTRINO, children);
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsStable(const xAOD::TruthParticle& truth) const
 {
   const int   pdgId  = std::abs(truth.pdgId());
@@ -234,7 +259,7 @@ bool ttH::TruthSelector::IsStable(const xAOD::TruthParticle& truth) const
   return false;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::IsLepton(const xAOD::TruthParticle& truth) const
 {
   const int pdgId = std::abs(truth.pdgId());
@@ -246,7 +271,7 @@ bool ttH::TruthSelector::IsLepton(const xAOD::TruthParticle& truth) const
   return false;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 bool ttH::TruthSelector::HasThisChild(const int childID, const vector<int>& children)
 {
   for(size_t i = 0; i < children.size(); i++) {
@@ -266,7 +291,7 @@ bool ttH::TruthSelector::HasThisChild(const int childID, const vector<int>& chil
   return false;
 }
 
-//-------------------------------------------------------------------------
+//=========================================================================
 std::vector<ttH::TruthPart> ttH::TruthSelector::GetParents(const xAOD::TruthParticle &truth)
 {
   std::set<int> bc_set;
@@ -292,4 +317,49 @@ std::vector<ttH::TruthPart> ttH::TruthSelector::GetParents(const xAOD::TruthPart
   }
 
   return out;
+}
+
+//=========================================================================
+std::vector<ttH::TruthPart> ttH::TruthSelector::GetChildren(const xAOD::TruthParticle &truth)
+{
+  std::set<int> bc_set;
+
+  for(size_t i = 0; i < truth.nChildren(); ++i) {
+    const xAOD::TruthParticle *p = truth.child(i);
+    
+    if(p) {
+      bc_set.insert(p->barcode());
+    }
+  }
+
+  std::vector<ttH::TruthPart> out;
+ 
+  for(const xAOD::TruthParticle *ptr: *m_truths) {
+    if(!ptr) {
+      continue;
+    }
+
+    if(bc_set.count(ptr->barcode())) {
+      out.push_back(TruthPart(*ptr));
+    }
+  }
+
+  return out;
+}
+
+//=========================================================================
+void ttH::TruthSelector::PruneSelectedParticles()
+{
+  std::set<int> bcs;
+
+  std::vector<TruthPart>::iterator sit = m_select.begin();
+  
+  while(sit != m_select.end()) {
+    if(bcs.insert(sit->barcode).second) {
+      sit++;
+    }
+    else {
+      sit = m_select.erase(sit);
+    }
+  }
 }

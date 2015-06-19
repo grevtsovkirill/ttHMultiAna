@@ -58,11 +58,16 @@ namespace ttH
     bool IsStable(const xAOD::TruthParticle& truth) const;
     bool IsLepton(const xAOD::TruthParticle& truth) const;
 
-    std::vector<TruthPart> GetParents(const xAOD::TruthParticle &truth);
+    std::vector<TruthPart> GetParents (const xAOD::TruthParticle &truth);
+    std::vector<TruthPart> GetChildren(const xAOD::TruthParticle &truth);
+
+    void PruneSelectedParticles();
 
   private:
     
     bool                                m_debug;
+    int                                 m_ntotal;
+    int                                 m_nselect;
 
     const xAOD::TruthParticleContainer *m_truths;
     
