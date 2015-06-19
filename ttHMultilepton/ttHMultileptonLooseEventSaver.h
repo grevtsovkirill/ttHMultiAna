@@ -152,7 +152,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<int>   m_mc_pdgId;
   std::vector<int>   m_mc_status;
   std::vector<int>   m_mc_barcode;
-  std::vector<int>   m_mc_parentPdgId;
+
+  std::vector<std::vector<int> >  m_mc_parents;
+  std::vector<std::vector<int> >  m_mc_children;
 
   std::vector<float> m_PDFinfo_x1;
   std::vector<float> m_PDFinfo_x2;

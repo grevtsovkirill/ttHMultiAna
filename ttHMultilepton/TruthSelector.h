@@ -75,4 +75,4 @@ namespace ttH
   }; // class TruthSelector
 }
 
-#endif // __HWW_TTH_CODE_TRUTH_SELECTOR_H__
+#endif

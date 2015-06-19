@@ -1,3 +1,8 @@
+2015-06-19 Rustem Ospanov <rustem at cern.ch>
+	* Add TruthSelector tool
+	* Select W, Z, H, tau, top and direct children
+	* Select stable leptons with pt>5 GeV and their direct parents
+	
 2015-06-18 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: some fixes for things that weren't called as in Run 1 ntuple and some duplicate trigger items; 
 	jet_truth_label now works: it has been switched on

@@ -127,9 +127,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mc_phi,         "m_truth_phi");
     systematicTree->makeOutputVariable(m_mc_e,           "m_truth_e");
     systematicTree->makeOutputVariable(m_mc_pdgId,       "m_truth_pdgId");
-    systematicTree->makeOutputVariable(m_mc_parentPdgId, "m_truth_parentPdgId");
     systematicTree->makeOutputVariable(m_mc_status,      "m_truth_status");
     systematicTree->makeOutputVariable(m_mc_barcode,     "m_truth_barcode");
+    systematicTree->makeOutputVariable(m_mc_parents,     "m_truth_parents");
+    systematicTree->makeOutputVariable(m_mc_children,    "m_truth_children");
 
     //truthEvent information
     systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
@@ -429,31 +430,31 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   
   //MC particle
   if (event.m_truth != nullptr) {
-    m_mc_m          .clear();
-    m_mc_pt         .clear();
-    m_mc_eta        .clear();
-    m_mc_phi        .clear();
-    m_mc_e          .clear();
-    m_mc_pdgId      .clear();
-    m_mc_parentPdgId.clear();
-    m_mc_status     .clear();
-    m_mc_barcode    .clear();
+    m_mc_m       .clear();
+    m_mc_pt      .clear();
+    m_mc_eta     .clear();
+    m_mc_phi     .clear();
+    m_mc_e       .clear();
+    m_mc_pdgId   .clear();
+    m_mc_parents .clear();
+    m_mc_children.clear();
+    m_mc_status  .clear();
+    m_mc_barcode .clear();
 
     const std::vector<ttH::TruthPart> selected_truths = truthSelector.SelectTruth(event.m_truth);
 
     for (const ttH::TruthPart &truth : selected_truths) {
 
-      m_mc_m      .push_back(truth.m);
-      m_mc_pt     .push_back(truth.pt);
-      m_mc_eta    .push_back(truth.eta);
-      m_mc_phi    .push_back(truth.phi);
-      m_mc_e      .push_back(truth.e);
-      m_mc_pdgId  .push_back(truth.pdgId);
-      m_mc_status .push_back(truth.status);
-      m_mc_barcode.push_back(truth.barcode); 
-
-      if(!truth.bc_parents.empty()) m_mc_parentPdgId.push_back(truth.bc_parents.front());
-      else                          m_mc_parentPdgId.push_back(99999.);
+      m_mc_m       .push_back(truth.m);
+      m_mc_pt      .push_back(truth.pt);
+      m_mc_eta     .push_back(truth.eta);
+      m_mc_phi     .push_back(truth.phi);
+      m_mc_e       .push_back(truth.e);
+      m_mc_pdgId   .push_back(truth.pdgId);
+      m_mc_status  .push_back(truth.status);
+      m_mc_barcode .push_back(truth.barcode); 
+      m_mc_children.push_back(truth.bc_children); 
+      m_mc_parents .push_back(truth.bc_parents); 
     }
   }
 

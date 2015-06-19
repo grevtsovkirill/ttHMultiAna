@@ -93,7 +93,7 @@ std::string ttH::TruthPart::AsStr() const
 
 //=========================================================================
 ttH::TruthSelector::TruthSelector():
-  m_debug (true),
+  m_debug (false),
   m_truths(nullptr)
 {
 }
