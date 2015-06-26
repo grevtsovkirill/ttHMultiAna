@@ -1,3 +1,7 @@
+2015-06-26 David Hohn <david.hohn@cern.ch>
+	* Remove TauTruthMatchingTool, matching is now done in derivation
+	* Update tau truth variables to read decorations
+
 2015-06-19 Rustem Ospanov <rustem at cern.ch>
 	* Add TruthSelector tool
 	* Select W, Z, H, tau, top and direct children

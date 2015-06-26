@@ -8,7 +8,6 @@
 
 // CP tools
 #include "MuonSelectorTools/MuonSelectionTool.h"
-#include "TauAnalysisTools/TauTruthMatchingTool.h"
 
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
@@ -51,7 +50,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   TrigDecisionTool                       trigDecTool;
   MuonSelectionTool                      muonSelection;
   ttH::TruthSelector                     truthSelector;
-  TauAnalysisTools::TauTruthMatchingTool tauTruthMatching;  
 
   const VertexContainer* m_vertices;
   

@@ -13,7 +13,6 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   configTool("xAODConfigTool"),
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
-  tauTruthMatching("TauTruthMatchingTool"),
   m_mcWeight(0.),
   m_pileup_weight(0.),
   m_eventNumber(0),
@@ -353,23 +352,50 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
 
-    top::check( tauTruthMatching.initialize() ,"TauTruthMatchingTool not initialised.");
-    top::check( tauTruthMatching.setProperty("OutputLevel", MSG::INFO), "TauTruthMatchingTool OutputLevel not set");
-    //top::check( tauTruthMatching.setProperty("TruthMuonContainerName", "MuonTruthParticles"), "TauTruthMatchingTool set TruthMuonContainerName failed.");
-    //top::check( tauTruthMatching.setProperty("TruthElectronContainerName", "ElectronTruthParticles"), "TauTruthMatchingTool set TruthElectronContainerName failed.");
-    
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-    	if(tau.isAvailable<bool>("IsTruthMatched")) return (short) tau.auxdata<bool>("IsTruthMatched");
-    	else return short(0);
+	int isTruthMatched = 0;
+    	if(tau.isAvailable<char>("IsTruthMatched")) isTruthMatched = (int) tau.auxdata<char>("IsTruthMatched");
+	return isTruthMatched;
       }, *systematicTree, std::string(tauprefix+"isTruthMatched").c_str());
 
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-    	if(tau.isAvailable<bool>("IsTruthMatched")) {
-    	  const xAOD::TruthParticle* truthTau = tau.auxdata<const xAOD::TruthParticle*>("TruthTau");
-    	  if(truthTau!=nullptr) return (short) truthTau->auxdata<bool>("IsHadronicTau");
-    	} 
-    	return short(0);
+	int isHadronic = 0;
+	if(tau.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+    	  const xAOD::TruthParticle* truthTau = nullptr;
+	  ElementLink<xAOD::TruthParticleContainer> link = tau.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+    	  if(link.isValid()) {
+	    truthTau = *link;
+	    if( truthTau->isAvailable<char>("IsHadronicTau") ) isHadronic =  (int) truthTau->auxdata<char>("IsHadronicTau");
+	  }
+	}
+	return isHadronic;
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
+    
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	unsigned int tauTruthOrigin = 0;
+	if(tau.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+    	  const xAOD::TruthParticle* truthTau = nullptr;
+	  ElementLink<xAOD::TruthParticleContainer> link = tau.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+    	  if(link.isValid()) {
+	    truthTau = *link;
+	    tauTruthOrigin = truthTau->auxdata<unsigned int>("particleOrigin");
+	  }
+	}
+	return tauTruthOrigin;
+      }, *systematicTree, std::string(tauprefix+"truthOrigin").c_str());
+
+        Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	    unsigned int tauTruthType = 0;
+	    if(tau.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+	      const xAOD::TruthParticle* truthTau = nullptr;
+	      ElementLink<xAOD::TruthParticleContainer> link = tau.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+	      if(link.isValid()) {
+		truthTau = *link;
+		tauTruthType = truthTau->auxdata<unsigned int>("particleType");
+	      }
+	    }
+	    return tauTruthType;
+      }, *systematicTree, std::string(tauprefix+"truthType").c_str());
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
 
@@ -501,13 +527,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
   
-  //tau tool needs this in every event
-  // if( top::isSimulation(event) ) {
-  //   top::check( tauTruthMatching.initializeEvent() ,"tauTruthMatching.initializeEvent() failed.");
-  //   for( auto tau : event.m_tauJets) {
-  //     tauTruthMatching.getTruth(*tau);
-  //   }
-  // }
   
   // for (const auto* const elPtr : event.m_electrons) {
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
