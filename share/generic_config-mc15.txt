@@ -1,5 +1,8 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
+GRLDir ttHMultilepton
+GRLFile data15_13TeV.periodA_DetStatus-v62-pro18_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
+
 EventInfoName EventInfo
 ElectronCollectionName Electrons
 MuonCollectionName Muons
@@ -14,6 +17,9 @@ LooseMETCollectionName MET_Reference_AntiKt4EMTopo
 TruthCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthJets
 TopPartonHistory ttbar
+TopParticleLevel True
+TruthElectronCollectionName None
+TruthMuonCollectionName None
 PDFInfo True
 
 #ObjectSelectionName top::ObjectLoaderStandardCuts
@@ -36,15 +42,21 @@ TauJetID JetBDTSigMedium
 TauEVetoID EleBDTMedium
 TauJetIDBkg None
 
+MuonQuality Loose
+MuonEta 2.7
+
+TruthJetPt 10000.
+TruthJetEta 10.5
+
 TruthBlockInfo True
 
 # Don't be clever
 SELECTION dummy
-TRIGDEC HLT_mu26_imedium
+TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu50
 
 SELECTION loose
 INITIAL
-#GRL data/ttHMultilepton/data15_13TeV.periodA1_DetStatus-v62-pro17_DQDefects-00-01-02_PHYS_CombinedPerf_Tracking_Tracking.xml
+GRL
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 
 TTHMULTILEP

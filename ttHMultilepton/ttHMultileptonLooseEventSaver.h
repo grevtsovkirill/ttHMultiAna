@@ -12,6 +12,7 @@
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
 #include "xAODTracking/VertexContainer.h"
+#include "xAODTruth/xAODTruthHelpers.h"
 
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
@@ -37,8 +38,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //Run for every event (in every systematic) that needs saving
   void saveEvent(const top::Event& event);
 
+  void saveTruthEvent();
+
   // IGNORE
-  virtual void saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent);
+  void saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent);
 
   void finalize();
   
@@ -161,6 +164,11 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_PDFinfo_scalePDF;
   std::vector<float> m_PDFinfo_pdf1;
   std::vector<float> m_PDFinfo_pdf2;
+
+  std::vector<float> m_trjet_pt;
+  std::vector<float> m_trjet_eta;
+  std::vector<float> m_trjet_phi;
+  std::vector<float> m_trjet_e;
 
   #ifndef __CINT__ 
   std::vector<ScalarWrapperCollection> vec_scalar_wrappers;

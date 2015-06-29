@@ -5,6 +5,8 @@
 #include "TopConfiguration/TopConfig.h"
 #include "TopEventSelectionTools/TreeManager.h"
 
+#include "TopParticleLevel/ParticleLevelEvent.h"
+
 #include "TopCorrections/ScaleFactorRetriever.h"
 #include "TFile.h"
 
@@ -106,7 +108,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->runNumber(); }, *systematicTree, "RunNumber");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->lumiBlock(); }, *systematicTree, "lbn");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
-    //    systematicTree->makeOutputVariable(m_runNumber, "RunNumber");
+    WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
 
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
@@ -140,6 +142,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_PDFinfo_pdf1,      "m_mcevt_pdf_pdf1");
     systematicTree->makeOutputVariable(m_PDFinfo_pdf2,      "m_mcevt_pdf_pdf2");
 
+    //truth jets
+    systematicTree->makeOutputVariable(m_trjet_pt,  "m_truth_jet_pt");
+    systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
+    systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
+    systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
+    
+
     //TRIGGER PART
     // Trigger decision tool. 
     ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
@@ -153,9 +162,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Items and their PS
     std::vector<std::string> triggernames{"HLT_e26_tight_iloose", 
 	"HLT_e26_lhtight_iloose", "HLT_e60_medium", "HLT_e60_lhmedium", 
+	"HLT_e24_lhmedium_iloose_L1EM18VH",
 	"HLT_e24_tight_iloose", "HLT_e24_lhtight_iloose", 
 	"HLT_e24_tight_iloose_L1EM20VH", "HLT_e24_lhtight_iloose_L1EM20VH", 
 	"HLT_e140_loose", "HLT_e140_lhloose", 
+	"HLT_mu20_iloose_L1MU15",
 	"HLT_mu26_imedium", "HLT_mu50", "HLT_mu24_imedium",
 	"HLT_2e12_loose_L12EM10VH", "HLT_2e12_lhloose_L12EM10VH", "HLT_2mu14",
 	"HLT_2mu10", "HLT_e17_loose_mu14", "HLT_e17_lhloose_mu14", 
@@ -203,10 +214,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //truth origin HERE
     //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
-    if (0) {
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::EgammaHelpers::getParticleTruthOrigin(&ele); }, *systematicTree, "electron_truthOrig");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::EgammaHelpers::getParticleTruthType(&ele); }, *systematicTree, "electron_truthType");
-    }
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrig");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); }, *systematicTree, "electron_truthType");
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
     // Muons
@@ -398,15 +407,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }, *systematicTree, std::string(tauprefix+"truthType").c_str());
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
-
     //Truth jets
-    std::vector<VectorWrapper*> trjetvec;
-    Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.pt();  }, *systematicTree, "m_jetTruth_pt");
-    Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.eta(); }, *systematicTree, "m_jetTruth_eta");
-    Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.phi(); }, *systematicTree, "m_jetTruth_phi");
-    Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.e();   }, *systematicTree, "m_jetTruth_E");
-
-
+    //std::vector<VectorWrapper*> trjetvec;
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.pt();  }, *systematicTree, "m_jetTruth_pt");
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.eta(); }, *systematicTree, "m_jetTruth_eta");
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.phi(); }, *systematicTree, "m_jetTruth_phi");
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.e();   }, *systematicTree, "m_jetTruth_E");
+    
     //Event selection pass/fail branches
     int index(0);
     for (const auto& branchName : m_extraBranches) {
@@ -556,7 +563,25 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
 }
 
-void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLevelEvent& ) { }
+void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent) { 
+  //jets
+  unsigned int i = 0;
+  m_trjet_pt.resize(plEvent.m_jets->size());
+  m_trjet_eta.resize(plEvent.m_jets->size());
+  m_trjet_phi.resize(plEvent.m_jets->size());
+  m_trjet_e.resize(plEvent.m_jets->size());
+  for (const auto & jetPtr : * plEvent.m_jets) {
+    m_trjet_pt[i] = jetPtr->pt();
+    m_trjet_eta[i] = jetPtr->eta();
+    m_trjet_phi[i] = jetPtr->phi();
+    m_trjet_e[i] = jetPtr->e();
+    ++i;
+  }
+}
+
+//nothing happens in this method, but it needs to be defined because otherwise we have a crash
+void ttHMultileptonLooseEventSaver::saveTruthEvent() { 
+}
 
 void ttHMultileptonLooseEventSaver::finalize() {
   m_outputFile->Write();

@@ -33,9 +33,11 @@ top::TopObjectSelection* ttHMultileptonObjectLoader::init(std::shared_ptr<top::T
     objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
   } else if (topConfig->electronID().find("LH") == 0 && topConfig->electronIDLoose().find("LH") == 0) {
     //user wants likelihood electrons
-    LikeEnum::Menu operatingPoint = top::ElectronLikelihoodMC15::textToEgammaEnum(topConfig->electronID());
-    LikeEnum::Menu operatingPointLoose = top::ElectronLikelihoodMC15::textToEgammaEnum(topConfig->electronIDLoose());
-    objectSelection->electronSelection(new top::ElectronLikelihoodMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), operatingPoint, operatingPointLoose, new top::StandardIsolation()));
+    objectSelection->electronSelection(new top::ElectronLikelihoodMC15(topConfig->electronPtcut(),
+								       topConfig->electronVetoLArCrack(),
+								       topConfig->electronID(),
+								       topConfig->electronIDLoose(),
+								       new top::StandardIsolation()));
   } else {
     std::cout << "\nHo hum\n";
     std::cout << "Not sure it makes sense to use a mix of LH and cut-based electrons for the tight/loose definitions\n";
@@ -45,8 +47,8 @@ top::TopObjectSelection* ttHMultileptonObjectLoader::init(std::shared_ptr<top::T
     exit(1);
   }
 
-  objectSelection->muonSelection(new top::MuonMC15(10000., 2.5, nullptr)); //new top::ApproxPTVarCone(0.05, 0.)));
-  objectSelection->jetSelection(new top::JetMC15(25000., 2.5, 0.5));
+  objectSelection -> muonSelection(new top::MuonMC15(topConfig->muonPtcut(), new top::StandardIsolation()));
+  objectSelection -> jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), topConfig->jetJVTcut())); // new jet vertex tagger cut  
   objectSelection->tauSelection(new top::TauMC15(10000., false, TauAnalysisTools::JETID::JETIDBDTMEDIUM, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::ELEID::ELEIDBDTMEDIUM));
   
   //objectSelection->overlapRemovalPreSelection(nullptr);

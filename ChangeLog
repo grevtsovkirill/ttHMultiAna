@@ -1,4 +1,9 @@
 2015-06-29 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver and ttHMultileptonLooseObjectSaver: various changes to make pkg compile under 
+	Top,20.3.15b
+	* ttHMultileptonLooseEventSaver.cxx: add passEventCleaning
+	
+2015-06-29 Giuseppe Salamanna <salaman AT cern.ch>
 	* Tagging the trunk that worked with 20.3.13 as ttHMultiAna-00-00-01 and make a branch of it
 	
 2015-06-26 David Hohn <david.hohn@cern.ch>
