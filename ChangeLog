@@ -1,3 +1,6 @@
+2015-06-30 David Hohn <david.hohn@cern.ch>
+	* Add "Count" histogram for normalisation
+
 2015-06-29 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver and ttHMultileptonLooseObjectSaver: various changes to make pkg compile under 
 	Top,20.3.15b
