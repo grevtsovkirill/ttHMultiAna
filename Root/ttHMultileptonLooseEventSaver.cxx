@@ -387,7 +387,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  ElementLink<xAOD::TruthParticleContainer> link = tau.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
     	  if(link.isValid()) {
 	    truthTau = *link;
-	    tauTruthOrigin = truthTau->auxdata<unsigned int>("particleOrigin");
+	    tauTruthOrigin = truthTau->auxdata<unsigned int>("classifierParticleOrigin");
 	  }
 	}
 	return tauTruthOrigin;
@@ -400,7 +400,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	      ElementLink<xAOD::TruthParticleContainer> link = tau.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
 	      if(link.isValid()) {
 		truthTau = *link;
-		tauTruthType = truthTau->auxdata<unsigned int>("particleType");
+		tauTruthType = truthTau->auxdata<unsigned int>("classifierParticleType");
 	      }
 	    }
 	    return tauTruthType;
