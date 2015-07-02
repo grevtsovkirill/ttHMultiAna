@@ -20,8 +20,8 @@ CountHisto::CountHisto(const std::string& name, TFile* outputFile, EL::Worker* w
     m_nominalHashValue = nominal.hash();
 
     m_hists.addHist("Count", ";;Events", 2, 0., 2.);
-    m_hists.hist("Count")->GetXaxis()->SetBinLabel(1,"Raw events");
-    m_hists.hist("Count")->GetXaxis()->SetBinLabel(2,"Pileup weighted events");
+    m_hists.hist("Count")->GetXaxis()->SetBinLabel(1,"nominal pileup weight");
+    m_hists.hist("Count")->GetXaxis()->SetBinLabel(2,"totalEventsProcessed");
 }
 
 bool CountHisto::apply(const top::Event& event) const {
@@ -47,8 +47,8 @@ bool CountHisto::apply(const top::Event& event) const {
       }
     }
     
-    m_hists.hist("Count")->Fill( 0. ,eventWeight);
-    m_hists.hist("Count")->Fill( 1. ,eventWeight*pileUpWeight);
+    m_hists.hist("Count")->Fill( 0. ,eventWeight*pileUpWeight);
+    m_hists.hist("Count")->Fill( 1. , 1);
 
     return true;
 }
