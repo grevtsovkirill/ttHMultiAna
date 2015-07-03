@@ -38,9 +38,12 @@ ElectronIDLoose LHLoose
 FakesControlRegionDoLooseMC False
 ApplyElectronInJetSubtraction False
 OverlapRemovalLeptonDef Tight
-TauJetID JetBDTSigMedium
-TauEVetoID EleBDTMedium
-TauJetIDBkg None
+
+#Tau cuts
+TauPt 10000
+TauJetID JetBDTSigLoose
+TauJetIDBkg JetBDTSigLoose
+TauEVetoID EleBDTLoose
 
 MuonQuality Loose
 MuonEta 2.7

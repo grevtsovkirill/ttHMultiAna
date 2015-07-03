@@ -1,3 +1,6 @@
+2015-07-03 David Hohn <david.hohn@cern.ch>
+	* loosen tau cuts
+
 2015-07-01 David Hohn <david.hohn@cern.ch>
 	* adjust to new names of particleType and Origin in Truth containers, works with derivation 20.1.5.4
 
