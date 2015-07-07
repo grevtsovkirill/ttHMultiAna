@@ -29,6 +29,7 @@ OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename output.root
 OutputEvents SelectedEvents
 PerfStats No
+NEvents 0
 
 CalculateSF False
 Systematics Nominal
@@ -55,7 +56,7 @@ TruthBlockInfo True
 
 # Don't be clever
 SELECTION dummy
-TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu50
+TRIGDEC HLT_mu26_imedium HLT_mu50 HLT_e26_lhtight_iloose HLT_e60_lhmedium
 
 SELECTION loose
 INITIAL

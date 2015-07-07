@@ -46,7 +46,6 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     exit(1);
   }
   
-  //objectSelection->muonSelection(new top::MuonMC15(5000., 2.7, nullptr)); //new top::ApproxPTVarCone(0.05, 0.)));
   objectSelection->muonSelection(new top::MuonMC15(5000., nullptr)); //new top::ApproxPTVarCone(0.05, 0.)));
   objectSelection->jetSelection(new top::JetMC15(10000., 10.5, 0.));
   objectSelection->tauSelection(new top::TauMC15(topConfig->tauPtcut(), false, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::ELEID::ELEIDBDTLOOSE));

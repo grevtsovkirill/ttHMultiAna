@@ -8,6 +8,8 @@
 #include "TopParticleLevel/ParticleLevelEvent.h"
 
 #include "TopCorrections/ScaleFactorRetriever.h"
+
+#include "xAODTracking/TrackParticlexAODHelpers.h"
 #include "TFile.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
@@ -15,6 +17,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   configTool("xAODConfigTool"),
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
+  iso_1( "iso_1" ),
   m_mcWeight(0.),
   m_pileup_weight(0.),
   m_eventNumber(0),
@@ -177,19 +180,27 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
     //END trigger
     vec_scalar_wrappers.push_back(scalarvec);
-    
 
+    //Isolation tool for leptons
+    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
+    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
+    top::check( iso_1.initialize(),"IsolationTool fails to initialize");
+    
+    //leptons
     std::vector<VectorWrapper*> elevec;    
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->eta(); }, *systematicTree, "electron_ClEta");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->etaBE(2); }, *systematicTree, "electron_EtaBE2");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
     //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV");
+    //Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV_hand"); //INACCURATE: USE following one by Tracking CP
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { double d0sig = xAOD::TrackingHelpers::d0significance( ele.trackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() ); return (float) (d0sig); }, *systematicTree, "electron_sigd0PV");
+
     //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta_uncorr");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float vz = ele.trackParticle()->vz(); float z_pv = 0;  
@@ -208,14 +219,22 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "electron_ptvarcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "electron_ptvarcone30");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "electron_ptvarcone40");
+    //IsolationTool response 
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int iso_pass = 0; if(iso_1.accept( ele )) iso_pass = 1; return iso_pass; }, *systematicTree, "electron_isolationLoose");
+
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHTight"); }, *systematicTree, "electron_isTightLH");
+
     //truth origin HERE
     //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrig");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); }, *systematicTree, "electron_truthType");
+    //Trigger matching
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e26_lhtight_iloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e26_lhtight_iloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e26_lhtight_iloose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e60_lhmedium");
+
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
     // Muons
@@ -239,7 +258,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (-13*mu.charge()); }, *systematicTree, "muon_ID");
     //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  return (float) (d0); }, *systematicTree, "muon_d0");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV_hand");  //INACCURATE: USE following one by Tracking CP
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { double d0sig = xAOD::TrackingHelpers::d0significance( mu.primaryTrackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() ); return (float) (d0sig); }, *systematicTree, "muon_sigd0PV");
     //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta_uncorr");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float vz = mu.primaryTrackParticle()->vz(); float z_pv = 0;  
@@ -265,6 +285,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "muon_ptvarcone20");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
+    //IsolationTool response 
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int iso_pass = 0; if(iso_1.accept( mu )) iso_pass = 1; return iso_pass; }, *systematicTree, "muon_isolationLoose");
     //Trigger matching
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu26_imedium")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu26_imedium"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu26_imedium");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu50")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu50");
@@ -539,7 +561,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
   // }
 
-// Probably we want to bomb out if the vertices nonexist?
+  //Event info (for TrackingxAODHelpers)
+  m_eventInfo = event.m_info;
+
+  // Probably we want to bomb out if the vertices nonexist?
   if (event.m_primaryVertices == nullptr) { 
       std::cerr << "WARNING!! Null vertex container! Expect segfault" << std::endl;
   }

@@ -13,6 +13,10 @@
 #include "xAODEgamma/EgammaxAODHelpers.h"
 #include "xAODTracking/VertexContainer.h"
 #include "xAODTruth/xAODTruthHelpers.h"
+#include "xAODEventInfo/EventInfo.h"
+
+//Isolation
+#include "IsolationSelection/IsolationSelectionTool.h"
 
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
@@ -52,9 +56,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   xAODConfigTool                         configTool;
   TrigDecisionTool                       trigDecTool;
   MuonSelectionTool                      muonSelection;
+  IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
 
+  //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
+  const EventInfo*       m_eventInfo;
   
   ///A simple way to write out branches, without having to worry about the type.
   std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
