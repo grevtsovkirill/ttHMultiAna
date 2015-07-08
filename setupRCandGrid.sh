@@ -1,6 +1,6 @@
 #! /bin/sh
-echo "Setting up RootCore and Top Analysis version 2.3.15b..."
-rcSetup Top,2.3.15b
+echo "Setting up RootCore and requested Top Analysis version..."
+rcSetup Top,2.3.18
 
 echo "Setting up all grid-related libraries..."
 localSetupPandaClient --noAthenaCheck

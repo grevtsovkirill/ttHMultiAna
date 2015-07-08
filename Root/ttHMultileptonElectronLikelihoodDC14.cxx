@@ -89,8 +89,8 @@ bool ElectronLikelihoodDC14::passSelectionNoIsolation(const xAOD::Electron& el, 
 void ElectronLikelihoodDC14::print(std::ostream& os) const {
     os << "ElectronLikelihoodDC14\n";
     os << "    * pT > " << m_ptcut << "\n";
-    os << "    * Currently disabled --- |cluster_eta| < 2.47 \n";
-    os << "    * Veto 1.37 < |cluster_eta| < 1.52? " << std::boolalpha << m_vetoCrack << "\n";
+    os << "    * |cluster_eta BE(2)| < 2.47 is applied hard-wired in the code\n";
+    os << "    * Veto 1.37 < |cluster_eta BE(2)| < 1.52? " << std::boolalpha << m_vetoCrack << "\n";
 
     //os << "    * LH Tool Operating Point: " << m_likelihood->getOperatingPointName() << "\n";
     //does exactly what I want but is a private method in the likelihood class :( - asked egamma to make it public

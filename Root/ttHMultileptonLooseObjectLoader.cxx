@@ -36,7 +36,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     LikeEnum::Menu operatingPoint = ttHMultilepton::ElectronLikelihoodDC14::textToEgammaEnum(topConfig->electronID());
     LikeEnum::Menu operatingPointLoose = ttHMultilepton::ElectronLikelihoodDC14::textToEgammaEnum(topConfig->electronIDLoose());
     //objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), operatingPoint, operatingPointLoose, new top::StandardIsolation()));
-    objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodDC14(5000., false, operatingPoint, operatingPointLoose, nullptr));
+    objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodDC14(topConfig->electronPtcut(), false, operatingPoint, operatingPointLoose, nullptr));
   } else {
     std::cout << "\nHo hum\n";
     std::cout << "Not sure it makes sense to use a mix of LH and cut-based electrons for the tight/loose definitions\n";
@@ -46,8 +46,8 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     exit(1);
   }
   
-  objectSelection->muonSelection(new top::MuonMC15(5000., nullptr)); //new top::ApproxPTVarCone(0.05, 0.)));
-  objectSelection->jetSelection(new top::JetMC15(10000., 10.5, 0.));
+  objectSelection->muonSelection(new top::MuonMC15(topConfig->muonPtcut(), nullptr)); 
+  objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), 0.));
   objectSelection->tauSelection(new top::TauMC15(topConfig->tauPtcut(), false, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::ELEID::ELEIDBDTLOOSE));
   
   //and the overlap removal

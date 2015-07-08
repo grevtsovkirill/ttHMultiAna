@@ -1,5 +1,8 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
+GRLDir ttHMultilepton
+GRLFile data15_13TeV.periodA_DetStatus-v62-pro18_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
+
 EventInfoName EventInfo
 ElectronCollectionName Electrons
 MuonCollectionName Muons
@@ -11,19 +14,12 @@ PhotonCollectionName None
 METCollectionName MET_RefFinal_AntiKt4EMTopo
 LooseMETCollectionName MET_Reference_AntiKt4EMTopo
 
-TruthCollectionName TruthParticles
-TruthJetCollectionName AntiKt4TruthJets
-TopPartonHistory ttbar
-TopParticleLevel True
-TruthElectronCollectionName None
-TruthMuonCollectionName None
-PDFInfo True
 
 #ObjectSelectionName top::ObjectLoaderStandardCuts
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.MC.root
+OutputFilename output.DATA.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents	
 PerfStats No
@@ -40,8 +36,8 @@ ElectronPt 5000.
 #Muon cuts
 MuonQuality VeryLoose
 MuonQualityLoose VeryLoose
-MuonEta 2.7
 MuonPt 5000.
+MuonEta 2.7
 
 #Tau cuts
 TauPt 10000
@@ -53,16 +49,12 @@ TauEVetoID EleBDTLoose
 JetPt 10000.
 JetEta 10.5
 
-#Truth jet cuts
-TruthJetPt 10000.
-TruthJetEta 10.5
 
 #Other cuts, overlaps, bkgs..
 FakesControlRegionDoLooseMC False
 ApplyElectronInJetSubtraction False
 OverlapRemovalLeptonDef Tight
 
-TruthBlockInfo True
 
 # Don't be clever
 SELECTION dummy
@@ -73,6 +65,9 @@ TRIGDEC HLT_mu26_imedium HLT_mu50 HLT_e26_lhtight_iloose HLT_e60_lhmedium
 SELECTION loose
 INITIAL
 COUNTHISTO
+GRL
+GOODCALO
+#JETCLEAN LooseBad 
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 
 TTHMULTILEP
