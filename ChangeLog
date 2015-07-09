@@ -1,3 +1,6 @@
+2015-07-09 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonElectronLikelihoodDC14: updated confDir to latest (20150429)
+	
 2015-07-08 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseObjectLoader: make things a bit more configurable
 	* generic-..txt: clean up mc15 one and add lepton and jet cuts; create data15 one 

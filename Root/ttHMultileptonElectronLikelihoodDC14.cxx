@@ -139,7 +139,7 @@ LikeEnum::Menu ElectronLikelihoodDC14::textToEgammaEnum(const std::string& text)
 }
 
 std::string ElectronLikelihoodDC14::getConfigFile(const LikeEnum::Menu operatingPoint) {
-  std::string config_file = "ElectronPhotonSelectorTools/offline/mc15_20150408/";
+  std::string config_file = "ElectronPhotonSelectorTools/offline/mc15_20150429/";
 
   if (operatingPoint == LikeEnum::Tight)
     config_file += "ElectronLikelihoodTightOfflineConfig2015.conf";
