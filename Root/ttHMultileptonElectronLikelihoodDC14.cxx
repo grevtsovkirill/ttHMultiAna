@@ -60,7 +60,7 @@ bool ElectronLikelihoodDC14::passSelectionLoose(const xAOD::Electron& el) const 
 }
 
 bool ElectronLikelihoodDC14::passSelectionNoIsolation(const xAOD::Electron& el, std::shared_ptr<AsgElectronLikelihoodTool> likelihoodTool) const {
-    if (el.author() != xAOD::EgammaParameters::AuthorElectron && el.author() != xAOD::EgammaParameters::AuthorSofte)
+    if (el.author() != xAOD::EgammaParameters::AuthorElectron && el.author() != xAOD::EgammaParameters::AuthorAmbiguous)
         return false;
 
     if (el.pt() < m_ptcut)
