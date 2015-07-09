@@ -19,7 +19,7 @@ LooseMETCollectionName MET_Reference_AntiKt4EMTopo
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.DATA.root
+OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents	
 PerfStats No

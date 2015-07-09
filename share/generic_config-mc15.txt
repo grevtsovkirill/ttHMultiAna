@@ -23,7 +23,7 @@ PDFInfo True
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.MC.root
+OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents	
 PerfStats No
