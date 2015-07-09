@@ -30,7 +30,7 @@ ElectronLikelihoodDC14::ElectronLikelihoodDC14(double ptcut, bool vetoCrack, Lik
 
 bool ElectronLikelihoodDC14::passSelection(const xAOD::Electron& el) const {
   // decorate electron with likelihood pattern
-  if ((el.author() != xAOD::EgammaParameters::AuthorElectron && el.author() != xAOD::EgammaParameters::AuthorSofte) || el.pt() < m_ptcut) {
+  if ((el.author() != xAOD::EgammaParameters::AuthorElectron && el.author() != xAOD::EgammaParameters::AuthorAmbiguous) || el.pt() < m_ptcut) {
     // do not consider this electron object
     for (const auto wp : m_workingPointList) {
       el.auxdecor<short>("pass" + wp.second) = false;
