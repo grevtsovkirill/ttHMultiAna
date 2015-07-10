@@ -1,3 +1,6 @@
+2015-07-10 David Hohn <david.hohn@cern.ch>
+	* fix Count histo for data: the LooseEventSaver now sees all events and decides which events to save.
+
 2015-07-10 Giuseppe Salamanna <salaman AT cern.ch>
 	* generic_config-mc15.txt: eliminate reference to GRL
 	

@@ -459,6 +459,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
     return;
   }
+
+  // do not save bad events in data
+  if(!top::isSimulation(event) && !event.m_saveEvent) return;
+  
   m_mcWeight = 0.;
   if (top::isSimulation(event))
     m_mcWeight = event.m_info->mcEventWeight();

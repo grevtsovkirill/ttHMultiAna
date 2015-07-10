@@ -27,7 +27,7 @@ CountHisto::CountHisto(const std::string& name, TFile* outputFile, EL::Worker* w
 bool CountHisto::apply(const top::Event& event) const {
     //only nominal
     
-    if (event.m_hashValue != m_nominalHashValue)
+    if (event.m_hashValue != m_nominalHashValue || event.m_isLoose)
         return true;
 
     //only plot tight selection

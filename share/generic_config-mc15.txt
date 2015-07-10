@@ -24,8 +24,8 @@ ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename output.root
-#OutputEvents AllEvents
-OutputEvents SelectedEvents	
+OutputEvents AllEvents
+#OutputEvents SelectedEvents	
 PerfStats No
 NEvents 0
 
