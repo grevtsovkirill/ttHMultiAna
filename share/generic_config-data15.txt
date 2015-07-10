@@ -1,7 +1,7 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
 GRLDir ttHMultilepton
-GRLFile data15_13TeV.periodA_DetStatus-v62-pro18_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
+GRLFile data15_13TeV.periodAllYear_DetStatus-v62-pro18-01_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -64,10 +64,10 @@ TRIGDEC HLT_mu26_imedium HLT_mu50 HLT_e26_lhtight_iloose HLT_e60_lhmedium
 
 SELECTION loose
 INITIAL
-COUNTHISTO
+#COUNTHISTO
 GRL
 GOODCALO
-#JETCLEAN LooseBad 
+JETCLEAN LooseBad
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 
 TTHMULTILEP

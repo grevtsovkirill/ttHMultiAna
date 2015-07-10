@@ -1,3 +1,6 @@
+2015-07-10 Giuseppe Salamanna <salaman AT cern.ch>
+	* generic_config-mc15.txt: eliminate reference to GRL
+	
 2015-07-09 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonElectronLikelihoodDC14: updated confDir to latest (20150429) and change in LH computation
 	from author softe to AuthorAmbiguous

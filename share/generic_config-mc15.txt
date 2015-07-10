@@ -66,13 +66,13 @@ TruthBlockInfo True
 
 # Don't be clever
 SELECTION dummy
-GRL
 TRIGDEC HLT_mu26_imedium HLT_mu50 HLT_e26_lhtight_iloose HLT_e60_lhmedium
 
 
 SELECTION loose
 INITIAL
 COUNTHISTO
+JETCLEAN LooseBad
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 
 TTHMULTILEP
