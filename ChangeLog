@@ -1,3 +1,6 @@
+2015-07-13 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: switched to post-calib JVT from TopAna decoration
+	
 2015-07-10 David Hohn <david.hohn@cern.ch>
 	* fix Count histo for data: the LooseEventSaver now sees all events and decides which events to save.
 
