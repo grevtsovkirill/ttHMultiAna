@@ -1,0 +1,22 @@
+##########################################################################################################################################
+##Format                                                                                                                                 ##
+#DatasetID : Xsection(pb) : K-factor : Filtering Efficiency : Uncertainty : Mass : Sample Priority : Generator : ProcessInfo : Simulation ##
+###########################################################################################################################################
+
+361106	1901.2	1.026	1.0	--	-999	1	Powheg	zee	Full	
+361107	1901.2	1.026	1.0	--	-999	1	Powheg	zmumu	Full	
+361108	1901.2	1.026	1.0	--	-999	1	Powheg	ztautau	Full	
+410000	377.993	1.1949	1.0	--	-999	1	Powheg	ttbar	Full	
+410011	43.739	1	1.0	--	-999	1	Powheg	tchan_lept_top	Full	
+410012	25.778	1	1.0	--	-999	1	Powheg	tchan_lept_antitop	Full	
+410013	34.009	1	1.0	--	-999	1	Powheg	Wt_inclusive_top	Full	
+410014	33.989	1	1.0	--	-999	1	Powheg	Wt_inclusive_antitop	Full	
+410015	3.5835	1	1.0	--	-999	1	Powheg	Wt_dilepton_top	Full	
+410016	3.5814	1	1.0	--	-999	1	Powheg	Wt_dilepton_antitop	Full	
+361081	25.995	1	1.0	--	-999	1	Sherpa	WplvWmqq	Full	
+361082	25.974	1	1.0	--	-999	1	Sherpa	WpqqWmlv	Full	
+361083	12.543	1	1.0	--	-999	1	Sherpa	WlvZqq	Full	
+361084	3.7583	1	1.0	--	-999	1	Sherpa	WqqZll	Full	
+361085	7.4151	1	1.0	--	-999	1	Sherpa	WqqZvv	Full	
+361086	2.3647	1	1.0	--	-999	1	Sherpa	ZqqZll	Full	
+361087	4.6336	1	1.0	--	-999	1	Sherpa	ZqqZvv	Full	
