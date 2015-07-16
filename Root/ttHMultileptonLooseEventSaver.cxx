@@ -165,15 +165,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Items and their PS
     std::vector<std::string> triggernames{"HLT_e26_tight_iloose", 
 	"HLT_e26_lhtight_iloose", "HLT_e60_medium", "HLT_e60_lhmedium", 
-	"HLT_e24_lhmedium_iloose_L1EM18VH",
+	"HLT_e24_lhmedium_L1EM18VH","HLT_e24_lhmedium_iloose_L1EM18VH",
 	"HLT_e24_tight_iloose", "HLT_e24_lhtight_iloose", 
 	"HLT_e24_tight_iloose_L1EM20VH", "HLT_e24_lhtight_iloose_L1EM20VH", 
-	"HLT_e140_loose", "HLT_e140_lhloose", 
-	"HLT_mu20_iloose_L1MU15",
-	"HLT_mu26_imedium", "HLT_mu50", "HLT_mu24_imedium",
-	"HLT_2e12_loose_L12EM10VH", "HLT_2e12_lhloose_L12EM10VH", "HLT_2mu14",
-	"HLT_2mu10", "HLT_e17_loose_mu14", "HLT_e17_lhloose_mu14", 
+	"HLT_e120_lhloose", "HLT_e140_loose", "HLT_e140_lhloose", 
+	"HLT_mu20_iloose_L1MU15","HLT_mu26_imedium", 
+	"HLT_mu40", "HLT_mu50", "HLT_mu24_imedium",
+	"HLT_2e12_loose_L12EM10VH", "HLT_2e12_lhloose_L12EM10VH", "HLT_e17_lhloose_2e9_lhloose",
+	"HLT_2mu14", "HLT_2mu10", "HLT_e17_loose_mu14", "HLT_e17_lhloose_mu14", 
 	"HLT_e7_medium_mu24", "HLT_e7_lhmedium_mu24"};
+
     for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
       WrapS(scalarvec, [=](const top::Event&){ return (float) trigDecTool.getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
@@ -232,8 +233,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrig");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); }, *systematicTree, "electron_truthType");
     //Trigger matching
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e24_lhmedium_L1EM18VH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e26_lhtight_iloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e26_lhtight_iloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e26_lhtight_iloose");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e60_lhmedium");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e120_lhloose");
 
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
@@ -288,9 +291,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //IsolationTool response 
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int iso_pass = 0; if(iso_1.accept( mu )) iso_pass = 1; return iso_pass; }, *systematicTree, "muon_isolationLoose");
     //Trigger matching
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu20_iloose_L1MU15");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu26_imedium")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu26_imedium"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu26_imedium");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu40")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu40");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu50")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu50");
-
 
     //truth origin HERE
     //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon. 

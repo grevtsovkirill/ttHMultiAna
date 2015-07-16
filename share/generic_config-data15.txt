@@ -1,7 +1,7 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
 GRLDir ttHMultilepton
-GRLFile data15_13TeV.periodAllYear_DetStatus-v62-pro18-01_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
+GRLFile data15_13TeV.periodAllYear_DetStatus-v63-pro18-01_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -23,7 +23,7 @@ OutputFilename output.root
 OutputEvents AllEvents
 #OutputEvents SelectedEvents	
 PerfStats No
-NEvents 0
+NEvents 10000
 
 CalculateSF False
 Systematics Nominal
@@ -59,7 +59,7 @@ OverlapRemovalLeptonDef Tight
 # Don't be clever
 SELECTION dummy
 GRL
-TRIGDEC HLT_mu26_imedium HLT_mu50 HLT_e26_lhtight_iloose HLT_e60_lhmedium
+TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedium_L1EM18VH HLT_e26_lhtight_iloose HLT_e60_lhmedium HLT_e120_lhloose 
 
 
 SELECTION loose

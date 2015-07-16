@@ -1,3 +1,7 @@
+2015-07-16 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: adding 50ns un-prescaled triggers according to 
+	https://twiki.cern.ch/twiki/bin/viewauth/Atlas/LowestUnprescaled#Data_Periods
+	
 2015-07-13 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: switched to post-calib JVT from TopAna decoration
 	
