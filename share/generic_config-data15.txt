@@ -20,10 +20,10 @@ ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename output.root
-OutputEvents AllEvents
-#OutputEvents SelectedEvents	
+#OutputEvents AllEvents
+OutputEvents SelectedEvents	
 PerfStats No
-NEvents 10000
+NEvents 900
 
 CalculateSF False
 Systematics Nominal
@@ -64,9 +64,9 @@ TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedi
 
 SELECTION loose
 INITIAL
-#COUNTHISTO
 GRL
 GOODCALO
+COUNTHISTO
 JETCLEAN LooseBad
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 

@@ -87,6 +87,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float m_mu_ac;
   int m_pvNumber;
   int m_puNumber;
+  //use with care, dont mix MC and data in same job
+  bool m_isMC;
 
   //met
   float m_met_met;

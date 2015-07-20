@@ -11,6 +11,7 @@
 
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 #include "TFile.h"
+#include "TH1.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
   m_outputFile(0),
@@ -448,7 +449,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
         systematicTree->makeOutputVariable(m_selectionDecisions[index], branchName);
         ++index;
     }
-  } 
+  }
+
+  // dont mix MC and data in the same job
+  m_isMC = config->isMC();
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -465,8 +469,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     return;
   }
 
-  // do not save bad events in data
-  if(!top::isSimulation(event) && !event.m_saveEvent) return;
+  // only save selected events
+  if(!event.m_saveEvent) {
+    return;
+  }
   
   m_mcWeight = 0.;
   if (top::isSimulation(event))
@@ -618,5 +624,10 @@ void ttHMultileptonLooseEventSaver::saveTruthEvent() {
 }
 
 void ttHMultileptonLooseEventSaver::finalize() {
+  // copy number of events before event cleaning for data
+  if(!m_isMC) {
+    double goodCalo = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(2);
+    static_cast<TH1D*>(m_outputFile->Get("loose/Count"))->SetBinContent(2,goodCalo);
+  }
   m_outputFile->Write();
 }
