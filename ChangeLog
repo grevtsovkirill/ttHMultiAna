@@ -1,3 +1,6 @@
+2015-07-20 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: adding LooseBad per jet; preparing to call PURW, but still commented out for now
+	
 2015-07-20 David Hohn <david.hohn@cern.ch>
 	* optimise Count histo for data: will now copy the content of TopAnalysis builtin cutflow histo to our Count histo at the end of jobs for data
 

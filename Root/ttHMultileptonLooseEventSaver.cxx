@@ -152,7 +152,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
     systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
     
-
+    //PURW
+    m_purwtool = new CP::PileupReweightingTool("prw");
+    std::vector<std::string> confFiles;
+    std::vector<std::string> lcalcFiles;
+    confFiles.push_back("auto.prw.root");
+    lcalcFiles.push_back("my.lumicalc.root");
+    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
+    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
+    //top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
+    
     //TRIGGER PART
     // Trigger decision tool. 
     ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
@@ -344,6 +353,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
   
+    //Jet cleaning tool is initialized here
+    cleaningTool = new JetCleaningTool("MyCleaningTool");
+    top::check( cleaningTool->setProperty("CutLevel", "LooseBad"), "Jet Cleaning tool failed to set cut level"); // also "TightBad"
+    top::check( cleaningTool->setProperty("DoUgly", false), "Jet Cleaning tool failed to set value for DoUgly flag");
+    top::check( cleaningTool->initialize(), "Jet Cleaning tool failed to initialize");
 
     // Jets
     std::vector<VectorWrapper*> jetvec;
@@ -358,6 +372,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     // not in sample xAOD
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("Jvt"); }, *systematicTree, "m_jet_jvt_uncal");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { float this_jvt = -999.; if(jet.isAvailable<float>("AnalysisTop_JVT")) this_jvt = jet.auxdataConst<float>("AnalysisTop_JVT"); return this_jvt;}, *systematicTree, "m_jet_jvt");
+    //Jet cleaning flag
+    Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = cleaningTool->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad"); 
     // No label tagging in sample MC
     //if (0) {
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<int>("ConeTruthLabelID"); }, *systematicTree, "m_jet_flavor_truth_label");
@@ -488,7 +504,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mcChannelNumber = 0;
   if (top::isSimulation(event))
     m_mcChannelNumber = event.m_info->mcChannelNumber();
-  m_mu     = event.m_info->averageInteractionsPerCrossing();
+  //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
+  m_mu     = event.m_info->averageInteractionsPerCrossing(); // m_purwtool->getLumiBlockMu( *event.m_info ); SWITCHED OFF FOR NOW
   m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
   
   //Event selection variable for each event selection region (pass/fail)

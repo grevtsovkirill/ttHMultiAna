@@ -8,6 +8,9 @@
 
 // CP tools
 #include "MuonSelectorTools/MuonSelectionTool.h"
+#include "JetSelectorTools/JetCleaningTool.h"
+#include "PileupReweighting/PileupReweightingTool.h"
+#include "AsgTools/ToolHandle.h"
 
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
@@ -56,8 +59,11 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   xAODConfigTool                         configTool;
   TrigDecisionTool                       trigDecTool;
   MuonSelectionTool                      muonSelection;
+  JetCleaningTool*                       cleaningTool;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
+  //  ToolHandle<CP::IPileupReweightingTool>     m_purwtool;
+  ToolHandle<IPileupReweightingTool>     m_purwtool;
 
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
