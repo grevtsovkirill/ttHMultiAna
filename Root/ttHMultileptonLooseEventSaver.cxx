@@ -486,9 +486,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   // only save selected events
-  if(!event.m_saveEvent) {
-    return;
-  }
+  //if(!event.m_saveEvent) {
+  // return;
+  //}
   
   m_mcWeight = 0.;
   if (top::isSimulation(event))
