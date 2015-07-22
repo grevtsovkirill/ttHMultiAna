@@ -1,6 +1,7 @@
 2015-07-21 David Hohn <david.hohn@cern.ch>
 	* wrote own Tau object selector as the top:: one could not be configured to be loose enough.
 	* move to Top,2.3.20: no API changes required this time
+	* enable builtin pileup reweighting with prelim configs
 
 2015-07-20 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: adding LooseBad per jet; preparing to call PURW, but still commented out for now
