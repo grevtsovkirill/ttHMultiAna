@@ -21,7 +21,7 @@ ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename output.root
 #OutputEvents AllEvents
-OutputEvents SelectedEvents	
+OutputEvents SelectedEvents
 PerfStats No
 #NEvents 900
 
@@ -40,6 +40,10 @@ MuonPt 5000.
 MuonEta 2.7
 
 #Tau cuts
+#have been moved to ttHMultilepton/data/loose_tau_selection.conf
+#for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
+
+#below is just dummy, so TopConfig doesnt complain
 TauPt 10000
 TauJetID JetBDTSigLoose
 TauJetIDBkg JetBDTSigLoose
