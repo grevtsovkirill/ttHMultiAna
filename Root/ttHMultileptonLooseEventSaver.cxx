@@ -19,8 +19,10 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
+  m_sfRetriever(nullptr),
   m_mcWeight(0.),
   m_pileup_weight(0.),
+  m_leptonSF_weight(0.),
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
@@ -105,6 +107,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   for (auto systematicTree : m_treeManagers){
     systematicTree->makeOutputVariable(m_mcWeight, "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
+    systematicTree->makeOutputVariable(m_leptonSF_weight, "lepTrigSFEventWeight");
 
     //event info
     std::vector<ScalarWrapper*> scalarvec; 
@@ -156,11 +159,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     m_purwtool = new CP::PileupReweightingTool("prw");
     std::vector<std::string> confFiles;
     std::vector<std::string> lcalcFiles;
-    confFiles.push_back("auto.prw.root");
-    lcalcFiles.push_back("my.lumicalc.root");
-    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
-    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
-    //top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
+    confFiles.push_back("prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root");
+    lcalcFiles.push_back("ilumicalc_histograms_None_266904-267639.root");
+    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
+    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
+    top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
     
     //TRIGGER PART
     // Trigger decision tool. 
@@ -470,6 +473,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   // dont mix MC and data in the same job
   m_isMC = config->isMC();
+
+  // Shall we do scale factors?
+  if (config->doCalculateSF()) {
+    m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
+  }
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -491,23 +499,31 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   // return;
   //}
   
-  m_mcWeight = 0.;
-  if (top::isSimulation(event))
-    m_mcWeight = event.m_info->mcEventWeight();
+  m_mcWeight = 1.;
+  m_pileup_weight = 1.;
+  m_leptonSF_weight = 1.;
+ 
+  if (top::isSimulation(event)){
+    m_mcChannelNumber = event.m_info->mcChannelNumber();
+    m_mcWeight        = event.m_info->mcEventWeight(); 
+    if(m_sfRetriever){
+      m_pileup_weight   = m_sfRetriever->pileupSF(event);
+      m_leptonSF_weight = m_sfRetriever->leptonSF(event,top::topSFSyst::nominal);
+    }
+  }
   
-  m_pileup_weight = 0.;
-  if (top::ScaleFactorRetriever::hasPileupSF(event))
-    m_pileup_weight = top::ScaleFactorRetriever::pileupSF(event);
+  top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
 
   //event info
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
   m_mcChannelNumber = 0;
-  if (top::isSimulation(event))
-    m_mcChannelNumber = event.m_info->mcChannelNumber();
-  //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  m_mu     = event.m_info->averageInteractionsPerCrossing(); // m_purwtool->getLumiBlockMu( *event.m_info ); SWITCHED OFF FOR NOW
   m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
+  m_mu     = event.m_info->averageInteractionsPerCrossing();
+  //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
+  //if(!top::isSimulation(event))
+  // m_mu     = m_purwtool->getLumiBlockMu( *event.m_info ); 
+  
   
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);

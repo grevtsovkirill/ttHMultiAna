@@ -33,7 +33,7 @@ PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r626
 PRWLumiCalcFiles  TopCorrections/ilumicalc_histograms_None_266904-267639.root
 PRWDefaultChannel 410000
 
-CalculateSF False
+CalculateSF True
 Systematics Nominal
 
 #Electron cuts

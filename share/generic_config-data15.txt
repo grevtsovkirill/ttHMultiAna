@@ -25,7 +25,6 @@ OutputEvents SelectedEvents
 PerfStats No
 #NEvents 900
 
-CalculateSF False
 Systematics Nominal
 
 #Electron cuts

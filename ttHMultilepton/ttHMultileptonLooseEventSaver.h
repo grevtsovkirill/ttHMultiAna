@@ -23,6 +23,7 @@
 
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
+#include "TopCorrections/ScaleFactorRetriever.h"
 #include "ttHMultilepton/TreeAssist.h"
 #include "ttHMultilepton/TruthSelector.h"
 
@@ -56,6 +57,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ///The file where everything goes
   TFile* m_outputFile;
 
+  ///Scale factors
+  std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
+
   xAODConfigTool                         configTool;
   TrigDecisionTool                       trigDecTool;
   MuonSelectionTool                      muonSelection;
@@ -84,6 +88,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //some event weights
   double m_mcWeight;
   double m_pileup_weight;
+  double m_leptonSF_weight;
 
   //event info
   unsigned int m_eventNumber;

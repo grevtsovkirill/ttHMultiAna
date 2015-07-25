@@ -1,3 +1,7 @@
+2015-07-25 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: adding lepton SF from top SF retriever
+	* generic_config-mc15.txt: switched SF calculation on
+	
 2015-07-24 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: adding eta at EM scale per jet; it's for JVT acceptance cut
 	
