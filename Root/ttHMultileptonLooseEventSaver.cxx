@@ -159,11 +159,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     m_purwtool = new CP::PileupReweightingTool("prw");
     std::vector<std::string> confFiles;
     std::vector<std::string> lcalcFiles;
-    confFiles.push_back("prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root");
-    lcalcFiles.push_back("ilumicalc_histograms_None_266904-267639.root");
-    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
-    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
-    top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
+    //confFiles.push_back("prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root");
+    //lcalcFiles.push_back("ilumicalc_histograms_None_266904-267639.root");
+    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
+    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
+    //top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
     
     //TRIGGER PART
     // Trigger decision tool. 
@@ -512,7 +512,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
   
-  top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
+  //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
 
   //event info
   m_eventNumber = event.m_info->eventNumber();
