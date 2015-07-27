@@ -11,11 +11,12 @@ bool MultilepEventSelector::apply(const top::Event& event) const {
 
   bool passed = false;
   for (const auto* const elPtr : event.m_electrons) {
-    //std::cout << "Passes?" << elPtr->auxdataConst< unsigned int >("passPreORSelection") << std::endl;
+    //std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
     if (elPtr->auxdataConst< char >("passPreORSelection") != 0) {
       passed = true;
     }
   }
+
   return true;
 
   

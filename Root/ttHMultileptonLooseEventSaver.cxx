@@ -502,6 +502,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
   m_leptonSF_weight = 1.;
+  m_mcChannelNumber = 0;
  
   if (top::isSimulation(event)){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
@@ -517,7 +518,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //event info
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
-  m_mcChannelNumber = 0;
   m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
   m_mu     = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
