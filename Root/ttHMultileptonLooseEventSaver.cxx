@@ -177,18 +177,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     top::check( m_purwtool->setProperty("OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
     top::check( m_purwtool->initialize(), "Failed to initialize pileup reweighting tool" );
     
-    /** OLD WAY OF CONFIGUTING PURW TOOL
-    //m_purwtool = new CP::PileupReweightingTool("prw_tthml");
-    std::vector<std::string> confFiles;
-    std::vector<std::string> lcalcFiles;
-    confFiles.push_back("prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root");
-    lcalcFiles.push_back("ilumicalc_histograms_None_266904-267639.root");
-    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
-    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
-    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
-    top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
-    */
-
     //TRIGGER PART
     // Trigger decision tool. 
     ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
