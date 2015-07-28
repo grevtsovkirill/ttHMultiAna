@@ -31,6 +31,12 @@ int main()
 		stringstream line(s);
 		if(line>>dsid)
 		{
+			if(tdp.getRawXsection(dsid)== -1 || tdp.getKfactor(dsid)== -1 )
+			{
+				cout<<"Xsection for DSID: "<<dsid<<" not found in TopDataPreparation Package\n";
+				out_file<<s<<endl;
+				continue;
+			}
 			out_file<<dsid<<"\t"<<tdp.getRawXsection(dsid)<<"\t"<<tdp.getKfactor(dsid)<<"\t";
 			count=0;
 			while(line>>del)
