@@ -1,3 +1,6 @@
+2015-07-28 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: fixed bug in lep z0sinTh to vertex correction
+	
 2015-07-26 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: added lumicalc profile root file for all 50ns periods, 85 pb-1 
 	* generic_config-mc15.txt: switched to new ilumi profile file

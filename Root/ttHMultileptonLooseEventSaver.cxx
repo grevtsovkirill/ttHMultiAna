@@ -218,7 +218,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta_uncorr");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float vz = ele.trackParticle()->vz(); float z_pv = 0;  
-	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) z_pv = vtx->z(); break; };  
+	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) {z_pv = vtx->z(); break;} };  
 	  float z0corr = (z0 + vz - z_pv); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "electron_z0SinTheta");    
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "electron_Etcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "electron_Etcone30");
@@ -279,7 +279,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta_uncorr");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float vz = mu.primaryTrackParticle()->vz(); float z_pv = 0;  
-	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) z_pv = vtx->z(); break; };  
+	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) {z_pv = vtx->z(); break;} };  
 	float z0corr = (z0 + vz - z_pv); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "muon_z0SinTheta");
     
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
