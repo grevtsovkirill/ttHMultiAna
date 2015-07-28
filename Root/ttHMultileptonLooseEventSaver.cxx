@@ -9,6 +9,8 @@
 
 #include "TopCorrections/ScaleFactorRetriever.h"
 
+#include "PathResolver/PathResolver.h"
+
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 #include "TFile.h"
 #include "TH1.h"
@@ -28,6 +30,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_mcChannelNumber(0),
   m_mu(0),
   m_mu_ac(0),
+  m_pu_hash(0),
   m_pvNumber(0),
   m_puNumber(0),
   m_met_met(0.),
@@ -121,6 +124,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
+    systematicTree->makeOutputVariable(m_pu_hash, "pileupHash");
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
 
@@ -156,15 +160,35 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
     
     //PURW
-    m_purwtool = new CP::PileupReweightingTool("prw");
+    m_purwtool = new CP::PileupReweightingTool("prw_tthml");
+    std::vector<std::string> pileup_config = config->PileupConfig();
+    for ( std::string& s: pileup_config )
+      s = PathResolverFindCalibFile( s );
+    std::vector<std::string> pileup_lumi_calc = config->PileupLumiCalc();
+    for ( std::string& s: pileup_lumi_calc )
+      s = PathResolverFindCalibFile( s );
+    // Let's have the option of having one config file per MC sample- set default channel
+    // to < 0 if you are doing this.
+    int default_channel = config->PileupDefaultChannel();
+    if ( default_channel > 0 )
+      top::check( m_purwtool->setProperty("DefaultChannel", default_channel), "Failed to set pileup reweighting config files" );    
+    top::check( m_purwtool->setProperty("ConfigFiles", pileup_config), "Failed to set pileup reweighting config files" );
+    top::check( m_purwtool->setProperty("LumiCalcFiles", pileup_lumi_calc), "Failed to set pileup reweighting lumicalc files");
+    top::check( m_purwtool->setProperty("OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
+    top::check( m_purwtool->initialize(), "Failed to initialize pileup reweighting tool" );
+    
+    /** OLD WAY OF CONFIGUTING PURW TOOL
+    //m_purwtool = new CP::PileupReweightingTool("prw_tthml");
     std::vector<std::string> confFiles;
     std::vector<std::string> lcalcFiles;
-    //confFiles.push_back("prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root");
-    //lcalcFiles.push_back("ilumicalc_histograms_None_266904-267639.root");
-    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
-    //top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
-    //top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
-    
+    confFiles.push_back("prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root");
+    lcalcFiles.push_back("ilumicalc_histograms_None_266904-267639.root");
+    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "ConfigFiles", confFiles),"m_purwtool won't set confFiles");
+    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "LumiCalcFiles", lcalcFiles), "m_purwtool won't set lcalcFiles");
+    top::check(dynamic_cast<CP::PileupReweightingTool&>(*m_purwtool).setProperty( "OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
+    top::check(m_purwtool->initialize(),"m_purwtool won't initialize");
+    */
+
     //TRIGGER PART
     // Trigger decision tool. 
     ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
@@ -513,18 +537,16 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
   
-  //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
-
   //event info
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
-  m_mu_ac  = event.m_info->actualInteractionsPerCrossing();
-  m_mu     = event.m_info->averageInteractionsPerCrossing();
+  m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
+  m_mu      = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  //if(!top::isSimulation(event))
-  // m_mu     = m_purwtool->getLumiBlockMu( *event.m_info ); 
-  
-  
+  //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
+  m_mu      = m_purwtool->getLumiBlockMu( *event.m_info);
+  m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
+    
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 

@@ -1,4 +1,8 @@
 2015-07-28 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: changes to the purw tool instance here to write out corrected mu (but doeasn't work yet..). 
+	Also add PRWtool Hash to be able to re-generate PU weights with changing mu profile in future
+	
+2015-07-28 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: fixed bug in lep z0sinTh to vertex correction
 	
 2015-07-26 Giuseppe Salamanna <salaman AT cern.ch>

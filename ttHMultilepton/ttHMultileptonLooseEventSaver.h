@@ -67,7 +67,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
   //  ToolHandle<CP::IPileupReweightingTool>     m_purwtool;
-  ToolHandle<IPileupReweightingTool>     m_purwtool;
+  //ToolHandle<IPileupReweightingTool>     m_purwtool;
+  PileupReweightingTool*                 m_purwtool;
 
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
@@ -96,9 +97,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   unsigned int m_mcChannelNumber;
   float m_mu;
   float m_mu_ac;
+  ULong64_t m_pu_hash;
   int m_pvNumber;
   int m_puNumber;
-  //use with care, dont mix MC and data in same job
+  //use with care, don't mix MC and data in same job
   bool m_isMC;
 
   //met
