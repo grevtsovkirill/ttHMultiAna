@@ -20,9 +20,9 @@
 361085	7.4151	1	1.0	--	-999	1	Sherpa	WZ->qqvv	Full	
 361086	2.3647	1	1.0	--	-999	1	Sherpa	ZZ->qqll	Full	
 361087	4.6336	1	1.0	--	-999	1	Sherpa	ZZ->qqvv	Full	
-341271	0.23237	1	1.0	--	-999	1	MC@NLO	ttH->allhad+H	Full	
-341270	0.22275	1	1.0	--	-999	1	MC@NLO	ttH->ljets+H	Full	
-341177	0.05338	1	1.0	--	-999	1	MC@NLO	ttH->ll+H	Full	
+
+
+
 
 
 

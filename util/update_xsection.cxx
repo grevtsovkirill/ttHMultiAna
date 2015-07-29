@@ -11,8 +11,7 @@ int main()
 
 	ifstream file; ofstream out_file;
 	string s, del; int dsid, count;
-  	file.open("Xsection13TeV_tth_bkg_v1.txt");
-  	out_file.open("temporary.txt");
+	const char* outfile_name[]={"Xsection13TeV_tth_bkg_v1.txt", "Xsection13TeV_tth_sig_v1.txt"};
 
 	SampleXsection tdp;
 	const char* const rc = getenv("ROOTCOREBIN"); 
@@ -23,42 +22,48 @@ int main()
 	        std::cout << "Maybe check it exists, first?" << std::endl;
 	       exit(1);
 	    }
-	
 
-	while(!file.eof())
-    	{
-	 	getline(file,s);
-		stringstream line(s);
-		if(line>>dsid)
-		{
-			if(tdp.getRawXsection(dsid)== -1 || tdp.getKfactor(dsid)== -1 )
+	for(int i =0; i<2;i++)
+	{
+        	file.open(outfile_name[i]);
+        	out_file.open("temporary.txt");	
+
+		while(!file.eof())
+    		{
+		 	getline(file,s);
+			stringstream line(s);
+			if(line>>dsid)
 			{
-				cout<<"Xsection for DSID: "<<dsid<<" not found in TopDataPreparation Package\n";
+				if(tdp.getRawXsection(dsid)== -1 || tdp.getKfactor(dsid)== -1 )
+				{
+					cout<<"Xsection for DSID: "<<dsid<<" not found in TopDataPreparation Package\n";
+					out_file<<s<<endl;
+					continue;
+				}
+				out_file<<dsid<<"\t"<<tdp.getRawXsection(dsid)<<"\t"<<tdp.getKfactor(dsid)<<"\t";
+				count=0;
+				while(line>>del)
+				{
+					if(count > 1)
+					{
+						out_file<<del<<"\t";
+					}
+					count++;
+				}
+				out_file<<endl;
+			}
+			else
+			{
 				out_file<<s<<endl;
 				continue;
-			}
-			out_file<<dsid<<"\t"<<tdp.getRawXsection(dsid)<<"\t"<<tdp.getKfactor(dsid)<<"\t";
-			count=0;
-			while(line>>del)
-			{
-				if(count > 1)
-				{
-					out_file<<del<<"\t";
-				}
-				count++;
-			}
-			out_file<<endl;
-		}
-		else
-		{
-			out_file<<s<<endl;
-			continue;
-		}	
-   	}
+			}	
+   		}	
 
-  file.close(); out_file.close();
-  remove("Xsection13TeV_tth_bkg_v1.txt");
-  rename("temporary.txt","Xsection13TeV_tth_bkg_v1.txt");	
+  	file.close(); out_file.close();
+ 	 remove(outfile_name[i]);
+ 	 rename("temporary.txt",outfile_name[i]);
+	cout<<"Successfully Updated "<<outfile_name[i]<<endl;
+	}	
 	
 
 	return 0;
