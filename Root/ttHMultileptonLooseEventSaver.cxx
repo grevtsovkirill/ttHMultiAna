@@ -28,6 +28,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
+  m_mu_unc(0),  
   m_mu(0),
   m_mu_ac(0),
   m_pu_hash(0),
@@ -122,6 +123,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
+    systematicTree->makeOutputVariable(m_mu_unc, "averageIntPerXing_uncorr");
     systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
     systematicTree->makeOutputVariable(m_pu_hash, "pileupHash");
@@ -546,12 +548,15 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
-  m_mu      = event.m_info->averageInteractionsPerCrossing();
+  m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
   //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
   m_mu      = m_purwtool->getLumiBlockMu( *event.m_info);
-  m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
-    
+  if(top::isSimulation(event)){
+    m_mu      = m_mu_unc;
+    m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
+  }
+
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 

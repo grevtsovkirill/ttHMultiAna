@@ -27,10 +27,9 @@ OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 0
+NEvents 900
 
 PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root
-#PRWLumiCalcFiles  TopCorrections/ilumicalc_histograms_None_266904-267639.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_None_267073-271744.root
 PRWDefaultChannel 410000
 
