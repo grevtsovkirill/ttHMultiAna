@@ -188,18 +188,35 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     top::check(trigDecTool.initialize(),"TrigDecTool fails to initialize");    
 
     //Items and their PS
-    std::vector<std::string> triggernames{"HLT_e26_tight_iloose", 
-	"HLT_e26_lhtight_iloose", "HLT_e60_medium", "HLT_e60_lhmedium", 
-	"HLT_e24_lhmedium_L1EM18VH","HLT_e24_lhmedium_iloose_L1EM18VH",
-	"HLT_e24_tight_iloose", "HLT_e24_lhtight_iloose", 
-	"HLT_e24_tight_iloose_L1EM20VH", "HLT_e24_lhtight_iloose_L1EM20VH", 
-	"HLT_e120_lhloose", "HLT_e140_loose", "HLT_e140_lhloose", 
-	"HLT_mu20_iloose_L1MU15","HLT_mu26_imedium", 
-	"HLT_mu40", "HLT_mu50", "HLT_mu24_imedium",
-	"HLT_2e12_loose_L12EM10VH", "HLT_2e12_lhloose_L12EM10VH", "HLT_e17_lhloose_2e9_lhloose",
-	"HLT_2mu14", "HLT_2mu10", "HLT_e17_loose_mu14", "HLT_e17_lhloose_mu14", 
-	"HLT_e7_medium_mu24", "HLT_e7_lhmedium_mu24"};
-
+    std::vector<std::string> triggernames
+    {   "HLT_e24_lhmedium_L1EM18VH",
+	"HLT_e24_lhmedium_iloose_L1EM18VH",
+	"HLT_e24_tight_iloose",
+	"HLT_e24_lhtight_iloose", 
+	"HLT_e24_tight_iloose_L1EM20VH",
+	"HLT_e24_lhtight_iloose_L1EM20VH", 
+	"HLT_e26_tight_iloose",
+	"HLT_e26_lhtight_iloose",
+	"HLT_e60_medium",
+	"HLT_e60_lhmedium", 
+	"HLT_e120_lhloose",
+	"HLT_e140_loose",
+	"HLT_e140_lhloose", 
+	"HLT_mu20_iloose_L1MU15",
+	"HLT_mu24_imedium",
+	"HLT_mu26_imedium", 
+	"HLT_mu40",
+	"HLT_mu50",
+	"HLT_2e12_loose_L12EM10VH",
+	"HLT_2e12_lhloose_L12EM10VH",
+	"HLT_e17_lhloose_2e9_lhloose",
+	"HLT_2mu14",
+	"HLT_2mu10",
+	"HLT_e17_loose_mu14",
+	"HLT_e17_lhloose_mu14", 
+	"HLT_e7_medium_mu24",
+	"HLT_e7_lhmedium_mu24"};
+    
     for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
       WrapS(scalarvec, [=](const top::Event&){ return (float) trigDecTool.getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
