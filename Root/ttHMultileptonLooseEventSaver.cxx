@@ -17,11 +17,11 @@
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
   m_outputFile(0),
+  m_sfRetriever(nullptr),
   configTool("xAODConfigTool"),
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
-  m_sfRetriever(nullptr),
   m_mcWeight(0.),
   m_pileup_weight(0.),
   m_leptonSF_weight(0.),
@@ -100,6 +100,28 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_outputFile = file;
   m_extraBranches = extraBranches;
   m_selectionDecisions.resize(m_extraBranches.size());
+
+  //Cutflow histograms
+  m_eleCutflow = new TH1I("eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+  int idx = 1;
+  for (const auto label : { "initial", "pt", "eta", "ident", "z0sinth", "d0sig", "iso", "e-#mu OR", "e-e OR"}) {
+    m_eleCutflow->GetXaxis()->SetBinLabel(idx++, label);
+  }
+  m_muCutflow = new TH1I("muCutflow", "Muon cutflow", 10, 0.5, 10.5);
+  idx = 1;
+  for (const auto label : { "initial", "eta/qual", "pt", "z0sinth", "d0sig", "iso", "#mu-jet OR"}) {
+    m_muCutflow->GetXaxis()->SetBinLabel(idx++, label);
+  }
+  m_jetCutflow = new TH1I("jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
+  idx = 1;
+  for (const auto label : { "initial", "cleaning", "pt", "eta", "jvt", "jet-e OR", "jet-#tau OR"}) {
+    m_jetCutflow->GetXaxis()->SetBinLabel(idx++, label);
+  }
+  m_tauCutflow = new TH1I("tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
+  idx = 1;
+  for (const auto label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "elebdt", "#tau-e,#mu OR"}) {
+    m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);
+  }
   
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
@@ -244,13 +266,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0");
     //Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV_hand"); //INACCURATE: USE following one by Tracking CP
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { double d0sig = xAOD::TrackingHelpers::d0significance( ele.trackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() ); return (float) (d0sig); }, *systematicTree, "electron_sigd0PV");
+
+    //Wrap2(elevec, [=](const xAOD::Electron& ele) { double d0sig = xAOD::TrackingHelpers::d0significance( ele.trackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() ); return (float) (d0sig); }, *systematicTree, "electron_sigd0PV");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("d0significance"); }, *systematicTree, "electron_sigd0PV");
 
     //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "electron_z0SinTheta_uncorr");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); float vz = ele.trackParticle()->vz(); float z_pv = 0;  
-	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) {z_pv = vtx->z(); break;} };  
-	  float z0corr = (z0 + vz - z_pv); float theta = ele.trackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "electron_z0SinTheta");    
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("z0sintheta"); }, *systematicTree, "electron_z0SinTheta");    
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone20); return iso; }, *systematicTree, "electron_Etcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone30); return iso; }, *systematicTree, "electron_Etcone30");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::etcone40); return iso; }, *systematicTree, "electron_Etcone40");
@@ -306,12 +328,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0();  return (float) (d0); }, *systematicTree, "muon_d0");
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float d0 = mu.primaryTrackParticle()->d0(); float err_d0 = sqrt(mu.primaryTrackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "muon_sigd0PV_hand");  //INACCURATE: USE following one by Tracking CP
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { double d0sig = xAOD::TrackingHelpers::d0significance( mu.primaryTrackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() ); return (float) (d0sig); }, *systematicTree, "muon_sigd0PV");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { double d0sig = xAOD::TrackingHelpers::d0significance( mu.primaryTrackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() ); return (float) (d0sig); }, *systematicTree, "muon_sigd0PV");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("d0significance"); }, *systematicTree, "muon_sigd0PV");
     //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0*sin_Th); }, *systematicTree, "muon_z0SinTheta_uncorr");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { float z0 = mu.primaryTrackParticle()->z0(); float vz = mu.primaryTrackParticle()->vz(); float z_pv = 0;  
-	for (auto vtx : *m_vertices){ if(vtx->vertexType() == xAOD::VxType::PriVtx) {z_pv = vtx->z(); break;} };  
-	float z0corr = (z0 + vz - z_pv); float theta = mu.primaryTrackParticle()->theta(); float sin_Th = sin(theta); return (float) (z0corr*sin_Th); }, *systematicTree, "muon_z0SinTheta");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("z0sintheta"); }, *systematicTree, "muon_z0SinTheta");
     
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
@@ -500,6 +521,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
         systematicTree->makeOutputVariable(m_selectionDecisions[index], branchName);
         ++index;
     }
+    for (size_t idx = 0; idx < LEPTON_ARR_SIZE; ++idx) {
+      m_leptons[idx].BootstrapTree(systematicTree, idx);
+    }
+    m_variables = new ttHMultilepton::Variables();
+    m_variables->BootstrapTree(systematicTree);
   }
 
   // dont mix MC and data in the same job
@@ -509,6 +535,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   if (config->doCalculateSF()) {
     m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
   }
+  
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -658,6 +685,18 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
   }
   
+  m_variables->Clear();
+  Decorate(event);
+  auto goodEl = SelectElectrons(event);
+  auto goodMu = SelectMuons(event);
+  auto goodJet = SelectJets(event);
+  auto goodTau = SelectTaus(event);
+  OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
+  CopyLeptons(goodEl, goodMu);
+  CopyJets(goodJet);
+  CopyTaus(goodTau);
+  CheckIsBlinded();
+
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
@@ -695,5 +734,9 @@ void ttHMultileptonLooseEventSaver::finalize() {
     double goodCalo = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(2);
     static_cast<TH1D*>(m_outputFile->Get("loose/Count"))->SetBinContent(2,goodCalo);
   }
+  m_outputFile->WriteTObject(m_eleCutflow);
+  m_outputFile->WriteTObject(m_muCutflow);
+  m_outputFile->WriteTObject(m_jetCutflow);
+  m_outputFile->WriteTObject(m_tauCutflow);
   m_outputFile->Write();
 }

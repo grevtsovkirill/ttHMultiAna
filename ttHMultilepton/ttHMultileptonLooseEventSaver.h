@@ -17,6 +17,8 @@
 #include "xAODTracking/VertexContainer.h"
 #include "xAODTruth/xAODTruthHelpers.h"
 #include "xAODEventInfo/EventInfo.h"
+#include "xAODJet/JetContainer.h"
+#include "xAODTau/TauJetContainer.h"
 
 //Isolation
 #include "IsolationSelection/IsolationSelectionTool.h"
@@ -26,11 +28,14 @@
 #include "TopCorrections/ScaleFactorRetriever.h"
 #include "ttHMultilepton/TreeAssist.h"
 #include "ttHMultilepton/TruthSelector.h"
+#include "ttHMultilepton/Lepton.h"
+#include "ttHMultilepton/Variables.h"
 
 using namespace Trig;
 using namespace TrigConf;
 using namespace xAOD;
 using namespace CP;
+using namespace ttHMultilepton;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  public:
@@ -52,10 +57,26 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent);
 
   void finalize();
+
+  void Decorate(const top::Event& event);
+  std::shared_ptr<xAOD::ElectronContainer> SelectElectrons(const top::Event& event);
+  std::shared_ptr<xAOD::MuonContainer> SelectMuons(const top::Event& event);
+  std::shared_ptr<xAOD::JetContainer> SelectJets(const top::Event& event);
+  std::shared_ptr<xAOD::TauJetContainer> SelectTaus(const top::Event& event);
+  void OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow);
+  void CopyLeptons(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu);
+  void CopyJets(std::shared_ptr<xAOD::JetContainer>& goodJet);
+  void CopyTaus(std::shared_ptr<xAOD::TauJetContainer>& goodTau);
+  void CheckIsBlinded();
   
  private:
   ///The file where everything goes
   TFile* m_outputFile;
+
+  TH1* m_eleCutflow;
+  TH1* m_muCutflow;
+  TH1* m_jetCutflow;
+  TH1* m_tauCutflow;
 
   ///Scale factors
   std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
@@ -107,6 +128,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //met
   float m_met_met;
   float m_met_phi;
+
+  // leptons to save
+  Lepton m_leptons[LEPTON_ARR_SIZE];
+  ttHMultilepton::Variables* m_variables;
 
   //trigger info
   //single e
@@ -203,5 +228,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   ClassDef(ttHMultileptonLooseEventSaver, 0);
 };
+
 
 #endif

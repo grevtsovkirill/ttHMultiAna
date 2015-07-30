@@ -1,3 +1,7 @@
+2015-07-30 Peter Onyisi <ponyisi AT cern.ch>
+	* Add "flat" variables for light leptons, blinding variable (not
+	blinded tree yet), object cutflow histograms
+
 2015-07-29 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: PRW hash only for MC. Mu corrected same as Mu default for MC.  
 	
