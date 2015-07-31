@@ -1,3 +1,8 @@
+2015-07-31 Giuseppe Salamanna <salaman AT cern.ch>
+	* data: added lumicalc profile root file for all 50ns periods, 
+	85 pb-1, with unPS'd triggers
+	* generic_config-mc15.txt: switched to new ilumi profile file
+	
 2015-07-30 Peter Onyisi <ponyisi AT cern.ch>
 	* Add "flat" variables for light leptons, blinding variable (not
 	blinded tree yet), object cutflow histograms
