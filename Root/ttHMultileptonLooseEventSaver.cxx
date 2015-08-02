@@ -471,6 +471,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	return isTruthMatched;
       }, *systematicTree, std::string(tauprefix+"isTruthMatched").c_str());
 
+    //decorated in ttHMultileptonLooseEventSaver_Decorate.cxx
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("IsHadronic");
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
@@ -555,12 +556,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
 
-  for( auto tau : event.m_tauJets) {
-    double tauSF(1.0);
-    top::check( m_tauEffTool.getEfficiencyScaleFactor(*tau, tauSF), "Failed to apply SF to tau");
-    tau->auxdecor<double>("TauScaleFactorReconstructionHadTau") = tauSF;
-  }
-    
   //event info
   m_eventNumber = event.m_info->eventNumber();
   m_runNumber = event.m_info->runNumber();
