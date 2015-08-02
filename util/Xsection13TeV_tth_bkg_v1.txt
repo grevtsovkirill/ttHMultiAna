@@ -21,9 +21,20 @@
 361086	2.3647	1	1.0	--	-999	1	Sherpa	ZZ->qqll	Full	
 361087	4.6336	1	1.0	--	-999	1	Sherpa	ZZ->qqvv	Full	
 
+#Sherpa Zjets from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/CentralMC15ProductionList
+361420	2196.5	0.77854	0.9011	--	-999	2	Sherpa	Ztautau_Pt0_70_CVetoBVeto	Full
+361421  2204.1  0.14155 0.9011  --      -999    2       Sherpa  Ztautau_Pt0_70_CFilterBVeto	Full
+361422  2205.1  0.077733 0.9011 --      -999    2       Sherpa  Ztautau_Pt0_70_BFilter		Full
+361423  76.322  0.6407  0.9011  --      -999    2       Sherpa  Ztautau_Pt70_140_CVetoBVeto	Full
+361424  76.004  0.21564 0.9011  --      -999    2       Sherpa  Ztautau_Pt70_140_CFilterBVeto	Full
+361425  76.369  0.12302 0.9011  --      -999    2       Sherpa  Ztautau_Pt70_140_BFilter	Full
+361426  11.569  0.6069  0.9011  --      -999    2       Sherpa  Ztautau_Pt140_280_CVetoBVeto	Full
+361427  11.649  0.23086 0.9011  --      -999    2       Sherpa  Ztautau_Pt140_280_CFilterBVeto	Full
+361428  11.612  0.12753 0.9011  --      -999    2       Sherpa  Ztautau_Pt140_280_BFilter	Full
 
-
-
-
-
-
+#ttV
+410066  0.17656	  1	1.0	--	-999	1	MadGraphPythia8EvtGen  ttW_Np0		Full
+410070  0.030629  1	1.0	--	-999	1	MadGraphPythia8EvtGen  ttZllonshell_Np1	Full
+410075  0.10512	  1	1.0	--	-999	1	MadGraphPythia8EvtGen  ttZnnqq_Np2	Full
+410080  0.0091622 1	1.0	--	-999	1	MadGraphPythia8EvtGen  4topSM		Full
+410081	0.0080975 1	1.0	--	-999	1	MadGraphPythia8EvtGen  ttbarWW		Full

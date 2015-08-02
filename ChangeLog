@@ -1,3 +1,8 @@
+2015-08-02 David Hohn <david.hohn@cern.ch>
+	* implement TauEfficiencyCorrectionsTool
+	* reorder tau code to Decorator
+	* added some crosssections by hand
+
 2015-07-31 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: added lumicalc profile root file for all 50ns periods, 
 	85 pb-1, with unPS'd triggers

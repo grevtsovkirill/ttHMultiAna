@@ -11,6 +11,7 @@
 #include "JetSelectorTools/JetCleaningTool.h"
 #include "PileupReweighting/PileupReweightingTool.h"
 #include "AsgTools/ToolHandle.h"
+#include "TauAnalysisTools/TauEfficiencyCorrectionsTool.h"
 
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
@@ -36,6 +37,7 @@ using namespace TrigConf;
 using namespace xAOD;
 using namespace CP;
 using namespace ttHMultilepton;
+using TauAnalysisTools::TauEfficiencyCorrectionsTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  public:
@@ -90,6 +92,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //  ToolHandle<CP::IPileupReweightingTool>     m_purwtool;
   //ToolHandle<IPileupReweightingTool>     m_purwtool;
   PileupReweightingTool*                 m_purwtool;
+  TauEfficiencyCorrectionsTool           m_tauEffTool;
 
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;

@@ -1,5 +1,6 @@
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "TopEvent/Event.h"
+#include "TopEvent/EventTools.h"
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 
 void
@@ -21,6 +22,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     float sin_Th = sin(theta); 
     elItr->auxdecor<float>("z0sintheta") = (z0corr*sin_Th);
   }
+  
   for (auto muItr : event.m_muons) {
     muItr->auxdecor<float>("d0significance") = xAOD::TrackingHelpers::d0significance( muItr->primaryTrackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() );
 
@@ -38,4 +40,31 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     float sin_Th = sin(theta); 
     muItr->auxdecor<float>("z0sintheta") = (z0corr*sin_Th);
   }
+
+  for( auto tauItr : event.m_tauJets) {
+    //SF
+    double tauSF(1.0);
+    top::check( m_tauEffTool.getEfficiencyScaleFactor(*tauItr, tauSF), "Failed to apply SF to tau");
+    tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau") = tauSF;
+
+    //truth
+    int isHadronic(0), tauTruthType(0), tauTruthOrigin(0);
+    if(tauItr->isAvailable<char>("IsTruthMatched") && static_cast<int>(tauItr->auxdata<char>("IsTruthMatched")) == 1)
+      {
+	if(tauItr->isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+	  auto tauTruthLink = tauItr->auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+    	  if(tauTruthLink.isValid()) {
+	    const xAOD::TruthParticle* truthTau = nullptr;
+	    truthTau = *tauTruthLink;
+	    if( truthTau->isAvailable<char>("IsHadronicTau") ) isHadronic =  static_cast<int>( truthTau->auxdata<char>("IsHadronicTau") );
+	    tauTruthOrigin = truthTau->auxdata<unsigned int>("classifierParticleOrigin");
+	    tauTruthType = truthTau->auxdata<unsigned int>("classifierParticleType");
+	  }
+	}
+      }
+    tauItr->auxdecor<int>("IsHadronic")     = isHadronic;
+    tauItr->auxdecor<int>("tauTruthType")   = tauTruthType;
+    tauItr->auxdecor<int>("tauTruthOrigin") = tauTruthOrigin;   
+  }//end taus
+  
 }
