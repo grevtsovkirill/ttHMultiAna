@@ -29,9 +29,9 @@ OutputEvents SelectedEvents
 PerfStats No
 NEvents 0
 
-PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root
+PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root ttHMultilepton/tthML.PURWTconfig.361106.root ttHMultilepton/tthML.PURWTconfig.361107.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_267073-271744.root
-PRWDefaultChannel 410000
+PRWDefaultChannel 361106
 
 CalculateSF True
 Systematics Nominal
