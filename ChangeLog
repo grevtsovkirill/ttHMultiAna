@@ -1,3 +1,7 @@
+2015-08-03 Giuseppe Salamanna <salaman AT cern.ch>
+	* data: added mu profile reference root file for Ztautau (361108)
+	* generic_config-mc15.txt: updated consequently
+	
 2015-08-02 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: added mu profile reference root file for Zee,Zmm (361106/7)
 	* generic_config-mc15.txt: updated consequently
