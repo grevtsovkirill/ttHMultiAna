@@ -41,6 +41,8 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     muItr->auxdecor<float>("z0sintheta") = (z0corr*sin_Th);
   }
 
+  top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
+  
   for( auto tauItr : event.m_tauJets) {
     //SF
     double tauSF(1.0);
@@ -64,7 +66,12 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
       }
     tauItr->auxdecor<int>("IsHadronic")     = isHadronic;
     tauItr->auxdecor<int>("tauTruthType")   = tauTruthType;
-    tauItr->auxdecor<int>("tauTruthOrigin") = tauTruthOrigin;   
+    tauItr->auxdecor<int>("tauTruthOrigin") = tauTruthOrigin;
+
+    //EleOLR
+    int passEleOLR(0);
+    if(m_tauSelectionEleOLR.accept(*tauItr)) passEleOLR = 1;
+    tauItr->auxdecor<int>("passEleOLR") = passEleOLR;
   }//end taus
   
 }

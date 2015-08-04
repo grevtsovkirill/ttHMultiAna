@@ -38,6 +38,7 @@ using namespace xAOD;
 using namespace CP;
 using namespace ttHMultilepton;
 using TauAnalysisTools::TauEfficiencyCorrectionsTool;
+using TauAnalysisTools::TauSelectionTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  public:
@@ -93,6 +94,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //ToolHandle<IPileupReweightingTool>     m_purwtool;
   PileupReweightingTool*                 m_purwtool;
   TauEfficiencyCorrectionsTool           m_tauEffTool;
+  TauSelectionTool                       m_tauSelectionEleOLR;
 
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;

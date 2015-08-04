@@ -1,3 +1,7 @@
+2015-08-04 David Hohn <david.hohn@cern.ch>
+	* remove tau EleBDT branches, which are deprecated now
+	* add tau EleOLR, save result of TauSelectionTool as decoration
+
 2015-08-03 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: added mu profile reference root file for Ztautau (361108)
 	* generic_config-mc15.txt: updated consequently
