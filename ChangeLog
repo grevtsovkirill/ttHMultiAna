@@ -1,4 +1,7 @@
 2015-08-04 David Hohn <david.hohn@cern.ch>
+	* split bins in Count histo to only mcweight and mcweight*puweight
+
+2015-08-04 David Hohn <david.hohn@cern.ch>
 	* remove tau EleBDT branches, which are deprecated now
 	* add tau EleOLR, save result of TauSelectionTool as decoration
 
