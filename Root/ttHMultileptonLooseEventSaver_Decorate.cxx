@@ -21,6 +21,12 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     float theta = elItr->trackParticle()->theta(); 
     float sin_Th = sin(theta); 
     elItr->auxdecor<float>("z0sintheta") = (z0corr*sin_Th);
+    // Isolation
+    auto isomap = iso_1.accept(*elItr);
+    int idx = 0;
+    for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Tight", "Iso_Gradient", "Iso_GradientLoose"}) {
+      elItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
+    }
   }
   
   for (auto muItr : event.m_muons) {
@@ -39,6 +45,12 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     float theta = muItr->primaryTrackParticle()->theta(); 
     float sin_Th = sin(theta); 
     muItr->auxdecor<float>("z0sintheta") = (z0corr*sin_Th);
+    // Isolation
+    auto isomap = iso_1.accept(*muItr);
+    int idx = 0;
+    for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Tight", "Iso_Gradient", "Iso_GradientLoose"}) {
+      muItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
+    }
   }
 
   top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");

@@ -252,13 +252,26 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //END trigger
     vec_scalar_wrappers.push_back(scalarvec);
 
-    //Isolation tool for leptons
-    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
-    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
-    top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-    
     //leptons
     std::vector<VectorWrapper*> elevec;    
+    std::vector<VectorWrapper*> muvec;
+
+    //Isolation tool for leptons
+//    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
+//    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
+    top::check( iso_1.initialize(),"IsolationTool fails to initialize");
+    auto WPs{"LooseTrackOnly", "Loose", "Tight", "Gradient", "GradientLoose"};
+    for (auto wp : WPs) {
+      top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
+      top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
+      std::string isoname("Iso_"); isoname += wp;
+      std::string eleisoname("electron_isolation"); eleisoname += wp;
+      std::string muisoname("muon_isolation"); muisoname += wp;
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>(isoname); }, *systematicTree, eleisoname.c_str());
+      Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
+    }
+    
+    //leptons
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->eta(); }, *systematicTree, "electron_ClEta");
@@ -290,8 +303,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "electron_ptvarcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "electron_ptvarcone30");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "electron_ptvarcone40");
-    //IsolationTool response 
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { int iso_pass = 0; if(iso_1.accept( ele )) iso_pass = 1; return iso_pass; }, *systematicTree, "electron_isolationLoose");
 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHLoose"); }, *systematicTree, "electron_isLooseLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
@@ -315,7 +326,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     top::check( muonSelection.setProperty( "MaxEta", 2.7 ), "muonSelection tool could not set max eta");
     top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
    
-    std::vector<VectorWrapper*> muvec;
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.pt(); }, *systematicTree, "muon_pt");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
@@ -357,8 +367,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "muon_ptvarcone20");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
-    //IsolationTool response 
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { int iso_pass = 0; if(iso_1.accept( mu )) iso_pass = 1; return iso_pass; }, *systematicTree, "muon_isolationLoose");
+
     //Trigger matching
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu20_iloose_L1MU15");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu26_imedium")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu26_imedium"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu26_imedium");

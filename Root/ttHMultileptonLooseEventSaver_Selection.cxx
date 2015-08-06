@@ -47,7 +47,7 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(6);
-    if (! iso_1.accept( *elItr )) {
+    if (! elItr->auxdataConst<short>("Iso_Loose")) {
       //std::cout << "Fail isolation" << std::endl;
       continue;
     }
@@ -88,7 +88,7 @@ ttHMultileptonLooseEventSaver::SelectMuons(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(5);
-    if (! iso_1.accept( *muItr )) {
+    if (! muItr->auxdataConst<short>("Iso_Loose")) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(6);
@@ -123,12 +123,13 @@ ttHMultileptonLooseEventSaver::SelectJets(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(3);
-    auto abseta = fabs(jetItr->eta());
-    if (abseta > 2.5) {
+    if (fabs(jetItr->eta()) > 2.5) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(4);
-    if (jetItr->pt() < 50e3 && abseta < 2.4 && jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.64) {
+    if (jetItr->pt() < 50e3
+	&& fabs(jetItr->jetP4("JetEMScaleMomentum").eta()) < 2.4 
+	&& jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.64) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(5);
@@ -367,9 +368,18 @@ void CopyIParticle(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.Eta = part.eta();
   lep.Phi = part.phi();
 }
+
+void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
+  lep.isolationLooseTrackOnly = part.auxdataConst<short>("Iso_LooseTrackOnly");
+  lep.isolationLoose = part.auxdataConst<short>("Iso_Loose");
+  lep.isolationTight = part.auxdataConst<short>("Iso_Tight");
+  lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
+  lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
+}
   
 void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   CopyIParticle(el, lep);
+  CopyIso(el, lep);
   lep.ID = -11*el.charge();
   lep.isLooseLH = el.auxdataConst<short>("passLHLoose");
   lep.isMediumLH = el.auxdataConst<short>("passLHMedium");
@@ -378,6 +388,7 @@ void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
 
 void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   CopyIParticle(mu, lep);
+  CopyIso(mu, lep);
   lep.ID = -13*mu.charge();
 }
 
