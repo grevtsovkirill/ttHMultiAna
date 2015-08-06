@@ -123,7 +123,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   }
   m_tauCutflow = new TH1I("tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
   idx = 1;
-  for (const auto label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "elebdt", "#tau-e,#mu OR"}) {
+  for (const auto label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "EleOLR", "#tau-e,#mu OR"}) {
     m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
   
