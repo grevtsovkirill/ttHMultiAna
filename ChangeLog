@@ -1,3 +1,7 @@
+2015-08-16 Giuseppe Salamanna <salaman AT cern.ch>
+	* data: committing MC mu profile root file for AF2 samples (runN=222525)
+	* generic_config-mc15.txt: added above file to list under PURWT instructions
+	
 2015-08-11 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: committing GRL for 50 ns
 	

@@ -29,7 +29,7 @@ OutputEvents SelectedEvents
 PerfStats No
 NEvents 0
 
-PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root ttHMultilepton/tthML.PURWTconfig.361106.root ttHMultilepton/tthML.PURWTconfig.361107.root ttHMultilepton/tthML.PURWTconfig.361108.root
+PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root ttHMultilepton/tthML.PURWTconfig.361106.root ttHMultilepton/tthML.PURWTconfig.361107.root ttHMultilepton/tthML.PURWTconfig.361108.root ttHMultilepton/tthML.PURWTconfig.302458.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_267073-271744.root
 PRWDefaultChannel 361106
 
