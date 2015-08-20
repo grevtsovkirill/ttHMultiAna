@@ -731,8 +731,8 @@ void ttHMultileptonLooseEventSaver::saveTruthEvent() {
 void ttHMultileptonLooseEventSaver::finalize() {
   // copy number of events before event cleaning for data
   if(!m_isMC) {
-    double goodCalo = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(2);
-    static_cast<TH1D*>(m_outputFile->Get("loose/Count"))->SetBinContent(3,goodCalo);
+    double totalEvents = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(1);
+    static_cast<TH1D*>(m_outputFile->Get("loose/Count"))->SetBinContent(3,totalEvents);
   }
   m_outputFile->WriteTObject(m_eleCutflow);
   m_outputFile->WriteTObject(m_muCutflow);
