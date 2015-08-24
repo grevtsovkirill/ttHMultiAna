@@ -268,7 +268,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       std::string eleisoname("electron_isolation"); eleisoname += wp;
       std::string muisoname("muon_isolation"); muisoname += wp;
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>(isoname); }, *systematicTree, eleisoname.c_str());
-      Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
     }
     
     //leptons
