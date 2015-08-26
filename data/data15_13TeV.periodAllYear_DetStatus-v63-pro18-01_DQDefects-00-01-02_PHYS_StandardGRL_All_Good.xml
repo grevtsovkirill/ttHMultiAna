@@ -9,7 +9,7 @@
 <Metadata Name="ARQEquivalentQuery">find run data15_13TeV.periodAllYear and dq PHYS_StandardGRL_All_Good DEFECTS#DetStatus-v63-pro18-01 g</Metadata>
 <Metadata Name="Query">Period: data15_13TeV.AllYear; Defect: PHYS_StandardGRL_All_Good; Defect tag: DetStatus-v63-pro18-01; Ignoring None</Metadata>
 <Metadata Name="RQTSVNVersion">DQDefects-00-01-02</Metadata>
-<Metadata Name="RunList">267073,267167,267358,267359,267360,267367,267385,267599,267638,267639,270806,270953,271048,271298,271421,271516,271595</Metadata>
+<Metadata Name="RunList">267073,267167,267358,267359,267360,267367,267385,267599,267638,267639,270806,270953,271048,271298,271421,271516,271595,271744</Metadata>
 <LumiBlockCollection>
 <Run>267073</Run>
 <LBRange Start="368" End="410"/>
@@ -126,6 +126,10 @@
 <Run>271595</Run>
 <LBRange Start="331" End="428"/>
 <LBRange Start="454" End="582"/>
+</LumiBlockCollection>
+<LumiBlockCollection>
+<Run>271744</Run>
+<LBRange Start="78" End="219"/>
 </LumiBlockCollection>
 </NamedLumiRange>
 </LumiRangeCollection>

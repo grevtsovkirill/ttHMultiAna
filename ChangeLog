@@ -1,4 +1,7 @@
 2015-08-26 Giuseppe Salamanna <salaman AT cern.ch>
+	* data: adding latest greatest 50ns GRL
+	
+2015-08-26 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: committing data lumicalc file for D1-D3 (up to run 276511), L=33300.5 nb-1
 	* generic_config-data15.txt: added above file to list under PURWT instructions
 	
