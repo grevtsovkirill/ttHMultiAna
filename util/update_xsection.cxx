@@ -4,12 +4,13 @@
 #include <sstream>
 #include<stdio.h>
 #include<stdlib.h>
+#include<iomanip>
 
 using namespace std;
 int main()
 {
 
-	ifstream file; ofstream out_file;
+  ifstream file; ofstream out_file; bool notfound;
 	string s, del; int dsid, count;
 	const char* outfile_name[]={"Xsection13TeV_tth_bkg_v1.txt", "Xsection13TeV_tth_sig_v1.txt"};
 
@@ -34,21 +35,38 @@ int main()
 			stringstream line(s);
 			if(line>>dsid)
 			{
+			  notfound = false;
 				if(tdp.getRawXsection(dsid)== -1 || tdp.getKfactor(dsid)== -1 )
 				{
 					cout<<"Xsection for DSID: "<<dsid<<" not found in TopDataPreparation Package\n";
-					out_file<<s<<endl;
-					continue;
+					notfound = true;
 				}
-				out_file<<dsid<<"\t"<<tdp.getRawXsection(dsid)<<"\t"<<tdp.getKfactor(dsid)<<"\t";
+				if(notfound ==false)
+				  {
+				    out_file<<setw(7)<<dsid<<"\t"<<setw(14)<<tdp.getRawXsection(dsid)<<"\t"<<setw(9)<<tdp.getKfactor(dsid)<<"\t";
+				  }
+				else
+				  {
+				    out_file<<setw(7)<<dsid<<"\t";
+				  }
 				count=0;
 				while(line>>del)
 				{
-					if(count > 1)
-					{
-						out_file<<del<<"\t";
-					}
-					count++;
+				  if(notfound==true && count<=1)
+				    {
+				      if(count==0) out_file<<setw(14);
+				      if(count==1) out_file<<setw(9);
+				      out_file<<del<<"\t";
+				    }
+				  else if(count > 1)
+				    {
+				      if(count==6) out_file<<setw(30);
+				      else if(count==7) out_file<<setw(35);
+				      else if(count==5 || count == 8) out_file<<setw(5);
+				      else out_file<<setw(9);
+				      out_file<<del<<"\t";
+				    }
+				  count++;
 				}
 				out_file<<endl;
 			}
