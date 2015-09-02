@@ -38,35 +38,50 @@ int main()
 			  notfound = false;
 				if(tdp.getRawXsection(dsid)== -1 || tdp.getKfactor(dsid)== -1 )
 				{
-					cout<<"Xsection for DSID: "<<dsid<<" not found in TopDataPreparation Package\n";
 					notfound = true;
 				}
 				if(notfound ==false)
 				  {
-				    out_file<<setw(7)<<dsid<<"\t"<<setw(14)<<tdp.getRawXsection(dsid)<<"\t"<<setw(9)<<tdp.getKfactor(dsid)<<"\t";
+				    out_file<<setw(7)<<dsid<<"   "<<setw(14)<<tdp.getRawXsection(dsid)<<"   "<<setw(13)<<tdp.getKfactor(dsid)<<"   ";
 				  }
 				else
 				  {
-				    out_file<<setw(7)<<dsid<<"\t";
+				    out_file<<setw(7)<<dsid<<"   ";
 				  }
-				count=0;
-				while(line>>del)
+				for(count=0;line>>del;count++)
 				{
 				  if(notfound==true && count<=1)
 				    {
-				      if(count==0) out_file<<setw(14);
-				      if(count==1) out_file<<setw(9);
-				      out_file<<del<<"\t";
+				      if(count==0)
+					{
+					  out_file<<setw(14);
+					  if(tdp.getRawXsection(dsid) != -1)
+					    {
+					      out_file<<tdp.getRawXsection(dsid)<<"   ";
+					    }
+					  else
+					    {
+					      cout<<"Xsection for DSID: "<<dsid<<" not found in TopDataPreparation Package\n";
+					      out_file<<del<<"   ";
+					    }
+					}
+				      else
+					{
+					  out_file<<setw(13);
+					  out_file<<del<<"   ";
+					}
 				    }
 				  else if(count > 1)
 				    {
-				      if(count==6) out_file<<setw(30);
+				      if(count==6) out_file<<setw(19);
 				      else if(count==7) out_file<<setw(35);
-				      else if(count==5 || count == 8) out_file<<setw(5);
-				      else out_file<<setw(9);
-				      out_file<<del<<"\t";
+				      else if(count==5) out_file<<setw(2);
+				      else if(count==2) out_file<<setw(9);
+				      else if (count==3) out_file<<setw(4);
+				      else if (count==8) out_file<<setw(4);
+				      else out_file<<setw(6);
+				      out_file<<del<<"  ";
 				    }
-				  count++;
 				}
 				out_file<<endl;
 			}
