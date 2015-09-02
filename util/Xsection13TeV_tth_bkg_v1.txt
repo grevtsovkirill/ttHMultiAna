@@ -54,7 +54,7 @@
  361380          1.75343          0.9013         1.0    --    -999   2               Sherpa                Zee_Pt140_280_BFilter  Full  
  361381          0.46428          0.9013         1.0    --    -999   2               Sherpa             Zee_Pt280_500_CVetoBVeto  Full  
  361382          0.22164          0.9013         1.0    --    -999   2               Sherpa           Zee_Pt280_500_CFilterBVeto  Full  
- 361383          0.13491          0.9013         1.0    --    -999   2               Sherpa                                 None  Full  
+ 361383          0.13491          0.9013         1.0    --    -999   2               Sherpa                Zee_Pt280_500_BFilter  Full  
  361384          0.02991          0.9013         1.0    --    -999   2               Sherpa             Zee_Pt500_700_CVetoBVeto  Full  
  361385          0.01459          0.9013         1.0    --    -999   2               Sherpa           Zee_Pt500_700_CFilterBVeto  Full  
  361386          0.00949          0.9013         1.0    --    -999   2               Sherpa                Zee_Pt500_700_BFilter  Full  
