@@ -243,7 +243,19 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	"HLT_e17_loose_mu14",
 	"HLT_e17_lhloose_mu14", 
 	"HLT_e7_medium_mu24",
-	"HLT_e7_lhmedium_mu24"};
+	"HLT_e7_lhmedium_mu24"
+	// Added low pt threshold trigger for MM back up
+	"HLT_mu10",
+	"HLT_mu14",
+	"HLT_mu18",
+	"HLT_mu24",
+	"HLT_e17_loose",
+	"HLT_e17_lhloose",
+	"HLT_e12_loose",
+	"HLT_e12_lhloose",
+	"HLT_e5_loose",
+	"HLT_e5_lhloose",
+	};
     
     for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
@@ -318,6 +330,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e26_lhtight_iloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e26_lhtight_iloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e26_lhtight_iloose");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e60_lhmedium");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e120_lhloose");
+  // Trigger matching with low pt threshold triggers
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e17_loose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e17_loose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e17_loose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e17_lhloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e17_lhloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e17_lhloose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e12_loose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e12_loose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e12_loose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e12_lhloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e12_lhloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e12_lhloose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e5_loose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e5_loose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e5_loose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e5_lhloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e5_lhloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e5_lhloose");
 
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
@@ -373,6 +392,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu26_imedium")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu26_imedium"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu26_imedium");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu40")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu40");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu50")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu50");
+   // Trigger matching for low pt threshold triggers
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu10")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu10"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu10");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu14")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu14"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu14");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu18")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu18"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu18");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu24")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu24"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu24");
 
     //truth origin HERE
     //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon. 
