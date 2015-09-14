@@ -459,6 +459,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
     // is it the 1 GeV counting we want?
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float> >("SumPtTrkPt1000"); return (float) (tmp.size() ? tmp[0] : 0.); }, *systematicTree, "m_jet_sumPtTrk");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute< std::vector<int> >(xAOD::JetAttribute::NumTrkPt500); return (int) (tmp.size() ? tmp[0] : 0); }, *systematicTree, "m_jet_numTrkPt500");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("EMFrac"); }, *systematicTree, "m_jet_emfrac");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
     // not in sample xAOD

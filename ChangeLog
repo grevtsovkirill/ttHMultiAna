@@ -1,3 +1,7 @@
+2015-09-14 David Hohn <david.hohn@cern.ch>
+	* add NumTrkPt500 for jets
+	* requested in ATLASTTHML-4
+
 2015-09-02 Harish Potti <harish.potti@utexas.edu>
 	* update_xsection.cxx Added ttV files
 	
