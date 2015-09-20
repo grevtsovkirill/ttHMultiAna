@@ -1,3 +1,7 @@
+2015-09-20 Harish Potti <harish.potti@cern.ch>
+	* data Added 25ns purwt config files
+	* generic_config-mc15.txt Added above files to list under PURWT instructions
+
 2015-09-14 David Hohn <david.hohn@cern.ch>
 	* add NumTrkPt500 for jets
 	* requested in ATLASTTHML-4
