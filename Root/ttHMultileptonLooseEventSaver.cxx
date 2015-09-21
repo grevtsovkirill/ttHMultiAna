@@ -243,7 +243,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	"HLT_e17_loose_mu14",
 	"HLT_e17_lhloose_mu14", 
 	"HLT_e7_medium_mu24",
-	"HLT_e7_lhmedium_mu24"
+	"HLT_e7_lhmedium_mu24",
 	// Added low pt threshold trigger for MM back up
 	"HLT_mu10",
 	"HLT_mu14",
