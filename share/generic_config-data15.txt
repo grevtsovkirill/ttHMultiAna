@@ -1,7 +1,7 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
 GRLDir ttHMultilepton
-GRLFile data15_13TeV.periodAllYear_DetStatus-v64-pro19_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
+GRLFile data15_13TeV.periodAllYear_DetStatus-v65-pro19-01_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -26,7 +26,7 @@ PerfStats No
 NEvents 0
 
 PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root
-PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_267073-271744.root ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-276511.root
+PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_267073-271744.root ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-279598.root
 PRWDefaultChannel 410000
 
 Systematics Nominal
