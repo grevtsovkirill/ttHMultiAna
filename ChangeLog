@@ -1,3 +1,7 @@
+2015-09-27 Harish Potti <harish.potti@cern.ch>
+	* data Added latest v65 grl and PRWLumiCalcFiles
+	* generic_config-*15.txt Updated grl and PRWlumicalc file instructions
+	
 2015-09-20 Harish Potti <harish.potti@cern.ch>
 	* data Added 25ns purwt config files
 	* generic_config-mc15.txt Added above files to list under PURWT instructions
