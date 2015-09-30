@@ -1,3 +1,6 @@
+2015-09-29 Harish Potti <harish.potti@utexas.edu>
+	* data Added PURWTconfig files for 361500 and 361524
+	* generic_config-mc15.txt Incorporated above files to the PURWT list
 2015-09-27 Harish Potti <harish.potti@cern.ch>
 	* data Added latest v65 grl and PRWLumiCalcFiles
 	* generic_config-*15.txt Updated grl and PRWlumicalc file instructions
