@@ -1,5 +1,6 @@
 2015-10-01 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for ele match to HLT_e24_lhmedium_iloose_L1EM18VH (see https://its.cern.ch/jira/browse/ATLASTTHML-13)
+	Added HLT_mu18_mu8noL1 decision and PS. 
 	* generic_config-mc15.txt added corresponding string to check match
 	
 2015-09-29 Harish Potti <harish.potti@utexas.edu>

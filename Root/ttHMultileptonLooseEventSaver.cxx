@@ -240,6 +240,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	"HLT_e17_lhloose_2e9_lhloose",
 	"HLT_2mu14",
 	"HLT_2mu10",
+	"HLT_mu18_mu8noL1",
 	"HLT_e17_loose_mu14",
 	"HLT_e17_lhloose_mu14", 
 	"HLT_e7_medium_mu24",
