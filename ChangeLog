@@ -1,3 +1,6 @@
+2015-10-05 Giuseppe Salamanna <salaman AT cern.ch>
+	* Xsection13TeV_tth_bkg_v1.txt Added MG5+Py8 Z+jets xsections to the file
+
 2015-10-01 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for ele match to HLT_e24_lhmedium_iloose_L1EM18VH (see https://its.cern.ch/jira/browse/ATLASTTHML-13)
 	Added HLT_mu18_mu8noL1 decision and PS. 
