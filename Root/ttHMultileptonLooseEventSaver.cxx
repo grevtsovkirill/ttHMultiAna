@@ -392,8 +392,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Trigger matching
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu20_iloose_L1MU15");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu26_imedium")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu26_imedium"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu26_imedium");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu40")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu40");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu40")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"); else std::cout << "mu40 N/A!" << std::endl; return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu40");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu50")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu50");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu18_mu8noL1")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu18_mu8noL1"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu18_mu8noL1");
+
    // Trigger matching for low pt threshold triggers
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu10")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu10"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu10");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { int is_matched(0); if (mu.isAvailable<char>("TRIGMATCH_HLT_mu14")) is_matched = mu.auxdataConst<char>("TRIGMATCH_HLT_mu14"); return (int) is_matched; }, *systematicTree, "muon_match_HLT_mu14");

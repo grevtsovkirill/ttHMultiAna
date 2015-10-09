@@ -66,7 +66,7 @@ OverlapRemovalLeptonDef Tight
 # Don't be clever
 SELECTION dummy
 GRL
-TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedium_L1EM18VH HLT_e26_lhtight_iloose HLT_e60_lhmedium HLT_e120_lhloose 
+TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedium_L1EM18VH HLT_e26_lhtight_iloose HLT_e60_lhmedium HLT_e120_lhloose HLT_mu18_mu8noL1
 
 
 SELECTION loose
