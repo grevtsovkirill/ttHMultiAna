@@ -522,6 +522,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }, *systematicTree, std::string(tauprefix+"RecoSF").c_str());
 
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.auxdata<double>("TauScaleFactorJetIDHadTau");
+      }, *systematicTree, std::string(tauprefix+"JetIDSF").c_str());
+    
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.auxdata<double>("TauScaleFactorEleOLRHadTau");
+      }, *systematicTree, std::string(tauprefix+"EleOLRSF").c_str());
+
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
     

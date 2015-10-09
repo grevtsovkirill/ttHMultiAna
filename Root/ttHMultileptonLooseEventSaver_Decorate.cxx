@@ -57,9 +57,10 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   
   for( auto tauItr : event.m_tauJets) {
     //SF
-    double tauSF(1.0);
-    top::check( m_tauEffTool.getEfficiencyScaleFactor(*tauItr, tauSF), "Failed to apply SF to tau");
-    tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau") = tauSF;
+    top::check( m_tauEffTool.applyEfficiencyScaleFactor(*tauItr), "Failed to apply SF to tau");
+    //std::cout<<tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau")<<std::endl;
+    //std::cout<<tauItr->auxdecor<double>("TauScaleFactorJetIDHadTau")<<std::endl;
+    //std::cout<<tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")<<std::endl;
 
     //truth
     int isHadronic(0), tauTruthType(0), tauTruthOrigin(0);

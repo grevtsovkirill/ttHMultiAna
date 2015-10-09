@@ -1,8 +1,9 @@
 2015-10-09 David Hohn <dhohn@cern.ch>
 	* move to Top,2.3.30
-	* needed only minor interface changes
-	* but had to switch off electron isolation sf calculation
-	* and had to switch from VeryLoose to Loose muons because of missing scale factors
+	  needed only minor interface changes
+	  but had to switch off electron isolation sf calculation
+	  and had to switch from VeryLoose to Loose muons because of missing scale factors
+	* added tau scale factors, all equal 1 still for some reason
 
 2015-10-05 Giuseppe Salamanna <salaman AT cern.ch>
 	* Xsection13TeV_tth_bkg_v1.txt Added MG5+Py8 Z+jets xsections to the file
