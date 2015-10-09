@@ -11,7 +11,7 @@ namespace ttHMultilepton {
   {
 
     //set the tool to verbose
-    m_tauSelection->msg().setLevel(MSG::VERBOSE);
+    //m_tauSelection->msg().setLevel(MSG::VERBOSE);
     // main selection: tight-like taus
     top::check(m_tauSelection->setProperty("ConfigPath", m_configPath ), "TauMC15:Failed to set ConfigPath");
     top::check(m_tauSelection->initialize(), "TauMC15:Failed to initialize TauSelectionTool for tight-like object");

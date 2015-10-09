@@ -529,7 +529,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     //tau tools
     top::check( m_tauEffTool.initialize(), "Failed to initialise TauEffTool" );
-    m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
+    m_tauEffTool.msg().setLevel(MSG::VERBOSE);
+    //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
     top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
     top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
     
@@ -559,9 +560,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_isMC = config->isMC();
 
   // Shall we do scale factors?
-  if (config->doCalculateSF()) {
-    m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
-  }
+  // apparently not a question anymore
+  m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
   
 }
 

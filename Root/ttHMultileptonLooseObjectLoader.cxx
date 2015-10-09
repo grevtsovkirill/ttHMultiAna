@@ -11,6 +11,7 @@
 
 //We'll need these so we can apply some cuts
 #include "ttHMultilepton/ttHMultileptonElectronLikelihoodDC14.h"
+#include "TopObjectSelectionTools/ElectronLikelihoodMC15.h"
 #include "TopObjectSelectionTools/ElectronCutBasedMC15.h"
 #include "TopObjectSelectionTools/IsolationTools.h"
 #include "TopObjectSelectionTools/MuonMC15.h"
@@ -32,11 +33,10 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
   if (topConfig->electronID().find("LH") == std::string::npos && topConfig->electronIDLoose().find("LH") == std::string::npos) {
     //both the tight and loose user settings do not contain LH -> cut based
     objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), false, topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
-  } else if (topConfig->electronID().find("LH") == 0 && topConfig->electronIDLoose().find("LH") == 0) {
+  } else if (topConfig->electronID().find("LH") != std::string::npos && topConfig->electronIDLoose().find("LH") != std::string::npos) {
     //user wants likelihood electrons
     LikeEnum::Menu operatingPoint = ttHMultilepton::ElectronLikelihoodDC14::textToEgammaEnum(topConfig->electronID());
     LikeEnum::Menu operatingPointLoose = ttHMultilepton::ElectronLikelihoodDC14::textToEgammaEnum(topConfig->electronIDLoose());
-    //objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), operatingPoint, operatingPointLoose, new top::StandardIsolation()));
     objectSelection->electronSelection(new ttHMultilepton::ElectronLikelihoodDC14(topConfig->electronPtcut(), false, operatingPoint, operatingPointLoose, nullptr));
   } else {
     std::cout << "\nHo hum\n";

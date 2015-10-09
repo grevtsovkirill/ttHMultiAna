@@ -123,11 +123,11 @@ void ElectronLikelihoodDC14::print(std::ostream& os) const {
 
 LikeEnum::Menu ElectronLikelihoodDC14::textToEgammaEnum(const std::string& text) {
     LikeEnum::Menu operatingPoint;
-    if (text == "LHLoose")
+    if (text == "LHLoose" || text == "LooseLH")
         operatingPoint = LikeEnum::Loose;
-    else if (text == "LHMedium")
+    else if (text == "LHMedium" || text == "MediumLH")
         operatingPoint = LikeEnum::Medium;
-    else if (text == "LHTight")
+    else if (text == "LHTight" || text == "TightLH")
         operatingPoint = LikeEnum::Tight;
     else {
         std::cout << "ElectronLikelihoodDC14: Not sure what to set the Electron LH Quality to - LHLoose, LHMedium, LHTight are allowed" << std::endl;

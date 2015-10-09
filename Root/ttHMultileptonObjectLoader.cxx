@@ -33,7 +33,8 @@ top::TopObjectSelection* ttHMultileptonObjectLoader::init(std::shared_ptr<top::T
     objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), topConfig->electronVetoLArCrack(), topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
   } else if (topConfig->electronID().find("LH") == 0 && topConfig->electronIDLoose().find("LH") == 0) {
     //user wants likelihood electrons
-    objectSelection->electronSelection(new top::ElectronLikelihoodMC15(topConfig->electronPtcut(),
+    objectSelection->electronSelection(new top::ElectronLikelihoodMC15(/*isPrimaryxAOD*/false,
+								       topConfig->electronPtcut(),
 								       topConfig->electronVetoLArCrack(),
 								       topConfig->electronID(),
 								       topConfig->electronIDLoose(),
