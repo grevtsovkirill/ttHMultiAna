@@ -10,6 +10,7 @@ namespace ttHMultilepton {
     int dilep_type;
     int trilep_type;
     int quadlep_type;
+    int total_leptons;
     int total_charge;
     float Mll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float Ptll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];

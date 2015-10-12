@@ -396,6 +396,7 @@ void
 ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu) {
   memset(&m_leptons, 0, sizeof(m_leptons));
   const int totleptons = goodEl->size() + goodMu->size();
+  m_variables->total_leptons = totleptons;
   int keyval = 1 + goodEl->size();
   switch(totleptons) {
   case 1:

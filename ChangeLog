@@ -1,3 +1,6 @@
+2015-10-09 David Hohn <dhohn@cern.ch>
+	* added variable: total_leptons
+
 2015-10-09 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for muon match to HLT_mu18_mu8noL1
 	* generic_config-*15.txt added corresponding string to check match

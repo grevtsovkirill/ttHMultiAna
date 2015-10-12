@@ -4,11 +4,12 @@
 using boost::format;
 
 void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree) {
-  tree->makeOutputVariable(onelep_type, "onelep_type");
-  tree->makeOutputVariable(dilep_type, "dilep_type");
-  tree->makeOutputVariable(trilep_type, "trilep_type");
-  tree->makeOutputVariable(quadlep_type, "quadlep_type");
-  tree->makeOutputVariable(total_charge, "total_charge");
+  tree->makeOutputVariable(onelep_type,   "onelep_type");
+  tree->makeOutputVariable(dilep_type,    "dilep_type");
+  tree->makeOutputVariable(trilep_type,   "trilep_type");
+  tree->makeOutputVariable(quadlep_type,  "quadlep_type");
+  tree->makeOutputVariable(total_charge,  "total_charge");
+  tree->makeOutputVariable(total_leptons, "total_leptons");
   //tree->makeOutputVariable(Mll01, "Mll01");
   format XXmn("%1%%2%%3%");
   for (size_t idx1 = 0; idx1 < LEPTON_ARR_SIZE-1; ++idx1) {
