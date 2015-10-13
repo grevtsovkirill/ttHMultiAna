@@ -142,12 +142,12 @@
  410075          0.10512             1.0         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np2  Full  
  410080        0.0091622   1.00423479077         1.0    --    -999   1     MadGraph+Pythia8                               4topSM  Full  
  410081        0.0080975   1.22309354739         1.0    --    -999   1     MadGraph+Pythia8                              ttbarWW  Full  
- 410111        0.0088155             1.0         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np0  Full  
- 410112          0.01438             1.0         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np1  Full  
- 410113        0.0088422             1.0         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np0  Full  
- 410114         0.014375             1.0         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np1  Full  
- 410115        0.0090148             1.0         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np0  Full  
- 410116         0.014636             1.0         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np1  Full  
+ 410111        0.0088155          1.1025         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np0  Full  
+ 410112          0.01438          1.1025         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np1  Full  
+ 410113        0.0088422          1.1015         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np0  Full  
+ 410114         0.014375          1.1015         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np1  Full  
+ 410115        0.0090148          1.0813         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np0  Full  
+ 410116         0.014636          1.0813         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np1  Full  
 
 
 
