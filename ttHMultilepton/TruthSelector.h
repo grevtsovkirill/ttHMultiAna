@@ -57,6 +57,7 @@ namespace ttH
 
     bool IsStable(const xAOD::TruthParticle& truth) const;
     bool IsLepton(const xAOD::TruthParticle& truth) const;
+    bool IsGenerator(int status, int barcode) const;
 
     std::vector<TruthPart> GetParents (const xAOD::TruthParticle &truth);
     std::vector<TruthPart> GetChildren(const xAOD::TruthParticle &truth);

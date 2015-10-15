@@ -1,3 +1,6 @@
+2015-10-15 Giuseppe Salamanna <salaman AT cern.ch>
+	* TruthSelector: lowered pt cut to 1 GeV and checking against geant leptons
+	
 2015-10-15 David Hohn <dhohn@cern.ch>
 	* change name: electron_truthOrig ->electron_truthOrigin, consistent with muons and taus
 

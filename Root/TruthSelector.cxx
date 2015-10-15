@@ -153,9 +153,9 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
     //-------------------------------------------------------------------------
     // Select stable leptons and their parents
     //
-    if(IsStable(*ptr) && IsLepton(*ptr) && ptr->pt() > 5000.0) {
+    if(IsStable(*ptr) && IsLepton(*ptr) && ptr->pt() > 1000.0 && IsGenerator(ptr->status(),ptr->barcode())) {
       pass = true;
-
+      
       const std::vector<ttH::TruthPart> parents = GetParents(*ptr);
       m_select.insert(m_select.end(), parents.begin(), parents.end());
 
@@ -269,6 +269,15 @@ bool ttH::TruthSelector::IsLepton(const xAOD::TruthParticle& truth) const
   }
 
   return false;
+}
+
+//=================================================================================
+bool ttH::TruthSelector::IsGenerator(int status, int barcode) const
+{
+  
+  return barcode < 200000 && (status < 200 ||
+			      status % 1000 == 1 || status % 1000 == 2 ||
+			      status == 10902);
 }
 
 //=========================================================================
