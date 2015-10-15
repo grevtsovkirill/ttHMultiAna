@@ -1,13 +1,16 @@
+2015-10-15 David Hohn <dhohn@cern.ch>
+	* change name: electron_truthOrig ->electron_truthOrigin, consistent with muons and taus
+
 2015-10-13 Harish Potti <harish.potti@cern.ch>
 	* added new GRL and IlumiCalc file
-	
+
 2015-10-12 David Hohn <dhohn@cern.ch>
 	* added variable: total_leptons
 
 2015-10-09 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for muon match to HLT_mu18_mu8noL1
 	* generic_config-*15.txt added corresponding string to check match
-	
+
 2015-10-09 David Hohn <dhohn@cern.ch>
 	* move to Top,2.3.30
 	  needed only minor interface changes

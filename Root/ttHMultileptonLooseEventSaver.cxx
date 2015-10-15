@@ -324,7 +324,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //truth origin HERE
     //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
     //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrig");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrigin");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); }, *systematicTree, "electron_truthType");
     //Trigger matching
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e24_lhmedium_L1EM18VH");
