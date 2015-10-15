@@ -1,4 +1,7 @@
 2015-10-15 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: split lepton SF into trigger and others 
+	
+2015-10-15 Giuseppe Salamanna <salaman AT cern.ch>
 	* TruthSelector: lowered pt cut to 1 GeV and checking against geant leptons
 	
 2015-10-15 David Hohn <dhohn@cern.ch>

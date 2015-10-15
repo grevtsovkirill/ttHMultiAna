@@ -28,7 +28,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
   m_mcWeight(0.),
   m_pileup_weight(0.),
-  m_leptonSF_weight(0.),
+  m_leptonTrigSF_weight(0.),
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
@@ -137,7 +137,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   for (auto systematicTree : m_treeManagers){
     systematicTree->makeOutputVariable(m_mcWeight, "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
-    systematicTree->makeOutputVariable(m_leptonSF_weight, "lepTrigSFEventWeight");
+    systematicTree->makeOutputVariable(m_leptonTrigSF_weight, "lepTrigSFEventWeight");
 
     //event info
     std::vector<ScalarWrapper*> scalarvec; 
@@ -596,7 +596,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
-  m_leptonSF_weight = 1.;
+  m_leptonTrigSF_weight = 1.;
   m_mcChannelNumber = 0;
  
   if (top::isSimulation(event)){
@@ -604,7 +604,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mcWeight        = event.m_info->mcEventWeight(); 
     if(m_sfRetriever){
       m_pileup_weight   = m_sfRetriever->pileupSF(event);
-      m_leptonSF_weight = m_sfRetriever->leptonSF(event,top::topSFSyst::nominal);
+      m_leptonTrigSF_weight = m_sfRetriever->triggerSF(event,top::topSFSyst::nominal);
     }
   }
 

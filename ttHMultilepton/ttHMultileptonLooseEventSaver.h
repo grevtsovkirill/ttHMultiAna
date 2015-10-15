@@ -115,7 +115,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //some event weights
   double m_mcWeight;
   double m_pileup_weight;
-  double m_leptonSF_weight;
+  double m_leptonTrigSF_weight;
 
   //event info
   unsigned int m_eventNumber;
