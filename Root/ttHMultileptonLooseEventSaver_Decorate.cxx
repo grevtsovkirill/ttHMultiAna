@@ -54,13 +54,23 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   }
 
   top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
-  
+
   for( auto tauItr : event.m_tauJets) {
     //SF
-    top::check( m_tauEffTool.applyEfficiencyScaleFactor(*tauItr), "Failed to apply SF to tau");
-    //std::cout<<tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau")<<std::endl;
-    //std::cout<<tauItr->auxdecor<double>("TauScaleFactorJetIDHadTau")<<std::endl;
-    //std::cout<<tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")<<std::endl;
+    // init the values
+    tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau") = 1.;
+    tauItr->auxdecor<double>("TauScaleFactorJetIDHadTau")          = 1.;
+    tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")         = 1.;
+    if( top::isSimulation(event) ) {
+      top::check( m_tauEffTool.applyEfficiencyScaleFactor(*tauItr), "Failed to apply SF to tau");
+      double tauSF(0);
+      top::check( m_tauEffTool.getEfficiencyScaleFactor(*tauItr,tauSF), "Failed to apply SF to tau");
+      
+      //std::cout<<tauSF<<std::endl;
+      //std::cout<<tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau")<<std::endl;
+      //std::cout<<tauItr->auxdecor<double>("TauScaleFactorJetIDHadTau")<<std::endl;
+      //std::cout<<tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")<<std::endl;
+    }
 
     //truth
     int isHadronic(0), tauTruthType(0), tauTruthOrigin(0);

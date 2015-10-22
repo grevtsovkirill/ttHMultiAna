@@ -2,6 +2,7 @@
 	* Add DuplicateSelector to veto double events, enabled for data
 	* update data config for 2.3.30 as well
 	* added ttHtautau xsections
+	* protect data from TauEfficiencyCorrections
 
 2015-10-15 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: split lepton SF into trigger and others 
