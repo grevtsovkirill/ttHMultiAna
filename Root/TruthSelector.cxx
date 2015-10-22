@@ -12,6 +12,8 @@
 // Local
 #include "ttHMultilepton/TruthSelector.h"
 
+
+
 using namespace std;
 
 const static int PDG_CHARM = 4;
@@ -96,6 +98,21 @@ ttH::TruthSelector::TruthSelector():
   m_debug (false),
   m_truths(nullptr)
 {
+     decaymodestr[bb]    = "bb";
+     decaymodestr[cc]    = "cc";
+     decaymodestr[ss]    = "ss";
+     decaymodestr[WW]    = "WW";
+     decaymodestr[ZZ]    = "ZZ";
+     decaymodestr[gg]    = "gg";
+     decaymodestr[tautau]= "tautau";
+     decaymodestr[mumu]  = "mumu";
+     decaymodestr[gamgam]= "gamgam";
+     decaymodestr[Zgamma]= "Zgamma";
+     decaymodestr[taugamma]= "taugamma";
+     decaymodestr[unclassified]  = "unclassified";
+     decaymodestr[noproducts]    = "noproducts";
+     decaymodestr[nohiggs]       = "nohiggs";
+     decaymodestr[problem]       = "problem";
 }
 
 //=========================================================================
@@ -131,7 +148,6 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
 
     bool pass = false;
     TruthPart p(*ptr);
-
     //-------------------------------------------------------------------------
     // Select list A particles
     //
@@ -184,6 +200,169 @@ const std::vector<ttH::TruthPart>& ttH::TruthSelector::SelectTruth(const xAOD::T
   return m_select;
 }
 
+void ttH::TruthSelector::FillHiggsDecayMode(TH1F* hist, const xAOD::TruthParticleContainer *cont)
+{
+    m_truths = cont;
+    for(const xAOD::TruthParticle *part: *m_truths) 
+    {
+        if(!part) 
+        {
+            continue;
+        }
+        //Select Higgs
+        if(IsGoodHiggs(part->pdgId(),GetChildren(*part)))
+        {
+            ttH::decaymode mode = GetHiggsDecayMode(part);
+            std::string decaymode_str = decaymodestr[mode];
+            hist->Fill(decaymode_str.c_str(),1);
+        }
+    }
+}
+
+std::vector<std::string> ttH::TruthSelector::GetHiggsDecayModeString(const xAOD::TruthParticleContainer *cont)
+{
+    std::vector<std::string> modeVector;
+    m_truths = cont;
+    for (const xAOD::TruthParticle *part: *m_truths)
+    {
+        if(!part)
+        {
+            continue;
+        }
+        //Select Higgs
+        if(IsGoodHiggs(part->pdgId(),GetChildren(*part)))
+        {
+            modeVector.push_back(decaymodestr[GetHiggsDecayMode(part)]);
+        }
+    }
+    return modeVector;
+}
+ttH::decaymode ttH::TruthSelector::GetHiggsDecayMode(const xAOD::TruthParticle* part)
+{
+    int h = -1;
+    std::vector<int> higgs_cpdg;
+    higgs_cpdg.clear();
+    if(abs(part->pdgId()) != PDG_HIGGS) return problem;
+    /*if(part->status() != 62)
+    {
+        std::cout <<"SC != 62"<<std::endl;
+        return problem;
+    }*/
+    
+    for(unsigned int mcp_c = 0; mcp_c < GetChildren(*part).size();mcp_c++)
+    {
+        ttH::TruthPart child = GetChildren(*part).at(mcp_c);
+        //cerr << "child pdgId: " << mc_pdgId->at(mc_child_index->at(mcp).at(mcp_c)) << ", child status: " << mc_status->at(mc_child_index->at(mcp).at(mcp_c)) << endl;
+        int cpdg = child.pdgId;
+        
+        //15: status 2
+        //5 : status 23
+        //24: status 22
+        //23: status 22?
+        //22: status 1, 23?
+        //13: status 1
+        //21: status 23
+        if(abs(cpdg) == 5)
+        {
+            //if(child.status !=23) continue;
+            higgs_cpdg.push_back(cpdg);
+        }
+        else if(abs(cpdg)==24)
+        {
+            //if(child.status !=22) continue;
+            higgs_cpdg.push_back(cpdg);
+        }
+        else if(abs(cpdg)==15)
+        {
+            //if(child.status !=2) continue;
+            higgs_cpdg.push_back(cpdg);
+        }
+        else if(abs(cpdg)==4)
+        {
+            //if(child.status !=23) continue;
+            higgs_cpdg.push_back(cpdg);
+        }
+        else if(abs(cpdg)==23)
+        {
+            //if(child.status !=22) continue;
+            higgs_cpdg.push_back(cpdg);
+        }
+        else if(abs(cpdg)==21)
+        {
+             //if(child.status !=23) continue;
+             higgs_cpdg.push_back(cpdg);
+         }
+         else if(abs(cpdg)==22)
+         {
+             //if(child.status !=1 && child.status !=23) continue;
+             higgs_cpdg.push_back(cpdg);
+         }
+         else if(abs(cpdg)==13)
+         {
+             //if(child.status !=1) continue;
+             higgs_cpdg.push_back(cpdg);
+         }
+         else if(abs(cpdg)==3)
+         {
+             //if(child.status !=23) continue;
+             higgs_cpdg.push_back(cpdg);
+          }   
+    }
+              
+    int gammacount = 0;
+    //if there is one (or more) extra gamma(s), remove it(them)
+    if(higgs_cpdg.size() > 2 )
+    {
+        gammacount = count(higgs_cpdg.begin(), higgs_cpdg.end(), 22);
+        if(higgs_cpdg.size() - gammacount >= 1)
+        {
+            vector<int>::iterator pos;
+            //if only 1 other particle + photons, leave last photon
+            if(higgs_cpdg.size() - gammacount == 1) gammacount--;
+            for(int iter = 0; iter < gammacount; iter++)
+            {
+                pos = find(higgs_cpdg.begin(), higgs_cpdg.end(),22);
+                higgs_cpdg.erase(pos);
+            }
+        }
+    }
+
+    if(higgs_cpdg.size()==2)
+    {
+        if(higgs_cpdg[0] + higgs_cpdg[1] == 0)
+        {
+            //ostringstream cN2;
+            //cN2 << abs(higgs_cpdg[0]) ;
+            //cout << cN2.str() << endl;
+            
+            if(abs(higgs_cpdg[0]) == 5) return bb;
+            if(abs(higgs_cpdg[0]) == 3) return ss;
+            if(abs(higgs_cpdg[0]) == 24) return WW;
+            if(abs(higgs_cpdg[0]) == 23) return ZZ;
+            if(abs(higgs_cpdg[0]) == 4) return cc;
+            if(abs(higgs_cpdg[0]) == 15) return tautau;
+            if(abs(higgs_cpdg[0]) == 22) return gamgam;
+            if(abs(higgs_cpdg[0]) == 13) return mumu;
+            if(abs(higgs_cpdg[0]) == 21) return gg;
+        }
+        else if(higgs_cpdg[0] == higgs_cpdg[1])
+        {
+            if(higgs_cpdg[0] == 23) return ZZ;
+            if(higgs_cpdg[0] == 22) return gamgam;
+            if(higgs_cpdg[0] == 21) return gg;
+        }
+        //else if(higgs_cpdg[0] + higgs_cpdg[1] == 45) return Zgamma;
+        else if(higgs_cpdg[0] == 22 && higgs_cpdg[1] == 23) return Zgamma;
+        else if(higgs_cpdg[0] == 23 && higgs_cpdg[1] == 22) return Zgamma;
+        else if(abs(higgs_cpdg[0]) == 15 && higgs_cpdg[1] == 22) return taugamma;
+        else if(higgs_cpdg[0] == 22 && abs(higgs_cpdg[1]) == 15) return taugamma;
+        else cerr << "1 = " << higgs_cpdg[0] << ", 2 = " << higgs_cpdg[1] << endl;
+    }
+    std::cout<<"Warning: Higgs children size: "<<higgs_cpdg.size() <<std::endl;
+    return unclassified;   
+}
+
+
 //=========================================================================
 bool ttH::TruthSelector::IsGoodTop(const int pdgId, const vector<int>& children) 
 {
@@ -191,6 +370,11 @@ bool ttH::TruthSelector::IsGoodTop(const int pdgId, const vector<int>& children)
 }
 
 //=========================================================================
+
+bool ttH::TruthSelector::IsGoodHiggs(const int pdgId, const std::vector<ttH::TruthPart>& children)
+{
+    return std::abs(pdgId) == PDG_HIGGS && children.size() >=2;
+}
 bool ttH::TruthSelector::IsGoodHiggs(const int pdgId, const vector<int>& children)
 {
   return std::abs(pdgId) == PDG_HIGGS && children.size() >= 2;

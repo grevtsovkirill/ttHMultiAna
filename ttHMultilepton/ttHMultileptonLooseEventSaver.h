@@ -32,6 +32,10 @@
 #include "ttHMultilepton/Lepton.h"
 #include "ttHMultilepton/Variables.h"
 
+//root
+#include <TH1F.h>
+#include <TString.h>
+
 using namespace Trig;
 using namespace TrigConf;
 using namespace xAOD;
@@ -198,6 +202,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //end trigger
   */  
   //MC  
+  TString m_higgsMode;
   std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;
@@ -222,6 +227,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;
   std::vector<float> m_trjet_e;
+
+
+  TH1F * h_decayMode;
 
   #ifndef __CINT__ 
   std::vector<ScalarWrapperCollection> vec_scalar_wrappers;

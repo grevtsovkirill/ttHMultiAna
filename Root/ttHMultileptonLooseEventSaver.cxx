@@ -147,6 +147,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
 
+    systematicTree->makeOutputVariable(m_higgsMode,"m_higgsMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_mu_unc, "averageIntPerXing_uncorr");
@@ -655,6 +656,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_mc_barcode .push_back(truth.barcode); 
       m_mc_children.push_back(truth.bc_children); 
       m_mc_parents .push_back(truth.bc_parents); 
+    }
+    std::vector<std::string> higgsMode = truthSelector.GetHiggsDecayModeString(event.m_truth);
+    if(higgsMode.size() ==1)
+    {
+        m_higgsMode = higgsMode[0];
+    }
+    else {
+        m_higgsMode = "noHiggs";
     }
   }
 
