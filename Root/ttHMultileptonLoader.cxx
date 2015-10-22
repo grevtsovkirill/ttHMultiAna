@@ -4,6 +4,7 @@
 #include "ttHMultilepton/MLLSFWinSelector.h"
 #include "ttHMultilepton/MultilepEventSelector.h"
 #include "ttHMultilepton/CountHisto.h"
+#include "ttHMultilepton/DuplicateSelector.h"
 
 /*** This is where the magic happens.  When top-xaod comes across a cut in the configuration file it tries to load it.
  * So if it comes across the word "EVEN" it'll make and return a new EvenNumberSelector object (which
@@ -19,6 +20,8 @@ top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& name, 
   }
   else if (line.find("COUNTHISTO") == 0)
     return new CountHisto(name,outputFile,wk);
+  else if (line.find("DUPLICATEVETO") == 0)
+    return new DuplicateSelector();
   //else if (line.find("OTHER_TOOL") == 0)
   //  return new OtherToolThatYouInvented();
   

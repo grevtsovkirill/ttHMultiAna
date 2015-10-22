@@ -32,13 +32,14 @@ PRWDefaultChannel 410000
 Systematics Nominal
 
 #Electron cuts
-ElectronID LHLoose
-ElectronIDLoose LHLoose
+ElectronID LooseLH
+ElectronIDLoose LooseLH
 ElectronPt 5000.
+ElectronIsoSFs False
 
 #Muon cuts
-MuonQuality VeryLoose
-MuonQualityLoose VeryLoose
+MuonQuality Loose
+MuonQualityLoose Loose
 MuonPt 5000.
 MuonEta 2.7
 
@@ -78,4 +79,5 @@ JETCLEAN LooseBad
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 
 TTHMULTILEP
+DUPLICATEVETO
 SAVE
