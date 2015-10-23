@@ -17,7 +17,7 @@ int main()
 	SampleXsection tdp;
 	const char* const rc = getenv("ROOTCOREBIN");
 	cout<<"RootCore: "<<rc<<endl;
-	std::string filename = std::string(rc) + "/../TopDataPreparation/data/XSection-MC15-13TeV-fromSusyGrp.data";
+	std::string filename = std::string(rc) + "/data/TopDataPreparation/XSection-MC15-13TeV-fromSusyGrp.data";
 	if (!tdp.readFromFile(filename.c_str())) {
 	        std::cout << "TopDataPreparation - could not read file\n";
 	        std::cout << filename << "\n";

@@ -115,21 +115,21 @@
  361441       3.6399e-06          0.9013         1.0    --    -999   2               Sherpa      Ztautau_Pt2000_E_CMS_CVetoBVeto  Full  
 
 #Madgraph Zjets from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/CentralMC15ProductionList
- 361500     1401.6                1.232          1.0    --    -999   1               MadGraph+Pythia8                    Zee_Np0  Full            
- 361501     211.99                1.232          1.0    --    -999   1               MadGraph+Pythia8                    Zee_Np1  Full            
- 361502     67.305                1.232          1.0    --    -999   1               MadGraph+Pythia8                    Zee_Np2  Full            
- 361503     18.679                1.232          1.0    --    -999   1               MadGraph+Pythia8                    Zee_Np3  Full            
- 361504     7.291                 1.232          1.0    --    -999   1               MadGraph+Pythia8                    Zee_Np4  Full            
- 361505     1402.0                1.232          1.0    --    -999   1               MadGraph+Pythia8                  Zmumu_Np0  Full            
- 361506     211.95                1.232          1.0    --    -999   1               MadGraph+Pythia8                  Zmumu_Np1  Full            
- 361507     67.353                1.232          1.0    --    -999   1               MadGraph+Pythia8                  Zmumu_Np2  Full            
- 361508     18.633                1.232          1.0    --    -999   1               MadGraph+Pythia8                  Zmumu_Np3  Full            
- 361509     7.3013                1.232          1.0    --    -999   1               MadGraph+Pythia8                  Zmumu_Np4  Full            
- 361510     1397.8                1.232          1.0    --    -999   1               MadGraph+Pythia8                Ztautau_Np0  Full            
- 361511     211.4                 1.232          1.0    --    -999   1               MadGraph+Pythia8                Ztautau_Np1  Full            
- 361512     67.176                1.232          1.0    --    -999   1               MadGraph+Pythia8                Ztautau_Np2  Full            
- 361513     18.609                1.232          1.0    --    -999   1               MadGraph+Pythia8                Ztautau_Np3  Full            
- 361514     7.2749                1.232          1.0    --    -999   1               MadGraph+Pythia8                Ztautau_Np4  Full
+ 361500           1401.6           1.232         1.0    --    -999   1     MadGraph+Pythia8                              Zee_Np0  Full  
+ 361501           211.99           1.232         1.0    --    -999   1     MadGraph+Pythia8                              Zee_Np1  Full  
+ 361502           67.305           1.232         1.0    --    -999   1     MadGraph+Pythia8                              Zee_Np2  Full  
+ 361503           18.679           1.232         1.0    --    -999   1     MadGraph+Pythia8                              Zee_Np3  Full  
+ 361504            7.291           1.232         1.0    --    -999   1     MadGraph+Pythia8                              Zee_Np4  Full  
+ 361505             1402           1.232         1.0    --    -999   1     MadGraph+Pythia8                            Zmumu_Np0  Full  
+ 361506           211.95           1.232         1.0    --    -999   1     MadGraph+Pythia8                            Zmumu_Np1  Full  
+ 361507           67.353           1.232         1.0    --    -999   1     MadGraph+Pythia8                            Zmumu_Np2  Full  
+ 361508           18.633           1.232         1.0    --    -999   1     MadGraph+Pythia8                            Zmumu_Np3  Full  
+ 361509           7.3013           1.232         1.0    --    -999   1     MadGraph+Pythia8                            Zmumu_Np4  Full  
+ 361510           1397.8           1.232         1.0    --    -999   1     MadGraph+Pythia8                          Ztautau_Np0  Full  
+ 361511            211.4           1.232         1.0    --    -999   1     MadGraph+Pythia8                          Ztautau_Np1  Full  
+ 361512           67.176           1.232         1.0    --    -999   1     MadGraph+Pythia8                          Ztautau_Np2  Full  
+ 361513           18.609           1.232         1.0    --    -999   1     MadGraph+Pythia8                          Ztautau_Np3  Full  
+ 361514           7.2749           1.232         1.0    --    -999   1     MadGraph+Pythia8                          Ztautau_Np4  Full  
 
 #ttV
  410066          0.17656           1.247         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np0  Full  
@@ -148,6 +148,13 @@
  410114         0.014375          1.1015         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np1  Full  
  410115        0.0090148          1.0813         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np0  Full  
  410116         0.014636          1.0813         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np1  Full  
+
+#Single Top
+ 410062           32.384           1.054         1.0    --    -999   1               Powheg                            SingleTop  Full  
+ 410063           32.357           1.054         1.0    --    -999   1               Powheg                            SingleTop  Full  
+
+
+
 
 
 
