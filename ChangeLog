@@ -1,4 +1,9 @@
-2015-10-22
+2015-10-23 Rohin Narayan <narayan@cern.ch>
+	* Changing higgsdecaymode to int type
+	* Also changed the name of the branch to "higgsDecayMode" in tune with
+	Run1 scheme. 
+
+2015-10-22 Rohin T Narayan <narayan@cern.ch>
 	* Adding higgs decay mode to the ntuples
 
 2015-10-15 David Hohn <dhohn@cern.ch>

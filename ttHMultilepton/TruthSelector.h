@@ -58,11 +58,7 @@ namespace ttH
     
     const std::vector<TruthPart>& SelectTruth(const xAOD::TruthParticleContainer *truths);
  
-    decaymode GetHiggsDecayMode(const xAOD::TruthParticle* part);
-    std::vector<std::string> GetHiggsDecayModeString(const xAOD::TruthParticleContainer *truthCont);
-
-    void FillHiggsDecayMode(TH1F* hist, const xAOD::TruthParticleContainer *truths);
-    
+    decaymode GetHiggsDecayMode(const xAOD::TruthParticleContainer* truthCont);
   private:
     
     bool IsGoodTop    (const int pdgId, const std::vector<int>& children);

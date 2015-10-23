@@ -202,7 +202,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //end trigger
   */  
   //MC  
-  TString m_higgsMode;
+  int m_higgsMode;
   std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;
