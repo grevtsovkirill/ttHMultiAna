@@ -18,8 +18,8 @@
  410016           3.5814           1.054         1.0    --    -999   2               Powheg                  Wt_dilepton_antitop  Full  
 #Extra Top/SingleTop
  410025           2.0517          1.6806         1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full  
- 410062           32.384           1.054         1.0    --    -999   2               Powheg                            Wt_DS_inclusive_top  Full  
- 410063           32.357           1.054         1.0    --    -999   2               Powheg                            Wt_DS_inclusive_antitop  Full  
+ 410062           32.384           1.054         1.0    --    -999   2               Powheg                  Wt_DS_inclusive_top  Full  
+ 410063           32.357               1         1.0    --    -999   2               Powheg              Wt_DS_inclusive_antitop  Full  
 
 
 #Dibosons
@@ -142,13 +142,13 @@
  410066          0.17656           1.247         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np0  Full  
  410067          0.14062           1.247         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np1  Full  
  410068           0.1368           1.247         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np2  Full  
- 410069         0.018103             1.0         1.0    --    -999   2     MadGraph+Pythia8                     ttZllonshell_Np0  Full  
- 410070         0.030629             1.0         1.0    --    -999   2     MadGraph+Pythia8                     ttZllonshell_Np1  Full  
- 410073          0.11122             1.0         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np0  Full  
- 410074         0.095466             1.0         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np1  Full  
- 410075          0.10512             1.0         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np2  Full  
- 410080        0.0091622   1.00423479077         1.0    --    -999   1     MadGraph+Pythia8                               4topSM  Full  
- 410081        0.0080975   1.22309354739         1.0    --    -999   1     MadGraph+Pythia8                              ttbarWW  Full  
+ 410069         0.018103               1         1.0    --    -999   2     MadGraph+Pythia8                     ttZllonshell_Np0  Full  
+ 410070         0.030629               1         1.0    --    -999   2     MadGraph+Pythia8                     ttZllonshell_Np1  Full  
+ 410073          0.11122               1         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np0  Full  
+ 410074         0.095466               1         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np1  Full  
+ 410075          0.10512               1         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np2  Full  
+ 410080        0.0091622          1.0042         1.0    --    -999   1     MadGraph+Pythia8                               4topSM  Full  
+ 410081        0.0080975          1.2231         1.0    --    -999   1     MadGraph+Pythia8                              ttbarWW  Full  
  410111        0.0088155          1.1025         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np0  Full  
  410112          0.01438          1.1025         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np1  Full  
  410113        0.0088422          1.1015         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np0  Full  
@@ -268,6 +268,10 @@
  361533           179.21         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np3  Full  
  361534           71.012         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np4  Full  
   
+
+
+
+
 
 
 

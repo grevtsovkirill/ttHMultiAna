@@ -3,13 +3,17 @@
 #DatasetID : Xsection(pb) : K-factor : Filtering Efficiency : Uncertainty :   Mass : Sample Priority :  Generator : ProcessInfo :Simulation ##
 ##############################################################################################################################################
 
- 341271           0.2033               1         1.0    --    -999   1               MC@NLO                        ttH->allhad+H  Full  
- 341270           0.1961               1         1.0    --    -999   1               MC@NLO                         ttH->ljets+H  Full  
- 341177           0.0447               1         1.0    --    -999   1               MC@NLO                            ttH->ll+H  Full  
+ 341271           0.2315               1         1.0    --    -999   1               MC@NLO                        ttH->allhad+H  Full  
+ 341270           0.2234               1         1.0    --    -999   1               MC@NLO                         ttH->ljets+H  Full  
+ 341177           0.0536               1         1.0    --    -999   1               MC@NLO                            ttH->ll+H  Full  
 
  342170           0.0447               1      0.0632    --    -999   1               MC@NLO                                ttH->  tt->ll  H->tautau    Full  
  342171           0.1961               1      0.0632    --    -999   1               MC@NLO                                ttH->  tt->ljets  H->tautau    Full  
  342172           0.2033               1      0.0632    --    -999   1               MC@NLO                                ttH->  tt->allhad,  H->tautau    Full  
+
+
+
+
 
 
 
