@@ -32,7 +32,7 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(3);
-    if (!elItr->auxdataConst<short>("passLHTight")) {
+    if (!elItr->auxdataConst<short>("passLHLoose")) {
       //std::cout << "Fail LH cut" << std::endl;
       continue;
     }
@@ -372,9 +372,10 @@ void CopyIParticle(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
 void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.isolationLooseTrackOnly = part.auxdataConst<short>("Iso_LooseTrackOnly");
   lep.isolationLoose = part.auxdataConst<short>("Iso_Loose");
-  lep.isolationTight = part.auxdataConst<short>("Iso_Tight");
   lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
   lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
+  lep.isolationFixedCutTightTrackOnly = part.auxdataConst<short>("Iso_FixedCutTightTrackOnly");
+  lep.isolationFixedCutLoose = part.auxdataConst<short>("Iso_FixedCutLoose");
 }
   
 void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
@@ -384,6 +385,7 @@ void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isLooseLH = el.auxdataConst<short>("passLHLoose");
   lep.isMediumLH = el.auxdataConst<short>("passLHMedium");
   lep.isTightLH = el.auxdataConst<short>("passLHTight");
+  lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
 }
 
 void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {

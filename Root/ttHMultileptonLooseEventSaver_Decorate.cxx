@@ -24,7 +24,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     // Isolation
     auto isomap = iso_1.accept(*elItr);
     int idx = 0;
-    for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Tight", "Iso_Gradient", "Iso_GradientLoose"}) {
+    for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose","Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose","Iso_FixedCutTight"}) {
       elItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
     }
   }
@@ -48,7 +48,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     // Isolation
     auto isomap = iso_1.accept(*muItr);
     int idx = 0;
-    for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Tight", "Iso_Gradient", "Iso_GradientLoose"}) {
+    for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose", "Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose"}) {
       muItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
     }
   }

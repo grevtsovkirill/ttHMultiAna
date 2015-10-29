@@ -65,9 +65,12 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isHSG3IsoClear, "lep_isHSG3IsoClear_", index);
   CreateBranch(tree, &isolationLooseTrackOnly, "lep_isolationLooseTrackOnly_", index);
   CreateBranch(tree, &isolationLoose, "lep_isolationLoose_", index);
-  CreateBranch(tree, &isolationTight, "lep_isolationTight_", index);
   CreateBranch(tree, &isolationGradient, "lep_isolationGradient_", index);
   CreateBranch(tree, &isolationGradientLoose, "lep_isolationGradientLoose_", index);
+  CreateBranch(tree, &isolationFixedCutTight, "lep_isolationFixedCutTight_", index);
+  CreateBranch(tree, &isolationFixedCutTightTrackOnly, "lep_isolationFixedCutTightTrackOnly_", index);
+  CreateBranch(tree, &isolationFixedCutLoose, "lep_isolationFixedCutLoose_", index);
+
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
   CreateBranch(tree, &isFakable, "lep_isFakable_", index);
   CreateBranch(tree, &BLayer_hit, "lep_BLayer_hit_", index);

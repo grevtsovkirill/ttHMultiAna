@@ -84,9 +84,12 @@ namespace ttHMultilepton {
     char    isHSG3IsoClear;
     int    isolationLooseTrackOnly;
     int    isolationLoose;
-    int    isolationTight;
     int    isolationGradient;
     int    isolationGradientLoose;
+    int    isolationFixedCutTight;
+    int    isolationFixedCutTightTrackOnly;
+    int    isolationFixedCutLoose;
+
     char    isTrigMatch;
     char    isFakable;
     int     Author;
