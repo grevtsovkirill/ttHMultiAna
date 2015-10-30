@@ -1,3 +1,7 @@
+2015-10-30 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: added variable for dilep triggers and L1EM20 for data 2015
+	* generic_config-*15.txt added corresponding strings to check match
+	
 2015-10-28 Harish Potti <hpotti@cern.ch>
 	* Xsection13TeV_tth_sig_v1.txt Updated Xsections with Latest TopDataPreparation package
 2015-10-26 Harish Potti <hpotti@cern.ch>
