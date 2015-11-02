@@ -72,7 +72,7 @@ ttHMultileptonLooseEventSaver::SelectMuons(const top::Event& event) {
   for (const auto muItr : event.m_muons) {
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(1);
     auto abseta = fabs(muItr->eta());
-    if (!(abseta < 2.5 && muonSelection.getQuality(*muItr) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(*muItr))) {
+    if (!(abseta < 2.5 && muonSelection.getQuality(*muItr) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(*muItr))) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(2);
