@@ -7,9 +7,11 @@
  341270           0.2234               1         1.0    --    -999   1               MC@NLO                         ttH->ljets+H  Full  
  341177           0.0536               1         1.0    --    -999   1               MC@NLO                            ttH->ll+H  Full  
 
- 342170           0.0536               1      0.0632    --    -999   1               MC@NLO                                ttH->ll+Htautau    Full  
- 342171           0.2234               1      0.0632    --    -999   1               MC@NLO                                ttH->ljets+Htautau    Full  
- 342172           0.2315               1      0.0632    --    -999   1               MC@NLO                                ttH->allhad+Htautau    Full  
+ 342170           0.0536               1      0.0632    --    -999   2      Powheg+Herwig++                      ttH->ll+Htautau  Full  
+ 342171           0.2234               1      0.0632    --    -999   2      Powheg+Herwig++                   ttH->ljets+Htautau  Full  
+ 342172           0.2315               1      0.0632    --    -999   2      Powheg+Herwig++                  ttH->allhad+Htautau  Full  
+
+
 
 
 
