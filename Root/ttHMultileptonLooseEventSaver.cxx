@@ -623,7 +623,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
   //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
-  m_mu      = m_purwtool->getLumiBlockMu( *event.m_info);
+  m_mu      = m_purwtool->getCorrectedMu( *event.m_info); 
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );

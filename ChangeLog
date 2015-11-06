@@ -1,3 +1,6 @@
+2015-11-06 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: moving to getCorrectedMu method for PURWtool
+	
 2015-10-30 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for dilep triggers and L1EM20 for data 2015
 	* generic_config-*15.txt added corresponding strings to check match
