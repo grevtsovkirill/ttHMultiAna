@@ -80,6 +80,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ///The file where everything goes
   TFile* m_outputFile;
 
+  //unique sys names for selected object containers
+  std::string m_sysName;
+  std::shared_ptr<top::TopConfig> m_config;
+  
   TH1* m_eleCutflow;
   TH1* m_muCutflow;
   TH1* m_jetCutflow;

@@ -105,6 +105,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_extraBranches = extraBranches;
   m_selectionDecisions.resize(m_extraBranches.size());
 
+  m_config = config;
+
   //Cutflow histograms
   m_eleCutflow = new TH1I("eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
   int idx = 1;
@@ -601,6 +603,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //if(!event.m_saveEvent) {
   // return;
   //}
+
+  //unique name for selected containers
+
+  std::size_t sysHash = event.m_hashValue;
+  m_sysName = m_config->systematicName(sysHash);
   
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
