@@ -27,7 +27,7 @@ OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 50000
+NEvents -1
 
 PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.361106.root ttHMultilepton/tthML.PURWTconfig.361500.root ttHMultilepton/tthML.PURWTconfig.361501.root ttHMultilepton/tthML.PURWTconfig.361502.root ttHMultilepton/tthML.PURWTconfig.361503.root ttHMultilepton/tthML.PURWTconfig.361504.root ttHMultilepton/tthML.PURWTconfig.361505.root ttHMultilepton/tthML.PURWTconfig.361506.root ttHMultilepton/tthML.PURWTconfig.361507.root ttHMultilepton/tthML.PURWTconfig.361508.root ttHMultilepton/tthML.PURWTconfig.361509.root ttHMultilepton/tthML.PURWTconfig.361510.root ttHMultilepton/tthML.PURWTconfig.361511.root ttHMultilepton/tthML.PURWTconfig.361512.root ttHMultilepton/tthML.PURWTconfig.361513.root ttHMultilepton/tthML.PURWTconfig.361514.root ttHMultilepton/tthML.PURWTconfig.361520.root ttHMultilepton/tthML.PURWTconfig.361521.root ttHMultilepton/tthML.PURWTconfig.361522.root ttHMultilepton/tthML.PURWTconfig.361523.root ttHMultilepton/tthML.PURWTconfig.361524.root ttHMultilepton/tthML.PURWTconfig.361525.root ttHMultilepton/tthML.PURWTconfig.361526.root ttHMultilepton/tthML.PURWTconfig.361527.root ttHMultilepton/tthML.PURWTconfig.361528.root ttHMultilepton/tthML.PURWTconfig.361529.root ttHMultilepton/tthML.PURWTconfig.361530.root ttHMultilepton/tthML.PURWTconfig.361531.root ttHMultilepton/tthML.PURWTconfig.361532.root ttHMultilepton/tthML.PURWTconfig.361533.root ttHMultilepton/tthML.PURWTconfig.361534.root ttHMultilepton/tthML.PURWTconfig.410000.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284154.root
