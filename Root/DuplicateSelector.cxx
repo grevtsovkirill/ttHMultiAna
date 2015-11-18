@@ -15,12 +15,12 @@ bool DuplicateSelector::apply(const top::Event& event) const {
   if (event.m_hashValue != m_nominalHashValue || event.m_isLoose)
     return true;
   
-  int runNumber = event.m_info->eventNumber();
-  int eventNumber = event.m_info->runNumber();
-  std::pair<int,int> runEvent = std::make_pair(runNumber,eventNumber);
+  int runNumber = event.m_info->runNumber();
+  uint64_t eventNumber = event.m_info->eventNumber();
+  std::pair<int,uint64_t> runEvent = std::make_pair(runNumber,eventNumber);
   if( m_processedEvents.insert(runEvent).second == false ){
     // event is duplicate
-    std::cout<<"Ignoring duplicate event: "<<eventNumber<<" run: "<<runNumber<<std::cout;
+    std::cout<<"Ignoring duplicate, run:"<<runNumber<<" event: "<<eventNumber<<std::cout;
     return false;
   }
   
