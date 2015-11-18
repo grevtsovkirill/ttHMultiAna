@@ -54,7 +54,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   }
 
   top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
-
+  
   for( auto tauItr : event.m_tauJets) {
     //SF
     // init the values
@@ -63,10 +63,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")         = 1.;
     if( top::isSimulation(event) ) {
       top::check( m_tauEffTool.applyEfficiencyScaleFactor(*tauItr), "Failed to apply SF to tau");
-      double tauSF(0);
-      top::check( m_tauEffTool.getEfficiencyScaleFactor(*tauItr,tauSF), "Failed to apply SF to tau");
-      
-      //std::cout<<tauSF<<std::endl;
+      //std::cout<<*tauItr<<std::endl;
       //std::cout<<tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau")<<std::endl;
       //std::cout<<tauItr->auxdecor<double>("TauScaleFactorJetIDHadTau")<<std::endl;
       //std::cout<<tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")<<std::endl;

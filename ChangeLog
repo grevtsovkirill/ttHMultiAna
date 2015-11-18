@@ -1,5 +1,6 @@
 2015-11-17 David Hohn <david.hohn@cern.ch>
 	* uint64 for counting events number, enable duplicate veto on MC
+	* small tau SFs cleanup
 
 2015-11-18 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonElectronLikelihoodDC14: updated confDir to latest (mc15_20150712)
