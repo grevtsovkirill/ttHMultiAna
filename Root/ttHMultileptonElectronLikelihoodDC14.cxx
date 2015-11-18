@@ -75,13 +75,11 @@ bool ElectronLikelihoodDC14::passSelectionNoIsolation(const xAOD::Electron& el, 
     //This stops a crash
     //Good electrons should always have a cluster, if not then crash to warn us
     //Better than checking and silently doing nothing...
-    //if (std::fabs(el.caloCluster()->eta()) > 2.47)
-    if (std::fabs(el.caloCluster()->etaBE(2)) > 2.47)
-         return false;
+    //if (std::fabs(el.caloCluster()->etaBE(2)) > 2.47)
+    //   return false;
 
-    //if (m_vetoCrack && std::fabs(el.caloCluster()->eta()) > 1.37 && std::fabs(el.caloCluster()->eta()) < 1.52)
-    if (m_vetoCrack && std::fabs(el.caloCluster()->etaBE(2)) > 1.37 && std::fabs(el.caloCluster()->etaBE(2)) < 1.52)
-        return false;
+    //if (m_vetoCrack && std::fabs(el.caloCluster()->etaBE(2)) > 1.37 && std::fabs(el.caloCluster()->etaBE(2)) < 1.52)
+    //  return false;
 
     return true;
 }
@@ -139,7 +137,7 @@ LikeEnum::Menu ElectronLikelihoodDC14::textToEgammaEnum(const std::string& text)
 }
 
 std::string ElectronLikelihoodDC14::getConfigFile(const LikeEnum::Menu operatingPoint) {
-  std::string config_file = "ElectronPhotonSelectorTools/offline/mc15_20150429/";
+  std::string config_file = "ElectronPhotonSelectorTools/offline/mc15_20150712/";
 
   if (operatingPoint == LikeEnum::Tight)
     config_file += "ElectronLikelihoodTightOfflineConfig2015.conf";

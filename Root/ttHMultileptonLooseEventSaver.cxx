@@ -205,7 +205,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       top::check( m_purwtool->setProperty("DefaultChannel", default_channel), "Failed to set pileup reweighting config files" );    
     top::check( m_purwtool->setProperty("ConfigFiles", pileup_config), "Failed to set pileup reweighting config files" );
     top::check( m_purwtool->setProperty("LumiCalcFiles", pileup_lumi_calc), "Failed to set pileup reweighting lumicalc files");
-    top::check( m_purwtool->setProperty("OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
+    top::check( m_purwtool->setProperty("OutputLevel", MSG::ERROR),"m_purwtool fails to set OutputLevel");
     top::check( m_purwtool->initialize(), "Failed to initialize pileup reweighting tool" );
     
     //TRIGGER PART
