@@ -38,14 +38,14 @@ Systematics Nominal
 #Electron cuts
 ElectronID LooseLH
 ElectronIDLoose LooseLH
-ElectronPt 0.
+ElectronPt 5000.
 ElectronIsoSFs False
 
 #Muon cuts
 MuonQuality Loose
 MuonQualityLoose Loose
-MuonEta 10.
-MuonPt 0.
+MuonEta 2.7
+MuonPt 5000.
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
@@ -58,8 +58,8 @@ TauJetIDBkg JetBDTSigLoose
 TauEVetoID EleBDTLoose
 
 #Jet cuts
-JetPt 0.
-JetEta 10000.
+JetPt 10000.
+JetEta 10.5
 
 #Truth jet cuts
 TruthJetPt 10000.
