@@ -1,3 +1,6 @@
+2015-11-18 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonElectronLikelihoodDC14: updated confDir to latest (mc15_20150712)
+	
 2015-11-17 David Hohn <david.hohn@cern.ch>
 	* update README with Top,2.3.33
 
