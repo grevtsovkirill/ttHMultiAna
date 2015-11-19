@@ -2,6 +2,7 @@
 #include "TopEvent/Event.h"
 #include "TopEvent/EventTools.h"
 #include "xAODTracking/TrackParticlexAODHelpers.h"
+#include "TopConfiguration/TopConfig.h"
 
 void
 ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
@@ -27,7 +28,21 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose","Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose","Iso_FixedCutTight"}) {
       elItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
     }
-  }
+
+    auto WPs = {"LHLoose","LHMedium","LHTight"};
+    for( auto wp : WPs ) {
+      std::string ttHML_LH_decoration("pass");                        ttHML_LH_decoration += wp;
+      std::string derivation_LH_decoration("DFCommonElectrons"); derivation_LH_decoration += wp;
+      if(m_config->isPrimaryxAOD()) {
+	//there will be only one LH wp when using PxAOD
+	elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdecor<int>(m_config->electronIDDecoration());
+	std::cout<<"doing the LH stuff"<<std::endl;
+      }
+      else
+	elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdecor<int>(derivation_LH_decoration);
+    }
+  
+  }// end elecs
   
   for (auto muItr : event.m_muons) {
     muItr->auxdecor<float>("d0significance") = xAOD::TrackingHelpers::d0significance( muItr->primaryTrackParticle(), m_eventInfo->beamPosSigmaX(), m_eventInfo->beamPosSigmaY(), m_eventInfo->beamPosSigmaXY() );
@@ -51,7 +66,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose", "Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose"}) {
       muItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
     }
-  }
+  }//end muons
 
   top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
   
@@ -64,6 +79,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     if( top::isSimulation(event) ) {
       top::check( m_tauEffTool.applyEfficiencyScaleFactor(*tauItr), "Failed to apply SF to tau");
       //std::cout<<*tauItr<<std::endl;
+      //std::cout<<tauItr->nTracks()<<std::endl;
       //std::cout<<tauItr->auxdecor<double>("TauScaleFactorReconstructionHadTau")<<std::endl;
       //std::cout<<tauItr->auxdecor<double>("TauScaleFactorJetIDHadTau")<<std::endl;
       //std::cout<<tauItr->auxdecor<double>("TauScaleFactorEleOLRHadTau")<<std::endl;
@@ -78,9 +94,15 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     	  if(tauTruthLink.isValid()) {
 	    const xAOD::TruthParticle* truthTau = nullptr;
 	    truthTau = *tauTruthLink;
-	    if( truthTau->isAvailable<char>("IsHadronicTau") ) isHadronic =  static_cast<int>( truthTau->auxdata<char>("IsHadronicTau") );
-	    tauTruthOrigin = truthTau->auxdata<unsigned int>("classifierParticleOrigin");
-	    tauTruthType = truthTau->auxdata<unsigned int>("classifierParticleType");
+
+	    if( truthTau->isAvailable<char>("IsHadronicTau") )
+	      isHadronic =  static_cast<int>( truthTau->auxdata<char>("IsHadronicTau") );
+
+	    if( truthTau->isAvailable<unsigned int>("classifierParticleOrigin") )
+	      tauTruthOrigin = truthTau->auxdata<unsigned int>("classifierParticleOrigin");
+
+	    if( truthTau->isAvailable<unsigned int>("classifierParticleType") )
+	      tauTruthType = truthTau->auxdata<unsigned int>("classifierParticleType");
 	  }
 	}
       }
@@ -94,4 +116,4 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     tauItr->auxdecor<int>("passEleOLR") = passEleOLR;
   }//end taus
   
-}
+}//end decorate

@@ -1,3 +1,8 @@
+2015-11-19 David Hohn <david.hohn@cern.ch>
+	* take electron LH WP values from derivation, only one electron LH WP available when using PxAODs
+	* use default electron selector from AnalysisTop, remove custom electron selector
+	* little extra truth protection for taus
+
 2015-11-17 David Hohn <david.hohn@cern.ch>
 	* uint64 for counting events number, enable duplicate veto on MC
 	* small tau SFs cleanup
