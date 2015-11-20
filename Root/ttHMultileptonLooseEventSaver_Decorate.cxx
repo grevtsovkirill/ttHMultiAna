@@ -33,13 +33,11 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     for( auto wp : WPs ) {
       std::string ttHML_LH_decoration("pass");                        ttHML_LH_decoration += wp;
       std::string derivation_LH_decoration("DFCommonElectrons"); derivation_LH_decoration += wp;
-      if(m_config->isPrimaryxAOD()) {
+      if(m_config->isPrimaryxAOD())
 	//there will be only one LH wp when using PxAOD
-	elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdecor<int>(m_config->electronIDDecoration());
-	std::cout<<"doing the LH stuff"<<std::endl;
-      }
+	elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdataConst<int>(m_config->electronIDDecoration());
       else
-	elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdecor<int>(derivation_LH_decoration);
+	elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdataConst<int>(derivation_LH_decoration);
     }
   
   }// end elecs
