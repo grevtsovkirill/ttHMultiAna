@@ -549,7 +549,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     //tau tools
     top::check( m_tauEffTool.initialize(), "Failed to initialise TauEffTool" );
-    m_tauEffTool.msg().setLevel(MSG::VERBOSE);
+    //m_tauEffTool.msg().setLevel(MSG::VERBOSE);
     //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
     top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
     top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
