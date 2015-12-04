@@ -54,8 +54,8 @@ TauJetIDBkg JetBDTSigLoose
 TauEVetoID EleBDTLoose
 
 #Jet cuts
-JetPt 10000.
-JetEta 10.5
+JetPt 25000.
+JetEta 2.5
 
 
 #Other cuts, overlaps, bkgs..

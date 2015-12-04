@@ -29,7 +29,7 @@ OutputEvents SelectedEvents
 PerfStats No
 NEvents -1
 
-PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.361106.root 
+PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.410000.root 
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284154.root
 PRWDefaultChannel 410000
 
@@ -58,8 +58,8 @@ TauJetIDBkg JetBDTSigLoose
 TauEVetoID EleBDTLoose
 
 #Jet cuts
-JetPt 10000.
-JetEta 10.5
+JetPt 25000.
+JetEta 2.5
 
 #Truth jet cuts
 TruthJetPt 10000.

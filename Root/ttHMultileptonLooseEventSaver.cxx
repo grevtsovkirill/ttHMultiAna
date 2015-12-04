@@ -29,6 +29,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_mcWeight(0.),
   m_pileup_weight(0.),
   m_leptonTrigSF_weight(0.),
+  m_bTagSF_weight(0.),
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
@@ -140,6 +141,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcWeight, "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_leptonTrigSF_weight, "lepTrigSFEventWeight");
+    systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_70_EventWeight");
 
     //event info
     std::vector<ScalarWrapper*> scalarvec; 
@@ -620,6 +622,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     if(m_sfRetriever){
       m_pileup_weight   = m_sfRetriever->pileupSF(event);
       m_leptonTrigSF_weight = m_sfRetriever->triggerSF(event,top::topSFSyst::nominal);
+      m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
     }
   }
 
