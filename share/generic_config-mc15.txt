@@ -62,8 +62,8 @@ JetPt 25000.
 JetEta 2.5
 
 #Truth jet cuts
-TruthJetPt 10000.
-TruthJetEta 10.5
+TruthJetPt 25000.
+TruthJetEta 2.5
 
 #Other cuts, overlaps, bkgs..
 FakesControlRegionDoLooseMC False
