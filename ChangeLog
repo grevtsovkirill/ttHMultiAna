@@ -1,3 +1,7 @@
+2015-12-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* include missing variables: HT, HT_lep, HT_jets, sublead/lead_jetPt/Eta/Phi
+	* fill empty variables: lep_isTrigMatch_X, lep_sigd0PV_X, lep_Z0SinTheta_X
+	
 2015-12-08 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: correct name of Btag weight per event
 	

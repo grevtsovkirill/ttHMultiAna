@@ -43,14 +43,10 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &Z0SinTheta, "lep_Z0SinTheta_", index);
   //CreateBranch(tree, &Truth_parent_particle_ID, "lep_truth_parent_particle_id", index);
   //CreateBranch(tree, &Truth_particle_ID, "lep_truth_particle_id", index);
-  
-
   //CreateBranch(tree, &MagD0, "lep_MagD0_", index);
-
-//   tree->Branch("DRlep0jet",&DRlep0jet,"DRlep0jet/F");
-//   tree->Branch("DRlep1jet",&DRlep1jet,"DRlep1jet/F");
-
- // CreateBranch(tree, &Sys ,"lep_Sys_", "std::vector<float>",index);
+  //   tree->Branch("DRlep0jet",&DRlep0jet,"DRlep0jet/F");
+  //   tree->Branch("DRlep1jet",&DRlep1jet,"DRlep1jet/F");
+  // CreateBranch(tree, &Sys ,"lep_Sys_", "std::vector<float>",index);
   
   CreateBranch(tree, &isVeryTightLH, "lep_isVeryTightLH_", index);
   CreateBranch(tree, &isTightLH, "lep_isTightLH_", index);

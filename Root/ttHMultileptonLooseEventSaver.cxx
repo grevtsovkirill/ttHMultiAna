@@ -751,6 +751,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CopyLeptons(goodEl, goodMu);
   CopyJets(goodJet);
   CopyTaus(goodTau);
+  CopyHT(goodEl, goodMu, goodJet, goodTau);
   CheckIsBlinded();
 
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);

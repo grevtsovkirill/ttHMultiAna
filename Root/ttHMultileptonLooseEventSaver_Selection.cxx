@@ -377,21 +377,41 @@ void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.isolationFixedCutTightTrackOnly = part.auxdataConst<short>("Iso_FixedCutTightTrackOnly");
   lep.isolationFixedCutLoose = part.auxdataConst<short>("Iso_FixedCutLoose");
 }
+
+void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
+  lep.sigd0PV = part.auxdataConst<float>("d0significance");
+  lep.Z0SinTheta = part.auxdataConst<float>("z0sintheta");
+}
   
 void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   CopyIParticle(el, lep);
   CopyIso(el, lep);
+  CopyIParam(el, lep);
   lep.ID = -11*el.charge();
   lep.isLooseLH  = el.auxdataConst<int>("passLHLoose");
   lep.isMediumLH = el.auxdataConst<int>("passLHMedium");
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
+ 
+  if (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
+    lep.isTrigMatch = 1;
+  else if (!(el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH")) && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //mc
+    lep.isTrigMatch = 1;
+  else
+    lep.isTrigMatch = 0;
+  
 }
 
 void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   CopyIParticle(mu, lep);
   CopyIso(mu, lep);
+  CopyIParam(mu, lep);
   lep.ID = -13*mu.charge();
+
+  if (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"))
+    lep.isTrigMatch = 1;
+  else
+    lep.isTrigMatch = 0;
 }
 
 void
@@ -492,7 +512,20 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   m_variables->nJets_OR_T = goodJets->size();
   m_variables->nJets_OR_T_MV2c20_70 = 0;
   m_variables->nJets_OR_T_MV2c20_77 = 0;
+
+  m_variables->lead_jetPt = 0;
+  m_variables->sublead_jetPt = 0;
+  m_variables->lead_jetEta = 0;
+  m_variables->sublead_jetEta = 0;
+  m_variables->lead_jetPhi = 0;
+  m_variables->sublead_jetPhi = 0;
+
+  typedef std::tuple<const TLorentzVector*, int> sortvec_t;
+  std::vector<sortvec_t> sorter_jets;
+  size_t idx = 0;
   for (const auto jetItr : *goodJets) {
+    sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
+
     auto btagging = jetItr->btagging(); 
     if (btagging) {
       double mv2c;
@@ -506,11 +539,59 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
       }
     }
   }
+
+  std::sort(sorter_jets.begin(), sorter_jets.end(),
+	      [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
+
+  std::vector<const TLorentzVector*> p4s;
+  const int totjets = goodJets->size();
+  for (short idx1 = 0; idx1 < totjets; ++idx1) {
+    const TLorentzVector* p4;
+    int lidx;
+    std::tie(p4, lidx) = sorter_jets[idx1];
+    p4s.push_back(p4);
+  }
+  
+  if (goodJets->size() > 0){
+    m_variables->lead_jetPt  = p4s[0]->Pt();
+    m_variables->lead_jetEta = p4s[0]->Eta();
+    m_variables->lead_jetPhi = p4s[0]->Phi();
+    }
+  if (goodJets->size() > 1){
+    m_variables->sublead_jetPt  = p4s[1]->Pt();
+    m_variables->sublead_jetEta = p4s[1]->Eta();
+    m_variables->sublead_jetPhi = p4s[1]->Phi();
+  }
+  
+
 }
 
 void
 ttHMultileptonLooseEventSaver::CopyTaus(std::shared_ptr<xAOD::TauJetContainer>& goodTaus) {
   m_variables->nTaus_OR_Pt25 = goodTaus->size();
+}
+
+void
+ttHMultileptonLooseEventSaver::CopyHT(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<xAOD::JetContainer>& goodJets, std::shared_ptr<xAOD::TauJetContainer>& goodTaus) {
+  m_variables->HT = 0;
+  m_variables->HT_lep = 0;
+  m_variables->HT_jets = 0;
+  
+  for (const auto jetItr : *goodJets) {
+    m_variables->HT += jetItr->pt();
+    m_variables->HT_jets += jetItr->pt();
+  }
+  for (const auto elItr : *goodEl) {
+    m_variables->HT += elItr->pt();
+    m_variables->HT_lep += elItr->pt();
+  }
+  for (const auto muItr : *goodMu) {
+    m_variables->HT += muItr->pt();
+    m_variables->HT_lep += muItr->pt();
+  }
+  for (const auto tauItr : *goodTaus) {
+    m_variables->HT += tauItr->pt();
+  }
 }
 
 void

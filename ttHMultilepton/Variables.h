@@ -20,6 +20,15 @@ namespace ttHMultilepton {
     int nJets_OR_T_MV2c20_77;
     int nTaus_OR_Pt25;
     bool isBlinded;
+    float HT;
+    float HT_lep;
+    float HT_jets;
+    float lead_jetPt;
+    float lead_jetEta;
+    float lead_jetPhi;
+    float sublead_jetPt;
+    float sublead_jetEta;
+    float sublead_jetPhi;
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree);
     void Clear() { memset(this, 0, sizeof(Variables)); }
   };

@@ -29,4 +29,14 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(nJets_OR_T_MV2c20_77, "nJets_OR_T_MV2c20_77");
   tree->makeOutputVariable(nTaus_OR_Pt25, "nTaus_OR_Pt25");
   tree->makeOutputVariable(isBlinded, "isBlinded");
+  tree->makeOutputVariable(HT, "HT");
+  tree->makeOutputVariable(HT_lep, "HT_lep");
+  tree->makeOutputVariable(HT_jets, "HT_jets");
+  tree->makeOutputVariable(lead_jetPt,  "lead_jetPt");
+  tree->makeOutputVariable(lead_jetEta, "lead_jetEta");
+  tree->makeOutputVariable(lead_jetPhi, "lead_jetPhi");
+  tree->makeOutputVariable(sublead_jetPt,  "sublead_jetPt");
+  tree->makeOutputVariable(sublead_jetEta, "sublead_jetEta");
+  tree->makeOutputVariable(sublead_jetPhi, "sublead_jetPhi");
+
 }
