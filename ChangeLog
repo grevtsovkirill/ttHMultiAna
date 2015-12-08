@@ -1,3 +1,6 @@
+2015-12-08 Giuseppe Salamanna <salaman AT cern.ch>
+	* ttHMultileptonLooseEventSaver: correct name of Btag weight per event
+	
 2015-12-04 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added Btag weight per event
 	* generic_config-*15.txt changed jet pt and eta selections, changed

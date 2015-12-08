@@ -141,7 +141,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcWeight, "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_leptonTrigSF_weight, "lepTrigSFEventWeight");
-    systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_70_EventWeight");
+    systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
 
     //event info
     std::vector<ScalarWrapper*> scalarvec; 
