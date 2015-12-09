@@ -509,6 +509,21 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); }, *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); }, *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); }, *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+    //substructure
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	int decayMode = 0;
+	tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
+	return decayMode;
+      }, *systematicTree, std::string(tauprefix+"PanTauDecayMode").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.ptPanTauCellBased();
+      }, *systematicTree, std::string(tauprefix+"ptPanTau").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.etaPanTauCellBased();
+      }, *systematicTree, std::string(tauprefix+"etaPanTau").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.phiPanTauCellBased();
+      }, *systematicTree, std::string(tauprefix+"phiPanTau").c_str());
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
     //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
 
@@ -546,6 +561,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.auxdata<double>("ele_match_lhscore");
+      }, *systematicTree, std::string(tauprefix+"ele_match_lhscore").c_str());
     
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 

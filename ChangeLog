@@ -1,3 +1,6 @@
+2015-11-19 David Hohn <david.hohn@cern.ch>
+	* add tau substructure variables, electron LH score if overlapping with tau, empty until available in derivation
+
 2015-12-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* include missing variables: HT, HT_lep, HT_jets, sublead/lead_jetPt/Eta/Phi
 	* fill empty variables: lep_isTrigMatch_X, lep_sigd0PV_X, lep_Z0SinTheta_X
