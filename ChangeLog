@@ -1,3 +1,6 @@
+2015-12-10 Giuseppe Salamanna <salaman AT cern.ch>
+	* data: add PURWT confog file for new MC15b 410009
+	
 2015-12-09 David Hohn <david.hohn@cern.ch>
 	* add tau substructure variables, electron LH score if overlapping with tau, empty until available in derivation
 	* add flat taus, just one for now but is extensible
