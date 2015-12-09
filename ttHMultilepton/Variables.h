@@ -3,6 +3,7 @@
 #include "TopEventSelectionTools/TreeManager.h"
 #include <memory>
 #define LEPTON_ARR_SIZE 5
+#define TAU_ARR_SIZE 1
 
 namespace ttHMultilepton {
   struct Variables {

@@ -566,9 +566,29 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
 
 }
 
+void CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& MLTau) {
+  MLTau.pt              = xTau.pt();
+  MLTau.eta             = xTau.eta();
+  MLTau.phi             = xTau.phi();
+  MLTau.charge          = xTau.charge();
+  MLTau.BDTJetScore     = xTau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore);
+  MLTau.JetBDTSigLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose);
+  MLTau.JetBDTSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium);
+  MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
+  MLTau.numTrack        = xTau.nTracks();
+}
+
 void
 ttHMultileptonLooseEventSaver::CopyTaus(std::shared_ptr<xAOD::TauJetContainer>& goodTaus) {
-  m_variables->nTaus_OR_Pt25 = goodTaus->size();
+  memset(&m_taus, 0, sizeof(m_taus));
+  int totalTaus = goodTaus->size();
+  m_variables->nTaus_OR_Pt25 = totalTaus;
+
+  goodTaus->sort(top::descendingPtSorter);
+
+  for(int i = 0; i < totalTaus && i < TAU_ARR_SIZE; ++i) {
+    CopyTau( *(goodTaus->at(i)) , m_taus[i] );
+  }
 }
 
 void

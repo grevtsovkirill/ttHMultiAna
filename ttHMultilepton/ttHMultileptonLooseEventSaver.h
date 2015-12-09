@@ -30,6 +30,7 @@
 #include "ttHMultilepton/TreeAssist.h"
 #include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
+#include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/Variables.h"
 
 //root
@@ -126,6 +127,14 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_pileup_weight;
   double m_leptonTrigSF_weight;
   double m_bTagSF_weight;
+  //tau SF weights
+  double m_weight_tauSF;
+  double m_weight_tauSF_ELEOLR_UP;
+  double m_weight_tauSF_ELEOLR_DOWN;
+  double m_weight_tauSF_JETID_UP;
+  double m_weight_tauSF_JETID_DOWN;
+  double m_weight_tauSF_RECO_UP;
+  double m_weight_tauSF_RECO_DOWN;
 
   //event info
   unsigned int m_eventNumber;
@@ -146,6 +155,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   // leptons to save
   Lepton m_leptons[LEPTON_ARR_SIZE];
+  Tau m_taus[TAU_ARR_SIZE];
   ttHMultilepton::Variables* m_variables;
 
   //trigger info

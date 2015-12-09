@@ -1,5 +1,7 @@
 2015-12-09 David Hohn <david.hohn@cern.ch>
 	* add tau substructure variables, electron LH score if overlapping with tau, empty until available in derivation
+	* add flat taus, just one for now but is extensible
+	* add all tau SFs, uses unreleased code of AnalysisTop so not active yet
 
 2015-12-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* include missing variables: HT, HT_lep, HT_jets, sublead/lead_jetPt/Eta/Phi

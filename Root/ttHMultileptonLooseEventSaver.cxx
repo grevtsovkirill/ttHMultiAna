@@ -143,6 +143,22 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_leptonTrigSF_weight, "lepTrigSFEventWeight");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
 
+    //tau SFs
+    systematicTree->makeOutputVariable(m_weight_tauSF,
+				       "weight_tauSF");
+    systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_UP,
+				       "weight_tauSF_ELEOLR_UP");
+    systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_DOWN,
+				       "weight_tauSF_ELEOLR_DOWN");
+    systematicTree->makeOutputVariable(m_weight_tauSF_JETID_UP,
+				       "weight_tauSF_JETID_UP");
+    systematicTree->makeOutputVariable(m_weight_tauSF_JETID_DOWN,
+				       "weight_tauSF_JETID_DOWN");
+    systematicTree->makeOutputVariable(m_weight_tauSF_RECO_UP,
+				       "weight_tauSF_RECO_UP");
+    systematicTree->makeOutputVariable(m_weight_tauSF_RECO_DOWN,
+				       "weight_tauSF_RECO_DOWN");
+    
     //event info
     std::vector<ScalarWrapper*> scalarvec; 
     systematicTree->makeOutputVariable(m_eventNumber, "EventNumber");
@@ -592,6 +608,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     for (size_t idx = 0; idx < LEPTON_ARR_SIZE; ++idx) {
       m_leptons[idx].BootstrapTree(systematicTree, idx);
     }
+    for (size_t idx = 0; idx < TAU_ARR_SIZE; ++idx) {
+      m_taus[idx].BootstrapTree(systematicTree, idx);
+    }
     m_variables = new ttHMultilepton::Variables();
     m_variables->BootstrapTree(systematicTree);
   }
@@ -641,6 +660,20 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_pileup_weight   = m_sfRetriever->pileupSF(event);
       m_leptonTrigSF_weight = m_sfRetriever->triggerSF(event,top::topSFSyst::nominal);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
+
+      /* uncomment this block when moved to AnalysisTop,2.3.39
+      //nominal tauSF
+      m_weight_tauSF = m_sfRetriever->tauSF(event, top::topSFSyst::nominal);
+      // Tau-electron overlap removal
+      m_weight_tauSF_ELEOLR_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP);
+      m_weight_tauSF_ELEOLR_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN);
+      // Tau Jet IDWP
+      m_weight_tauSF_JETID_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_UP);
+      m_weight_tauSF_JETID_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN);
+      // Tau reconstruction
+      m_weight_tauSF_RECO_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_UP);
+      m_weight_tauSF_RECO_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN);
+      */
     }
   }
 
