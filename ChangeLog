@@ -1,4 +1,4 @@
-2015-11-19 David Hohn <david.hohn@cern.ch>
+2015-12-09 David Hohn <david.hohn@cern.ch>
 	* add tau substructure variables, electron LH score if overlapping with tau, empty until available in derivation
 
 2015-12-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
