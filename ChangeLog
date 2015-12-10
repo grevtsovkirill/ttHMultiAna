@@ -1,3 +1,7 @@
+2015-12-10 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* clean up of empty unused variables: some lep_*, JetBDT* tau, and muons variables not needed anymore
+	* include topoetcone/ptvarcone variables for lep_*
+	
 2015-12-10 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: add PURWT confog file for new MC15b 410009
 	

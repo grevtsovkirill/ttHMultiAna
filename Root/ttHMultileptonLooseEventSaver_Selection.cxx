@@ -367,6 +367,7 @@ void CopyIParticle(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.E = part.e();
   lep.Eta = part.eta();
   lep.Phi = part.phi();
+  lep.Index = part.index();
 }
 
 void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
@@ -376,6 +377,7 @@ void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
   lep.isolationFixedCutTightTrackOnly = part.auxdataConst<short>("Iso_FixedCutTightTrackOnly");
   lep.isolationFixedCutLoose = part.auxdataConst<short>("Iso_FixedCutLoose");
+
 }
 
 void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
@@ -393,12 +395,21 @@ void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
  
+  // trigger matching
   if (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
     lep.isTrigMatch = 1;
   else if (!(el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH")) && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //mc
     lep.isTrigMatch = 1;
   else
     lep.isTrigMatch = 0;
+
+  // isolation variables
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone30); lep.ptVarcone30 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone40); lep.ptVarcone40 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone20); lep.topoEtcone20 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
   
 }
 
@@ -407,11 +418,20 @@ void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   CopyIso(mu, lep);
   CopyIParam(mu, lep);
   lep.ID = -13*mu.charge();
-
+  // trigger matching
   if (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"))
     lep.isTrigMatch = 1;
   else
     lep.isTrigMatch = 0;
+
+  // isolation variables
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); lep.ptVarcone30 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); lep.ptVarcone40 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); lep.topoEtcone20 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
+
 }
 
 void

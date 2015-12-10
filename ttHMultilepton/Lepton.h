@@ -99,6 +99,13 @@ namespace ttHMultilepton {
     int     Truth_parent_particle_ID;
     int     Truth_particle_ID;
 
+    float   topoEtcone20;
+    float   topoEtcone30;
+    float   topoEtcone40;
+    float   ptVarcone20;
+    float   ptVarcone30;
+    float   ptVarcone40;
+
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 
     bool operator==(const Lepton &other) {
