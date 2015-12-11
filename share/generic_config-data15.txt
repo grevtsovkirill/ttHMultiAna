@@ -1,7 +1,7 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
 GRLDir ttHMultilepton
-GRLFile data15_13TeV.periodAllYear_DetStatus-v71-pro19-06_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml
+GRLFile data15_13TeV.periodAllYear_DetStatus-v73-pro19-08_DQDefects-00-01-02_PHYS_StandardGRL_All_Good_25ns.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
