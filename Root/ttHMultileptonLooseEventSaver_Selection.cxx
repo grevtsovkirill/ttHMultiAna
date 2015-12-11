@@ -170,7 +170,7 @@ ttHMultileptonLooseEventSaver::SelectTaus(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(6);
-    if (tauItr->auxdata<int>("passEleOLR")) {
+    if ( !tauItr->auxdata<int>("passEleOLR")) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(7);

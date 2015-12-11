@@ -1,3 +1,7 @@
+2015-12-09 David Hohn <david.hohn@cern.ch>
+	* bug fix for tau counting, EleOLR was backwards
+	* addresses ATLASTTHML-32
+
 2015-12-10 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* clean up of empty unused variables: some lep_*, JetBDT* tau, and muons variables not needed anymore
 	* include topoetcone/ptvarcone variables for lep_*
