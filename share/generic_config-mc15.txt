@@ -29,9 +29,9 @@ OutputEvents SelectedEvents
 PerfStats No
 NEvents -1
 
-PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root
+PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root ttHMultilepton/tthML.PURWTconfig.410000.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
-PRWDefaultChannel 410009
+PRWDefaultChannel 410000
 
 Systematics Nominal
 

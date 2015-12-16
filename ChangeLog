@@ -1,3 +1,7 @@
+2015-12-16 David Hohn <david.hohn@cern.ch>
+	* added back 410000 config for PRW and default back to 410000
+	* be careful when removing these, I think we need at least one config for each mc campaign
+
 2015-12-09 David Hohn <david.hohn@cern.ch>
 	* bug fix for tau counting, EleOLR was backwards
 	* addresses ATLASTTHML-32
