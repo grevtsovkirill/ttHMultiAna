@@ -32,8 +32,8 @@ PRWDefaultChannel 410000
 Systematics Nominal
 
 #Electron cuts
-ElectronID LooseLH
-ElectronIDLoose LooseLH
+ElectronID LooseAndBLayerLH
+ElectronIDLoose LooseAndBLayerLH
 ElectronPt 5000.
 ElectronIsoSFs False
 

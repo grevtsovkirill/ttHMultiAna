@@ -1,4 +1,7 @@
 2016-01-05 David Hohn <david.hohn@cern.ch>
+	* migrate to Top,2.3.37
+
+2016-01-05 David Hohn <david.hohn@cern.ch>
 	* tag ttHMultiAna-00-00-04
 	* last tag to use Top,2.3.33
 

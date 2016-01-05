@@ -372,7 +372,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
     
     // Muons
-    top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
+    //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
     top::check( muonSelection.setProperty( "MaxEta", 2.7 ), "muonSelection tool could not set max eta");
     top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
    

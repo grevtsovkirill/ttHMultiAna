@@ -52,7 +52,9 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
   
   objectSelection->muonSelection(new top::MuonMC15(topConfig->muonPtcut(), nullptr)); 
   objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), 0.));
-  objectSelection->tauSelection(new ttHMultilepton::TauMC15("ttHMultilepton/loose_tau_selection.conf"));
+  //auto tauSelection_top   = new top::TauMC15();
+  auto tauSelection_ttHML = new ttHMultilepton::TauMC15("ttHMultilepton/loose_tau_selection.conf");
+  objectSelection->tauSelection(tauSelection_ttHML);
   
   //and the overlap removal
   //objectSelection->overlapRemovalPreSelection();
