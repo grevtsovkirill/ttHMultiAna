@@ -130,6 +130,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
   
+  m_variables = new ttHMultilepton::Variables();
+
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
     std::cout << "INITIALIZING SYST TREES" << std::endl;
@@ -611,7 +613,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     for (size_t idx = 0; idx < TAU_ARR_SIZE; ++idx) {
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
-    m_variables = new ttHMultilepton::Variables();
+    //m_variables = new ttHMultilepton::Variables();
     m_variables->BootstrapTree(systematicTree);
   }
 
