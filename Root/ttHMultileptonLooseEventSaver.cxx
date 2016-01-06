@@ -132,6 +132,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   
   m_variables = new ttHMultilepton::Variables();
 
+  //prepare btag eigen vectors
+  m_weight_bTagSF_77_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars() );
+  m_weight_bTagSF_77_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars() );
+  m_weight_bTagSF_77_eigen_C_up      .resize(m_config->btagging_num_C_eigenvars() );
+  m_weight_bTagSF_77_eigen_C_down    .resize(m_config->btagging_num_C_eigenvars() );
+  m_weight_bTagSF_77_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars() );
+  m_weight_bTagSF_77_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars() );
+
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
     std::cout << "INITIALIZING SYST TREES" << std::endl;
@@ -140,26 +148,77 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
 
   for (auto systematicTree : m_treeManagers){
-    systematicTree->makeOutputVariable(m_mcWeight, "mcWeightOrg");
+    systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_leptonTrigSF_weight, "lepTrigSFEventWeight");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
+    systematicTree->makeOutputVariable(m_weight_tauSF,  "weight_tauSF");
+    
+    if (systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue() ) ) {
 
-    //tau SFs
-    systematicTree->makeOutputVariable(m_weight_tauSF,
-				       "weight_tauSF");
-    systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_UP,
-				       "weight_tauSF_ELEOLR_UP");
-    systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_DOWN,
-				       "weight_tauSF_ELEOLR_DOWN");
-    systematicTree->makeOutputVariable(m_weight_tauSF_JETID_UP,
-				       "weight_tauSF_JETID_UP");
-    systematicTree->makeOutputVariable(m_weight_tauSF_JETID_DOWN,
-				       "weight_tauSF_JETID_DOWN");
-    systematicTree->makeOutputVariable(m_weight_tauSF_RECO_UP,
-				       "weight_tauSF_RECO_UP");
-    systematicTree->makeOutputVariable(m_weight_tauSF_RECO_DOWN,
-				       "weight_tauSF_RECO_DOWN");
+      //pileup
+      systematicTree->makeOutputVariable(m_pileup_weight_UP,   "pileupEventWeight_UP");
+      systematicTree->makeOutputVariable(m_pileup_weight_DOWN, "pileupEventWeight_DOWN");
+      
+      //tau SFs
+      systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_UP,
+					 "weight_tauSF_ELEOLR_UP");
+      systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_DOWN,
+					 "weight_tauSF_ELEOLR_DOWN");
+      systematicTree->makeOutputVariable(m_weight_tauSF_JETID_UP,
+					 "weight_tauSF_JETID_UP");
+      systematicTree->makeOutputVariable(m_weight_tauSF_JETID_DOWN,
+					 "weight_tauSF_JETID_DOWN");
+      systematicTree->makeOutputVariable(m_weight_tauSF_RECO_UP,
+					 "weight_tauSF_RECO_UP");
+      systematicTree->makeOutputVariable(m_weight_tauSF_RECO_DOWN,
+					 "weight_tauSF_RECO_DOWN");
+
+      //btag
+      //B 
+      for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(); ++i) {
+	std::stringstream branchName; branchName << "MV2c20_77_EventWeight_B" << i;
+	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
+	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
+	
+	systematicTree->makeOutputVariable(m_weight_bTagSF_77_eigen_B_up.at(i),
+					   branchNameUp );
+	systematicTree->makeOutputVariable(m_weight_bTagSF_77_eigen_B_down.at(i),
+					   branchNameDown );
+      }
+      //C
+      for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(); ++i) {
+	std::stringstream branchName; branchName << "MV2c20_77_EventWeight_C" << i;
+	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
+	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
+	
+	systematicTree->makeOutputVariable(m_weight_bTagSF_77_eigen_C_up.at(i),
+					   branchNameUp );
+	systematicTree->makeOutputVariable(m_weight_bTagSF_77_eigen_C_down.at(i),
+					   branchNameDown );
+      }
+      //Light
+      for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(); ++i) {
+	std::stringstream branchName; branchName << "MV2c20_77_EventWeight_Light" << i;
+	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
+	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
+	
+	systematicTree->makeOutputVariable(m_weight_bTagSF_77_eigen_Light_up.at(i),
+					   branchNameUp );
+	systematicTree->makeOutputVariable(m_weight_bTagSF_77_eigen_Light_down.at(i),
+					   branchNameDown );
+      }
+      systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_up,
+					 "MV2c20_77_EventWeight_extrapolation_up" );
+      systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_down,
+					 "MV2c20_77_EventWeight_extrapolation_down" );
+
+      systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_up,
+					 "MV2c20_77_EventWeight_extrapolation_from_charm_up" );
+      systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_down,
+					 "MV2c20_77_EventWeight_extrapolation_from_charm_down" );
+
+    }
     
     //event info
     std::vector<ScalarWrapper*> scalarvec; 
@@ -613,7 +672,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     for (size_t idx = 0; idx < TAU_ARR_SIZE; ++idx) {
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
-    //m_variables = new ttHMultilepton::Variables();
     m_variables->BootstrapTree(systematicTree);
   }
 
@@ -676,8 +734,42 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_weight_tauSF_RECO_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_UP);
       m_weight_tauSF_RECO_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN);
       */
-    }
-  }
+
+      //do sys weights only in "nominal" sample
+      if(event.m_hashValue == m_config->nominalHashValue() ){
+      
+	m_pileup_weight_UP = m_sfRetriever->pileupSF( event, +1 ); // up variation
+	m_pileup_weight_DOWN = m_sfRetriever->pileupSF( event, -1 ); // down variation
+      
+	m_sfRetriever->btagSF_eigen_vars(event,
+					 top::topSFSyst::BTAG_SF_EIGEN_B,
+					 m_weight_bTagSF_77_eigen_B_up,
+					 m_weight_bTagSF_77_eigen_B_down, "77");
+	m_sfRetriever->btagSF_eigen_vars(event,
+					 top::topSFSyst::BTAG_SF_EIGEN_C,
+					 m_weight_bTagSF_77_eigen_C_up,
+					 m_weight_bTagSF_77_eigen_C_down, "77");
+	m_sfRetriever->btagSF_eigen_vars(event,
+					 top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
+					 m_weight_bTagSF_77_eigen_Light_up,
+					 m_weight_bTagSF_77_eigen_Light_down, "77");
+      
+      
+	m_weight_bTagSF_77_extrapolation_up = m_sfRetriever->btagSF( event,
+								     top::topSFSyst::BTAG_SF_EXTRAPOLATION_UP,
+								     "77" );
+	m_weight_bTagSF_77_extrapolation_down = m_sfRetriever->btagSF( event,
+								       top::topSFSyst::BTAG_SF_EXTRAPOLATION_DOWN,
+								       "77" );
+	m_weight_bTagSF_77_extrapolation_from_charm_up = m_sfRetriever->btagSF( event,
+										top::topSFSyst::BTAG_SF_EXTRAP_FROM_CHARM_UP,
+										"77" );
+	m_weight_bTagSF_77_extrapolation_from_charm_down = m_sfRetriever->btagSF( event,
+										  top::topSFSyst::BTAG_SF_EXTRAP_FROM_CHARM_DOWN,
+										"77" );
+      } //end if isNominal
+    } //end if m_sfRetriever
+  } //end if isSimulation
 
   //event info
   m_eventNumber = event.m_info->eventNumber();
