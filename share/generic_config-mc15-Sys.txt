@@ -1,0 +1,91 @@
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
+
+EventInfoName EventInfo
+ElectronCollectionName Electrons
+MuonCollectionName Muons
+JetCollectionName AntiKt4EMTopoJets
+LargeJetCollectionName None
+LargeJetSubstructure None
+TauCollectionName TauJets
+PhotonCollectionName None
+METCollectionName MET_RefFinal_AntiKt4EMTopo
+LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+
+TruthCollectionName TruthParticles
+TruthJetCollectionName AntiKt4TruthJets
+TopPartonHistory ttbar
+TopParticleLevel True
+TruthElectronCollectionName None
+TruthMuonCollectionName None
+PDFInfo True
+
+#ObjectSelectionName top::ObjectLoaderStandardCuts
+ObjectSelectionName ttHMultileptonLooseObjectLoader
+#OutputFormat top::EventSaverFlatNtuple
+OutputFormat ttHMultileptonLooseEventSaver
+OutputFilename output.root
+#OutputEvents AllEvents
+OutputEvents SelectedEvents
+PerfStats No
+NEvents 0
+
+PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root ttHMultilepton/tthML.PURWTconfig.410000.root
+PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
+PRWDefaultChannel 410000
+
+Systematics All
+DynamicKeys SkimForSystematics
+SkimForSystematics True
+
+#Electron cuts
+ElectronID LooseAndBLayerLH
+ElectronIDLoose LooseAndBLayerLH
+ElectronPt 10000.
+ElectronIsolation Loose
+ElectronIsoSFs False
+
+#Muon cuts
+MuonQuality Loose
+MuonQualityLoose Loose
+MuonEta 2.5
+MuonPt 10000.
+MuonIsolation Loose
+
+#Tau cuts
+#have been moved to ttHMultilepton/data/loose_tau_selection.conf
+#for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
+
+#below is just dummy, so TopConfig doesnt complain
+TauPt 10000
+TauJetID JetBDTSigLoose
+TauJetIDBkg JetBDTSigLoose
+TauEVetoID EleBDTLoose
+
+#Jet cuts
+JetPt 25000.
+JetEta 2.5
+
+#Truth jet cuts
+TruthJetPt 25000.
+TruthJetEta 2.5
+
+#Other cuts, overlaps, bkgs..
+FakesControlRegionDoLooseMC False
+ApplyElectronInJetSubtraction False
+OverlapRemovalLeptonDef Tight
+
+TruthBlockInfo True
+
+# Don't be clever
+SELECTION dummy
+TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedium_L1EM18VH HLT_e24_lhmedium_L1EM20VH HLT_e24_lhmedium_iloose_L1EM18VH HLT_e26_lhtight_iloose HLT_e60_lhmedium HLT_e120_lhloose HLT_mu18_mu8noL1 HLT_2mu10 HLT_2e12_lhloose_L12EM10VH HLT_e17_lhloose_2e9_lhloose 
+
+SELECTION loose
+INITIAL
+COUNTHISTO
+JETCLEAN LooseBad
+#TRIGDEC HLT_mu26_imedium 
+#TRIGMATCH HLT_mu26_imedium 
+TTHMULTILEP
+DUPLICATEVETO
+SAVE

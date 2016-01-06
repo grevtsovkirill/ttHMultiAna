@@ -85,6 +85,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //unique sys names for selected object containers
   std::string m_sysName;
   std::shared_ptr<top::TopConfig> m_config;
+  bool m_doSkim;
   
   TH1* m_eleCutflow;
   TH1* m_muCutflow;
@@ -170,66 +171,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   Lepton m_leptons[LEPTON_ARR_SIZE];
   Tau m_taus[TAU_ARR_SIZE];
   ttHMultilepton::Variables* m_variables;
-
-  //trigger info
-  //single e
-  /*
-  unsigned int HLT_e26_tight_iloose;
-  unsigned int HLT_e26_lhtight_iloose;
-  unsigned int HLT_e60_medium;
-  unsigned int HLT_e60_lhmedium;
-  unsigned int HLT_e24_tight_iloose;
-  unsigned int HLT_e24_lhtight_iloose;
-
-  unsigned int HLT_e24_tight_iloose_L1EM20VH;
-  unsigned int HLT_e140_loose;
-  unsigned int HLT_e24_lhtight_iloose_L1EM20VH;
-  unsigned int HLT_e140_lhloose;
-
-  //single mu
-  unsigned int HLT_mu26_imedium;
-  unsigned int HLT_mu50;
-  unsigned int HLT_mu24_imedium;
-
-  //dilepton
-  //e-e
-  unsigned int HLT_2e12_loose_L12EM10VH;
-  unsigned int HLT_2e12_lhloose_L12EM10VH;
-
-  //mu-mu
-  unsigned int HLT_2mu14;
-  unsigned int HLT_2mu10;
-
-  //e-mu
-  unsigned int HLT_e17_loose_mu14;
-  unsigned int HLT_e17_lhloose_mu14;
-  unsigned int HLT_e7_medium_mu24;
-  unsigned int HLT_e7_lhmedium_mu24;
-
-  //Associated pre-scales
-  float HLT_e26_tight_iloose_PS;
-  float HLT_e26_lhtight_iloose_PS;
-  float HLT_e60_medium_PS;
-  float HLT_e60_lhmedium_PS;
-  float HLT_e24_tight_iloose_PS;
-  float HLT_e24_lhtight_iloose_PS;
-  float HLT_e24_tight_iloose_L1EM20VH_PS;
-  float HLT_e140_loose_PS;
-  float HLT_e24_lhtight_iloose_L1EM20VH_PS;
-  float HLT_e140_lhloose_PS;
-  float HLT_mu26_imedium_PS;
-  float HLT_mu50_PS;
-  float HLT_mu24_imedium_PS;
-  float HLT_2e12_loose_L12EM10VH_PS;
-  float HLT_2e12_lhloose_L12EM10VH_PS;
-  float HLT_2mu14_PS;
-  float HLT_2mu10_PS;
-  float HLT_e17_loose_mu14_PS;
-  float HLT_e17_lhloose_mu14_PS;
-  float HLT_e7_medium_mu24_PS;
-  float HLT_e7_lhmedium_mu24_PS;
-  //end trigger
-  */  
+ 
   //MC  
   int m_higgsMode;
   std::vector<float> m_mc_m;

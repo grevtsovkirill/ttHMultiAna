@@ -3,6 +3,7 @@
 #include "TopEvent/Event.h"
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
+#include "TopConfiguration/ConfigurationSettings.h"
 #include "TopEventSelectionTools/TreeManager.h"
 
 #include "TopParticleLevel/ParticleLevelEvent.h"
@@ -19,6 +20,7 @@
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
   m_outputFile(0),
+  m_doSkim(false),
   m_sfRetriever(nullptr),
   configTool("xAODConfigTool"),
   trigDecTool("TrigDecTool"),
@@ -707,6 +709,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   std::size_t sysHash = event.m_hashValue;
   m_sysName = m_config->systematicName(sysHash);
+
+  // do we want to skim?
+  // configured with DynamicKeys in the cuts file
+  auto* const settings = top::ConfigurationSettings::get();
+  m_doSkim = settings->value("SkimForSystematics") == "True";
   
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
@@ -904,6 +911,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CopyHT(goodEl, goodMu, goodJet, goodTau);
   CheckIsBlinded();
 
+  if ( m_doSkim && m_variables->total_leptons < 2 ) return;
+  
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
