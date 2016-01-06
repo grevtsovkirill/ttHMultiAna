@@ -218,6 +218,33 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_down,
 					 "MV2c20_77_EventWeight_extrapolation_from_charm_down" );
 
+
+      //truth information   
+      systematicTree->makeOutputVariable(m_mc_m,           "m_truth_m");
+      systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
+      systematicTree->makeOutputVariable(m_mc_eta,         "m_truth_eta");
+      systematicTree->makeOutputVariable(m_mc_phi,         "m_truth_phi");
+      systematicTree->makeOutputVariable(m_mc_e,           "m_truth_e");
+      systematicTree->makeOutputVariable(m_mc_pdgId,       "m_truth_pdgId");
+      systematicTree->makeOutputVariable(m_mc_status,      "m_truth_status");
+      systematicTree->makeOutputVariable(m_mc_barcode,     "m_truth_barcode");
+      systematicTree->makeOutputVariable(m_mc_parents,     "m_truth_parents");
+      systematicTree->makeOutputVariable(m_mc_children,    "m_truth_children");
+
+      //truth jets
+      systematicTree->makeOutputVariable(m_trjet_pt,  "m_truth_jet_pt");
+      systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
+      systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
+      systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
+
+      //truthEvent information
+      systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
+      systematicTree->makeOutputVariable(m_PDFinfo_x2,        "m_mcevt_pdf_x2");
+      systematicTree->makeOutputVariable(m_PDFinfo_id1,       "m_mcevt_pdf_id1");
+      systematicTree->makeOutputVariable(m_PDFinfo_id2,       "m_mcevt_pdf_id2");
+      systematicTree->makeOutputVariable(m_PDFinfo_scalePDF,  "m_mcevt_pdf_scale");
+      systematicTree->makeOutputVariable(m_PDFinfo_pdf1,      "m_mcevt_pdf_pdf1");
+      systematicTree->makeOutputVariable(m_PDFinfo_pdf2,      "m_mcevt_pdf_pdf2");
     }
     
     //event info
@@ -241,33 +268,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
-    
-    //truth information   
-    systematicTree->makeOutputVariable(m_mc_m,           "m_truth_m");
-    systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
-    systematicTree->makeOutputVariable(m_mc_eta,         "m_truth_eta");
-    systematicTree->makeOutputVariable(m_mc_phi,         "m_truth_phi");
-    systematicTree->makeOutputVariable(m_mc_e,           "m_truth_e");
-    systematicTree->makeOutputVariable(m_mc_pdgId,       "m_truth_pdgId");
-    systematicTree->makeOutputVariable(m_mc_status,      "m_truth_status");
-    systematicTree->makeOutputVariable(m_mc_barcode,     "m_truth_barcode");
-    systematicTree->makeOutputVariable(m_mc_parents,     "m_truth_parents");
-    systematicTree->makeOutputVariable(m_mc_children,    "m_truth_children");
-
-    //truthEvent information
-    systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
-    systematicTree->makeOutputVariable(m_PDFinfo_x2,        "m_mcevt_pdf_x2");
-    systematicTree->makeOutputVariable(m_PDFinfo_id1,       "m_mcevt_pdf_id1");
-    systematicTree->makeOutputVariable(m_PDFinfo_id2,       "m_mcevt_pdf_id2");
-    systematicTree->makeOutputVariable(m_PDFinfo_scalePDF,  "m_mcevt_pdf_scale");
-    systematicTree->makeOutputVariable(m_PDFinfo_pdf1,      "m_mcevt_pdf_pdf1");
-    systematicTree->makeOutputVariable(m_PDFinfo_pdf2,      "m_mcevt_pdf_pdf2");
-
-    //truth jets
-    systematicTree->makeOutputVariable(m_trjet_pt,  "m_truth_jet_pt");
-    systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
-    systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
-    systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
     
     //PURW
     m_purwtool = new CP::PileupReweightingTool("prw_tthml");
@@ -721,7 +721,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_leptonTrigSF_weight = m_sfRetriever->triggerSF(event,top::topSFSyst::nominal);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
 
-      /* uncomment this block when moved to AnalysisTop,2.3.39
+      /*
+      //uncomment this block when moved to AnalysisTop,2.3.39
       //nominal tauSF
       m_weight_tauSF = m_sfRetriever->tauSF(event, top::topSFSyst::nominal);
       // Tau-electron overlap removal
@@ -793,37 +794,41 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   
   //MC particle
   if (event.m_truth != nullptr) {
-    m_mc_m       .clear();
-    m_mc_pt      .clear();
-    m_mc_eta     .clear();
-    m_mc_phi     .clear();
-    m_mc_e       .clear();
-    m_mc_pdgId   .clear();
-    m_mc_parents .clear();
-    m_mc_children.clear();
-    m_mc_status  .clear();
-    m_mc_barcode .clear();
 
-    const std::vector<ttH::TruthPart> selected_truths = truthSelector.SelectTruth(event.m_truth);
+    if(event.m_hashValue == m_config->nominalHashValue() ){
+      m_mc_m       .clear();
+      m_mc_pt      .clear();
+      m_mc_eta     .clear();
+      m_mc_phi     .clear();
+      m_mc_e       .clear();
+      m_mc_pdgId   .clear();
+      m_mc_parents .clear();
+      m_mc_children.clear();
+      m_mc_status  .clear();
+      m_mc_barcode .clear();
 
-    for (const ttH::TruthPart &truth : selected_truths) {
+      const std::vector<ttH::TruthPart> selected_truths = truthSelector.SelectTruth(event.m_truth);
 
-      m_mc_m       .push_back(truth.m);
-      m_mc_pt      .push_back(truth.pt);
-      m_mc_eta     .push_back(truth.eta);
-      m_mc_phi     .push_back(truth.phi);
-      m_mc_e       .push_back(truth.e);
-      m_mc_pdgId   .push_back(truth.pdgId);
-      m_mc_status  .push_back(truth.status);
-      m_mc_barcode .push_back(truth.barcode); 
-      m_mc_children.push_back(truth.bc_children); 
-      m_mc_parents .push_back(truth.bc_parents); 
+      for (const ttH::TruthPart &truth : selected_truths) {
+
+	m_mc_m       .push_back(truth.m);
+	m_mc_pt      .push_back(truth.pt);
+	m_mc_eta     .push_back(truth.eta);
+	m_mc_phi     .push_back(truth.phi);
+	m_mc_e       .push_back(truth.e);
+	m_mc_pdgId   .push_back(truth.pdgId);
+	m_mc_status  .push_back(truth.status);
+	m_mc_barcode .push_back(truth.barcode); 
+	m_mc_children.push_back(truth.bc_children); 
+	m_mc_parents .push_back(truth.bc_parents); 
+      }
     }
+
     m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
   }
 
   //TruthEvent info here (pdf, MC weights, etc)
-  if (event.m_truthEvent != nullptr) {
+  if (event.m_truthEvent != nullptr && event.m_hashValue == m_config->nominalHashValue() ) {
     unsigned int i(0);
     unsigned int truthEventSize = event.m_truthEvent->size();
     m_PDFinfo_x1.resize(truthEventSize);

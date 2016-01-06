@@ -1,5 +1,6 @@
 2016-01-06 David Hohn <david.hohn@cern.ch>
 	* add systematic variations of btag SF and PU event weights, only stored in nominal Tree
+	* working on slimming systematic trees: no truth
 
 2016-01-05 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* bug fix systematic trees: Variables constructor moved outside the systematic loop in ttHMultileptonLooseEventSaver.cxx
