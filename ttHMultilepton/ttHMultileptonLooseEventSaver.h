@@ -104,7 +104,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //  ToolHandle<CP::IPileupReweightingTool>     m_purwtool;
   //ToolHandle<IPileupReweightingTool>     m_purwtool;
   PileupReweightingTool*                 m_purwtool;
-  TauEfficiencyCorrectionsTool           m_tauEffTool;
   TauSelectionTool                       m_tauSelectionEleOLR;
 
   //for convenience of use with Wrap stuff

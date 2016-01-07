@@ -26,7 +26,6 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
-  m_tauEffTool("TauEfficiencyCorrectionsTool"),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
   m_mcWeight(0.),
   m_pileup_weight(0.),
@@ -626,18 +625,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }, *systematicTree, std::string(tauprefix+"truthType").c_str());
     
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	return tau.auxdata<double>("TauScaleFactorReconstructionHadTau");
-      }, *systematicTree, std::string(tauprefix+"RecoSF").c_str());
-
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	return tau.auxdata<double>("TauScaleFactorJetIDHadTau");
-      }, *systematicTree, std::string(tauprefix+"JetIDSF").c_str());
-    
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	return tau.auxdata<double>("TauScaleFactorEleOLRHadTau");
-      }, *systematicTree, std::string(tauprefix+"EleOLRSF").c_str());
-
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
@@ -647,8 +634,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
     //tau tools
-    top::check( m_tauEffTool.initialize(), "Failed to initialise TauEffTool" );
-    //m_tauEffTool.msg().setLevel(MSG::VERBOSE);
     //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
     top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
     top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
@@ -735,21 +720,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_leptonTrigSF_weight = m_sfRetriever->triggerSF(event,top::topSFSyst::nominal);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
 
-      /*
-      //uncomment this block when moved to AnalysisTop,2.3.39
       //nominal tauSF
       m_weight_tauSF = m_sfRetriever->tauSF(event, top::topSFSyst::nominal);
-      // Tau-electron overlap removal
-      m_weight_tauSF_ELEOLR_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP);
-      m_weight_tauSF_ELEOLR_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN);
-      // Tau Jet IDWP
-      m_weight_tauSF_JETID_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_UP);
-      m_weight_tauSF_JETID_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN);
-      // Tau reconstruction
-      m_weight_tauSF_RECO_UP = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_UP);
-      m_weight_tauSF_RECO_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN);
-      */
-
+      
       //do sys weights only in "nominal" sample
       if(event.m_hashValue == m_config->nominalHashValue() ){
       
@@ -782,6 +755,17 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_weight_bTagSF_77_extrapolation_from_charm_down = m_sfRetriever->btagSF( event,
 										  top::topSFSyst::BTAG_SF_EXTRAP_FROM_CHARM_DOWN,
 										"77" );
+
+	// Tau-electron overlap removal
+	m_weight_tauSF_ELEOLR_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP);
+	m_weight_tauSF_ELEOLR_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN);
+	// Tau Jet IDWP
+	m_weight_tauSF_JETID_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_UP);
+	m_weight_tauSF_JETID_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN);
+	// Tau reconstruction
+	m_weight_tauSF_RECO_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_UP);
+	m_weight_tauSF_RECO_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN);
+      
       } //end if isNominal
     } //end if m_sfRetriever
   } //end if isSimulation
