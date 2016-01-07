@@ -48,12 +48,7 @@ MuonEta 2.7
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-
-#below is just dummy, so TopConfig doesnt complain
-TauPt 10000
-TauJetID JetBDTSigLoose
-TauJetIDBkg JetBDTSigLoose
-TauEVetoID EleBDTLoose
+TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
 
 #Jet cuts
 JetPt 25000.

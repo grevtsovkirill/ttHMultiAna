@@ -2,6 +2,7 @@
 	* migrate to Top,2.3.39
 	* enabling tau SFs from AnalysisTop, removing my private implementation
 	* fill lep_*_is{Loose,Medium,Tight}
+	* use new top::TauMC15, remove ttHMultilepton::TauMC15
 
 2016-01-06 David Hohn <david.hohn@cern.ch>
 	* add config file for running Systematics: tighten object selection to strawman, add skim

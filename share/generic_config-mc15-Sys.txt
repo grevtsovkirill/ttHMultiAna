@@ -27,7 +27,7 @@ OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 0
+NEvents 100
 
 PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root ttHMultilepton/tthML.PURWTconfig.410000.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
@@ -54,12 +54,7 @@ MuonIsolation Loose
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-
-#below is just dummy, so TopConfig doesnt complain
-TauPt 10000
-TauJetID JetBDTSigLoose
-TauJetIDBkg JetBDTSigLoose
-TauEVetoID EleBDTLoose
+TauJetConfigFile ttHMultilepton/tight_tau_selection.conf
 
 #Jet cuts
 JetPt 25000.
