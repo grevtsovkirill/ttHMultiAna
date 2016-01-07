@@ -41,6 +41,7 @@ SkimForSystematics False
 ElectronID LooseAndBLayerLH
 ElectronIDLoose LooseAndBLayerLH
 ElectronPt 5000.
+ElectronIsolation None
 ElectronIsoSFs False
 
 #Muon cuts
@@ -48,6 +49,7 @@ MuonQuality Loose
 MuonQualityLoose Loose
 MuonEta 2.7
 MuonPt 5000.
+MuonIsolation None
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
