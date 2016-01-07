@@ -55,7 +55,7 @@ TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-
+BTaggingWP 77%
 
 #Other cuts, overlaps, bkgs..
 FakesControlRegionDoLooseMC False
