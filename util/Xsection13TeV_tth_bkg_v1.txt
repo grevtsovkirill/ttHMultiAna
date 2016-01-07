@@ -23,24 +23,24 @@
 
 
 #Dibosons
- 361063           12.583               1         1.0    --    -999   1               Sherpa                                 llll  Full  
- 361064           1.8446               1         1.0    --    -999   1               Sherpa                          lllvSFMinus  Full  
- 361065           3.6235               1         1.0    --    -999   1               Sherpa                          lllvOFMinus  Full  
- 361066           2.5656               1         1.0    --    -999   1               Sherpa                           lllvSFPlus  Full  
- 361067           5.0169               1         1.0    --    -999   1               Sherpa                           lllvOFPlus  Full  
- 361068           14.022               1         1.0    --    -999   1               Sherpa                                 llvv  Full  
- 361069          0.02575               1         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW4  Full  
- 361070         0.043375               1         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW6  Full  
- 361071         0.042017               1         1.0    --    -999   1               Sherpa                           lllvjj_EW6  Full  
- 361072           0.1279               1         1.0    --    -999   1               Sherpa                           lllljj_EW6  Full  
- 361073          0.02095               1         1.0    --    -999   1               Sherpa                               ggllll  Full  
- 361074         0.015884               1         1.0    --    -999   2               Sherpa                        ggllll_M4l100  Full  
- 361075         0.011826               1         1.0    --    -999   2               Sherpa                        ggllllNoHiggs  Full  
- 361076         0.006272               1         1.0    --    -999   2               Sherpa                      ggllllOnlyHiggs  Full  
- 361077          0.85492               1         1.0    --    -999   1               Sherpa                               ggllvv  Full  
- 361078           0.3763               1         1.0    --    -999   2               Sherpa                        ggllvvNoHiggs  Full  
- 361079           0.5374               1         1.0    --    -999   2               Sherpa                      ggllvvOnlyHiggs  Full  
- 361080           0.0508               1         1.0    --    -999   2               Sherpa                        ggllvv_ZZcuts  Full  
+ 361063           12.583            0.91         1.0    --    -999   1               Sherpa                                 llll  Full  
+ 361064           1.8446            0.91         1.0    --    -999   1               Sherpa                          lllvSFMinus  Full  
+ 361065           3.6235            0.91         1.0    --    -999   1               Sherpa                          lllvOFMinus  Full  
+ 361066           2.5656            0.91         1.0    --    -999   1               Sherpa                           lllvSFPlus  Full  
+ 361067           5.0169            0.91         1.0    --    -999   1               Sherpa                           lllvOFPlus  Full  
+ 361068           14.022            0.91         1.0    --    -999   1               Sherpa                                 llvv  Full  
+ 361069          0.02575            0.91         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW4  Full  
+ 361070         0.043375            0.91         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW6  Full  
+ 361071         0.042017            0.91         1.0    --    -999   1               Sherpa                           lllvjj_EW6  Full  
+ 361072           0.1279            0.91         1.0    --    -999   1               Sherpa                           lllljj_EW6  Full  
+ 361073          0.02095            0.91         1.0    --    -999   1               Sherpa                               ggllll  Full  
+ 361074         0.015884            0.91         1.0    --    -999   2               Sherpa                        ggllll_M4l100  Full  
+ 361075         0.011826            0.91         1.0    --    -999   2               Sherpa                        ggllllNoHiggs  Full  
+ 361076         0.006272            0.91         1.0    --    -999   2               Sherpa                      ggllllOnlyHiggs  Full  
+ 361077          0.85492            0.91         1.0    --    -999   1               Sherpa                               ggllvv  Full  
+ 361078           0.3763            0.91         1.0    --    -999   2               Sherpa                        ggllvvNoHiggs  Full  
+ 361079           0.5374            0.91         1.0    --    -999   2               Sherpa                      ggllvvOnlyHiggs  Full  
+ 361080           0.0508            0.91         1.0    --    -999   2               Sherpa                        ggllvv_ZZcuts  Full  
  361081           25.995            0.91         1.0    --    -999   1               Sherpa                             WW->lvqq  Full  
  361082           25.974            0.91         1.0    --    -999   1               Sherpa                             WW->qqlv  Full  
  361083           12.543            0.91         1.0    --    -999   1               Sherpa                             WZ->lvqq  Full  
