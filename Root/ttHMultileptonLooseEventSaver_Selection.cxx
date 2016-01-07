@@ -413,11 +413,14 @@ void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   
 }
 
-void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
+void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep, CP::MuonSelectionTool& muonSelection) {
   CopyIParticle(mu, lep);
   CopyIso(mu, lep);
   CopyIParam(mu, lep);
   lep.ID = -13*mu.charge();
+  lep.isLoose  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Loose  && muonSelection.passedIDCuts(mu) );
+  lep.isMedium = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu) );
+  lep.isTight  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Tight  && muonSelection.passedIDCuts(mu) );
   // trigger matching
   if (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"))
     lep.isTrigMatch = 1;
@@ -505,7 +508,7 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
     if (typ == ttHMultilepton::ELECTRON) {
       CopyElectron(*(*goodEl)[lidx], m_leptons[idx]);
     } else {
-      CopyMuon(*(*goodMu)[lidx], m_leptons[idx]);
+      CopyMuon(*(*goodMu)[lidx], m_leptons[idx], muonSelection);
     }
   }
 

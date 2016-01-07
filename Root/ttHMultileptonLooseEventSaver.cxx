@@ -432,10 +432,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { int is_matched(0); if (ele.isAvailable<char>("TRIGMATCH_HLT_e5_lhloose")) is_matched = ele.auxdataConst<char>("TRIGMATCH_HLT_e5_lhloose"); return (int) is_matched; }, *systematicTree, "electron_match_HLT_e5_lhloose");
 
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
-    
+
     // Muons
     //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
-    top::check( muonSelection.setProperty( "MaxEta", 2.7 ), "muonSelection tool could not set max eta");
+    top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
     top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
    
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.pt(); }, *systematicTree, "muon_pt");
