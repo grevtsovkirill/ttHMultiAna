@@ -16,6 +16,7 @@
 #include "TopObjectSelectionTools/MuonMC15.h"
 #include "TopObjectSelectionTools/JetMC15.h"
 #include "TopObjectSelectionTools/TauMC15.h"
+#include "ttHMultilepton/TauMC15.h"
 #include "TopObjectSelectionTools/OverlapRemovalASG.h"
 
 //Run once at the start of the program to setup our object selection (and overlap removal)
@@ -49,8 +50,9 @@ top::TopObjectSelection* ttHMultileptonObjectLoader::init(std::shared_ptr<top::T
   }
 
   objectSelection -> muonSelection(new top::MuonMC15(topConfig->muonPtcut(), new top::StandardIsolation()));
-  objectSelection -> jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), topConfig->jetJVTcut())); // new jet vertex tagger cut  
-  objectSelection->tauSelection(new top::TauMC15(10000., false, TauAnalysisTools::JETID::JETIDBDTMEDIUM, TauAnalysisTools::JETID::JETIDNONE, TauAnalysisTools::ELEID::ELEIDBDTMEDIUM));
+  objectSelection -> jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), topConfig->jetJVTcut())); // new jet vertex tagger cut
+  auto tauSelection_ttHML = new ttHMultilepton::TauMC15("ttHMultilepton/loose_tau_selection.conf");
+  objectSelection->tauSelection(tauSelection_ttHML);
   
   //objectSelection->overlapRemovalPreSelection(nullptr);
   objectSelection->overlapRemovalPostSelection(new top::OverlapRemovalASG());
