@@ -683,6 +683,18 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   // Shall we do scale factors?
   // apparently not a question anymore
   m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
+
+  // do we want to skim?
+  // configured with DynamicKeys in the cuts file
+  auto* const settings = top::ConfigurationSettings::get();
+  try {
+    m_doSkim = settings->value("SkimForSystematics") == "True";
+    if(m_doSkim) std::cout<<"SKIMMING FOR SYSTEMATICS"<<std::endl;
+    else         std::cout<<"NO SKIM"<<std::endl;
+  }
+  catch(std::exception& e) {
+    std::cout<<"NO SKIM"<<std::endl;
+  }
   
 }
 
@@ -710,11 +722,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   std::size_t sysHash = event.m_hashValue;
   m_sysName = m_config->systematicName(sysHash);
 
-  // do we want to skim?
-  // configured with DynamicKeys in the cuts file
-  auto* const settings = top::ConfigurationSettings::get();
-  m_doSkim = settings->value("SkimForSystematics") == "True";
-  
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
   m_leptonTrigSF_weight = 1.;
