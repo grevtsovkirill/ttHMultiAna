@@ -641,7 +641,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	return tau.auxdata<double>("ele_match_lhscore");
+	return tau.auxdata<float>("ele_match_lhscore");
       }, *systematicTree, std::string(tauprefix+"ele_match_lhscore").c_str());
     
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
