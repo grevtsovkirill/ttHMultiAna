@@ -34,6 +34,9 @@ PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276
 PRWDefaultChannel 410000
 
 Systematics All
+JetUncertainties_NPModel 19NP
+JetUncertainties_BunchSpacing 25ns
+JetJERSmearingModel Simple
 DynamicKeys SkimForSystematics
 SkimForSystematics True
 
