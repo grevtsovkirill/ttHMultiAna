@@ -703,7 +703,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //}
 
   //unique name for selected containers
-
   std::size_t sysHash = event.m_hashValue;
   m_sysName = m_config->systematicName(sysHash);
 

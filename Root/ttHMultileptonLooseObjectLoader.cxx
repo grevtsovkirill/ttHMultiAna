@@ -11,9 +11,11 @@
 
 //We'll need these so we can apply some cuts
 #include "TopObjectSelectionTools/ElectronLikelihoodMC15.h"
+#include "ttHMultilepton/ElectronLikelihoodMC15.h"
 #include "TopObjectSelectionTools/ElectronCutBasedMC15.h"
 #include "TopObjectSelectionTools/IsolationTools.h"
 #include "TopObjectSelectionTools/MuonMC15.h"
+#include "ttHMultilepton/MuonMC15.h"
 #include "TopObjectSelectionTools/JetMC15.h"
 #include "TopObjectSelectionTools/TauMC15.h"
 #include "ttHMultilepton/DummyOverlapRemoval.h"
@@ -33,7 +35,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), false, topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
   } else if (topConfig->electronID().find("LH") != std::string::npos && topConfig->electronIDLoose().find("LH") != std::string::npos) {
     //user wants likelihood electrons
-    auto electronSelection = new top::ElectronLikelihoodMC15(topConfig->isPrimaryxAOD(),
+    auto electronSelection = new ttHMultilepton::ElectronLikelihoodMC15(topConfig->isPrimaryxAOD(),
 							     topConfig->electronPtcut(), 
 							     topConfig->electronVetoLArCrack(), 
 							     topConfig->electronID(), 
@@ -49,7 +51,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     exit(1);
   }
   
-  objectSelection->muonSelection(new top::MuonMC15(topConfig->muonPtcut(), nullptr)); 
+  objectSelection->muonSelection(new ttHMultilepton::MuonMC15(topConfig->muonPtcut(), nullptr)); 
   objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), 0.));
 
   objectSelection->tauSelection( new top::TauMC15() );

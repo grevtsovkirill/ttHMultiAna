@@ -1,7 +1,11 @@
+2016-01-08 David Hohn <david.hohn@cern.ch>
+	* Add MuonMC15 and ElectronLikelihoodMC15 that inherit from their top:: versions,
+	  our version only override the function passTTVACuts so we have leptons without IP cuts
+
 2016-01-08 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* add JES 19 NP and 25ns parameters and simple JER parameter to the config file
 
-2016-01-06 David Hohn <david.hohn@cern.ch>
+2016-01-07 David Hohn <david.hohn@cern.ch>
 	* migrate to Top,2.3.39
 	* enabling tau SFs from AnalysisTop, removing my private implementation
 	* fill lep_*_is{Loose,Medium,Tight}
