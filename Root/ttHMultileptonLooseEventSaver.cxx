@@ -900,6 +900,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CopyTaus(goodTau);
   CopyHT(goodEl, goodMu, goodJet, goodTau);
   CheckIsBlinded();
+  doEventSFs();
 
   if ( m_doSkim && m_variables->total_leptons < 2 ) return;
   
@@ -945,4 +946,79 @@ void ttHMultileptonLooseEventSaver::finalize() {
   m_outputFile->WriteTObject(m_jetCutflow);
   m_outputFile->WriteTObject(m_tauCutflow);
   m_outputFile->Write();
+}
+
+void ttHMultileptonLooseEventSaver::doEventSFs() {
+  // logic: for 3l Tight = Loose * Tight * Tight
+  // otherwise = Product of corresponding SF
+  m_variables->lepSFIDLoose = 1;
+  m_variables->lepSFIDTight = 1;
+  m_variables->lepSFIsoLoose = 1;
+  m_variables->lepSFIsoTight = 1;
+  m_variables->lepSFTrigLoose = 1;
+  m_variables->lepSFTrigTight = 1;
+  m_variables->lepSFReco = 1;
+  m_variables->lepSFTTVA = 1;
+  m_variables->lepSFObjLoose = 1;
+  m_variables->lepSFObjTight = 1;
+  // The following: index 0 = 1-eff(mc), index 1 = 1-eff(data)
+  double oneMinusTrigEffLoose[2]{1,1}, oneMinusTrigEffTight[2]{1,1};
+  switch (m_variables->total_leptons) {
+  case 1:
+  case 2:
+  case 4:
+    for (int ilep = 0; ilep < m_variables->total_leptons; ++ilep) {
+      m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose;
+      m_variables->lepSFIDTight *= m_leptons[ilep].SFIDTight;
+      m_variables->lepSFIsoLoose *= m_leptons[ilep].SFIsoLoose;
+      m_variables->lepSFIsoTight *= m_leptons[ilep].SFIsoTight;
+      m_variables->lepSFReco *= m_leptons[ilep].SFReco;
+      m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA;
+      m_variables->lepSFObjLoose *= m_leptons[ilep].SFObjLoose;
+      m_variables->lepSFObjTight *= m_leptons[ilep].SFObjTight;
+      oneMinusTrigEffLoose[0] *= (1-m_leptons[ilep].EffTrigLoose);
+      oneMinusTrigEffLoose[1] *= (1-m_leptons[ilep].EffTrigLoose*m_leptons[ilep].SFTrigLoose);
+      oneMinusTrigEffTight[0] *= (1-m_leptons[ilep].EffTrigTight);
+      oneMinusTrigEffTight[1] *= (1-m_leptons[ilep].EffTrigTight*m_leptons[ilep].SFTrigTight);
+    }
+    // if (m_variables->total_leptons == 1 && abs(m_leptons[0].ID) == 13) {
+    //   std::cout << m_leptons[0].EffTrigTight << " " << m_leptons[0].SFTrigTight << " " << oneMinusTrigEffTight[0] << " " << oneMinusTrigEffTight[1] << std::endl;
+    // }
+    break;
+  case 3:
+    m_variables->lepSFIDLoose *= m_leptons[0].SFIDLoose;
+    m_variables->lepSFIDTight *= m_leptons[0].SFIDLoose;
+    m_variables->lepSFIsoLoose *= m_leptons[0].SFIsoLoose;
+    m_variables->lepSFIsoTight *= m_leptons[0].SFIsoLoose;
+    m_variables->lepSFReco *= m_leptons[0].SFReco;
+    m_variables->lepSFTTVA *= m_leptons[0].SFTTVA;
+    m_variables->lepSFObjLoose *= m_leptons[0].SFObjLoose;
+    m_variables->lepSFObjTight *= m_leptons[0].SFObjLoose;
+    oneMinusTrigEffLoose[0] *= (1-m_leptons[0].EffTrigLoose);
+    oneMinusTrigEffLoose[1] *= (1-m_leptons[0].EffTrigLoose*m_leptons[0].SFTrigLoose);
+    oneMinusTrigEffTight[0] *= (1-m_leptons[0].EffTrigLoose);
+    oneMinusTrigEffTight[1] *= (1-m_leptons[0].EffTrigLoose*m_leptons[0].SFTrigLoose);
+    for (int ilep = 1; ilep < m_variables->total_leptons; ++ilep) {
+      m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose;
+      m_variables->lepSFIDTight *= m_leptons[ilep].SFIDTight;
+      m_variables->lepSFIsoLoose *= m_leptons[ilep].SFIsoLoose;
+      m_variables->lepSFIsoTight *= m_leptons[ilep].SFIsoTight;
+      m_variables->lepSFReco *= m_leptons[ilep].SFReco;
+      m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA;
+      m_variables->lepSFObjLoose *= m_leptons[ilep].SFObjLoose;
+      m_variables->lepSFObjTight *= m_leptons[ilep].SFObjTight;
+      oneMinusTrigEffLoose[0] *= (1-m_leptons[ilep].EffTrigLoose);
+      oneMinusTrigEffLoose[1] *= (1-m_leptons[ilep].EffTrigLoose*m_leptons[ilep].SFTrigLoose);
+      oneMinusTrigEffTight[0] *= (1-m_leptons[ilep].EffTrigTight);
+      oneMinusTrigEffTight[1] *= (1-m_leptons[ilep].EffTrigTight*m_leptons[ilep].SFTrigTight);
+    }
+    break;
+  default:
+    m_variables->lepSFTrigLoose = 1;
+    m_variables->lepSFTrigTight = 1;
+    return;
+  }
+  m_variables->lepSFTrigLoose = oneMinusTrigEffLoose[0] != 1 ? (1-oneMinusTrigEffLoose[1])/(1-oneMinusTrigEffLoose[0]) : 1;
+  m_variables->lepSFTrigTight = oneMinusTrigEffTight[0] != 1 ? (1-oneMinusTrigEffTight[1])/(1-oneMinusTrigEffTight[0]) : 1;
+    
 }

@@ -30,6 +30,16 @@ namespace ttHMultilepton {
     float sublead_jetPt;
     float sublead_jetEta;
     float sublead_jetPhi;
+    float lepSFIDLoose;
+    float lepSFIDTight;
+    float lepSFTrigLoose;
+    float lepSFTrigTight;
+    float lepSFIsoLoose;
+    float lepSFIsoTight;
+    float lepSFReco;
+    float lepSFTTVA;
+    float lepSFObjLoose;
+    float lepSFObjTight;
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree);
     void Clear() { memset(this, 0, sizeof(Variables)); }
   };

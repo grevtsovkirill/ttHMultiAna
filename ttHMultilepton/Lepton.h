@@ -8,15 +8,21 @@ namespace ttHMultilepton {
   enum LepType { ELECTRON, MUON, GENERIC };
   struct Lepton 
   {
-    double SFRecoEventWeight;
-    double SFIdEventWeight;
-    double SFIsoEventWeight;
-    double SFRecoError;
-    double SFRecoErrorSys;
-    double SFIdError;
-    double SFIsoError;
-    double TrigSFEventWeight;
-    double TrigSFError;
+    float SFIDTight;
+    float SFIDLoose;
+    //double SFIsoEventWeight;
+    //double SFRecoError;
+    //double SFRecoErrorSys;
+    //double SFIdError;
+    //double SFIsoError;
+    float SFTrigTight;
+    float SFTrigLoose;
+    float SFIsoTight;
+    float SFIsoLoose;
+    float SFReco;
+    float SFTTVA;
+    float SFObjTight;
+    float SFObjLoose;
     float  D0;
     float  Z0SinTheta;
     float  MagD0;
@@ -106,6 +112,9 @@ namespace ttHMultilepton {
     float   ptVarcone30;
     float   ptVarcone40;
 
+    float   EffTrigLoose;
+    float   EffTrigTight;
+    
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 
     bool operator==(const Lepton &other) {

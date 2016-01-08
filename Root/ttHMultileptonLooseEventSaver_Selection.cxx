@@ -4,6 +4,7 @@
 #include "xAODCore/AuxContainerBase.h"
 #include "TopEvent/Event.h"
 #include "TopEvent/EventTools.h"
+#include "TopConfiguration/TopConfig.h"
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 #include "TH1F.h"
 
@@ -384,8 +385,72 @@ void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.sigd0PV = part.auxdataConst<float>("d0significance");
   lep.Z0SinTheta = part.auxdataConst<float>("z0sintheta");
 }
+
+
+float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSFSyst SFSyst)
+{
+  float sf(1.);
+  if (x.isAvailable<float>("MU_EFF_Trigger_"+id)) {
+    sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id);
+    // if (sf == 0) {
+    //   std::cout << "Retrieval successful " << sf << std::endl;
+    //   std::cout << "Trigger match? " << (x.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || x.auxdataConst<char>("TRIGMATCH_HLT_mu50")) << std::endl;
+    // }
+  }
   
-void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_UP) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_STAT_UP")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_STAT_UP");
+    }
+  }
+  
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_DOWN) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_STAT_DOWN")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_STAT_DOWN");
+    }
+  }
+  
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_SYST_DOWN) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_SYST_DOWN")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_SYST_DOWN");
+    }
+  }
+  return sf;
+}
+
+float electronEff_Trigger(const xAOD::Electron& x,const std::string& id,const top::topSFSyst SFSyst) 
+{
+  float sf(1.);
+  if (x.isAvailable<float>("EL_EFF_Trigger_"+id)) {
+    sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id);
+  }
+  
+  if (SFSyst == top::topSFSyst::EL_SF_Trigger_UP) {
+    if (x.isAvailable<float>("EL_EFF_Trigger_"+id+"_UP")) {
+      sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id+"_UP");
+    }
+  }
+  
+  if (SFSyst == top::topSFSyst::EL_SF_Trigger_DOWN) {
+    if (x.isAvailable<float>("EL_EFF_Trigger_"+id+"_DOWN")) {
+      sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id+"_DOWN");
+    }
+  }
+  
+  return sf;
+}
+
+
+void ttHMultileptonLooseEventSaver::
+CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
+    // const SG::IConstAuxStore* store = el.container()->getConstStore(); 
+    // const SG::auxid_set_t& auxids = store->getAuxIDs(); 
+    // SG::AuxTypeRegistry& reg = SG::AuxTypeRegistry::instance();
+    // //std::cout << "=============" << std::endl;
+    // for( auto auxid : auxids ) { 
+    //   //std::cout << reg.getName( auxid ) << std::endl;
+    // }
+
   CopyIParticle(el, lep);
   CopyIso(el, lep);
   CopyIParam(el, lep);
@@ -395,10 +460,10 @@ void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
  
-  // trigger matching
-  if (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
+  // trigger matching, electron pt > 25 GeV
+  if (!m_isMC && el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
     lep.isTrigMatch = 1;
-  else if (!(el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH")) && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //mc
+  else if (el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"))) //mc
     lep.isTrigMatch = 1;
   else
     lep.isTrigMatch = 0;
@@ -411,9 +476,26 @@ void CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
   
+  // scale factors
+  lep.SFIDLoose = m_sfRetriever->electronSF_ID(el, top::topSFSyst::nominal, false);
+  lep.SFIDTight = m_sfRetriever->electronSF_ID(el, top::topSFSyst::nominal, true);
+  lep.SFTrigLoose = m_sfRetriever->electronSF_Trigger(el, top::topSFSyst::nominal, false);
+  lep.SFTrigTight = m_sfRetriever->electronSF_Trigger(el, top::topSFSyst::nominal, true);
+  lep.SFIsoLoose = m_sfRetriever->electronSF_Isol(el, top::topSFSyst::nominal, false);
+  lep.SFIsoTight = m_sfRetriever->electronSF_Isol(el, top::topSFSyst::nominal, true);
+  lep.SFReco = m_sfRetriever->electronSF_Reco(el, top::topSFSyst::nominal);
+  lep.SFTTVA = 1;
+  // I know the loose/tight swap looks weird, but it's intentional
+  lep.EffTrigLoose = electronEff_Trigger(el, m_config->electronID(), top::topSFSyst::nominal);
+  lep.EffTrigTight = electronEff_Trigger(el, m_config->electronIDLoose(), top::topSFSyst::nominal);
+  // Everything except trigger
+  lep.SFObjLoose = lep.SFIDLoose*lep.SFIsoLoose*lep.SFReco*lep.SFTTVA;
+  lep.SFObjTight = lep.SFIDTight*lep.SFIsoTight*lep.SFReco*lep.SFTTVA;
+
 }
 
-void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep, CP::MuonSelectionTool& muonSelection) {
+void ttHMultileptonLooseEventSaver::
+CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep, CP::MuonSelectionTool& muonSelection) {
   CopyIParticle(mu, lep);
   CopyIso(mu, lep);
   CopyIParam(mu, lep);
@@ -421,8 +503,9 @@ void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep, CP::MuonSelectionTool
   lep.isLoose  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Loose  && muonSelection.passedIDCuts(mu) );
   lep.isMedium = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu) );
   lep.isTight  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Tight  && muonSelection.passedIDCuts(mu) );
-  // trigger matching
-  if (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"))
+  // trigger matching, require lepton pt > 21 GeV
+  if (mu.pt() > 21e3
+      && (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
     lep.isTrigMatch = 1;
   else
     lep.isTrigMatch = 0;
@@ -434,6 +517,22 @@ void CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep, CP::MuonSelectionTool
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); lep.topoEtcone20 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
+
+  // scale factors
+  lep.SFIDLoose = m_sfRetriever->muonSF_ID(mu, top::topSFSyst::nominal, false);
+  lep.SFIDTight = m_sfRetriever->muonSF_ID(mu, top::topSFSyst::nominal, true);
+  lep.SFTrigLoose = m_sfRetriever->muonSF_Trigger(mu, top::topSFSyst::nominal, false);
+  lep.SFTrigTight = m_sfRetriever->muonSF_Trigger(mu, top::topSFSyst::nominal, true);
+  lep.SFIsoLoose = m_sfRetriever->muonSF_Isol(mu, top::topSFSyst::nominal, false);
+  lep.SFIsoTight = m_sfRetriever->muonSF_Isol(mu, top::topSFSyst::nominal, true);
+  lep.SFTTVA = m_sfRetriever->muonSF_TTVA(mu, top::topSFSyst::nominal);
+  lep.SFReco = 1;
+  // I know the loose/tight swap looks weird, but it's intentional
+  lep.EffTrigLoose = muonEff_Trigger(mu, m_config->muonQuality(), top::topSFSyst::nominal);
+  lep.EffTrigTight = muonEff_Trigger(mu, m_config->muonQualityLoose(), top::topSFSyst::nominal);
+  // Everything except trigger
+  lep.SFObjLoose = lep.SFIDLoose*lep.SFIsoLoose*lep.SFReco*lep.SFTTVA;
+  lep.SFObjTight = lep.SFIDTight*lep.SFIsoTight*lep.SFReco*lep.SFTTVA;
 
 }
 

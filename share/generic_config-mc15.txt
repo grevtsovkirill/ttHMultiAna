@@ -39,17 +39,21 @@ SkimForSystematics False
 
 #Electron cuts
 ElectronID LooseAndBLayerLH
-ElectronIDLoose LooseAndBLayerLH
+ElectronIDLoose TightLH
 ElectronPt 5000.
-ElectronIsolation None
+#ElectronIsolation None
 ElectronIsoSFs False
+ElectronIsolation Loose
+ElectronIsolationLoose FixedCutTight
 
 #Muon cuts
 MuonQuality Loose
 MuonQualityLoose Loose
 MuonEta 2.7
 MuonPt 5000.
-MuonIsolation None
+#MuonIsolation None
+MuonIsolation Loose
+MuonIsolationLoose FixedCutTightTrackOnly
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf

@@ -49,9 +49,15 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
 
   // SFs (not yet filled)
-  //  CreateBranch(tree, &TrigSFEventWeight, "lep_TrigSFEventWeight_", index);
-  CreateBranch(tree, &SFRecoEventWeight, "lep_SFRecoEventWeight_", index);
-  CreateBranch(tree, &SFIdEventWeight, "lep_SFIdEventWeight_", index);
-  CreateBranch(tree, &SFIsoEventWeight, "lep_SFIsoEventWeight_", index);
+  CreateBranch(tree, &SFIDLoose, "lep_SFIDLoose_", index);
+  CreateBranch(tree, &SFIDTight, "lep_SFIDTight_", index);
+  CreateBranch(tree, &SFTrigLoose, "lep_SFTrigLoose_", index);
+  CreateBranch(tree, &SFTrigTight, "lep_SFTrigTight_", index);
+  CreateBranch(tree, &SFIsoLoose, "lep_SFIsoLoose_", index);
+  CreateBranch(tree, &SFIsoTight, "lep_SFIsoTight_", index);
+  CreateBranch(tree, &SFReco, "lep_SFReco_", index);
+  CreateBranch(tree, &SFTTVA, "lep_SFTTVA_", index);
+  CreateBranch(tree, &SFObjLoose, "lep_SFObjLoose_", index);
+  CreateBranch(tree, &SFObjTight, "lep_SFObjTight_", index);
  
 }
