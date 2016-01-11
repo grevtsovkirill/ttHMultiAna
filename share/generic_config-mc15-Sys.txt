@@ -23,11 +23,11 @@ PDFInfo True
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output_AllSys_19NP.root
+OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 40000
+NEvents 0
 
 PRWConfigFiles    ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root ttHMultilepton/tthML.PURWTconfig.410000.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
