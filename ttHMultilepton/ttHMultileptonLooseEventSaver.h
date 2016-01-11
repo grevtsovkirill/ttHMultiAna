@@ -87,7 +87,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //unique sys names for selected object containers
   std::string m_sysName;
   std::shared_ptr<top::TopConfig> m_config;
-  bool m_doSkim;
+  bool m_doSystematics;
   
   TH1* m_eleCutflow;
   TH1* m_muCutflow;

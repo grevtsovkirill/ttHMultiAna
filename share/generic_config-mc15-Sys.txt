@@ -37,15 +37,17 @@ Systematics All
 JetUncertainties_NPModel 19NP
 JetUncertainties_BunchSpacing 25ns
 JetJERSmearingModel Simple
-DynamicKeys SkimForSystematics
-SkimForSystematics True
+DynamicKeys DoSystematics
+# enables skimming and slimming
+DoSystematics True
 
 #Electron cuts
 ElectronID LooseAndBLayerLH
-ElectronIDLoose LooseAndBLayerLH
+ElectronIDLoose TightLH
 ElectronPt 10000.
-ElectronIsolation Loose
 ElectronIsoSFs False
+ElectronIsolation Loose
+ElectronIsolationLoose FixedCutTight
 
 #Muon cuts
 MuonQuality Loose
@@ -53,6 +55,7 @@ MuonQualityLoose Loose
 MuonEta 2.5
 MuonPt 10000.
 MuonIsolation Loose
+MuonIsolationLoose FixedCutTightTrackOnly
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
