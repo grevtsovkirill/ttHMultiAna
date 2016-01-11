@@ -47,6 +47,7 @@ using TauAnalysisTools::TauEfficiencyCorrectionsTool;
 using TauAnalysisTools::TauSelectionTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
+ friend class ttHMultilepton::Variables;
  public:
   //Default - so root can load based on a name
   ttHMultileptonLooseEventSaver();
@@ -204,6 +205,36 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_trjet_phi;
   std::vector<float> m_trjet_e;
 
+  // for names of lepton SFs
+  std::map<top::topSFSyst, std::string> m_lep_sf_names{
+    { top::topSFSyst::nominal, "nominal" },
+    { top::topSFSyst::EL_SF_Trigger_UP, "EL_SF_Trigger_UP" },
+    { top::topSFSyst::EL_SF_Trigger_DOWN, "EL_SF_Trigger_DOWN" },
+    { top::topSFSyst::EL_SF_Reco_UP, "EL_SF_Reco_UP" },
+    { top::topSFSyst::EL_SF_Reco_DOWN, "EL_SF_Reco_DOWN" },
+    { top::topSFSyst::EL_SF_ID_UP, "EL_SF_ID_UP" },
+    { top::topSFSyst::EL_SF_ID_DOWN, "EL_SF_ID_DOWN" },
+    { top::topSFSyst::EL_SF_Isol_UP, "EL_SF_Isol_UP" },
+    { top::topSFSyst::EL_SF_Isol_DOWN, "EL_SF_Isol_DOWN" },
+    { top::topSFSyst::MU_SF_Trigger_UP, "MU_SF_Trigger_UP" },
+    { top::topSFSyst::MU_SF_Trigger_DOWN, "MU_SF_Trigger_DOWN" },
+    { top::topSFSyst::MU_SF_Trigger_STAT_UP, "MU_SF_Trigger_STAT_UP" },
+    { top::topSFSyst::MU_SF_Trigger_STAT_DOWN, "MU_SF_Trigger_STAT_DOWN" },
+    { top::topSFSyst::MU_SF_Trigger_SYST_UP, "MU_SF_Trigger_SYST_UP" },
+    { top::topSFSyst::MU_SF_Trigger_SYST_DOWN, "MU_SF_Trigger_SYST_DOWN" },
+    { top::topSFSyst::MU_SF_ID_STAT_UP, "MU_SF_ID_STAT_UP" },
+    { top::topSFSyst::MU_SF_ID_STAT_DOWN, "MU_SF_ID_STAT_DOWN" },
+    { top::topSFSyst::MU_SF_ID_SYST_UP, "MU_SF_ID_SYST_UP" },
+    { top::topSFSyst::MU_SF_ID_SYST_DOWN, "MU_SF_ID_SYST_DOWN" },
+    { top::topSFSyst::MU_SF_Isol_STAT_UP, "MU_SF_Isol_STAT_UP" },
+    { top::topSFSyst::MU_SF_Isol_STAT_DOWN, "MU_SF_Isol_STAT_DOWN" },
+    { top::topSFSyst::MU_SF_Isol_SYST_UP, "MU_SF_Isol_SYST_UP" },
+    { top::topSFSyst::MU_SF_Isol_SYST_DOWN, "MU_SF_Isol_SYST_DOWN" },
+    { top::topSFSyst::MU_SF_TTVA_STAT_UP, "MU_SF_TTVA_STAT_UP" },
+    { top::topSFSyst::MU_SF_TTVA_STAT_DOWN, "MU_SF_TTVA_STAT_DOWN" },
+    { top::topSFSyst::MU_SF_TTVA_SYST_UP, "MU_SF_TTVA_SYST_UP" },
+    { top::topSFSyst::MU_SF_TTVA_SYST_DOWN, "MU_SF_TTVA_SYST_DOWN" },
+  };
 
   TH1F * h_decayMode;
 
@@ -217,6 +248,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   ClassDef(ttHMultileptonLooseEventSaver, 0);
 };
+
 
 
 #endif

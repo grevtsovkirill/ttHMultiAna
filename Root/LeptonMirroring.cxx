@@ -48,16 +48,16 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   // trigger matching
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
 
-  // SFs (not yet filled)
-  CreateBranch(tree, &SFIDLoose, "lep_SFIDLoose_", index);
-  CreateBranch(tree, &SFIDTight, "lep_SFIDTight_", index);
-  CreateBranch(tree, &SFTrigLoose, "lep_SFTrigLoose_", index);
-  CreateBranch(tree, &SFTrigTight, "lep_SFTrigTight_", index);
-  CreateBranch(tree, &SFIsoLoose, "lep_SFIsoLoose_", index);
-  CreateBranch(tree, &SFIsoTight, "lep_SFIsoTight_", index);
-  CreateBranch(tree, &SFReco, "lep_SFReco_", index);
-  CreateBranch(tree, &SFTTVA, "lep_SFTTVA_", index);
-  CreateBranch(tree, &SFObjLoose, "lep_SFObjLoose_", index);
-  CreateBranch(tree, &SFObjTight, "lep_SFObjTight_", index);
+  // SFs
+  CreateBranch(tree, &SFIDLoose[0], "lep_SFIDLoose_", index);
+  CreateBranch(tree, &SFIDTight[0], "lep_SFIDTight_", index);
+  CreateBranch(tree, &SFTrigLoose[0], "lep_SFTrigLoose_", index);
+  CreateBranch(tree, &SFTrigTight[0], "lep_SFTrigTight_", index);
+  CreateBranch(tree, &SFIsoLoose[0], "lep_SFIsoLoose_", index);
+  CreateBranch(tree, &SFIsoTight[0], "lep_SFIsoTight_", index);
+  CreateBranch(tree, &SFReco[0], "lep_SFReco_", index);
+  CreateBranch(tree, &SFTTVA[0], "lep_SFTTVA_", index);
+  CreateBranch(tree, &SFObjLoose[0], "lep_SFObjLoose_", index);
+  CreateBranch(tree, &SFObjTight[0], "lep_SFObjTight_", index);
  
 }

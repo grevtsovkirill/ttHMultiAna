@@ -4,6 +4,9 @@
 #include <memory>
 #define LEPTON_ARR_SIZE 5
 #define TAU_ARR_SIZE 1
+#define MAXSYST 50
+
+class ttHMultileptonLooseEventSaver;
 
 namespace ttHMultilepton {
   struct Variables {
@@ -16,6 +19,8 @@ namespace ttHMultilepton {
     float Mll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float Ptll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float DRll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
+    float Mlll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-2];
+    float Mllll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-2][LEPTON_ARR_SIZE-3];
     int nJets_OR_T;
     int nJets_OR_T_MV2c20_70;
     int nJets_OR_T_MV2c20_77;
@@ -32,15 +37,15 @@ namespace ttHMultilepton {
     float sublead_jetPhi;
     float lepSFIDLoose;
     float lepSFIDTight;
-    float lepSFTrigLoose;
-    float lepSFTrigTight;
+    float lepSFTrigLoose[MAXSYST];
+    float lepSFTrigTight[MAXSYST];
     float lepSFIsoLoose;
     float lepSFIsoTight;
     float lepSFReco;
     float lepSFTTVA;
-    float lepSFObjLoose;
-    float lepSFObjTight;
-    void BootstrapTree(std::shared_ptr<top::TreeManager> tree);
+    float lepSFObjLoose[MAXSYST];
+    float lepSFObjTight[MAXSYST];
+    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler);
     void Clear() { memset(this, 0, sizeof(Variables)); }
   };
 }
