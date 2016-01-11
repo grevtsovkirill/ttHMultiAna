@@ -231,7 +231,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_down,
 					 "MV2c20_77_EventWeight_extrapolation_from_charm_down" );
 
+    }
 
+    if(!m_doSystematics) {
       //truth information   
       systematicTree->makeOutputVariable(m_mc_m,           "m_truth_m");
       systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
@@ -396,10 +398,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //leptons
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt"); 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->eta(); }, *systematicTree, "electron_ClEta");
+    //Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->eta(); }, *systematicTree, "electron_ClEta");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->etaBE(2); }, *systematicTree, "electron_EtaBE2");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); }, *systematicTree, "electron_E");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
 
     //Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); float err_d0 = sqrt(ele.trackParticle()->definingParametersCovMatrix()(0,0)); return (float) (d0/err_d0); }, *systematicTree, "electron_sigd0PV_hand"); //INACCURATE: USE following one by Tracking CP
 
@@ -438,7 +441,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
-      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
       //d0  and sig d0 are wrt Beamline (see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/InDetTrackingPerformanceGuidelines#Variables) -- "PV" is left to ensure compatibility with Run1 code, but it is NOT corrected for PV position as it is not recommended
       Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0();  return (float) (d0); }, *systematicTree, "electron_d0");
       //z0sinTh raw and corrected for PV (see https://twiki.cern.ch/twiki/bin/view/AtlasProtected/InDetTrackingDC14)
@@ -576,7 +578,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
-    Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
+    //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
     // not in sample xAOD
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("Jvt"); }, *systematicTree, "m_jet_jvt_uncal");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.jetP4("JetEMScaleMomentum").eta(); }, *systematicTree, "m_jet_etaEM");    
@@ -584,7 +586,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Jet cleaning flag
     Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = cleaningTool->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad"); 
 
-    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
+    //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
@@ -818,7 +820,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //MC particle
   if (event.m_truth != nullptr) {
 
-    if(event.m_hashValue == m_config->nominalHashValue() ){
+    if( !m_doSystematics ){
       m_mc_m       .clear();
       m_mc_pt      .clear();
       m_mc_eta     .clear();
@@ -851,7 +853,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //TruthEvent info here (pdf, MC weights, etc)
-  if (event.m_truthEvent != nullptr && event.m_hashValue == m_config->nominalHashValue() ) {
+  if (event.m_truthEvent != nullptr && !m_doSystematics ) {
     unsigned int i(0);
     unsigned int truthEventSize = event.m_truthEvent->size();
     m_PDFinfo_x1.resize(truthEventSize);
