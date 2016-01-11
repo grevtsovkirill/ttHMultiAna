@@ -499,7 +499,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
 }
 
 void ttHMultileptonLooseEventSaver::
-CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep, CP::MuonSelectionTool& muonSelection) {
+CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   CopyIParticle(mu, lep);
   CopyIso(mu, lep);
   CopyIParam(mu, lep);
@@ -613,7 +613,7 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
     if (typ == ttHMultilepton::ELECTRON) {
       CopyElectron(*(*goodEl)[lidx], m_leptons[idx]);
     } else {
-      CopyMuon(*(*goodMu)[lidx], m_leptons[idx], muonSelection);
+      CopyMuon(*(*goodMu)[lidx], m_leptons[idx]);
     }
   }
 
@@ -702,7 +702,8 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
 
 }
 
-void CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& MLTau) {
+void
+ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& MLTau) {
   MLTau.pt              = xTau.pt();
   MLTau.eta             = xTau.eta();
   MLTau.phi             = xTau.phi();
@@ -712,6 +713,12 @@ void CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& MLTau) {
   MLTau.JetBDTSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium);
   MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
   MLTau.numTrack        = xTau.nTracks();
+
+  for( auto syst : m_tau_sf_names ) {
+    auto ivar = syst.first;
+    MLTau.SFTight[ivar] = m_sfRetriever->tauSF(xTau, ivar, /*isLoose = */ false);
+    MLTau.SFLoose[ivar] = m_sfRetriever->tauSF(xTau, ivar, true);
+  }
 }
 
 void

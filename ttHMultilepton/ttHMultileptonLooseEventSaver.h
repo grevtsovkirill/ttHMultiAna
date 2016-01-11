@@ -126,7 +126,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   // utility functions
   void CopyElectron(xAOD::Electron&, ttHMultilepton::Lepton&);
-  void CopyMuon(xAOD::Muon&, ttHMultilepton::Lepton&, CP::MuonSelectionTool&);
+  void CopyMuon(xAOD::Muon&, ttHMultilepton::Lepton&);
+  void CopyTau(xAOD::TauJet&, ttHMultilepton::Tau&);
   void doEventSFs();
   
   //some event weights
@@ -235,6 +236,16 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
     { top::topSFSyst::MU_SF_TTVA_SYST_UP, "MU_SF_TTVA_SYST_UP" },
     { top::topSFSyst::MU_SF_TTVA_SYST_DOWN, "MU_SF_TTVA_SYST_DOWN" },
   };
+  // names tau SFs
+  std::map<top::topSFSyst, std::string> m_tau_sf_names{
+      { top::topSFSyst::nominal, "nominal" },
+      { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },  
+      { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN, "TAU_SF_ELEOLR_TOTAL_DOWN"},
+      { top::topSFSyst::TAU_SF_JETID_TOTAL_UP,	  "TAU_SF_JETID_TOTAL_UP"   },	 
+      { top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN,  "TAU_SF_JETID_TOTAL_DOWN" },
+      { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,	  "TAU_SF_RECO_TOTAL_UP"    },	 
+      { top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN,   "TAU_SF_RECO_TOTAL_DOWN"  },
+	};
 
   TH1F * h_decayMode;
 

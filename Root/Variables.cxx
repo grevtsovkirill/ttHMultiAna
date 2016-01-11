@@ -81,4 +81,9 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);
     }
   }
+  for ( auto systvar : ntupler->m_tau_sf_names) {
+    std::string thisname = systvar.first == 0 ? "" : "_" + systvar.second;
+    tree->makeOutputVariable(tauSFTight[systvar.first], "tauSFTight" + thisname);
+    tree->makeOutputVariable(tauSFLoose[systvar.first], "tauSFLoose" + thisname);
+  }
 }

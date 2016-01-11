@@ -59,6 +59,7 @@ MuonIsolationLoose FixedCutTightTrackOnly
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
 TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
+TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
 
 #Jet cuts
 JetPt 25000.

@@ -4,6 +4,8 @@
 #include <memory>
 #include "TopEventSelectionTools/TreeManager.h"
 
+#define MAXSYST 50
+
 namespace ttHMultilepton {
 
   struct Tau {
@@ -16,6 +18,9 @@ namespace ttHMultilepton {
     int JetBDTSigMedium;
     int JetBDTSigTight;
     int numTrack;
+    float SFTight[MAXSYST];
+    float SFLoose[MAXSYST];
+    
 
     bool operator==(const Tau &other) {
       // compare eta, phi, bleurgh

@@ -4,27 +4,27 @@
 #include <memory>
 #include "TopEventSelectionTools/TreeManager.h"
 
-#define MAXLEPSYST 50
+#define MAXSYST 50
 
 namespace ttHMultilepton {
   enum LepType { ELECTRON, MUON, GENERIC };
   struct Lepton 
   {
-    float SFIDTight[MAXLEPSYST];
-    float SFIDLoose[MAXLEPSYST];
+    float SFIDTight[MAXSYST];
+    float SFIDLoose[MAXSYST];
     //double SFIsoEventWeight;
     //double SFRecoError;
     //double SFRecoErrorSys;
     //double SFIdError;
     //double SFIsoError;
-    float SFTrigTight[MAXLEPSYST];
-    float SFTrigLoose[MAXLEPSYST];
-    float SFIsoTight[MAXLEPSYST];
-    float SFIsoLoose[MAXLEPSYST];
-    float SFReco[MAXLEPSYST];
-    float SFTTVA[MAXLEPSYST];
-    float SFObjTight[MAXLEPSYST];
-    float SFObjLoose[MAXLEPSYST];
+    float SFTrigTight[MAXSYST];
+    float SFTrigLoose[MAXSYST];
+    float SFIsoTight[MAXSYST];
+    float SFIsoLoose[MAXSYST];
+    float SFReco[MAXSYST];
+    float SFTTVA[MAXSYST];
+    float SFObjTight[MAXSYST];
+    float SFObjLoose[MAXSYST];
     float  D0;
     float  Z0SinTheta;
     float  MagD0;
@@ -114,8 +114,8 @@ namespace ttHMultilepton {
     float   ptVarcone30;
     float   ptVarcone40;
 
-    float   EffTrigLoose[MAXLEPSYST];
-    float   EffTrigTight[MAXLEPSYST];
+    float   EffTrigLoose[MAXSYST];
+    float   EffTrigTight[MAXSYST];
     
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 

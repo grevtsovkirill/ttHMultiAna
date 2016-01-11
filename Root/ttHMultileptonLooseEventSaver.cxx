@@ -604,13 +604,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = cleaningTool->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad"); 
 
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
-    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
-    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
 
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
       // is it the 1 GeV counting we want?
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float> >(xAOD::JetAttribute::SumPtTrkPt500); return (float) (tmp.size() ? tmp[0] : 0.); }, *systematicTree, "m_jet_sumPtTrk");
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[0] : 0);  }, *systematicTree, "m_jet_numTrk");
@@ -1007,8 +1007,8 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
   }
   // The following: index 0 = 1-eff(mc), index 1 = 1-eff(data)
   //  double oneMinusTrigEffLoose[2]{1,1}, oneMinusTrigEffTight[2]{1,1};
-  double oneMinusTrigEffLoose[MAXLEPSYST][2], oneMinusTrigEffTight[MAXLEPSYST][2];
-  for (int idx1 = 0; idx1 < MAXLEPSYST; ++idx1) {
+  double oneMinusTrigEffLoose[MAXSYST][2], oneMinusTrigEffTight[MAXSYST][2];
+  for (int idx1 = 0; idx1 < MAXSYST; ++idx1) {
     for (int idx2 = 0; idx2 < 2; ++idx2) {
       oneMinusTrigEffLoose[idx1][idx2] = oneMinusTrigEffTight[idx1][idx2] = 1.;
     }
@@ -1094,5 +1094,19 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     if (ivar == top::topSFSyst::nominal) continue;
     m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_variables->lepSFTrigLoose[0] : 1;
     m_variables->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_variables->lepSFTrigTight[0] : 1;
+  }
+
+  //taus
+  for ( auto syst : m_tau_sf_names ) {
+    m_variables->tauSFTight[syst.first] = 1;
+    m_variables->tauSFLoose[syst.first] = 1;
+  }
+  
+  for ( unsigned int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {
+    for ( auto syst : m_tau_sf_names ) {
+      auto ivar = syst.first;
+      m_variables->tauSFTight[syst.first] *= m_taus[itau].SFTight[ivar];
+      m_variables->tauSFLoose[syst.first] *= m_taus[itau].SFLoose[ivar];
+    }
   }
 }

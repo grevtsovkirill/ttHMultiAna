@@ -5,6 +5,7 @@
 	* more slimming
 	* not even truth in Nominal tree when doing systematics
 	* move initialisation of tools outside loop of sys trees
+	* include tight/loose tau SFs, modelled after Peters implementation for leptons
 
 2016-01-11 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* corrected bjet WP to 77 in CheckIsBlinded function
