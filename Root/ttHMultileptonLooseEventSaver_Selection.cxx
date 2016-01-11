@@ -392,10 +392,6 @@ float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSF
   float sf(1.);
   if (x.isAvailable<float>("MU_EFF_Trigger_"+id)) {
     sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id);
-    // if (sf == 0) {
-    //   std::cout << "Retrieval successful " << sf << std::endl;
-    //   std::cout << "Trigger match? " << (x.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || x.auxdataConst<char>("TRIGMATCH_HLT_mu50")) << std::endl;
-    // }
   }
   
   if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_UP) {
@@ -410,6 +406,12 @@ float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSF
     }
   }
   
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_SYST_UP) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_SYST_UP")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_SYST_UP");
+    }
+  }
+
   if (SFSyst == top::topSFSyst::MU_SF_Trigger_SYST_DOWN) {
     if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_SYST_DOWN")) {
       sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_SYST_DOWN");

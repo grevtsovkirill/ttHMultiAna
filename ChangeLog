@@ -1,3 +1,6 @@
+2016-01-11 Peter Onyisi <ponyisi@cern.ch>
+	* Some additional tweaks & fixes to lepton SF & systematics
+ 
 2016-01-11 David Hohn <david.hohn@cern.ch>
 	* more slimming
 	* not even truth in Nominal tree when doing systematics
@@ -5,6 +8,9 @@
 
 2016-01-11 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* corrected bjet WP to 77 in CheckIsBlinded function
+
+2016-01-10 Peter Onyisi <ponyisi@cern.ch>
+	* Include lepton SF & systematics
 
 2016-01-08 David Hohn <david.hohn@cern.ch>
 	* Add MuonMC15 and ElectronLikelihoodMC15 that inherit from their top:: versions,

@@ -1081,8 +1081,18 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     return;
   }
   for (const auto systvar : m_lep_sf_names) {
+    const auto ivar = systvar.first;
+    if (ivar == top::topSFSyst::nominal) continue;
+    m_variables->lepSFObjLoose[ivar] /= m_variables->lepSFObjLoose[0];
+    m_variables->lepSFObjTight[ivar] /= m_variables->lepSFObjTight[0];
+  }
+
+  m_variables->lepSFTrigLoose[0] = oneMinusTrigEffLoose[0][0] != 1 ? (1-oneMinusTrigEffLoose[0][1])/(1-oneMinusTrigEffLoose[0][0]) : 1;
+  m_variables->lepSFTrigTight[0] = oneMinusTrigEffTight[0][0] != 1 ? (1-oneMinusTrigEffTight[0][1])/(1-oneMinusTrigEffTight[0][0]) : 1;
+  for (const auto systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
-    m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0]) : 1;
-    m_variables->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0]) : 1;
+    if (ivar == top::topSFSyst::nominal) continue;
+    m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_variables->lepSFTrigLoose[0] : 1;
+    m_variables->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_variables->lepSFTrigTight[0] : 1;
   }
 }

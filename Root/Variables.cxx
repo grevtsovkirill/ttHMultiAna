@@ -48,10 +48,10 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(sublead_jetEta, "sublead_jetEta");
   tree->makeOutputVariable(sublead_jetPhi, "sublead_jetPhi");
   // scale factors
-  tree->makeOutputVariable(lepSFIDLoose, "lepSFIDLoose");
-  tree->makeOutputVariable(lepSFIDTight, "lepSFIDTight");
-  tree->makeOutputVariable(lepSFTrigLoose, "lepSFTrigLoose");
-  tree->makeOutputVariable(lepSFTrigTight, "lepSFTrigTight");
+  //  tree->makeOutputVariable(lepSFIDLoose, "lepSFIDLoose");
+  //  tree->makeOutputVariable(lepSFIDTight, "lepSFIDTight");
+  //  tree->makeOutputVariable(lepSFTrigLoose, "lepSFTrigLoose");
+  //  tree->makeOutputVariable(lepSFTrigTight, "lepSFTrigTight");
   for (const auto systvar : ntupler->m_lep_sf_names) {
     std::string thisname = systvar.first == 0 ? "" : "_" + systvar.second;
     bool dotrig = false;
