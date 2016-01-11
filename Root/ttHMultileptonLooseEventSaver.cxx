@@ -153,6 +153,120 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_weight_bTagSF_77_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars() );
   m_weight_bTagSF_77_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars() );
 
+  //init Tools
+  
+  //Pileup Reweighting Tools
+  m_purwtool = new CP::PileupReweightingTool("prw_tthml");
+  std::vector<std::string> pileup_config = config->PileupConfig();
+  for ( std::string& s: pileup_config )
+    s = PathResolverFindCalibFile( s );
+  std::vector<std::string> pileup_lumi_calc = config->PileupLumiCalc();
+  for ( std::string& s: pileup_lumi_calc )
+    s = PathResolverFindCalibFile( s );
+  // Let's have the option of having one config file per MC sample- set default channel
+  // to < 0 if you are doing this.
+  int default_channel = config->PileupDefaultChannel();
+  if ( default_channel > 0 )
+    top::check( m_purwtool->setProperty("DefaultChannel", default_channel), "Failed to set pileup reweighting config files" );    
+  top::check( m_purwtool->setProperty("ConfigFiles", pileup_config), "Failed to set pileup reweighting config files" );
+  top::check( m_purwtool->setProperty("LumiCalcFiles", pileup_lumi_calc), "Failed to set pileup reweighting lumicalc files");
+  top::check( m_purwtool->setProperty("OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
+  top::check( m_purwtool->initialize(), "Failed to initialize pileup reweighting tool" );
+
+  //Trigger Tools
+  // Trigger decision tool. 
+  ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
+  top::check( configHandle->initialize(),"xAODConfigTool fails to initialize");   
+  // The decision tool
+  top::check( trigDecTool.setProperty("ConfigTool",configHandle),"TrigDecTool fails to set configHandle");
+  //top::check( trigDecTool.setProperty("OutputLevel", MSG::VERBOSE),"TrigDecTool fails to set OutputLevel");
+  top::check( trigDecTool.setProperty("TrigDecisionKey","xTrigDecision"),"TrigDecTool fails to set TrigDecisionKey");
+  top::check(trigDecTool.initialize(),"TrigDecTool fails to initialize");    
+
+  //Isolation tools for leptons
+  //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
+  //    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
+  top::check( iso_1.initialize(),"IsolationTool fails to initialize");
+  auto isolation_WPs{"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
+  for (auto wp : isolation_WPs) {
+    top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
+    top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
+  }
+  /// special case for FixedCutTight (el only)
+  top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
+
+  //Muon Tools
+  //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
+  top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
+  top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
+
+  //Jet Tools
+  //Jet cleaning tool is initialized here
+  cleaningTool = new JetCleaningTool("MyCleaningTool");
+  top::check( cleaningTool->setProperty("CutLevel", "LooseBad"), "Jet Cleaning tool failed to set cut level"); // also "TightBad"
+  top::check( cleaningTool->setProperty("DoUgly", false), "Jet Cleaning tool failed to set value for DoUgly flag");
+  top::check( cleaningTool->initialize(), "Jet Cleaning tool failed to initialize");
+
+  //Tau Tools
+  //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
+  top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
+  top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
+
+
+  //define triggers
+      //Items and their PS
+    std::vector<std::string> triggernames
+    {   "HLT_mu20_iloose_L1MU15",
+	"HLT_mu50",
+	"HLT_e24_lhmedium_L1EM18VH",
+	"HLT_e24_lhmedium_L1EM20VH",
+	"HLT_e60_lhmedium", 
+	"HLT_e120_lhloose",
+	};
+
+    if(!m_doSystematics) {
+      for( std::string extra_trigger:
+	{   "HLT_e24_lhmedium_iloose_L1EM18VH",
+	    "HLT_e24_tight_iloose",
+	    "HLT_e24_lhtight_iloose", 
+	    "HLT_e24_tight_iloose_L1EM20VH",
+	    "HLT_e24_lhtight_iloose_L1EM20VH", 
+	    "HLT_e26_tight_iloose",
+	    "HLT_e26_lhtight_iloose",
+	    "HLT_e60_medium",
+	    "HLT_e140_loose",
+	    "HLT_e140_lhloose", 
+	    "HLT_mu24_imedium",
+	    "HLT_mu26_imedium", 
+	    "HLT_mu40",
+	    "HLT_2e12_loose_L12EM10VH",
+	    "HLT_2e12_lhloose_L12EM10VH",
+	    "HLT_e17_lhloose_2e9_lhloose",
+	    "HLT_2mu14",
+	    "HLT_2mu10",
+	    "HLT_mu18_mu8noL1",
+	    "HLT_e17_loose_mu14",
+	    "HLT_e17_lhloose_mu14", 
+	    "HLT_e7_medium_mu24",
+	    "HLT_e7_lhmedium_mu24",
+	    // Added low pt threshold trigger for MM back up
+	    "HLT_mu10",
+	    "HLT_mu14",
+	    "HLT_mu18",
+	    "HLT_mu24",
+	    "HLT_e17_loose",
+	    "HLT_e17_lhloose",
+	    "HLT_e12_loose",
+	    "HLT_e12_lhloose",
+	    "HLT_e5_loose",
+	    "HLT_e5_lhloose",
+	    } )
+	{
+	  triggernames.push_back(extra_trigger);
+	}
+    } 
+  
+  
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
     std::cout << "INITIALIZING SYST TREES" << std::endl;
@@ -284,86 +398,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
     
-    //PURW
-    m_purwtool = new CP::PileupReweightingTool("prw_tthml");
-    std::vector<std::string> pileup_config = config->PileupConfig();
-    for ( std::string& s: pileup_config )
-      s = PathResolverFindCalibFile( s );
-    std::vector<std::string> pileup_lumi_calc = config->PileupLumiCalc();
-    for ( std::string& s: pileup_lumi_calc )
-      s = PathResolverFindCalibFile( s );
-    // Let's have the option of having one config file per MC sample- set default channel
-    // to < 0 if you are doing this.
-    int default_channel = config->PileupDefaultChannel();
-    if ( default_channel > 0 )
-      top::check( m_purwtool->setProperty("DefaultChannel", default_channel), "Failed to set pileup reweighting config files" );    
-    top::check( m_purwtool->setProperty("ConfigFiles", pileup_config), "Failed to set pileup reweighting config files" );
-    top::check( m_purwtool->setProperty("LumiCalcFiles", pileup_lumi_calc), "Failed to set pileup reweighting lumicalc files");
-    top::check( m_purwtool->setProperty("OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
-    top::check( m_purwtool->initialize(), "Failed to initialize pileup reweighting tool" );
-    
-    //TRIGGER PART
-    // Trigger decision tool. 
-    ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
-    top::check( configHandle->initialize(),"xAODConfigTool fails to initialize");   
-    // The decision tool
-    top::check( trigDecTool.setProperty("ConfigTool",configHandle),"TrigDecTool fails to set configHandle");
-    //top::check( trigDecTool.setProperty("OutputLevel", MSG::VERBOSE),"TrigDecTool fails to set OutputLevel");
-    top::check( trigDecTool.setProperty("TrigDecisionKey","xTrigDecision"),"TrigDecTool fails to set TrigDecisionKey");
-    top::check(trigDecTool.initialize(),"TrigDecTool fails to initialize");    
-
-    
-    //Items and their PS
-    std::vector<std::string> triggernames
-    {   "HLT_mu20_iloose_L1MU15",
-	"HLT_mu50",
-	"HLT_e24_lhmedium_L1EM18VH",
-	"HLT_e24_lhmedium_L1EM20VH",
-	"HLT_e60_lhmedium", 
-	"HLT_e120_lhloose",
-	};
-
-    if(!m_doSystematics) {
-      for( std::string extra_trigger:
-	{   "HLT_e24_lhmedium_iloose_L1EM18VH",
-	    "HLT_e24_tight_iloose",
-	    "HLT_e24_lhtight_iloose", 
-	    "HLT_e24_tight_iloose_L1EM20VH",
-	    "HLT_e24_lhtight_iloose_L1EM20VH", 
-	    "HLT_e26_tight_iloose",
-	    "HLT_e26_lhtight_iloose",
-	    "HLT_e60_medium",
-	    "HLT_e140_loose",
-	    "HLT_e140_lhloose", 
-	    "HLT_mu24_imedium",
-	    "HLT_mu26_imedium", 
-	    "HLT_mu40",
-	    "HLT_2e12_loose_L12EM10VH",
-	    "HLT_2e12_lhloose_L12EM10VH",
-	    "HLT_e17_lhloose_2e9_lhloose",
-	    "HLT_2mu14",
-	    "HLT_2mu10",
-	    "HLT_mu18_mu8noL1",
-	    "HLT_e17_loose_mu14",
-	    "HLT_e17_lhloose_mu14", 
-	    "HLT_e7_medium_mu24",
-	    "HLT_e7_lhmedium_mu24",
-	    // Added low pt threshold trigger for MM back up
-	    "HLT_mu10",
-	    "HLT_mu14",
-	    "HLT_mu18",
-	    "HLT_mu24",
-	    "HLT_e17_loose",
-	    "HLT_e17_lhloose",
-	    "HLT_e12_loose",
-	    "HLT_e12_lhloose",
-	    "HLT_e5_loose",
-	    "HLT_e5_lhloose",
-	    } )
-	{
-	  triggernames.push_back(extra_trigger);
-	}
-    } 
     
     for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
@@ -376,23 +410,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     std::vector<VectorWrapper*> elevec;    
     std::vector<VectorWrapper*> muvec;
 
-    //Isolation tool for leptons
-//    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
-//    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
-    top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-    auto WPs{"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
-    for (auto wp : WPs) {
-      top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
-      top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
+    //Isolation
+    for (auto wp : isolation_WPs) {
       std::string isoname("Iso_"); isoname += wp;
       std::string eleisoname("electron_isolation"); eleisoname += wp;
       std::string muisoname("muon_isolation"); muisoname += wp;
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>(isoname); }, *systematicTree, eleisoname.c_str());
-      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
+      Wrap2(muvec,  [=](const xAOD::Muon& mu) {      return (char)  mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
     }
 
     /// special case for FixedCutTight (el only)
-    top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("Iso_FixedCutTight"); }, *systematicTree, "electron_isolationFixedCutTight");
         
     //leptons
@@ -456,10 +483,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
 
     // Muons
-    //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
-    top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
-    top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
-   
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.pt(); }, *systematicTree, "muon_pt");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
@@ -566,12 +589,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
   
-    //Jet cleaning tool is initialized here
-    cleaningTool = new JetCleaningTool("MyCleaningTool");
-    top::check( cleaningTool->setProperty("CutLevel", "LooseBad"), "Jet Cleaning tool failed to set cut level"); // also "TightBad"
-    top::check( cleaningTool->setProperty("DoUgly", false), "Jet Cleaning tool failed to set value for DoUgly flag");
-    top::check( cleaningTool->initialize(), "Jet Cleaning tool failed to initialize");
-
     // Jets
     std::vector<VectorWrapper*> jetvec;
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.pt(); }, *systematicTree, "m_jet_pt");
@@ -673,12 +690,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
-    //tau tools
-    //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
-    top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
-    top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
-    
-    
     //Truth jets
     //std::vector<VectorWrapper*> trjetvec;
     //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.pt();  }, *systematicTree, "m_jetTruth_pt");
