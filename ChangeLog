@@ -1,3 +1,6 @@
+2016-01-11 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* corrected bjet WP to 77 in CheckIsBlinded function
+
 2016-01-08 David Hohn <david.hohn@cern.ch>
 	* Add MuonMC15 and ElectronLikelihoodMC15 that inherit from their top:: versions,
 	  our version only override the function passTTVACuts so we have leptons without IP cuts

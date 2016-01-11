@@ -754,23 +754,23 @@ ttHMultileptonLooseEventSaver::CheckIsBlinded() {
   if (m_variables->dilep_type) {
     if (abs(m_variables->total_charge) == 2
 	&& m_variables->nJets_OR_T >= 4
-	&& m_variables->nJets_OR_T_MV2c20_70 >= 1) {
+	&& m_variables->nJets_OR_T_MV2c20_77 >= 1) {
       isBlinded = true;
     }
   } else if (m_variables->trilep_type) {
     // remember Mll01 = Mll[0][0] and Mll02 = Mll[0][1]
     if (abs(m_variables->total_charge) == 1
 	&& ((m_variables->nJets_OR_T >=4 
-	     && m_variables->nJets_OR_T_MV2c20_70 >= 1) 
+	     && m_variables->nJets_OR_T_MV2c20_77 >= 1) 
 	    || (m_variables->nJets_OR_T ==3 
-		&& m_variables->nJets_OR_T_MV2c20_70 >= 2))
+		&& m_variables->nJets_OR_T_MV2c20_77 >= 2))
 	&& ! ((m_leptons[0].ID == - m_leptons[1].ID && fabs(m_variables->Mll[0][0] - 91.2e3) < 10e3)
 	      || (m_leptons[0].ID == - m_leptons[2].ID && fabs(m_variables->Mll[0][1] - 91.2e3) < 10e3))
 	) {
       isBlinded = true;
     }
   } else if (m_variables->quadlep_type) {
-    if (m_variables->nJets_OR_T_MV2c20_70 >= 1) {
+    if (m_variables->nJets_OR_T_MV2c20_77 >= 1) {
       isBlinded = true;
     }
   }
