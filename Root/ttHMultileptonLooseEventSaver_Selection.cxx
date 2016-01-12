@@ -680,12 +680,21 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
     //m_variables->Mll01 = p4_01.M();
     //m_variables->Ptll01 = p4_01.Pt();
     //m_variables->DRll01 = p4s[0]->DeltaR(*p4s[1]);
+    int zidx[2]{-1,-1};
     for (int idx1 = 0; idx1 < totleptons-1; ++idx1) {
       for (int idx2 = idx1+1; idx2 < totleptons; ++idx2) {
 	TLorentzVector p4sum = *p4s[idx1] + *p4s[idx2];
 	m_variables->Mll[idx1][idx2-1] = p4sum.M();
 	m_variables->Ptll[idx1][idx2-1] = p4sum.Pt();
 	m_variables->DRll[idx1][idx2-1] = p4s[idx1]->DeltaR(*p4s[idx2]);
+	if (m_leptons[idx1].ID == -m_leptons[idx2].ID) {
+	  if (m_variables->best_Z_Mll == 0 ||
+	      (fabs(m_variables->Mll[idx1][idx2-1]-91.1876e3) <
+	       fabs(m_variables->best_Z_Mll-91.1876e3))) {
+	    m_variables->best_Z_Mll=m_variables->Mll[idx1][idx2-1];
+	    zidx[0] = idx1; zidx[1] = idx2;
+	  }
+	}
 	for (int idx3 = idx2+1; idx3 < totleptons; ++idx3) {
 	  TLorentzVector p4sum3 = p4sum + *p4s[idx3];
 	  m_variables->Mlll[idx1][idx2-1][idx3-2] = p4sum3.M();
@@ -695,6 +704,15 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
 	  }
 	}
       }
+    }
+    if (totleptons==4 && zidx[0] >= 0) {
+      std::vector<int> otherleps;
+      for (int idx = 0; idx < 4; ++idx) {
+	if (idx != zidx[0] && idx != zidx[1]) {
+	  otherleps.push_back(idx);
+	}
+      }
+      m_variables->best_Z_other_Mll = m_variables->Mll[otherleps[0]][otherleps[1]-1];
     }
   }
 

@@ -21,6 +21,7 @@ namespace ttHMultilepton {
     float DRll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float Mlll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-2];
     float Mllll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-2][LEPTON_ARR_SIZE-3];
+    float best_Z_Mll, best_Z_other_Mll;
     int nJets_OR_T;
     int nJets_OR_T_MV2c20_70;
     int nJets_OR_T_MV2c20_77;
