@@ -1,3 +1,6 @@
+2016-01-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* included flags isPrompt, isBremsElec, and isFakeLep
+
 2016-01-12 David Hohn <david.hohn@cern.ch>
 	* remove lepton and tau SF systematic from systematic trees
 	* normalise systematic event weights
