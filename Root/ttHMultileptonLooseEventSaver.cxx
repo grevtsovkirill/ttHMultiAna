@@ -771,7 +771,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       
 	m_pileup_weight_UP = m_sfRetriever->pileupSF( event, +1 ); // up variation
 	m_pileup_weight_DOWN = m_sfRetriever->pileupSF( event, -1 ); // down variation
-      
+	//normalise
+	m_pileup_weight_UP   /= m_pileup_weight;
+	m_pileup_weight_DOWN /= m_pileup_weight;
+
+	//btag
 	m_sfRetriever->btagSF_eigen_vars(event,
 					 top::topSFSyst::BTAG_SF_EIGEN_B,
 					 m_weight_bTagSF_77_eigen_B_up,
@@ -799,6 +803,26 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 										  top::topSFSyst::BTAG_SF_EXTRAP_FROM_CHARM_DOWN,
 										"77" );
 
+	//normalise
+	for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(); ++i) {
+	  m_weight_bTagSF_77_eigen_B_up.at(i)   /= m_bTagSF_weight;
+	  m_weight_bTagSF_77_eigen_B_down.at(i) /= m_bTagSF_weight;
+	}
+	for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(); ++i) {
+	  m_weight_bTagSF_77_eigen_C_up.at(i)   /= m_bTagSF_weight;
+	  m_weight_bTagSF_77_eigen_C_down.at(i) /= m_bTagSF_weight;
+	}
+	for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(); ++i) {
+	  m_weight_bTagSF_77_eigen_Light_up.at(i)   /= m_bTagSF_weight;
+	  m_weight_bTagSF_77_eigen_Light_down.at(i) /= m_bTagSF_weight;
+	}
+	m_weight_bTagSF_77_extrapolation_up   /= m_bTagSF_weight;
+	m_weight_bTagSF_77_extrapolation_down /= m_bTagSF_weight;
+	m_weight_bTagSF_77_extrapolation_from_charm_up   /= m_bTagSF_weight;
+	m_weight_bTagSF_77_extrapolation_from_charm_down /= m_bTagSF_weight;
+	
+	
+	
 	// Tau-electron overlap removal
 	m_weight_tauSF_ELEOLR_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP);
 	m_weight_tauSF_ELEOLR_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN);
@@ -1110,4 +1134,12 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       m_variables->tauSFLoose[ivar] *= m_taus[itau].SFLoose[ivar];
     }
   }
+
+  //normalise variations
+  for ( auto syst : m_tau_sf_names ) {
+      auto ivar = syst.first;
+      if( ivar == top::topSFSyst::nominal ) continue;
+      m_variables->tauSFTight[ivar] /= m_variables->tauSFTight[top::topSFSyst::nominal];
+      m_variables->tauSFLoose[ivar] /= m_variables->tauSFLoose[top::topSFSyst::nominal];
+    }
 }

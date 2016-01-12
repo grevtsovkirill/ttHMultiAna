@@ -1,5 +1,6 @@
 2016-01-12 David Hohn <david.hohn@cern.ch>
 	* remove lepton and tau SF systematic from systematic trees
+	* normalise systematic event weights
 
 2016-01-11 Peter Onyisi <ponyisi@cern.ch>
 	* Some additional tweaks & fixes to lepton SF & systematics
