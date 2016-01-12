@@ -47,7 +47,7 @@ namespace ttHMultilepton {
     float lepSFObjTight[MAXSYST];
     float tauSFTight[MAXSYST];
     float tauSFLoose[MAXSYST];
-    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler);
+    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler, bool doSFSystematics);
     void Clear() { memset(this, 0, sizeof(Variables)); }
   };
 }

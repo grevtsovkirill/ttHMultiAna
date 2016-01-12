@@ -88,6 +88,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::string m_sysName;
   std::shared_ptr<top::TopConfig> m_config;
   bool m_doSystematics;
+  bool m_doSFSystematics;
   
   TH1* m_eleCutflow;
   TH1* m_muCutflow;

@@ -481,6 +481,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   // scale factors
   for (const auto systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
+    if( !m_doSFSystematics && ivar != 0 ) continue; // break after doing nominal
     lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false);
     lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true);
     lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false);
@@ -525,6 +526,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   // scale factors
   for (const auto systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
+    if( !m_doSFSystematics && ivar != 0 ) continue;
     // I know the loose/tight swap looks weird, but it's intentional
     lep.SFIDLoose[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, false);
     lep.SFIDTight[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, true);
@@ -716,8 +718,10 @@ ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& 
 
   for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
-    MLTau.SFTight[ivar] = m_sfRetriever->tauSF(xTau, ivar, /*isLoose = */ false);
-    MLTau.SFLoose[ivar] = m_sfRetriever->tauSF(xTau, ivar, true);
+    if( !m_doSFSystematics && ivar != 0 ) continue;
+    // AnalysisTop tight/loose and our tight/loose are reversed
+    MLTau.SFTight[ivar] = m_sfRetriever->tauSF(xTau, ivar, /*isLoose = */ true);
+    MLTau.SFLoose[ivar] = m_sfRetriever->tauSF(xTau, ivar, false);
   }
 }
 

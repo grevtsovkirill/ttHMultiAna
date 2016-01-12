@@ -21,6 +21,7 @@
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
   m_outputFile(0),
   m_doSystematics(false),
+  m_doSFSystematics(true),
   m_sfRetriever(nullptr),
   configTool("xAODConfigTool"),
   trigDecTool("TrigDecTool"),
@@ -710,7 +711,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     for (size_t idx = 0; idx < TAU_ARR_SIZE; ++idx) {
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
-    m_variables->BootstrapTree(systematicTree, this);
+    m_doSFSystematics = systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue());
+    m_variables->BootstrapTree(systematicTree, this, m_doSFSystematics);
   }
 
   // dont mix MC and data in the same job
@@ -745,6 +747,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   std::size_t sysHash = event.m_hashValue;
   m_sysName = m_config->systematicName(sysHash);
 
+  //SF systematics only in Nominal tree
+  m_doSFSystematics = event.m_hashValue == m_config->nominalHashValue();
+
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
   m_leptonTrigSF_weight = 1.;
@@ -761,8 +766,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       //nominal tauSF
       m_weight_tauSF = m_sfRetriever->tauSF(event, top::topSFSyst::nominal);
       
-      //do sys weights only in "nominal" sample
-      if(event.m_hashValue == m_config->nominalHashValue() ){
+      //do sys weights only in "nominal" tree
+      if( m_doSFSystematics ){
       
 	m_pileup_weight_UP = m_sfRetriever->pileupSF( event, +1 ); // up variation
 	m_pileup_weight_DOWN = m_sfRetriever->pileupSF( event, -1 ); // down variation
@@ -1005,6 +1010,12 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->lepSFObjLoose[ivar] = 1;
     m_variables->lepSFObjTight[ivar] = 1;
   }
+  for ( auto systvar : m_tau_sf_names ) {
+    auto ivar = systvar.first;
+    m_variables->tauSFTight[ivar] = 1;
+    m_variables->tauSFLoose[ivar] = 1;
+  }
+  
   // The following: index 0 = 1-eff(mc), index 1 = 1-eff(data)
   //  double oneMinusTrigEffLoose[2]{1,1}, oneMinusTrigEffTight[2]{1,1};
   double oneMinusTrigEffLoose[MAXSYST][2], oneMinusTrigEffTight[MAXSYST][2];
@@ -1073,11 +1084,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     }
     break;
   default:
-    for (const auto systvar : m_lep_sf_names) {
-      auto ivar = systvar.first;
-      m_variables->lepSFTrigLoose[ivar] = 1;
-      m_variables->lepSFTrigTight[ivar] = 1;
-    }
     return;
   }
   for (const auto systvar : m_lep_sf_names) {
@@ -1097,16 +1103,11 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
   }
 
   //taus
-  for ( auto syst : m_tau_sf_names ) {
-    m_variables->tauSFTight[syst.first] = 1;
-    m_variables->tauSFLoose[syst.first] = 1;
-  }
-  
-  for ( unsigned int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {
+  for ( int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {
     for ( auto syst : m_tau_sf_names ) {
       auto ivar = syst.first;
-      m_variables->tauSFTight[syst.first] *= m_taus[itau].SFTight[ivar];
-      m_variables->tauSFLoose[syst.first] *= m_taus[itau].SFLoose[ivar];
+      m_variables->tauSFTight[ivar] *= m_taus[itau].SFTight[ivar];
+      m_variables->tauSFLoose[ivar] *= m_taus[itau].SFLoose[ivar];
     }
   }
 }

@@ -4,7 +4,7 @@
 
 using boost::format;
 
-void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler) {
+void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler, bool doSFSystematics) {
   tree->makeOutputVariable(onelep_type,   "onelep_type");
   tree->makeOutputVariable(dilep_type,    "dilep_type");
   tree->makeOutputVariable(trilep_type,   "trilep_type");
@@ -52,38 +52,51 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   //  tree->makeOutputVariable(lepSFIDTight, "lepSFIDTight");
   //  tree->makeOutputVariable(lepSFTrigLoose, "lepSFTrigLoose");
   //  tree->makeOutputVariable(lepSFTrigTight, "lepSFTrigTight");
-  for (const auto systvar : ntupler->m_lep_sf_names) {
-    std::string thisname = systvar.first == 0 ? "" : "_" + systvar.second;
-    bool dotrig = false;
-    bool doobj = false;
-    if (systvar.first == top::topSFSyst::nominal) {
-      dotrig = doobj = true;
-    } else if (
-	       (top::topSFSyst::EL_SF_Trigger_UP <= systvar.first &&
-		systvar.first <= top::topSFSyst::EL_SF_Trigger_DOWN)
-	       ||
-	       (top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
-		systvar.first <= top::topSFSyst::MU_SF_Trigger_SYST_DOWN)
-	       ) {
-      if (!(top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
-	    systvar.first <= top::topSFSyst::MU_SF_Trigger_DOWN)) {
-	dotrig = true;
+
+  //nominal weights
+  tree->makeOutputVariable(lepSFTrigLoose[top::topSFSyst::nominal], "lepSFTrigLoose");
+  tree->makeOutputVariable(lepSFTrigTight[top::topSFSyst::nominal], "lepSFTrigTight");
+  tree->makeOutputVariable(lepSFObjLoose [top::topSFSyst::nominal], "lepSFObjLoose");
+  tree->makeOutputVariable(lepSFObjTight [top::topSFSyst::nominal], "lepSFObjTight");
+  tree->makeOutputVariable(tauSFTight    [top::topSFSyst::nominal], "tauSFTight");
+  tree->makeOutputVariable(tauSFLoose    [top::topSFSyst::nominal], "tauSFLoose");
+
+  if(doSFSystematics) {
+    for (const auto systvar : ntupler->m_lep_sf_names) {
+      if( systvar.first == top::topSFSyst::nominal ) continue; //nominal is done outside loop
+      std::string thisname = "_" + systvar.second;
+      bool dotrig = false;
+      bool doobj = false;
+
+      if (
+	  (top::topSFSyst::EL_SF_Trigger_UP <= systvar.first &&
+	   systvar.first <= top::topSFSyst::EL_SF_Trigger_DOWN)
+	  ||
+	  (top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
+	   systvar.first <= top::topSFSyst::MU_SF_Trigger_SYST_DOWN)
+	  ) {
+	if (!(top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
+	      systvar.first <= top::topSFSyst::MU_SF_Trigger_DOWN)) {
+	  dotrig = true;
+	}
+      } else {
+	doobj = true;
       }
-    } else {
-      doobj = true;
+      if (dotrig) {
+	tree->makeOutputVariable(lepSFTrigLoose[systvar.first], "lepSFTrigLoose" + thisname);
+	tree->makeOutputVariable(lepSFTrigTight[systvar.first], "lepSFTrigTight" + thisname);
+      }
+      if (doobj) {
+	tree->makeOutputVariable(lepSFObjLoose[systvar.first], "lepSFObjLoose" + thisname);
+	tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);
+      }
     }
-    if (dotrig) {
-      tree->makeOutputVariable(lepSFTrigLoose[systvar.first], "lepSFTrigLoose" + thisname);
-      tree->makeOutputVariable(lepSFTrigTight[systvar.first], "lepSFTrigTight" + thisname);
+    for ( auto systvar : ntupler->m_tau_sf_names) {
+      if( systvar.first == top::topSFSyst::nominal ) continue; //nominal is done outside loop
+      std::string thisname = "_" + systvar.second;
+      tree->makeOutputVariable(tauSFTight[systvar.first], "tauSFTight" + thisname);
+      tree->makeOutputVariable(tauSFLoose[systvar.first], "tauSFLoose" + thisname);
     }
-    if (doobj) {
-      tree->makeOutputVariable(lepSFObjLoose[systvar.first], "lepSFObjLoose" + thisname);
-      tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);
-    }
-  }
-  for ( auto systvar : ntupler->m_tau_sf_names) {
-    std::string thisname = systvar.first == 0 ? "" : "_" + systvar.second;
-    tree->makeOutputVariable(tauSFTight[systvar.first], "tauSFTight" + thisname);
-    tree->makeOutputVariable(tauSFLoose[systvar.first], "tauSFLoose" + thisname);
-  }
+
+  }// endif doSFSystematics
 }
