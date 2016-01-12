@@ -47,6 +47,12 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isolationFixedCutLoose, "lep_isolationFixedCutLoose_", index);
   // trigger matching
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
+  // truth matching
+  CreateBranch(tree, &isPrompt, "lep_isPrompt_", index);
+  // bremmstrahlung electron (~ QFlip)
+  CreateBranch(tree, &isBremsElec, "lep_isBremsElec_", index);
+  // fake lepton (non-prompt and NOT QFlip)
+  CreateBranch(tree, &isFakeLep, "lep_isFakeLep_", index);
 
   // SFs
   CreateBranch(tree, &SFIDLoose[0], "lep_SFIDLoose_", index);

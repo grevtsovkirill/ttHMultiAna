@@ -106,6 +106,9 @@ namespace ttHMultilepton {
     int     D3PDIndex;
     int     Truth_parent_particle_ID;
     int     Truth_particle_ID;
+    char    isPrompt;
+    char    isBremsElec;
+    char    isFakeLep;
 
     float   topoEtcone20;
     float   topoEtcone30;

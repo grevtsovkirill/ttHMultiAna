@@ -386,7 +386,6 @@ void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.Z0SinTheta = part.auxdataConst<float>("z0sintheta");
 }
 
-
 float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSFSyst SFSyst)
 {
   float sf(1.);
@@ -462,6 +461,28 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
  
+  // truth matching, fakes, QMisId
+  int truthType = -99;
+  int truthOrigin = -99;
+
+  truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
+  truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
+
+  if (truthType == 2 || truthType == 6)
+    lep.isPrompt = 1;
+  else
+    lep.isPrompt = 0;
+
+  if (truthOrigin == 5 && truthType == 4) // assuming most QFlip come from trident events
+    lep.isBremsElec = 1;
+  else
+    lep.isBremsElec = 0;
+
+  if (!(truthType == 2 || truthType == 6) && !(truthOrigin == 5 && truthType == 4))
+    lep.isFakeLep = 1;
+  else
+    lep.isFakeLep = 0;
+
   // trigger matching, electron pt > 25 GeV
   if (!m_isMC && el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
     lep.isTrigMatch = 1;
@@ -514,6 +535,41 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
     lep.isTrigMatch = 1;
   else
     lep.isTrigMatch = 0;
+
+  // truth matching, fakes, QMisId
+  int truthType = -99;
+  int truthOrigin = -99;
+
+  const xAOD::TruthParticle* matched_truth_muon=0;
+  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+    if(link.isValid()){
+      matched_truth_muon = *link;
+      truthOrigin = matched_truth_muon->auxdata<int>("truthOrigin");
+    }
+  }
+
+  const xAOD::TrackParticle* idtp=0;
+  ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+  if(idtpLink.isValid()){
+    idtp = *idtpLink;
+    truthType = idtp->auxdata<int>("truthType");
+  }
+ 
+  if (truthType == 2 || truthType == 6)
+    lep.isPrompt = 1;
+  else
+    lep.isPrompt = 0;
+
+  if (truthOrigin == 5 && truthType == 4) // assuming most QFlip come from trident events
+    lep.isBremsElec = 1;
+  else
+    lep.isBremsElec = 0;
+
+  if (!(truthType == 2 || truthType == 6) && !(truthOrigin == 5 && truthType == 4))
+    lep.isFakeLep = 1;
+  else
+    lep.isFakeLep = 0;
 
   // isolation variables
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
