@@ -41,7 +41,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
 									topConfig->electronVetoLArCrack(), 
 									topConfig->electronID(), 
 									topConfig->electronIDLoose(), 
-									electronIsolation);
+									nullptr);
     objectSelection->electronSelection( electronSelection );
   } else {
     std::cout << "\nHo hum\n";
@@ -53,7 +53,8 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
   }
 
   auto muonIsolation = new top::StandardIsolation(topConfig->muonIsolation(), topConfig->muonIsolationLoose()  );
-  objectSelection->muonSelection(new ttHMultilepton::MuonMC15(topConfig->muonPtcut(), muonIsolation) ); 
+  auto muonSelection = new ttHMultilepton::MuonMC15(topConfig->muonPtcut(), nullptr); 
+  objectSelection->muonSelection( muonSelection );
   objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), /*jvtmin*/ 0.64 ));
 
   objectSelection->tauSelection( new top::TauMC15() );
