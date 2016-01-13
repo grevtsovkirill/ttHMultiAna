@@ -739,9 +739,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   // only save selected events
-  //if(!event.m_saveEvent) {
-  // return;
-  //}
+  if(!event.m_saveEvent) {
+    return;
+  }
 
   //unique name for selected containers
   std::size_t sysHash = event.m_hashValue;

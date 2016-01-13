@@ -38,7 +38,6 @@ ElectronID LooseAndBLayerLH
 ElectronIDLoose LooseAndBLayerLH
 ElectronPt 5000.
 ElectronIsolation None
-ElectronIsoSFs False
 
 #Muon cuts
 MuonQuality Loose

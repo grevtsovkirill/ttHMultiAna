@@ -45,7 +45,6 @@ DoSystematics True
 ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 10000.
-ElectronIsoSFs False
 ElectronIsolation Loose
 ElectronIsolationLoose FixedCutTight
 
@@ -86,6 +85,7 @@ TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedi
 SELECTION loose
 INITIAL
 COUNTHISTO
+NLEPTON 10000 >= 2
 JETCLEAN LooseBad
 #TRIGDEC HLT_mu26_imedium 
 #TRIGMATCH HLT_mu26_imedium 
