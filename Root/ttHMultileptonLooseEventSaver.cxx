@@ -632,6 +632,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       //substructure
+
+      /* apparently catching exceptions can be slow, so lets not do this in every event for no reason
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  int decayMode = 0;
 	  tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
@@ -646,6 +648,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  return tau.phiPanTauCellBased();
 	}, *systematicTree, std::string(tauprefix+"phiPanTau").c_str());
+      */
+
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
 
@@ -1111,4 +1115,18 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       m_variables->tauSFTight[ivar] /= m_variables->tauSFTight[top::topSFSyst::nominal];
       m_variables->tauSFLoose[ivar] /= m_variables->tauSFLoose[top::topSFSyst::nominal];
     }
+
+  //naaaaan
+  for ( auto syst : m_lep_sf_names ) {
+    auto ivar = syst.first;
+    if( m_variables->lepSFTrigLoose[ivar] != m_variables->lepSFTrigLoose[ivar] ) {
+      //std::cout<<"nanananana"<<std::endl;
+      m_variables->lepSFTrigLoose[ivar] = 1;
+    }
+    if( m_variables->lepSFTrigTight[ivar] != m_variables->lepSFTrigTight[ivar] ) {
+      //std::cout<<"nanananana"<<std::endl;
+      m_variables->lepSFTrigTight[ivar] = 1;
+    }
+    
+  }
 }
