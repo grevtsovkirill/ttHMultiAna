@@ -122,22 +122,22 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //Cutflow histograms
   m_eleCutflow = new TH1I("eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
   int idx = 1;
-  for (const auto label : { "initial", "pt", "eta", "ident", "z0sinth", "d0sig", "iso", "e-#mu OR", "e-e OR"}) {
+  for (const auto& label : { "initial", "pt", "eta", "ident", "z0sinth", "d0sig", "iso", "e-#mu OR", "e-e OR"}) {
     m_eleCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
   m_muCutflow = new TH1I("muCutflow", "Muon cutflow", 10, 0.5, 10.5);
   idx = 1;
-  for (const auto label : { "initial", "eta/qual", "pt", "z0sinth", "d0sig", "iso", "#mu-jet OR"}) {
+  for (const auto& label : { "initial", "eta/qual", "pt", "z0sinth", "d0sig", "iso", "#mu-jet OR"}) {
     m_muCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
   m_jetCutflow = new TH1I("jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
   idx = 1;
-  for (const auto label : { "initial", "cleaning", "pt", "eta", "jvt", "jet-e OR", "jet-#tau OR"}) {
+  for (const auto& label : { "initial", "cleaning", "pt", "eta", "jvt", "jet-e OR", "jet-#tau OR"}) {
     m_jetCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
   m_tauCutflow = new TH1I("tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
   idx = 1;
-  for (const auto label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "EleOLR", "#tau-e,#mu OR"}) {
+  for (const auto& label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "EleOLR", "#tau-e,#mu OR"}) {
     m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
   
@@ -1000,14 +1000,14 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
   m_variables->lepSFIsoTight = 1;
   m_variables->lepSFReco = 1;
   m_variables->lepSFTTVA = 1;
-  for (const auto systvar : m_lep_sf_names) {
+  for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     m_variables->lepSFTrigLoose[ivar] = 1;
     m_variables->lepSFTrigTight[ivar] = 1;
     m_variables->lepSFObjLoose[ivar] = 1;
     m_variables->lepSFObjTight[ivar] = 1;
   }
-  for ( auto systvar : m_tau_sf_names ) {
+  for (const auto& systvar : m_tau_sf_names ) {
     auto ivar = systvar.first;
     m_variables->tauSFTight[ivar] = 1;
     m_variables->tauSFLoose[ivar] = 1;
@@ -1032,7 +1032,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       m_variables->lepSFIsoTight *= m_leptons[ilep].SFIsoTight[0];
       m_variables->lepSFReco *= m_leptons[ilep].SFReco[0];
       m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA[0];
-      for (const auto systvar : m_lep_sf_names) {
+      for (const auto& systvar : m_lep_sf_names) {
 	auto ivar = systvar.first;
 	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
 	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
@@ -1053,7 +1053,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->lepSFIsoTight *= m_leptons[0].SFIsoLoose[0];
     m_variables->lepSFReco *= m_leptons[0].SFReco[0];
     m_variables->lepSFTTVA *= m_leptons[0].SFTTVA[0];
-    for (const auto systvar : m_lep_sf_names) {
+    for (const auto& systvar : m_lep_sf_names) {
       auto ivar = systvar.first;
       m_variables->lepSFObjLoose[ivar] *= m_leptons[0].SFObjLoose[ivar];
       m_variables->lepSFObjTight[ivar] *= m_leptons[0].SFObjLoose[ivar];
@@ -1069,7 +1069,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       m_variables->lepSFIsoTight *= m_leptons[ilep].SFIsoTight[0];
       m_variables->lepSFReco *= m_leptons[ilep].SFReco[0];
       m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA[0];
-      for (const auto systvar : m_lep_sf_names) {
+      for (const auto& systvar : m_lep_sf_names) {
 	auto ivar = systvar.first;
 	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
 	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
@@ -1083,7 +1083,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
   default:
     return;
   }
-  for (const auto systvar : m_lep_sf_names) {
+  for (const auto& systvar : m_lep_sf_names) {
     const auto ivar = systvar.first;
     if (ivar == top::topSFSyst::nominal) continue;
     m_variables->lepSFObjLoose[ivar] /= m_variables->lepSFObjLoose[0];
@@ -1092,7 +1092,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
 
   m_variables->lepSFTrigLoose[0] = oneMinusTrigEffLoose[0][0] != 1 ? (1-oneMinusTrigEffLoose[0][1])/(1-oneMinusTrigEffLoose[0][0]) : 1;
   m_variables->lepSFTrigTight[0] = oneMinusTrigEffTight[0][0] != 1 ? (1-oneMinusTrigEffTight[0][1])/(1-oneMinusTrigEffTight[0][0]) : 1;
-  for (const auto systvar : m_lep_sf_names) {
+  for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if (ivar == top::topSFSyst::nominal) continue;
     m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_variables->lepSFTrigLoose[0] : 1;

@@ -500,13 +500,15 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
   
   // scale factors
-  for (const auto systvar : m_lep_sf_names) {
+  for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue; // break after doing nominal
     lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false);
     lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true);
     lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false);
     lep.SFTrigTight[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, true);
+    if (lep.SFTrigLoose[ivar] == 0) lep.SFTrigLoose[ivar] = 1;
+    if (lep.SFTrigTight[ivar] == 0) lep.SFTrigTight[ivar] = 1;
     lep.SFIsoLoose[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, false);
     lep.SFIsoTight[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, true);
     lep.SFReco[ivar] = m_sfRetriever->electronSF_Reco(el, ivar);
@@ -580,7 +582,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
 
   // scale factors
-  for (const auto systvar : m_lep_sf_names) {
+  for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // I know the loose/tight swap looks weird, but it's intentional

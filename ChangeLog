@@ -1,3 +1,6 @@
+2016-01-13 Peter Onyisi
+	* some minor efficiency improvements, avoid setting zero electron SFs
+
 2016-01-13 David Hohn <david.hohn@cern.ch>
 	* tag ttHMultiAna-00-01-00
 	* major version for systematics :)
@@ -15,6 +18,9 @@
 	* remove old/unused SFs
 	* NaN in lepSFTrig variations observed, set to 1
 	* Set AutoFlush Zero
+
+2016-01-12 Peter Onyisi <ponyisi@cern.ch>
+	* Add some Z-finding info
 
 2016-01-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* included flags isPrompt, isBremsElec, and isFakeLep
