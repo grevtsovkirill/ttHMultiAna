@@ -38,12 +38,12 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(4);
-    if (fabs(elItr->auxdataConst<float>("z0sintheta")) > 2) {
+    if (fabs(elItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
       //std::cout << "Fail z0sintheta" << std::endl;
       continue;
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(5);
-    if (fabs(elItr->auxdataConst<float>("d0significance")) > 10) {
+    if (fabs(elItr->auxdataConst<float>("d0sig")) > 10) {
       //std::cout << "Fail d0sig" << std::endl;
       continue;
     }
@@ -81,11 +81,11 @@ ttHMultileptonLooseEventSaver::SelectMuons(const top::Event& event) {
       continue;
     }    
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(3);
-    if (fabs(muItr->auxdataConst<float>("z0sintheta")) > 2) {
+    if (fabs(muItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(4);
-    if (fabs(muItr->auxdataConst<float>("d0significance")) > 10) {
+    if (fabs(muItr->auxdataConst<float>("d0sig")) > 10) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(5);
@@ -382,8 +382,8 @@ void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
 }
 
 void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
-  lep.sigd0PV = part.auxdataConst<float>("d0significance");
-  lep.Z0SinTheta = part.auxdataConst<float>("z0sintheta");
+  lep.sigd0PV = part.auxdataConst<float>("d0sig");
+  lep.Z0SinTheta = part.auxdataConst<float>("delta_z0_sintheta");
 }
 
 float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSFSyst SFSyst)

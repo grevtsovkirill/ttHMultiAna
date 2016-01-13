@@ -6,6 +6,7 @@
 	* Selector that cuts on sum of electron and muon
 	* cleanup obsolete options in config, NLepton cut in Sys config
 	* do JVT cut and lepton Isolation in Top
+	* use impact parameters from Top, dont recompute
 
 2016-01-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* included flags isPrompt, isBremsElec, and isFakeLep
