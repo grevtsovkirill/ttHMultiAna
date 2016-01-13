@@ -1,4 +1,8 @@
 2016-01-13 David Hohn <david.hohn@cern.ch>
+	* tag ttHMultiAna-00-01-00
+	* major version for systematics :)
+
+2016-01-13 David Hohn <david.hohn@cern.ch>
 	* add pileup reweighting configs for full stat ttbar dilep and tH, WtH, tZ
 	  generated with AthAnalysiBase,2.3.39
 	* strawman TTVA cuts
