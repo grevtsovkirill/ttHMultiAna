@@ -28,7 +28,6 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
   m_mcWeight(0.),
   m_pileup_weight(0.),
-  m_leptonTrigSF_weight(0.),
   m_bTagSF_weight(0.),
   m_eventNumber(0),
   m_runNumber(0),
@@ -276,9 +275,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   for (auto systematicTree : m_treeManagers){
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
-    systematicTree->makeOutputVariable(m_leptonTrigSF_weight, "lepTrigSFEventWeight");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
-    systematicTree->makeOutputVariable(m_weight_tauSF,  "weight_tauSF");
     
     if (systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue() ) ) {
 
@@ -286,20 +283,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_pileup_weight_UP,   "pileupEventWeight_UP");
       systematicTree->makeOutputVariable(m_pileup_weight_DOWN, "pileupEventWeight_DOWN");
       
-      //tau SFs
-      systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_UP,
-					 "weight_tauSF_ELEOLR_UP");
-      systematicTree->makeOutputVariable(m_weight_tauSF_ELEOLR_DOWN,
-					 "weight_tauSF_ELEOLR_DOWN");
-      systematicTree->makeOutputVariable(m_weight_tauSF_JETID_UP,
-					 "weight_tauSF_JETID_UP");
-      systematicTree->makeOutputVariable(m_weight_tauSF_JETID_DOWN,
-					 "weight_tauSF_JETID_DOWN");
-      systematicTree->makeOutputVariable(m_weight_tauSF_RECO_UP,
-					 "weight_tauSF_RECO_UP");
-      systematicTree->makeOutputVariable(m_weight_tauSF_RECO_DOWN,
-					 "weight_tauSF_RECO_DOWN");
-
       //btag
       //B 
       for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(); ++i) {
@@ -754,7 +737,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
-  m_leptonTrigSF_weight = 1.;
   m_mcChannelNumber = 0;
  
   if (top::isSimulation(event)){
@@ -762,12 +744,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mcWeight        = event.m_info->mcEventWeight(); 
     if(m_sfRetriever){
       m_pileup_weight   = m_sfRetriever->pileupSF(event);
-      //m_leptonTrigSF_weight = m_sfRetriever->triggerSF(event,top::topSFSyst::nominal);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
 
-      //nominal tauSF
-      m_weight_tauSF = m_sfRetriever->tauSF(event, top::topSFSyst::nominal);
-      
       //do sys weights only in "nominal" tree
       if( m_doSFSystematics ){
       
@@ -824,17 +802,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_weight_bTagSF_77_extrapolation_from_charm_down /= m_bTagSF_weight;
 	
 	
-	
-	// Tau-electron overlap removal
-	m_weight_tauSF_ELEOLR_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP);
-	m_weight_tauSF_ELEOLR_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN);
-	// Tau Jet IDWP
-	m_weight_tauSF_JETID_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_UP);
-	m_weight_tauSF_JETID_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN);
-	// Tau reconstruction
-	m_weight_tauSF_RECO_UP   = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_UP);
-	m_weight_tauSF_RECO_DOWN = m_sfRetriever->tauSF(event, top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN);
-      
       } //end if isNominal
     } //end if m_sfRetriever
   } //end if isSimulation

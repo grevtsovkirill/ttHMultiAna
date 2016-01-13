@@ -136,7 +136,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_pileup_weight;
   double m_pileup_weight_UP;
   double m_pileup_weight_DOWN;
-  double m_leptonTrigSF_weight;
   //btag SF weights
   double m_bTagSF_weight;
   std::vector<float> m_weight_bTagSF_77_eigen_B_up;
@@ -149,14 +148,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_weight_bTagSF_77_extrapolation_down;
   double m_weight_bTagSF_77_extrapolation_from_charm_up;
   double m_weight_bTagSF_77_extrapolation_from_charm_down;
-  //tau SF weights
-  double m_weight_tauSF;
-  double m_weight_tauSF_ELEOLR_UP;
-  double m_weight_tauSF_ELEOLR_DOWN;
-  double m_weight_tauSF_JETID_UP;
-  double m_weight_tauSF_JETID_DOWN;
-  double m_weight_tauSF_RECO_UP;
-  double m_weight_tauSF_RECO_DOWN;
 
   //event info
   unsigned int m_eventNumber;

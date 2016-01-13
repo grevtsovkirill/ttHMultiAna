@@ -8,6 +8,7 @@
 	* do JVT cut and lepton Isolation in Top
 	* use impact parameters from Top, dont recompute
 	* dont use lepton Isolation from Top, inconsistencies seen
+	* remove old/unused SFs
 
 2016-01-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* included flags isPrompt, isBremsElec, and isFakeLep
