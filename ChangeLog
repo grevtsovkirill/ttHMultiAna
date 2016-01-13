@@ -2,6 +2,7 @@
 	* add pileup reweighting configs for full stat ttbar dilep and tH, WtH, tZ
 	* strawman TTVA cuts
 	* flat tau SFs, bit superfluous with one tau...
+	* Selector that cuts on sum of electron and muon
 
 2016-01-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* included flags isPrompt, isBremsElec, and isFakeLep
