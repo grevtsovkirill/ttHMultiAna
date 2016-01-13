@@ -1,3 +1,6 @@
+2016-01-13 David Hohn <david.hohn@cern.ch>
+	* add pileup reweighting configs for full stat ttbar dilep and tH, WtH, tZ
+
 2016-01-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* included flags isPrompt, isBremsElec, and isFakeLep
 
