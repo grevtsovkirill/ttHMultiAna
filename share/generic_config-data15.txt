@@ -23,7 +23,7 @@ OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 100
+NEvents 0
 
 PRWConfigFiles ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
