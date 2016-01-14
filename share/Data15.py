@@ -130,7 +130,6 @@ TopExamples.grid.Add('data_25ns').datasets = [
 'data15_13TeV.00282431.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432',
 'data15_13TeV.00282455.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432',
 'data15_13TeV.00282457.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432',
-'data15_13TeV.00282625.physics_Main.merge.DAOD_HIGG8D1.f638_m1511_p2432',
 'data15_13TeV.00282625.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432',
 'data15_13TeV.00282630.physics_Main.merge.DAOD_HIGG8D1.f638_m1511_p2432',
 'data15_13TeV.00282631.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432',
