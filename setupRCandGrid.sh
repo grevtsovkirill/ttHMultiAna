@@ -1,10 +1,7 @@
 #! /bin/sh
-echo "Setting up RootCore and requested Top Analysis version..."
-rcSetup Top,2.3.39
+echo "Setting up all the things"
 
-echo "Setting up all grid-related libraries..."
-localSetupPandaClient --noAthenaCheck
-localSetupPyAMI
-localSetupRucioClients
+lsetup "rcsetup Top,2.3.39" panda rucio pyami
+#lsetup knows in which order to do these
 
 echo "Alright - done."

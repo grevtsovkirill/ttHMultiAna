@@ -464,10 +464,11 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   // truth matching, fakes, QMisId
   int truthType = -99;
   int truthOrigin = -99;
-
-  truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
-  truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
-
+  if(m_isMC) {
+    truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
+    truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
+  }
+  
   if (truthType == 2 || truthType == 6)
     lep.isPrompt = 1;
   else
@@ -555,7 +556,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
   if(idtpLink.isValid()){
     idtp = *idtpLink;
-    truthType = idtp->auxdata<int>("truthType");
+    if(m_isMC) truthType = idtp->auxdata<int>("truthType");
   }
  
   if (truthType == 2 || truthType == 6)
@@ -592,7 +593,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
     lep.SFTrigTight[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, true);
     lep.SFIsoLoose[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, false);
     lep.SFIsoTight[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, true);
-    lep.SFTTVA[ivar] = m_sfRetriever->muonSF_TTVA(mu, ivar);
+    lep.SFTTVA[ivar] = m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0;
     lep.SFReco[ivar] = 1;
     lep.EffTrigLoose[ivar] = muonEff_Trigger(mu, m_config->muonQuality(), ivar);
     lep.EffTrigTight[ivar] = muonEff_Trigger(mu, m_config->muonQualityLoose(), ivar);
@@ -796,8 +797,8 @@ ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& 
     auto ivar = syst.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // AnalysisTop tight/loose and our tight/loose are reversed
-    MLTau.SFTight[ivar] = m_sfRetriever->tauSF(xTau, ivar, /*isLoose = */ true);
-    MLTau.SFLoose[ivar] = m_sfRetriever->tauSF(xTau, ivar, false);
+    MLTau.SFTight[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar, /*isLoose = */ true) : 1.0;
+    MLTau.SFLoose[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar, false)               : 1.0;
   }
 }
 

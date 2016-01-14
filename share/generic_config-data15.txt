@@ -23,11 +23,10 @@ OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 0
+NEvents 100
 
-PRWConfigFiles    TopCorrections/prw.410000.partial.e3698_s2608_s2183_r6630_r6264.7vii15.root
+PRWConfigFiles ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
-PRWDefaultChannel 410000
 
 Systematics Nominal
 DynamicKeys DoSystematics

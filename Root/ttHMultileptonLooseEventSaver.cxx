@@ -26,9 +26,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
-  m_mcWeight(0.),
-  m_pileup_weight(0.),
-  m_bTagSF_weight(0.),
+  m_mcWeight(1.),
+  m_pileup_weight(1.),
+  m_bTagSF_weight(1.),
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
@@ -107,6 +107,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   m_config = config;
 
+  // dont mix MC and data in the same job
+  m_isMC = config->isMC();
+  
   // do we want to skim and slim?
   // configured with DynamicKeys in the cuts file
   auto* const settings = top::ConfigurationSettings::get();
@@ -273,11 +276,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
 
   for (auto systematicTree : m_treeManagers){
+    m_doSFSystematics = systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue());
+    if(!m_isMC) m_doSFSystematics = false;
+    
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
     
-    if (systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue() ) ) {
+    if ( m_doSFSystematics ) {
 
       //pileup
       systematicTree->makeOutputVariable(m_pileup_weight_UP,   "pileupEventWeight_UP");
@@ -700,12 +706,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     for (size_t idx = 0; idx < TAU_ARR_SIZE; ++idx) {
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
-    m_doSFSystematics = systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue());
+   
     m_variables->BootstrapTree(systematicTree, this, m_doSFSystematics);
   }
-
-  // dont mix MC and data in the same job
-  m_isMC = config->isMC();
 
   // Shall we do scale factors?
   // apparently not a question anymore
@@ -738,6 +741,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //SF systematics only in Nominal tree
   m_doSFSystematics = event.m_hashValue == m_config->nominalHashValue();
+  if(!m_isMC) m_doSFSystematics = false;
 
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
@@ -747,7 +751,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
     m_mcWeight        = event.m_info->mcEventWeight(); 
     if(m_sfRetriever){
-      m_pileup_weight   = m_sfRetriever->pileupSF(event);
+      m_pileup_weight = m_sfRetriever->pileupSF(event);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
 
       //do sys weights only in "nominal" tree
