@@ -103,7 +103,7 @@ def getSamplesOnEOS(eosMGM,eosPath):
     samples = []
     for f in eosFilesList:
         filename = f.split('/')[-1]
-        dsid = filename[:6]
+        dsid = filename.split('.')[0]
         samples += [Sample(dsid)]
     return samples
 
@@ -154,7 +154,7 @@ def getDoneSamplesOnGRID():
 #============================================================================
 def createJobScript(outDir,dsid,gridDS,eosPath):
     
-    jobScript = '%s.sh' % (dsid)
+    jobScript = '%s_%s.sh' % (productionName, dsid)
     
     file = open(outDir+ '/' + jobScript, 'w') 
     file.write('#!/bin/sh                                                                          \n')
@@ -173,11 +173,11 @@ def createJobScript(outDir,dsid,gridDS,eosPath):
     return jobScript 
 
 #============================================================================
-def SampleHasRunningBJob(sample, runningBJobs):
+def SampleHasRunningBJob(jobName, runningBJobs):
     #runningBJobs is list of strings, output of bjobs
     for bjob in runningBJobs:
         #check if there is still a bjob runnig for this sample
-        if bjob.count(sample.dsid):
+        if bjob.count(jobName):
             return True
 
     return False
@@ -211,28 +211,31 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
 
     eosMGM = 'root://eospublic.cern.ch/'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Nominal/mc'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/data'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Nominal/mc'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Sys/mc'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
     gridNickName = 'dhohn'
-    productionName = 'v3.Nominal'
-    skipRunningCheck = True
+    productionName = 'v3.Data'
+    #productionName = 'v3.Nominal'
+    #productionName = 'v3.Sys'
 
     
     doneSamplesOnGRID = getDoneSamplesOnGRID()
-
+    
     #samples that are done on GRID but not yet on EOS
     samplesCopyEOS = list(set(doneSamplesOnGRID) - set(samplesOnEOS))
-    runningBJobs = subprocess.Popen("bjobs",stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()[0].splitlines()
+    runningBJobs = subprocess.Popen(["bjobs","-lr"],stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()[0].splitlines()
     submitted = 0
     for copySample in samplesCopyEOS:
-        if SampleHasRunningBJob(copySample,runningBJobs):
+        if SampleHasRunningBJob(productionName+'_'+copySample.dsid,runningBJobs):
             print copySample, "has a running job. Wait for it."
             doSubmit = False
         else:
             doSubmit = True
             
-        if doSubmit or skipRunningCheck:
+        if doSubmit:
             outDir = productionName+'/'+copySample.dsid+'_jobdir'
             if not os.path.isdir(outDir):
                 os.makedirs(outDir)

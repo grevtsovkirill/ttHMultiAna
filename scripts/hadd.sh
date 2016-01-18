@@ -2,6 +2,7 @@
 
 function cleanExit {
     rm -rf $TMPDIR/$gridName
+    echo exit $1
     exit $1
 }
 
@@ -22,11 +23,17 @@ mkdir $gridName
 cd $gridName
 
 echo "Will download $gridName"
-rucio download $gridName
+rucio download $gridName|tee rucio.log
 rucioExit=$?
 echo "rucio exit $rucioExit"
 [ $rucioExit -eq 0 ] || cleanExit 1
+grep -q "Files that cannot be downloaded :             0" rucio.log
+[ $? -neq 0 ] || cleanExit 1
+
 cd $gridName
+echo ls -l
+ls -l
+echo
 
 echo "Will hadd $(ls -1 *.root*|wc -l) files"
 hadd -n 5 $fileName *.root*
@@ -41,3 +48,7 @@ xrdcp -f -np $fileName $eosPath/$fileName;
 eoscpExit=$?
 echo "eos cp exit $haddExit"
 [ $eoscpExit -eq 0 ] || cleanExit 3
+
+echo "alles goed"
+
+cleanExit 0
