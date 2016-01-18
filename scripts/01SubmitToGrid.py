@@ -8,7 +8,7 @@ config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
 config.gridUsername  = 'dhohn'
 config.excludedSites = ''
-config.noSubmit      = True
+config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
 config.destSE        = '' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 
@@ -64,6 +64,10 @@ all_samples += samples_wjets_sherpa
 all_samples += samples_ttv_sherpa
 #TopExamples.grid.submit(config, all_samples)
 
+config.suffix = 'v3.x.Nominal'
+specials = TopExamples.grid.Samples(['specials'])
+TopExamples.grid.submit(config, specials)
+
 #alternative zjets, wjets
 samples_zjets_mg = TopExamples.grid.Samples(['systematic_production_zjets_mg'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2434', samples_zjets_mg)
@@ -81,7 +85,11 @@ config.memory = ''
 config.maxNFilesPerJob = ''
 
 data = TopExamples.grid.Samples(['data_25ns'])
-TopExamples.grid.submit(config, data)
+#TopExamples.grid.submit(config, data)
+
+config.suffix = 'v3.Data.x'
+data = TopExamples.grid.Samples(['data_25ns_broken'])
+#TopExamples.grid.submit(config, data)
 
 
 #################################################################################

@@ -18,6 +18,13 @@ import TopExamples.ami
 #'dataBlah2..',
 #]
 
+#fine: user.dhohn.00282625.physics_Main.DAOD_HIGG8D1.f638_m1511_p2432.v3.Data/
+#superseded by f640
+
+TopExamples.grid.Add('data_25ns_broken').datasets = [
+'data15_13TeV.00283780.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+]
+
 TopExamples.grid.Add('data_25ns').datasets = [
 'data15_13TeV.00266904.physics_Main.merge.DAOD_HIGG8D1.r6944_p2410_p2432',
 'data15_13TeV.00266919.physics_Main.merge.DAOD_HIGG8D1.r6944_p2410_p2432',

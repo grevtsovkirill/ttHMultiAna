@@ -312,3 +312,8 @@ TopExamples.grid.Add('systematic_production_ttv_sherpa').datasets = [
 TopExamples.grid.Add('zjets_sherpa_p2480').datasets = [
 'mc15_13TeV.361397.Sherpa_CT10_Zmumu_Pt0_70_CFilterBVeto.merge.DAOD_HIGG8D1.e3651_s2586_s2174_r7267_r6282_p2480',
 ]
+
+TopExamples.grid.Add('specials').datasets = [
+'mc15_13TeV.361325.Sherpa_CT10_Wmunu_Pt0_70_CFilterBVeto.merge.DAOD_HIGG8D1.e3651_s2586_s2174_r6869_r6282_p2434',
+'mc15_13TeV.361326.Sherpa_CT10_Wmunu_Pt0_70_BFilter.merge.DAOD_HIGG8D1.e3651_s2608_s2183_r6869_r6282_p2434'
+]
