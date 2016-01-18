@@ -1,3 +1,6 @@
+2016-01-18 David Hohn <david.hohn@cern.ch>
+	* full switch to calib eta in JVT cut, we were doing OR with EMscale eta jvt cut jets, should be tiny effect
+
 2016-01-15 David Hohn <david.hohn@cern.ch>
 	* added script for downloading from grid, hadding and uploading to eos
 	* cobbled together from stuff I had lying around and a couple of tricks Chris had
