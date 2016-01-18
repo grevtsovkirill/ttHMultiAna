@@ -43,7 +43,7 @@ class Sample:
         return "DSID: %s   Size: %s"  % (self.dsid, self.size)
 
     def __hash__(self):
-        return int(self.dsid)
+        return hash(self.dsid)
 
 #============================================================================
 class BJob:
@@ -211,14 +211,14 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
 
     eosMGM = 'root://eospublic.cern.ch/'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/data'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Nominal/mc'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/data'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Nominal/mc'
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Sys/mc'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
     gridNickName = 'dhohn'
-    productionName = 'v3.Data'
-    #productionName = 'v3.Nominal'
+    #productionName = 'v3.Data'
+    productionName = 'v3.Nominal'
     #productionName = 'v3.Sys'
 
     

@@ -28,7 +28,7 @@ rucioExit=$?
 echo "rucio exit $rucioExit"
 [ $rucioExit -eq 0 ] || cleanExit 1
 grep -q "Files that cannot be downloaded :             0" rucio.log
-[ $? -neq 0 ] || cleanExit 1
+[ $? -ne 0 ] || cleanExit 1
 
 cd $gridName
 echo ls -l
