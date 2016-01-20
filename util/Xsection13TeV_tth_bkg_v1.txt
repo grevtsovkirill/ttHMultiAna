@@ -16,6 +16,7 @@
  410014           33.989           1.054         1.0    --    -999   1               Powheg                 Wt_inclusive_antitop  Full  
  410015           3.5835           1.054         1.0    --    -999   2               Powheg                      Wt_dilepton_top  Full  
  410016           3.5814           1.054         1.0    --    -999   2               Powheg                  Wt_dilepton_antitop  Full  
+ 410009           73.301             1.0         1.0    --    -999   1               Powheg                 ttbar_hdamp172p5_dil  Full  
 #Extra Top/SingleTop
  410025           2.0517          1.6806         1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full  
  410062           32.384           1.054         1.0    --    -999   2               Powheg                  Wt_DS_inclusive_top  Full  
@@ -267,7 +268,32 @@
  361532           641.87         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np2  Full  
  361533           179.21         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np3  Full  
  361534           71.012         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np4  Full  
+
+# tHbj MadGraph+Herwig
+ 341988                0               1         1.0    --    -999   2      Madgraph+Herwig             tHjb125_gamgam_yt_minus1  Full  
+ 341989       1.2335e-04               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_gamgam_yt_plus1  Full  
+ 341990                0               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_gamgam_yt_plus2  Full  
+ 341991                0               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_bbbar_yt_minus1  Full  
+ 341992         0.031216               1         1.0    --    -999   2      Madgraph+Herwig               tHjb125_bbbar_yt_plus1  Full  
+ 341993                0               1         1.0    --    -999   2      Madgraph+Herwig               tHjb125_bbbar_yt_plus2  Full  
+ 341994                0               1         1.0    --    -999   2      Madgraph+Herwig                tHjb125_lep_yt_minus1  Full  
+ 341995         0.016479               1         1.0    --    -999   2      Madgraph+Herwig                 tHjb125_lep_yt_plus1  Full  
+ 341996                0               1         1.0    --    -999   2      Madgraph+Herwig                 tHjb125_lep_yt_plus2  Full  
+ 341997                0               1         1.0    --    -999   2      Madgraph+Herwig              tWH125_gamgam_yt_minus1  Full  
+ 341998       5.7000e-05               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_gamgam_yt_plus1  Full  
+ 341999                0               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_gamgam_yt_plus2  Full  
+ 342000                0               1         1.0    --    -999   2      Madgraph+Herwig                 tWH125_lep_yt_minus1  Full  
+ 342001         0.007615               1         1.0    --    -999   2      Madgraph+Herwig                  tWH125_lep_yt_plus1  Full  
+ 342002                0               1         1.0    --    -999   2      Madgraph+Herwig                  tWH125_lep_yt_plus2  Full  
+ 342003                0               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_bbbar_yt_minus1  Full  
+ 342004         0.014425               1         1.0    --    -999   2      Madgraph+Herwig                tWH125_bbbar_yt_plus1  Full  
+ 342005                0               1         1.0    --    -999   2      Madgraph+Herwig                tWH125_bbbar_yt_plus2  Full  
   
+
+
+
+
+
 
 
 

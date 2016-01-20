@@ -1,3 +1,6 @@
+2016-01-20 Harish Potti <harish.potti@cern.ch>
+	* Xsection for tHjb and WtH samples
+	
 2016-01-18 David Hohn <david.hohn@cern.ch>
 	* full switch to calib eta in JVT cut, we were doing OR with EMscale eta jvt cut jets, should be tiny effect
 
