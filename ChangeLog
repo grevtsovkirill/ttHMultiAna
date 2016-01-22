@@ -1,5 +1,6 @@
 2016-01-22 David Hohn <david.hohn@cern.ch>
 	* added lep_EtaBE2_*
+	* migrate to Top,2.3.40
 
 2016-01-20 Harish Potti <harish.potti@cern.ch>
 	* Xsection for tHjb and WtH samples

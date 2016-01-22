@@ -34,8 +34,6 @@ PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276
 PRWDefaultChannel 410009
 
 Systematics Nominal
-DynamicKeys DoSystematics
-DoSystematics False
 
 #Electron cuts
 ElectronID LooseAndBLayerLH
