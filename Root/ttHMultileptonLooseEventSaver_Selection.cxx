@@ -665,7 +665,8 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
   }
 
   std::vector<const TLorentzVector*> p4s;
-  for (short idx = 0; idx < totleptons && idx < LEPTON_ARR_SIZE; ++idx) {
+  short capped_totleptons = std::min(totleptons, LEPTON_ARR_SIZE);
+  for (short idx = 0; idx < capped_totleptons; ++idx) {
     const TLorentzVector* p4;
     int lidx;
     ttHMultilepton::LepType typ;
@@ -684,8 +685,8 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
     //m_variables->Ptll01 = p4_01.Pt();
     //m_variables->DRll01 = p4s[0]->DeltaR(*p4s[1]);
     int zidx[2]{-1,-1};
-    for (int idx1 = 0; idx1 < totleptons-1; ++idx1) {
-      for (int idx2 = idx1+1; idx2 < totleptons; ++idx2) {
+    for (int idx1 = 0; idx1 < capped_totleptons-1; ++idx1) {
+      for (int idx2 = idx1+1; idx2 < capped_totleptons; ++idx2) {
 	TLorentzVector p4sum = *p4s[idx1] + *p4s[idx2];
 	m_variables->Mll[idx1][idx2-1] = p4sum.M();
 	m_variables->Ptll[idx1][idx2-1] = p4sum.Pt();
@@ -698,10 +699,10 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
 	    zidx[0] = idx1; zidx[1] = idx2;
 	  }
 	}
-	for (int idx3 = idx2+1; idx3 < totleptons; ++idx3) {
+	for (int idx3 = idx2+1; idx3 < capped_totleptons; ++idx3) {
 	  TLorentzVector p4sum3 = p4sum + *p4s[idx3];
 	  m_variables->Mlll[idx1][idx2-1][idx3-2] = p4sum3.M();
-	  for (int idx4 = idx3+1; idx4 < totleptons; ++idx4) {
+	  for (int idx4 = idx3+1; idx4 < capped_totleptons; ++idx4) {
 	    TLorentzVector p4sum4 = p4sum3 + *p4s[idx4];
 	    m_variables->Mllll[idx1][idx2-1][idx3-2][idx4-3] = p4sum4.M();
 	  }
