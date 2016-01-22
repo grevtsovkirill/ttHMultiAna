@@ -1,3 +1,6 @@
+2016-01-22 Peter Onyisi
+	* Fix crash on more than five leptons
+
 2016-01-22 David Hohn <david.hohn@cern.ch>
 	* added lep_EtaBE2_*
 	* migrate to Top,2.3.40
@@ -15,6 +18,7 @@
 2016-01-14 David Hohn <david.hohn@cern.ch>
 	* small fixes for data
 
+>>>>>>> .r237479
 2016-01-13 Peter Onyisi
 	* some minor efficiency improvements, avoid setting zero electron SFs
 
