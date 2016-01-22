@@ -31,7 +31,7 @@ namespace ttHMultilepton {
     float  Pt;
     float  Eta;
     float  matchchi2;
-    float  ClEta;
+    float  EtaBE2;
     float  Phi;
     float  Charge;
     float  Px;

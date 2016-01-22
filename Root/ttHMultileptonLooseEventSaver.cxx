@@ -119,6 +119,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     else         std::cout<<"NO SKIM, NO SLIM"<<std::endl;
   }
   catch(std::exception& e) {
+    m_doSystematics = false; //just to be very clear
     std::cout<<"NO SKIM, NO SLIM"<<std::endl;
   }
   

@@ -452,6 +452,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
     //   //std::cout << reg.getName( auxid ) << std::endl;
     // }
 
+  lep.EtaBE2 = el.caloCluster()->etaBE(2);
   CopyIParticle(el, lep);
   CopyIso(el, lep);
   CopyIParam(el, lep);
