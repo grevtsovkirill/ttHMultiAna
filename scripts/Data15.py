@@ -18,14 +18,7 @@ import TopExamples.ami
 #'dataBlah2..',
 #]
 
-#fine: user.dhohn.00282625.physics_Main.DAOD_HIGG8D1.f638_m1511_p2432.v3.Data/
-#superseded by f640
-
-TopExamples.grid.Add('data_25ns_broken').datasets = [
-'data15_13TeV.00283780.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
-]
-
-TopExamples.grid.Add('data_25ns').datasets = [
+TopExamples.grid.Add('data_2015_all').datasets = [
 'data15_13TeV.00266904.physics_Main.merge.DAOD_HIGG8D1.r6944_p2410_p2432',
 'data15_13TeV.00266919.physics_Main.merge.DAOD_HIGG8D1.r6944_p2410_p2432',
 'data15_13TeV.00267073.physics_Main.merge.DAOD_HIGG8D1.r6943_p2410_p2432',
@@ -160,7 +153,77 @@ TopExamples.grid.Add('data_25ns').datasets = [
 'data15_13TeV.00284484.physics_Main.merge.DAOD_HIGG8D1.f644_m1518_p2432',
 ]
 
+#only runs that are actually in grlv73
+TopExamples.grid.Add('data_2015_25ns_only_grlv73').datasets = [
+'data15_13TeV.00276262.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276329.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276336.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276416.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276511.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276689.physics_Main.merge.DAOD_HIGG8D1.f623_m1480_p2432'
+'data15_13TeV.00276778.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276790.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276952.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00276954.physics_Main.merge.DAOD_HIGG8D1.f620_m1480_p2432'
+'data15_13TeV.00278880.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00278912.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00278968.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279169.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279259.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279279.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279284.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279345.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279515.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279598.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279685.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279764.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279813.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279867.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279928.physics_Main.merge.DAOD_HIGG8D1.f628_m1497_p2432'
+'data15_13TeV.00279932.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00279984.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280231.physics_Main.merge.DAOD_HIGG8D1.f630_m1504_p2432'
+'data15_13TeV.00280319.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280368.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280423.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280464.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280500.physics_Main.merge.DAOD_HIGG8D1.f631_m1504_p2432'
+'data15_13TeV.00280520.physics_Main.merge.DAOD_HIGG8D1.f632_m1504_p2432'
+'data15_13TeV.00280614.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280673.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2436'
+'data15_13TeV.00280753.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280853.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280862.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280950.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00280977.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00281070.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00281074.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00281075.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00281317.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00281385.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00281411.physics_Main.merge.DAOD_HIGG8D1.f629_m1504_p2432'
+'data15_13TeV.00282625.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00282631.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00282712.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00282784.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00282992.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00283074.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00283155.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2432'
+'data15_13TeV.00283270.physics_Main.merge.DAOD_HIGG8D1.f640_m1511_p2436'
+'data15_13TeV.00283429.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+'data15_13TeV.00283608.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+'data15_13TeV.00283780.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+'data15_13TeV.00284006.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+'data15_13TeV.00284154.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+'data15_13TeV.00284213.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2436'
+'data15_13TeV.00284285.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2432'
+'data15_13TeV.00284420.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2432'
+'data15_13TeV.00284427.physics_Main.merge.DAOD_HIGG8D1.f643_m1518_p2432'
+'data15_13TeV.00284484.physics_Main.merge.DAOD_HIGG8D1.f644_m1518_p2432'
+]
 
+
+        
 #if __name__ == '__main__':
     #for sample in TopExamples.grid.Samples(['Data15_PeriodAB_repro19', 'Data15_PeriodD_t0pro19']):
         #sample.details()

@@ -8,7 +8,7 @@ config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
 config.gridUsername  = 'dhohn'
 config.excludedSites = ''
-config.noSubmit      = False
+config.noSubmit      = True
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
 config.destSE        = '' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 
@@ -25,17 +25,14 @@ TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2501', samples_p2501)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2501', samples_p2501_high_efficiency)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2434', samples_p2434)
 
-stragglers = TopExamples.grid.Samples(['stragglers'])
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2501', stragglers)
-#TopExamples.grid.submit(config, stragglers)
-
 #submit with default --maxNFilesPerJob
-samples = samples_p2501+samples_p2434
-#TopExamples.grid.submit(config, samples)
+all_samples = samples_p2501+samples_p2434
+TopExamples.grid.submit(config, all_samples)
 
 #submit with --maxNFilesPerJob=1 because many events are expected to pass skimming
 config.maxNFilesPerJob = '1'
-#TopExamples.grid.submit(config, samples_p2501_high_efficiency)
+TopExamples.grid.submit(config, samples_p2501_high_efficiency)
+all_samples += samples_p2501_high_efficiency
 
 ####################################################################################
 #Nominal
@@ -53,20 +50,16 @@ TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2501', samples_wjets_sherpa)
 samples_zjets_sherpa_p2480 = TopExamples.grid.Samples(['zjets_sherpa_p2480'])
 samples_ttv_sherpa = TopExamples.grid.Samples(['systematic_production_ttv_sherpa'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2501', samples_ttv_sherpa)
+#and these only have p2434
+samples_specials = TopExamples.grid.Samples(['specials'])
 
-all_samples = []
-all_samples += samples_p2501
-all_samples += samples_p2434
-all_samples += samples_p2501_high_efficiency
 all_samples += samples_zjets_sherpa
 all_samples += samples_zjets_sherpa_p2480
 all_samples += samples_wjets_sherpa
 all_samples += samples_ttv_sherpa
-#TopExamples.grid.submit(config, all_samples)
+all_sampels += specials
+TopExamples.grid.submit(config, all_samples)
 
-config.suffix = 'v3.x.Nominal'
-specials = TopExamples.grid.Samples(['specials'])
-TopExamples.grid.submit(config, specials)
 
 #alternative zjets, wjets
 samples_zjets_mg = TopExamples.grid.Samples(['systematic_production_zjets_mg'])
@@ -75,7 +68,7 @@ samples_wjets_mg = TopExamples.grid.Samples(['systematic_production_wjets_mg'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1', 'p2434', samples_wjets_mg)
 
 config.suffix = 'v3.alt.Nominal'
-#TopExamples.grid.submit(config, samples_zjets_mg + samples_wjets_mg)
+TopExamples.grid.submit(config, samples_zjets_mg + samples_wjets_mg)
 
 ########################################################################################
 #data
@@ -84,12 +77,8 @@ config.suffix = 'v3.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-data = TopExamples.grid.Samples(['data_25ns'])
-#TopExamples.grid.submit(config, data)
-
-config.suffix = 'v3.Data.x'
-data = TopExamples.grid.Samples(['data_25ns_broken'])
-#TopExamples.grid.submit(config, data)
+data = TopExamples.grid.Samples(['data_2015_25ns_only_grlv73'])
+TopExamples.grid.submit(config, data)
 
 
 #################################################################################

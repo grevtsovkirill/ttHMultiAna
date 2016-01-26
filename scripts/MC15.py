@@ -98,26 +98,6 @@ TopExamples.grid.Add('systematic_production_diboson_mc15a').datasets = [
 'mc15_13TeV.361087.Sherpa_CT10_ZqqZvv.merge.AOD.e3926_s2608_s2183_r6869_r6282',
 ]
 
-TopExamples.grid.Add('stragglers').datasets = [
-#ttV
-'mc15_13TeV.410066.MadGraphPythia8EvtGen_A14NNPDF23LO_ttW_Np0.merge.AOD.e4111_s2608_s2183_r6869_r6282',
-'mc15_13TeV.410067.MadGraphPythia8EvtGen_A14NNPDF23LO_ttW_Np1.merge.AOD.e4111_s2608_s2183_r6869_r6282',
-'mc15_13TeV.410068.MadGraphPythia8EvtGen_A14NNPDF23LO_ttW_Np2.merge.AOD.e4111_s2608_s2183_r6869_r6282',
-'mc15_13TeV.410080.MadGraphPythia8EvtGen_A14NNPDF23_4topSM.merge.AOD.e4111_s2608_s2183_r6869_r6282',
-'mc15_13TeV.410081.MadGraphPythia8EvtGen_A14NNPDF23_ttbarWW.merge.AOD.e4111_s2608_s2183_r6869_r6282',
-
-#tH, WtH, tZ
-'mc15_13TeV.341997.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_gamgam_yt_minus1.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.341998.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_gamgam_yt_plus1.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.341999.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_gamgam_yt_plus2.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.342000.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_lep_yt_minus1.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.342001.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_lep_yt_plus1.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.342002.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_lep_yt_plus2.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.342003.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_bbbar_yt_minus1.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.342004.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_bbbar_yt_plus1.merge.AOD.e4394_s2608_r6869_r6282',
-'mc15_13TeV.342005.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_bbbar_yt_plus2.merge.AOD.e4394_s2608_r6869_r6282',
-]
-
 #all mc15b :)
 TopExamples.grid.Add('systematic_production_zjets_sherpa').datasets = [
 'mc15_13TeV.361372.Sherpa_CT10_Zee_Pt0_70_CVetoBVeto.merge.AOD.e3651_s2586_s2174_r7267_r6282',
