@@ -1,6 +1,7 @@
 2016-01-26 David Hohn <david.hohn@cern.ch>
 	* fix NaN SFs
 	* add nJet without tau OR
+	* move top Top,2.3.41
 
 2016-01-22 Peter Onyisi
 	* Fix crash on more than five leptons
