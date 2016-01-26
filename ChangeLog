@@ -2,6 +2,7 @@
 	* fix NaN SFs
 	* add nJet without tau OR
 	* move top Top,2.3.41
+	* tag ttHMultiAna-00-01-02
 
 2016-01-22 Peter Onyisi
 	* Fix crash on more than five leptons
@@ -23,7 +24,6 @@
 2016-01-14 David Hohn <david.hohn@cern.ch>
 	* small fixes for data
 
->>>>>>> .r237479
 2016-01-13 Peter Onyisi
 	* some minor efficiency improvements, avoid setting zero electron SFs
 
