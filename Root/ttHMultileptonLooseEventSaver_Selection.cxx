@@ -182,14 +182,14 @@ ttHMultileptonLooseEventSaver::SelectTaus(const top::Event& event) {
   return std::shared_ptr<xAOD::TauJetContainer>(goodTaus);
 }
 
-template<typename T> int CountPassOR(DataVector<T>& vec) {
+template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
   int rv = 0;
   // Figure this out later ...
   //T::template Decorator<short> passovr("ttHpassOVR");
   //for (size_t idx = 0; idx < vec.size(); ++idx) {
   //if (passovr(vec, idx)) {
   for (const auto iItr : vec) {
-    if (iItr->template auxdataConst<short>("ttHpassOVR")) {
+    if (iItr->template auxdataConst<short>("ttHpassOVR") && (!doTauOR || iItr->template auxdataConst<short>("ttHpassTauOVR") ) ) {
       rv++;
     }
   }
@@ -227,6 +227,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   }
   for (const auto jetItr : *goodJet) {
     jetItr->auxdecor<short>("ttHpassOVR") = 1;
+    jetItr->auxdecor<short>("ttHpassTauOVR") = 1;
   }
   for (const auto tauItr : *goodTau) {
     tauItr->auxdecor<short>("ttHpassOVR") = 1;
@@ -319,7 +320,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
       for (const auto jetItr : *goodJet) {
 	// don't need additional protection here...
 	if (p4.DeltaR(jetItr->p4()) < 0.3) {
-	  jetItr->auxdecor<short>("ttHpassOVR") = 0;
+	  jetItr->auxdecor<short>("ttHpassTauOVR") = 0;
 	}
       }
     }
@@ -726,10 +727,14 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
 void
 ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goodJets) {
   // don't actually copy anything ATM, just give yields of jets & btags
-  m_variables->nJets_OR_T = goodJets->size();
+  m_variables->nJets_OR = goodJets->size();
+  m_variables->nJets_OR_T = CountPassOR(*goodJets, true);
+
+  m_variables->nJets_OR_MV2c20_70   = 0;
+  m_variables->nJets_OR_MV2c20_77   = 0;
   m_variables->nJets_OR_T_MV2c20_70 = 0;
   m_variables->nJets_OR_T_MV2c20_77 = 0;
-
+  
   m_variables->lead_jetPt = 0;
   m_variables->sublead_jetPt = 0;
   m_variables->lead_jetEta = 0;
@@ -748,9 +753,28 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
       double mv2c;
       if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
 	if (mv2c > -0.4434) {
-	  m_variables->nJets_OR_T_MV2c20_77++;
+	  m_variables->nJets_OR_MV2c20_77++;
 	  if (mv2c > -0.0436) {
-	    m_variables->nJets_OR_T_MV2c20_70++;
+	    m_variables->nJets_OR_MV2c20_70++;
+	  }
+	}
+      }
+    }
+  }
+
+  //same thing for jet with tau OR
+  for (const auto jetItr : *goodJets) {
+    if( jetItr->auxdataConst<short>("ttHpassTauOVR") ) {
+
+      auto btagging = jetItr->btagging(); 
+      if (btagging) {
+	double mv2c;
+	if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
+	  if (mv2c > -0.4434) {
+	    m_variables->nJets_OR_T_MV2c20_77++;
+	    if (mv2c > -0.0436) {
+	      m_variables->nJets_OR_T_MV2c20_70++;
+	    }
 	  }
 	}
       }

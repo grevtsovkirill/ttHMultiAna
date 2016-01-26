@@ -36,8 +36,11 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   //tree->makeOutputVariable(Ptll01, "Ptll01");
   //tree->makeOutputVariable(DRll01, "DRll01");
   tree->makeOutputVariable(nJets_OR_T, "nJets_OR_T");
+  tree->makeOutputVariable(nJets_OR, "nJets_OR");
   tree->makeOutputVariable(nJets_OR_T_MV2c20_70, "nJets_OR_T_MV2c20_70");
   tree->makeOutputVariable(nJets_OR_T_MV2c20_77, "nJets_OR_T_MV2c20_77");
+  tree->makeOutputVariable(nJets_OR_MV2c20_77, "nJets_OR_MV2c20_77");
+  tree->makeOutputVariable(nJets_OR_MV2c20_70, "nJets_OR_MV2c20_70");
   tree->makeOutputVariable(nTaus_OR_Pt25, "nTaus_OR_Pt25");
   tree->makeOutputVariable(isBlinded, "isBlinded");
   tree->makeOutputVariable(HT, "HT");

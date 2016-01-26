@@ -130,6 +130,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CopyMuon(xAOD::Muon&, ttHMultilepton::Lepton&);
   void CopyTau(xAOD::TauJet&, ttHMultilepton::Tau&);
   void doEventSFs();
+  double relativeSF(double variation, double nominal);
   
   //some event weights
   double m_mcWeight;

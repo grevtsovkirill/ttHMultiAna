@@ -761,8 +761,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_pileup_weight_UP = m_sfRetriever->pileupSF( event, +1 ); // up variation
 	m_pileup_weight_DOWN = m_sfRetriever->pileupSF( event, -1 ); // down variation
 	//normalise
-	m_pileup_weight_UP   /= m_pileup_weight;
-	m_pileup_weight_DOWN /= m_pileup_weight;
+	m_pileup_weight_UP    = relativeSF(m_pileup_weight_UP,   m_pileup_weight);
+	m_pileup_weight_DOWN  = relativeSF(m_pileup_weight_DOWN, m_pileup_weight);
 
 	//btag
 	m_sfRetriever->btagSF_eigen_vars(event,
@@ -1119,6 +1119,9 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       if( ivar == top::topSFSyst::nominal ) continue;
       m_variables->tauSFTight[ivar] /= m_variables->tauSFTight[top::topSFSyst::nominal];
       m_variables->tauSFLoose[ivar] /= m_variables->tauSFLoose[top::topSFSyst::nominal];
+
+      if( m_variables->tauSFTight[ivar] != m_variables->tauSFTight[ivar] ) m_variables->tauSFTight[ivar] = 1;
+      if( m_variables->tauSFLoose[ivar] != m_variables->tauSFLoose[ivar] ) m_variables->tauSFLoose[ivar] = 1;
     }
 
   //naaaaan
@@ -1134,4 +1137,9 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     }
     
   }
+}
+
+double ttHMultileptonLooseEventSaver::relativeSF(double variation, double nominal) {
+  if (nominal == 0) return 0;
+  else return variation/nominal;
 }
