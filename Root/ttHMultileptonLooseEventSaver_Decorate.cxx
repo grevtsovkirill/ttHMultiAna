@@ -52,7 +52,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     xAOD::Jet* jet = 0;
     std::pair<double, const xAOD::Jet*> match(10.0, jet);
     for(auto tjItr : event.m_trackJets) {
-      double dr = std::sqrt(std::pow(muItr->eta() - tjItr->eta(), 2) + std::pow(muItr->phi() - tjItr->phi(), 2));
+      double dr = tjItr->p4().DeltaR(muItr->p4());
       //std::cout << dr << std::endl;
       if(match.second) {
 	if(dr < match.first) {
