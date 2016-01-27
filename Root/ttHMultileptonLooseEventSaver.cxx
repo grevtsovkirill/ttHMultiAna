@@ -578,6 +578,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	    mu_orig = idtp->auxdata<int>("truthOrigin");
 	  } return (int) mu_orig; }, *systematicTree, "muon_trackOrigin");
 
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (double) mu.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "muon_jetFitterComb");
+
     }
     
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));

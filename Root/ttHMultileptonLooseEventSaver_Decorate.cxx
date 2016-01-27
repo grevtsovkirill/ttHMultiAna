@@ -47,6 +47,36 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose", "Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose"}) {
       muItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
     }
+
+    // Track jets
+    xAOD::Jet* jet = 0;
+    std::pair<double, const xAOD::Jet*> match(10.0, jet);
+    for(auto tjItr : event.m_trackJets) {
+      double dr = std::sqrt(std::pow(muItr->eta() - tjItr->eta(), 2) + std::pow(muItr->phi() - tjItr->phi(), 2));
+      //std::cout << dr << std::endl;
+      if(match.second) {
+	if(dr < match.first) {
+	  match.first  = dr;
+	  match.second = tjItr;
+	}
+      }
+      else {
+	match.first  = dr;
+	match.second = tjItr;    
+      }
+    }
+    //std::cout << "Nearest dr: " << match.first << std::endl;
+    if(match.second && match.first < 0.5) {
+      //std::vector<const xAOD::IParticle *> parts = match.second->getConstituents().asIParticleVector();
+      //if(parts.size() <= 1) muItr->auxdecor<double>("jetFitterComb") = -10.0;
+      const xAOD::BTagging *btag = match.second->btagging();
+      if(btag) {
+	muItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
+      }
+      else muItr->auxdecor<double>("jetFitterComb") = -10.0;
+    }
+    else muItr->auxdecor<double>("jetFitterComb") = -10.0;
+
   }//end muons
 
   top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
