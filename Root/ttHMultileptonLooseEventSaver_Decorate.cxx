@@ -19,7 +19,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
       std::string ttHML_LH_decoration("pass");                        ttHML_LH_decoration += wp;
       std::string derivation_LH_decoration("DFCommonElectrons"); derivation_LH_decoration += wp;
       if(m_config->isPrimaryxAOD()) {
-	//there will be only one LH wp when using PxAOD
+	//there will be only one LH wp when using xAOD
 	//it seems the type of the decoration was changed at some point
 	try {
 	  elItr->auxdecor<int>( ttHML_LH_decoration ) = elItr->auxdataConst<int> (m_config->electronIDDecoration());
@@ -39,7 +39,13 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     }
   
   }// end elecs
-  
+
+  // Retrieve track jet container from evtStore - needed due to baseline track jet overlap removal.
+  const xAOD::JetContainer* tJets = 0;
+  bool no_tjet = false;
+  if(m_config->useTrackJets() == false) no_tjet = true;
+  else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
+
   for (auto muItr : event.m_muons) {
     // Isolation
     auto isomap = iso_1.accept(*muItr);
@@ -49,29 +55,30 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     }
 
     // Track jets
-    xAOD::Jet* jet = 0;
-    std::pair<double, const xAOD::Jet*> match(10.0, jet);
-    for(auto tjItr : event.m_trackJets) {
-      double dr = tjItr->p4().DeltaR(muItr->p4());
-      //std::cout << dr << std::endl;
-      if(match.second) {
-	if(dr < match.first) {
+    if(!no_tjet) {
+      xAOD::Jet* jet = 0;
+      std::pair<double, const xAOD::Jet*> match(10.0, jet);
+      for(auto tjItr : *tJets) { 
+	double dr = tjItr->p4().DeltaR(muItr->p4());
+	if(match.second) {
+	  if(dr < match.first) {
+	    match.first  = dr;
+	    match.second = tjItr;
+	  }
+	}
+	else {
 	  match.first  = dr;
-	  match.second = tjItr;
+	  match.second = tjItr;    
 	}
       }
-      else {
-	match.first  = dr;
-	match.second = tjItr;    
-      }
-    }
-    //std::cout << "Nearest dr: " << match.first << std::endl;
-    if(match.second && match.first < 0.5) {
-      //std::vector<const xAOD::IParticle *> parts = match.second->getConstituents().asIParticleVector();
-      //if(parts.size() <= 1) muItr->auxdecor<double>("jetFitterComb") = -10.0;
-      const xAOD::BTagging *btag = match.second->btagging();
-      if(btag) {
-	muItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
+      if(match.second && match.first < 0.5) {
+	//std::vector<const xAOD::IParticle *> parts = match.second->getConstituents().asIParticleVector();
+	//if(parts.size() <= 1) muItr->auxdecor<double>("jetFitterComb") = -10.0;
+	const xAOD::BTagging *btag = match.second->btagging();
+	if(btag) {
+	  muItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
+	}
+	else muItr->auxdecor<double>("jetFitterComb") = -10.0;
       }
       else muItr->auxdecor<double>("jetFitterComb") = -10.0;
     }

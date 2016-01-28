@@ -17,7 +17,6 @@
 #include "TopObjectSelectionTools/MuonMC15.h"
 #include "ttHMultilepton/MuonMC15.h"
 #include "TopObjectSelectionTools/JetMC15.h"
-#include "TopObjectSelectionTools/TrackJetMC15.h"
 #include "TopObjectSelectionTools/TauMC15.h"
 #include "ttHMultilepton/DummyOverlapRemoval.h"
 #include "TopObjectSelectionTools/OverlapRemovalASG.h"
@@ -57,7 +56,6 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
   auto muonSelection = new ttHMultilepton::MuonMC15(topConfig->muonPtcut(), nullptr); 
   objectSelection->muonSelection( muonSelection );
   objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), /*jvtmin*/ 0.64 ));
-  objectSelection->trackJetSelection(new top::TrackJetMC15(topConfig->trackJetPtcut(), topConfig->trackJetEtacut()));
 
   objectSelection->tauSelection( new top::TauMC15() );
   
