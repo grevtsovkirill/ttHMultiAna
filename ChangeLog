@@ -1,3 +1,5 @@
+2016-01-27 Harish Potti <harish.potti@cern.ch>
+	* update k-factor for ttV
 2016-01-26 David Hohn <david.hohn@cern.ch>
 	* fix NaN SFs
 	* add nJet without tau OR

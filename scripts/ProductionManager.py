@@ -160,10 +160,10 @@ def createJobScript(outDir,dsid,gridDS,eosPath):
     file.write('#!/bin/sh                                                                          \n')
     file.write('source ~/.bashrc								   \n')
     file.write('setupATLAS                                                                         \n')
-    file.write('RUCIO_ACCOUNT=dhohn								   \n')
+    file.write('RUCIO_ACCOUNT=hpotti								   \n')
     file.write('lsetup root rucio								   \n')
     file.write('pwd										   \n')
-    txt  = 'source /afs/cern.ch/user/d/dhohn/ProductionManager/hadd.sh \\\n'
+    txt  = 'source /afs/cern.ch/user/h/hpotti/ProductionManager/hadd.sh \\\n'
     txt += '%s \\\n' % gridDS
     txt += '%s \\\n' % eosPath
     txt += '%s \\\n' % (dsid+'.root')
@@ -211,15 +211,15 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
 
     eosMGM = 'root://eospublic.cern.ch/'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/data'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Nominal/mc'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v3/Sys/mc'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/data'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/Nominal'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/Sys'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
-    gridNickName = 'dhohn'
-    #productionName = 'v3.Data'
-    productionName = 'v3.Nominal'
-    #productionName = 'v3.Sys'
+    gridNickName = 'hpotti'
+    #productionName = '26.1.16.v4.Data'
+    productionName = '26.1.16.v4.Nominal'
+    #productionName = '26.1.16.v4.Sys'
 
     
     doneSamplesOnGRID = getDoneSamplesOnGRID()
