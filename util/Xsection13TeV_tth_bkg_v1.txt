@@ -293,6 +293,9 @@
  410049        0.0090636               1         1.0    --    -999   2      Madgraph+Pythia               tZ_4fl_tchan_trilepton  Full  
 
 
+#VH
+342284            1.1021               1         1.0    --    -999   2      Pythia8+EvtGen                WH_inc                  Full
+342285           0.60072               1         1.0    --    -999   2      Pythia8+EvtGen                ZH_inc                  Full 
 
 
 
