@@ -3,7 +3,7 @@ import TopExamples.grid
 #For your info print them to the screen
 #for ds in sorted(TopExamples.grid.listDatasets('mc15_13TeV', '*410000*.AOD.*r6264')):
 #    print ds
-    
+
 #use with p2501
 TopExamples.grid.Add('systematic_production').datasets = [
 #mc15b
@@ -300,4 +300,23 @@ TopExamples.grid.Add('zjets_sherpa_p2480').datasets = [
 TopExamples.grid.Add('specials').datasets = [
 'mc15_13TeV.361325.Sherpa_CT10_Wmunu_Pt0_70_CFilterBVeto.merge.DAOD_HIGG8D1.e3651_s2586_s2174_r6869_r6282_p2434',
 'mc15_13TeV.361326.Sherpa_CT10_Wmunu_Pt0_70_BFilter.merge.DAOD_HIGG8D1.e3651_s2608_s2183_r6869_r6282_p2434'
+]
+
+TopExamples.grid.Add('VH').datasets = [
+'mc15_13TeV.342284.Pythia8EvtGen_A14NNPDF23LO_WH125_inc.merge.DAOD_HIGG8D1.e4246_s2608_s2183_r6869_r6282_p2501',
+'mc15_13TeV.342285.Pythia8EvtGen_A14NNPDF23LO_ZH125_inc.merge.DAOD_HIGG8D1.e4246_s2608_s2183_r6869_r6282_p2501',
+]
+
+TopExamples.grid.Add('triboson_mc15b').datasets = [
+'mc15_13TeV.361620.Sherpa_CT10_WWW_3l3v.merge.AOD.e4093_s2608_s2183_r7155_r6282',
+'mc15_13TeV.361621.Sherpa_CT10_WWZ_4l2v.merge.AOD.e4053_s2608_s2183_r7155_r6282',
+'mc15_13TeV.361622.Sherpa_CT10_WWZ_2l4v.merge.AOD.e4053_s2608_s2183_r7155_r6282',
+'mc15_13TeV.361623.Sherpa_CT10_WZZ_5l1v.merge.AOD.e4093_s2608_s2183_r7155_r6282',
+'mc15_13TeV.361624.Sherpa_CT10_WZZ_3l3v.merge.AOD.e4093_s2608_s2183_r7155_r6282',
+]
+
+TopExamples.grid.Add('triboson_mc15a').datasets = [
+'mc15_13TeV.361625.Sherpa_CT10_ZZZ_6l0v.merge.AOD.e4093_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361626.Sherpa_CT10_ZZZ_4l2v.merge.AOD.e4093_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361627.Sherpa_CT10_ZZZ_2l4v.merge.AOD.e4093_s2608_s2183_r6869_r6282',
 ]
