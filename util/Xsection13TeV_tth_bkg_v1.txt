@@ -158,6 +158,9 @@
  410114         0.017361            1.35         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np1  Full  
  410115        0.0098874            1.35         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np0  Full  
  410116          0.01779            1.35         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np1  Full  
+ 410142          0.11309            0.98         1.0    --    -999   2     Sherpa                                           ttll  AF2
+ 410143          0.68810            0.99         1.0    --    -999   2     Sherpa                                        ttZnnqq  AF2
+ 410144          0.57729            0.98         1.0    --    -999   2     Sherpa                                            ttW  AF2
 
 #Double Charged Higgs
  302449         0.020179             1.0         1.0    --    -999   2              Pythia8                               DCH300  AFII  

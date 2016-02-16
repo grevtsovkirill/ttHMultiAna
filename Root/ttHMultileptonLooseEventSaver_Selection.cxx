@@ -341,6 +341,8 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
     }
   }
   for (const auto jetItr : *goodJet) {
+    jetItr->auxdecor<short>("ttHJetOVRStatus") = jetItr->auxdataConst<short>("ttHpassOVR") + jetItr->auxdataConst<short>("ttHpassTauOVR");
+    //std::cout << std::find(goodJet->begin(), goodJet->end(), *jetItr) << std::endl;
     if (jetItr->auxdataConst<short>("ttHpassOVR")) {
       newGoodJet->push_back(new xAOD::Jet(*jetItr));
     }

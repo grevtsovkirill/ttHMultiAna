@@ -600,7 +600,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
-
+    //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); }, *systematicTree, "m_jet_OVRStatus");
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
@@ -961,7 +961,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
   //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
   m_treeManagers[event.m_ttreeIndex]->fill();
-
 
 }
 
