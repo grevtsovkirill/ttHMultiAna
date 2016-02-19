@@ -6,6 +6,12 @@
 void
 ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 
+  // Retrieve track jet container from evtStore - needed due to baseline track jet overlap removal.
+  const xAOD::JetContainer* tJets = 0;
+  bool no_tjet = false;
+  if(m_config->useTrackJets() == false) no_tjet = true;
+  else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
+
   for (auto elItr : event.m_electrons) {
     // Isolation
     auto isomap = iso_1.accept(*elItr);
@@ -37,14 +43,44 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 	}
       }
     }
+
+    // Track jets
+    if(!no_tjet) {
+      xAOD::Jet* jet = 0;
+      std::pair<double, const xAOD::Jet*> match(10.0, jet);
+      for(auto tjItr : *tJets) {
+	double dr = tjItr->p4().DeltaR(elItr->p4());
+	if(match.second) {
+	  if(dr < match.first) {
+	    match.first  = dr;
+	    match.second = tjItr;
+	  }
+	}
+	else {
+	  match.first  = dr;
+	  match.second = tjItr;    
+	}
+      }
+      if(match.second && match.first < 0.5 &&
+	 match.second->isAvailable<std::vector<ElementLink<DataVector<xAOD::IParticle> > > >("constituentLinks")) {
+	xAOD::JetConstituentVector parts = match.second->getConstituents();
+	if(parts.size() <= 1) elItr->auxdecor<double>("jetFitterComb") = -10.0;
+	else {
+	  if(match.second->isAvailable<ElementLink<DataVector<xAOD::BTagging_v1> > >("btaggingLink")) {
+	    const xAOD::BTagging *btag = match.second->btagging();
+	    if(btag) {
+	      elItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
+	    }
+	    else elItr->auxdecor<double>("jetFitterComb") = -10.0;
+	  }
+	  else elItr->auxdecor<double>("jetFitterComb") = -10.0;
+	}
+      }
+      else elItr->auxdecor<double>("jetFitterComb") = -10.0;
+    }
+    else elItr->auxdecor<double>("jetFitterComb") = -10.0;
   
   }// end elecs
-
-  // Retrieve track jet container from evtStore - needed due to baseline track jet overlap removal.
-  const xAOD::JetContainer* tJets = 0;
-  bool no_tjet = false;
-  if(m_config->useTrackJets() == false) no_tjet = true;
-  else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
 
   for (auto muItr : event.m_muons) {
     // Isolation
@@ -58,7 +94,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     if(!no_tjet) {
       xAOD::Jet* jet = 0;
       std::pair<double, const xAOD::Jet*> match(10.0, jet);
-      for(auto tjItr : *tJets) { 
+      for(auto tjItr : *tJets) {
 	double dr = tjItr->p4().DeltaR(muItr->p4());
 	if(match.second) {
 	  if(dr < match.first) {
@@ -71,14 +107,20 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 	  match.second = tjItr;    
 	}
       }
-      if(match.second && match.first < 0.5) {
-	//std::vector<const xAOD::IParticle *> parts = match.second->getConstituents().asIParticleVector();
-	//if(parts.size() <= 1) muItr->auxdecor<double>("jetFitterComb") = -10.0;
-	const xAOD::BTagging *btag = match.second->btagging();
-	if(btag) {
-	  muItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
+      if(match.second && match.first < 0.5 &&
+	 match.second->isAvailable<std::vector<ElementLink<DataVector<xAOD::IParticle> > > >("constituentLinks")) {
+	xAOD::JetConstituentVector parts = match.second->getConstituents();
+	if(parts.size() <= 1) muItr->auxdecor<double>("jetFitterComb") = -10.0;
+	else {
+	  if(match.second->isAvailable<ElementLink<DataVector<xAOD::BTagging_v1> > >("btaggingLink")) {
+	    const xAOD::BTagging *btag = match.second->btagging();
+	    if(btag) {
+	      muItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
+	    }
+	    else muItr->auxdecor<double>("jetFitterComb") = -10.0;
+	  }
+	  else muItr->auxdecor<double>("jetFitterComb") = -10.0;
 	}
-	else muItr->auxdecor<double>("jetFitterComb") = -10.0;
       }
       else muItr->auxdecor<double>("jetFitterComb") = -10.0;
     }
