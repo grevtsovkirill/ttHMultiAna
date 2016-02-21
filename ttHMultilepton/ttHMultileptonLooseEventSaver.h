@@ -33,6 +33,7 @@
 #include "ttHMultilepton/Lepton.h"
 #include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/Variables.h"
+#include "ttHMultilepton/ClassifyHF.h"
 
 //root
 #include <TH1F.h>
@@ -48,6 +49,7 @@ using TauAnalysisTools::TauSelectionTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  friend class ttHMultilepton::Variables;
+ friend class ttHMultilepton::ClassifyHF;
  public:
   //Default - so root can load based on a name
   ttHMultileptonLooseEventSaver();
@@ -163,6 +165,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //use with care, don't mix MC and data in same job
   bool m_isMC;
 
+  //ttbar HF classification
+  int m_HF_Classification;
+
   //met
   float m_met_met;
   float m_met_phi;
@@ -172,6 +177,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   Tau m_taus[TAU_ARR_SIZE];
   ttHMultilepton::Variables* m_variables;
  
+  //ttHF classification
+  ttHMultilepton::ClassifyHF* m_classifyttbarHF;
+
   //MC  
   int m_higgsMode;
   std::vector<float> m_mc_m;

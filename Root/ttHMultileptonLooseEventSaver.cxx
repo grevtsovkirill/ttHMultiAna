@@ -39,7 +39,8 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pvNumber(0),
   m_puNumber(0),
   m_met_met(0.),
-  m_met_phi(0.)
+  m_met_phi(0.),
+  m_HF_Classification(0.)
 {
 }
 
@@ -146,6 +147,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   }
   
   m_variables = new ttHMultilepton::Variables();
+
+  m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
 
   //prepare btag eigen vectors
   m_weight_bTagSF_77_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars() );
@@ -373,6 +376,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
 
+    // HF classification ttbar
+    systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");   
+   
     systematicTree->makeOutputVariable(m_higgsMode,"higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
@@ -830,6 +836,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
+  }
+
+  //ttbar HF classification
+  //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
+  if (m_mcChannelNumber==410000){
+    m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
+    //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
 
   //Event selection variable for each event selection region (pass/fail)
