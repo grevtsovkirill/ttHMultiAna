@@ -320,3 +320,14 @@ TopExamples.grid.Add('triboson_mc15a').datasets = [
 'mc15_13TeV.361626.Sherpa_CT10_ZZZ_4l2v.merge.AOD.e4093_s2608_s2183_r6869_r6282',
 'mc15_13TeV.361627.Sherpa_CT10_ZZZ_2l4v.merge.AOD.e4093_s2608_s2183_r6869_r6282',
 ]
+
+#mc15a AF2
+TopExamples.grid.Add('ttbargamma').datasets = [
+'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.DAOD_HIGG8D1.e4404_a766_a777_r6282_p2501',
+'mc15_13TeV.410087.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_allhad.merge.DAOD_HIGG8D1.e4404_a766_a777_r6282_p2501',
+]
+
+#mc15b
+TopExamples.grid.Add('tWZ').datasets = [
+'mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.DAOD_HIGG8D1.e4851_s2726_r7326_r6282_p2501',
+]
