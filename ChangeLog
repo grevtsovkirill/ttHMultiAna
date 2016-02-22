@@ -1,3 +1,10 @@
+2016-02-22 David Hohn
+	* HF classification for ttbar dilep
+	* tag ttHMultiAna-00-01-03
+
+2016-02-21 Tamara
+	* HF classification
+
 2016-02-16 Peter Onyisi
 	* Add Sherpa ttV
 
@@ -8,7 +15,7 @@
 2016-01-26 David Hohn <david.hohn@cern.ch>
 	* fix NaN SFs
 	* add nJet without tau OR
-	* move top Top,2.3.41
+	* move to Top,2.3.41
 	* tag ttHMultiAna-00-01-02
 
 2016-01-22 Peter Onyisi

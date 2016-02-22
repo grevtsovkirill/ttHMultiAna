@@ -840,7 +840,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //ttbar HF classification
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
-  if (m_mcChannelNumber==410000){
+  if (m_mcChannelNumber==410000 || m_mcChannelNumber==410009){
     m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
