@@ -18,7 +18,8 @@
  410016           3.5814           1.054         1.0    --    -999   2               Powheg                  Wt_dilepton_antitop  Full  
  410009            73.33          1.1949         1.0    --    -999   2               Powheg                 ttbar_hdamp172p5_dil  Full  
 #Extra Top/SingleTop
- 410025           2.0517          1.6806         1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full  
+ 410025           2.0517          1.6806         0.543  --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full
+ 410026           1.2615          1.7088         0.543  --    -999   1               Powheg          SingleTopSchan_noAllHad_antitop  Full
  410062           32.384           1.054         1.0    --    -999   2               Powheg                  Wt_DS_inclusive_top  Full  
  410063           32.357           1.054         1.0    --    -999   2               Powheg              Wt_DS_inclusive_antitop  Full  
 
