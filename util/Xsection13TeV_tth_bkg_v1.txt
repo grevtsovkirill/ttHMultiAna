@@ -18,8 +18,8 @@
  410016           3.5814           1.054         1.0    --    -999   2               Powheg                  Wt_dilepton_antitop  Full  
  410009            73.33          1.1949         1.0    --    -999   2               Powheg                 ttbar_hdamp172p5_dil  Full  
 #Extra Top/SingleTop
- 410025           2.0612           1.0           1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full
- 410026           1.2887           1.0           1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_antitop  Full
+ 410025           2.0517           1.005         1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full  
+ 410026           1.2615           1.022         1.0    --    -999   1               Powheg      SingleTopSchan_noAllHad_antitop  Full  
  410062           32.384           1.054         1.0    --    -999   2               Powheg                  Wt_DS_inclusive_top  Full  
  410063           32.357           1.054         1.0    --    -999   2               Powheg              Wt_DS_inclusive_antitop  Full  
 
@@ -159,9 +159,9 @@
  410114         0.017361            1.35         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np1  Full  
  410115        0.0098874            1.35         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np0  Full  
  410116          0.01779            1.35         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np1  Full  
- 410142          0.11309            0.98         1.0    --    -999   2     Sherpa                                           ttll  AF2
- 410143          0.68810            0.99         1.0    --    -999   2     Sherpa                                        ttZnnqq  AF2
- 410144          0.57729            0.98         1.0    --    -999   2     Sherpa                                            ttW  AF2
+ 410142          0.11309            0.98         1.0    --    -999   2               Sherpa                                 ttll   AF2  
+ 410143          0.68810            0.99         1.0    --    -999   2               Sherpa                              ttZnnqq   AF2  
+ 410144          0.57729            0.98         1.0    --    -999   2               Sherpa                                  ttW   AF2  
 
 #Double Charged Higgs
  302449         0.020179             1.0         1.0    --    -999   2              Pythia8                               DCH300  AFII  
@@ -276,32 +276,37 @@
  361534           71.012         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np4  Full  
 
 # tHbj MadGraph+Herwig
- 341988                0               1         1.0    --    -999   2      Madgraph+Herwig             tHjb125_gamgam_yt_minus1  Full  
- 341989       0.00012335               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_gamgam_yt_plus1  Full  
- 341990                0               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_gamgam_yt_plus2  Full  
- 341991                0               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_bbbar_yt_minus1  Full  
- 341992         0.031216               1         1.0    --    -999   2      Madgraph+Herwig               tHjb125_bbbar_yt_plus1  Full  
- 341993                0               1         1.0    --    -999   2      Madgraph+Herwig               tHjb125_bbbar_yt_plus2  Full  
- 341994                0               1         1.0    --    -999   2      Madgraph+Herwig                tHjb125_lep_yt_minus1  Full  
- 341995         0.016479               1         1.0    --    -999   2      Madgraph+Herwig                 tHjb125_lep_yt_plus1  Full  
- 341996                0               1         1.0    --    -999   2      Madgraph+Herwig                 tHjb125_lep_yt_plus2  Full  
- 341997                0               1         1.0    --    -999   2      Madgraph+Herwig              tWH125_gamgam_yt_minus1  Full  
- 341998          5.7e-05               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_gamgam_yt_plus1  Full  
- 341999                0               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_gamgam_yt_plus2  Full  
- 342000                0               1         1.0    --    -999   2      Madgraph+Herwig                 tWH125_lep_yt_minus1  Full  
- 342001         0.007615               1         1.0    --    -999   2      Madgraph+Herwig                  tWH125_lep_yt_plus1  Full  
- 342002                0               1         1.0    --    -999   2      Madgraph+Herwig                  tWH125_lep_yt_plus2  Full  
- 342003                0               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_bbbar_yt_minus1  Full  
- 342004         0.014425               1         1.0    --    -999   2      Madgraph+Herwig                tWH125_bbbar_yt_plus1  Full  
- 342005                0               1         1.0    --    -999   2      Madgraph+Herwig                tWH125_bbbar_yt_plus2  Full  
+ 341988                0               1         1.0    --    -999   1      Madgraph+Herwig             tHjb125_gamgam_yt_minus1  Full  
+ 341989       0.00012335               1         1.0    --    -999   1      Madgraph+Herwig              tHjb125_gamgam_yt_plus1  Full  
+ 341990                0               1         1.0    --    -999   1      Madgraph+Herwig              tHjb125_gamgam_yt_plus2  Full  
+ 341991                0               1         1.0    --    -999   1      Madgraph+Herwig              tHjb125_bbbar_yt_minus1  Full  
+ 341992         0.031216               1         1.0    --    -999   1      Madgraph+Herwig               tHjb125_bbbar_yt_plus1  Full  
+ 341993                0               1         1.0    --    -999   1      Madgraph+Herwig               tHjb125_bbbar_yt_plus2  Full  
+ 341994                0               1         1.0    --    -999   1      Madgraph+Herwig                tHjb125_lep_yt_minus1  Full  
+ 341995         0.016479               1         1.0    --    -999   1      Madgraph+Herwig                 tHjb125_lep_yt_plus1  Full  
+ 341996                0               1         1.0    --    -999   1      Madgraph+Herwig                 tHjb125_lep_yt_plus2  Full  
+ 341997                0               1         1.0    --    -999   1      Madgraph+Herwig              tWH125_gamgam_yt_minus1  Full  
+ 341998          5.7e-05               1         1.0    --    -999   1      Madgraph+Herwig               tWH125_gamgam_yt_plus1  Full  
+ 341999                0               1         1.0    --    -999   1      Madgraph+Herwig               tWH125_gamgam_yt_plus2  Full  
+ 342000                0               1         1.0    --    -999   1      Madgraph+Herwig                 tWH125_lep_yt_minus1  Full  
+ 342001         0.007615               1         1.0    --    -999   1      Madgraph+Herwig                  tWH125_lep_yt_plus1  Full  
+ 342002                0               1         1.0    --    -999   1      Madgraph+Herwig                  tWH125_lep_yt_plus2  Full  
+ 342003                0               1         1.0    --    -999   1      Madgraph+Herwig               tWH125_bbbar_yt_minus1  Full  
+ 342004         0.014425               1         1.0    --    -999   1      Madgraph+Herwig                tWH125_bbbar_yt_plus1  Full  
+ 342005                0               1         1.0    --    -999   1      Madgraph+Herwig                tWH125_bbbar_yt_plus2  Full  
   
 # tZ
- 410049        0.0090636               1         1.0    --    -999   2      Madgraph+Pythia               tZ_4fl_tchan_trilepton  Full  
+ 410049        0.0090636               1         1.0    --    -999   1      Madgraph+Pythia               tZ_4fl_tchan_trilepton  Full  
 
 
 #VH
- 342284           1.1021               1         1.0    --    -999   2       Pythia8+EvtGen                               WH_inc  Full  
- 342285          0.60072               1         1.0    --    -999   2       Pythia8+EvtGen                               ZH_inc  Full  
+ 342284           1.1021               1         1.0    --    -999   1       Pythia8+EvtGen                               WH_inc  Full  
+ 342285          0.60072               1         1.0    --    -999   1       Pythia8+EvtGen                               ZH_inc  Full  
+
+#tWZ
+ 410214                0               0         1.0    --    -999   1       Pythia8+EvtGen                                tWZDS  Full  
+ 410215                0               0         1.0    --    -999   1       Pythia8+EvtGen                                tWZDR  Full  
+ 410216                0               0         1.0    --    -999   1      Herwigpp+EvtGen                                tWZDS  Full  
 
 # tribosons
  361620                1        0.008343         1.0    --    -999   1               Sherpa                             WWW_3l3v  Full  
@@ -312,6 +317,7 @@
  361625                1      1.7059e-05         1.0    --    -999   1               Sherpa                             ZZZ_6l0v  Full  
  361626                1      9.9467e-05         1.0    --    -999   1               Sherpa                             ZZZ_4l2v  Full  
  361627                1     0.000199561         1.0    --    -999   1               Sherpa                             ZZZ_2l4v  Full  
+
 
 
 
