@@ -1,8 +1,12 @@
+2016-03-01 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Change EventNumber and RunNumber variable type to unsigned long long and uint32_t
+	* Tag ttHMultiAna-00-01-04
+
 2016-02-22 David Hohn
 	* HF classification for ttbar dilep, doesnt work with current derivations (p2501)
 	* tag ttHMultiAna-00-01-03
 
-2016-02-21 Tamara
+2016-02-21 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* HF classification
 
 2016-02-16 Peter Onyisi
