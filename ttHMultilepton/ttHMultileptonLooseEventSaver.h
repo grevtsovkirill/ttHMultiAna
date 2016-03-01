@@ -153,8 +153,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_weight_bTagSF_77_extrapolation_from_charm_down;
 
   //event info
-  unsigned int m_eventNumber;
-  unsigned int m_runNumber;
+  unsigned long long m_eventNumber;
+  uint32_t m_runNumber;
   unsigned int m_mcChannelNumber;
   float m_mu;
   float m_mu_unc;
