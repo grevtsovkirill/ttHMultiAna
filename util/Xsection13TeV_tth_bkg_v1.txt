@@ -305,7 +305,7 @@
 
 #tWZ
  410214                0               0         1.0    --    -999   1       Pythia8+EvtGen                                tWZDS  Full  
- 410215                0               0         1.0    --    -999   1       Pythia8+EvtGen                                tWZDR  Full  
+ 410215         0.015450               1         1.0    --    -999   1       Pythia8+EvtGen                                tWZDR  Full  
  410216                0               0         1.0    --    -999   1      Herwigpp+EvtGen                                tWZDS  Full  
 
 # tribosons
