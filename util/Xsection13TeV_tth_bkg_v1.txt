@@ -276,24 +276,24 @@
  361534           71.012         1.20185         1.0    --    -999   2     Madgraph+Pythia8                           Wtaunu_Np4  Full  
 
 # tHbj MadGraph+Herwig
- 341988                0               1         1.0    --    -999   1      Madgraph+Herwig             tHjb125_gamgam_yt_minus1  Full  
+ 341988                0               1         1.0    --    -999   2      Madgraph+Herwig             tHjb125_gamgam_yt_minus1  Full  
  341989       0.00012335               1         1.0    --    -999   1      Madgraph+Herwig              tHjb125_gamgam_yt_plus1  Full  
- 341990                0               1         1.0    --    -999   1      Madgraph+Herwig              tHjb125_gamgam_yt_plus2  Full  
- 341991                0               1         1.0    --    -999   1      Madgraph+Herwig              tHjb125_bbbar_yt_minus1  Full  
+ 341990                0               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_gamgam_yt_plus2  Full  
+ 341991                0               1         1.0    --    -999   2      Madgraph+Herwig              tHjb125_bbbar_yt_minus1  Full  
  341992         0.031216               1         1.0    --    -999   1      Madgraph+Herwig               tHjb125_bbbar_yt_plus1  Full  
- 341993                0               1         1.0    --    -999   1      Madgraph+Herwig               tHjb125_bbbar_yt_plus2  Full  
- 341994                0               1         1.0    --    -999   1      Madgraph+Herwig                tHjb125_lep_yt_minus1  Full  
+ 341993                0               1         1.0    --    -999   2      Madgraph+Herwig               tHjb125_bbbar_yt_plus2  Full  
+ 341994                0               1         1.0    --    -999   2      Madgraph+Herwig                tHjb125_lep_yt_minus1  Full  
  341995         0.016479               1         1.0    --    -999   1      Madgraph+Herwig                 tHjb125_lep_yt_plus1  Full  
- 341996                0               1         1.0    --    -999   1      Madgraph+Herwig                 tHjb125_lep_yt_plus2  Full  
- 341997                0               1         1.0    --    -999   1      Madgraph+Herwig              tWH125_gamgam_yt_minus1  Full  
+ 341996                0               1         1.0    --    -999   2      Madgraph+Herwig                 tHjb125_lep_yt_plus2  Full  
+ 341997                0               1         1.0    --    -999   2      Madgraph+Herwig              tWH125_gamgam_yt_minus1  Full  
  341998          5.7e-05               1         1.0    --    -999   1      Madgraph+Herwig               tWH125_gamgam_yt_plus1  Full  
- 341999                0               1         1.0    --    -999   1      Madgraph+Herwig               tWH125_gamgam_yt_plus2  Full  
- 342000                0               1         1.0    --    -999   1      Madgraph+Herwig                 tWH125_lep_yt_minus1  Full  
+ 341999                0               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_gamgam_yt_plus2  Full  
+ 342000                0               1         1.0    --    -999   2      Madgraph+Herwig                 tWH125_lep_yt_minus1  Full  
  342001         0.007615               1         1.0    --    -999   1      Madgraph+Herwig                  tWH125_lep_yt_plus1  Full  
- 342002                0               1         1.0    --    -999   1      Madgraph+Herwig                  tWH125_lep_yt_plus2  Full  
- 342003                0               1         1.0    --    -999   1      Madgraph+Herwig               tWH125_bbbar_yt_minus1  Full  
+ 342002                0               1         1.0    --    -999   2      Madgraph+Herwig                  tWH125_lep_yt_plus2  Full  
+ 342003                0               1         1.0    --    -999   2      Madgraph+Herwig               tWH125_bbbar_yt_minus1  Full  
  342004         0.014425               1         1.0    --    -999   1      Madgraph+Herwig                tWH125_bbbar_yt_plus1  Full  
- 342005                0               1         1.0    --    -999   1      Madgraph+Herwig                tWH125_bbbar_yt_plus2  Full  
+ 342005                0               1         1.0    --    -999   2      Madgraph+Herwig                tWH125_bbbar_yt_plus2  Full  
   
 # tZ
  410049        0.0090636               1         1.0    --    -999   1      Madgraph+Pythia               tZ_4fl_tchan_trilepton  Full  
