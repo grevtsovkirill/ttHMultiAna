@@ -151,6 +151,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_weight_bTagSF_77_extrapolation_down;
   double m_weight_bTagSF_77_extrapolation_from_charm_up;
   double m_weight_bTagSF_77_extrapolation_from_charm_down;
+  // JVT SF weights
+  double m_JVT_weight;
+  double m_JVT_weight_UP;
+  double m_JVT_weight_DOWN;
 
   //event info
   unsigned long long m_eventNumber;

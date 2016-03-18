@@ -3,7 +3,7 @@
 
 //Your tool must inherit from this
 #include "TopEventSelectionTools/EventSelectorBase.h"
-#include "TopEvent/EventTools.h"
+//#include "TopEvent/EventTools.h"
 
 class MultilepEventSelector : public top::EventSelectorBase {
  public:

@@ -29,6 +29,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_mcWeight(1.),
   m_pileup_weight(1.),
   m_bTagSF_weight(1.),
+  m_JVT_weight(1.),
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
@@ -286,6 +287,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
+    systematicTree->makeOutputVariable(m_JVT_weight, "JVT_EventWeight");
     
     if ( m_doSFSystematics ) {
 
@@ -337,6 +339,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_down,
 					 "MV2c20_77_EventWeight_extrapolation_from_charm_down" );
 
+      //JVT
+      systematicTree->makeOutputVariable(m_JVT_weight_UP,   "JVT_EventWeight_UP");
+      systematicTree->makeOutputVariable(m_JVT_weight_DOWN, "JVT_EventWeight_DOWN");
     }
 
     if(!m_doSystematics) {
@@ -764,6 +769,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     if(m_sfRetriever){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"77",false);
+      m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
 
       //do sys weights only in "nominal" tree
       if( m_doSFSystematics ){
@@ -820,6 +826,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_weight_bTagSF_77_extrapolation_from_charm_up   /= m_bTagSF_weight;
 	m_weight_bTagSF_77_extrapolation_from_charm_down /= m_bTagSF_weight;
 	
+	// JVT SF
+	m_JVT_weight_UP = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_UP);
+	m_JVT_weight_DOWN = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_DOWN);
+
+	//normalise
+	m_JVT_weight_UP   = relativeSF(m_JVT_weight_UP,  m_JVT_weight);
+	m_JVT_weight_DOWN = relativeSF(m_JVT_weight_DOWN,m_JVT_weight);
 	
       } //end if isNominal
     } //end if m_sfRetriever
@@ -832,7 +845,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
   //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
-  m_mu      = m_purwtool->getCorrectedMu( *event.m_info); 
+  m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false); 
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
