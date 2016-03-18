@@ -250,6 +250,33 @@ TopExamples.grid.Add('systematic_production_wjets_sherpa').datasets = [
 'mc15_13TeV.361371.Sherpa_CT10_Wtaunu_Pt2000_E_CMS_BFilter.merge.AOD.e4133_s2608_s2183_r7326_r6282',
 ]
 
+#mc15b
+TopExamples.grid.Add('V_gamma').datasets = [
+'mc15_13TeV.301890.Sherpa_CT10_enugammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301891.Sherpa_CT10_enugammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301892.Sherpa_CT10_enugammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301893.Sherpa_CT10_munugammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301894.Sherpa_CT10_munugammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301895.Sherpa_CT10_munugammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301896.Sherpa_CT10_taunugammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301897.Sherpa_CT10_taunugammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301898.Sherpa_CT10_taunugammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301535.Sherpa_CT10_eegammaPt10_35.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301899.Sherpa_CT10_eegammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301900.Sherpa_CT10_eegammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301901.Sherpa_CT10_eegammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301536.Sherpa_CT10_mumugammaPt10_35.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301902.Sherpa_CT10_mumugammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301903.Sherpa_CT10_mumugammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301904.Sherpa_CT10_mumugammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301905.Sherpa_CT10_tautaugammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301906.Sherpa_CT10_tautaugammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301907.Sherpa_CT10_tautaugammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301908.Sherpa_CT10_nunugammaPt35_70.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301909.Sherpa_CT10_nunugammaPt70_140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+'mc15_13TeV.301910.Sherpa_CT10_nunugammaPt140.merge.DAOD_HIGG8D1.e3952_s2608_s2183_r7326_r6282_p2501',
+]
+
 #mc15a
 TopExamples.grid.Add('systematic_production_zjets_mg').datasets = [
 'mc15_13TeV.361500.MadGraphPythia8EvtGen_A14NNPDF23LO_Zee_Np0.merge.AOD.e3898_s2608_s2183_r6869_r6282',
@@ -267,6 +294,33 @@ TopExamples.grid.Add('systematic_production_zjets_mg').datasets = [
 'mc15_13TeV.361512.MadGraphPythia8EvtGen_A14NNPDF23LO_Ztautau_Np2.merge.AOD.e3898_s2608_s2183_r6869_r6282',
 'mc15_13TeV.361513.MadGraphPythia8EvtGen_A14NNPDF23LO_Ztautau_Np3.merge.AOD.e3898_s2608_s2183_r6869_r6282',
 'mc15_13TeV.361514.MadGraphPythia8EvtGen_A14NNPDF23LO_Ztautau_Np4.merge.AOD.e3898_s2608_s2183_r6869_r6282',
+]
+
+TopExamples.grid.Add('low_mass_zjets').datasets = [
+'mc15_13TeV.361468.Sherpa_CT10_Zee_Mll10to40_Pt0_70_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361469.Sherpa_CT10_Zee_Mll10to40_Pt0_70_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361470.Sherpa_CT10_Zee_Mll10to40_Pt70_140_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361471.Sherpa_CT10_Zee_Mll10to40_Pt70_140_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361472.Sherpa_CT10_Zee_Mll10to40_Pt140_400_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361473.Sherpa_CT10_Zee_Mll10to40_Pt140_400_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361474.Sherpa_CT10_Zee_Mll10to40_Pt400_E_CMS_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361475.Sherpa_CT10_Zee_Mll10to40_Pt400_E_CMS_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361476.Sherpa_CT10_Zmumu_Mll10to40_Pt0_70_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361477.Sherpa_CT10_Zmumu_Mll10to40_Pt0_70_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361478.Sherpa_CT10_Zmumu_Mll10to40_Pt70_140_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361479.Sherpa_CT10_Zmumu_Mll10to40_Pt70_140_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361480.Sherpa_CT10_Zmumu_Mll10to40_Pt140_400_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361481.Sherpa_CT10_Zmumu_Mll10to40_Pt140_400_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361482.Sherpa_CT10_Zmumu_Mll10to40_Pt400_E_CMS_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361483.Sherpa_CT10_Zmumu_Mll10to40_Pt400_E_CMS_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361484.Sherpa_CT10_Ztautau_Mll10to40_Pt0_70_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361485.Sherpa_CT10_Ztautau_Mll10to40_Pt0_70_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361486.Sherpa_CT10_Ztautau_Mll10to40_Pt70_140_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361487.Sherpa_CT10_Ztautau_Mll10to40_Pt70_140_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361488.Sherpa_CT10_Ztautau_Mll10to40_Pt140_400_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361489.Sherpa_CT10_Ztautau_Mll10to40_Pt140_400_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361490.Sherpa_CT10_Ztautau_Mll10to40_Pt400_E_CMS_BVeto.merge.AOD.e4198_s2608_s2183_r6869_r6282',
+'mc15_13TeV.361491.Sherpa_CT10_Ztautau_Mll10to40_Pt400_E_CMS_BFilter.merge.AOD.e4198_s2608_s2183_r6869_r6282',
 ]
 
 #mc15a
@@ -321,13 +375,8 @@ TopExamples.grid.Add('triboson_mc15a').datasets = [
 'mc15_13TeV.361627.Sherpa_CT10_ZZZ_2l4v.merge.AOD.e4093_s2608_s2183_r6869_r6282',
 ]
 
-#mc15a AF2
-TopExamples.grid.Add('ttbargamma').datasets = [
-'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.DAOD_HIGG8D1.e4404_a766_a777_r6282_p2501',
-'mc15_13TeV.410087.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_allhad.merge.DAOD_HIGG8D1.e4404_a766_a777_r6282_p2501',
-]
-
-#mc15b
-TopExamples.grid.Add('tWZ').datasets = [
-'mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.DAOD_HIGG8D1.e4851_s2726_r7326_r6282_p2501',
+TopExamples.grid.Add('failed').datasets = [
+'mc15_13TeV.361620.Sherpa_CT10_WWW_3l3v.merge.DAOD_HIGG8D1.e4093_s2608_s2183_r7155_r6282_p2501',
+'mc15_13TeV.361626.Sherpa_CT10_ZZZ_4l2v.merge.DAOD_HIGG8D1.e4093_s2608_s2183_r6869_r6282_p2501',
+'mc15_13TeV.361625.Sherpa_CT10_ZZZ_6l0v.merge.DAOD_HIGG8D1.e4093_s2608_s2183_r6869_r6282_p2501',
 ]

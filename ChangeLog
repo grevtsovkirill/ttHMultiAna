@@ -1,3 +1,6 @@
+2016-03-18 Harish Potti <harish.potti@cern.ch>
+	* migrate to Top,2.3.45a
+	
 2016-03-01 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Change EventNumber and RunNumber variable type to unsigned long long and uint32_t
 	* Tag ttHMultiAna-00-01-04
