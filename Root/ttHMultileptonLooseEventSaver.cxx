@@ -380,6 +380,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->lumiBlock(); }, *systematicTree, "lbn");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
+    WrapS(scalarvec, [](const top::Event& event){ return event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background); }, *systematicTree, "backgroundFlags");
 
     // HF classification ttbar
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");   
@@ -850,6 +851,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
   }
+
+  //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
+  
 
   //ttbar HF classification
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
