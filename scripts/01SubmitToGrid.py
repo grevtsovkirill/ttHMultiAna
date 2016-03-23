@@ -10,28 +10,30 @@ config.gridUsername  = 'hpotti'
 config.excludedSites = 'DE ANALY_CSCS, ANALY_CSCS, ANALY_GOEGRID, DE ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
-config.destSE        = '' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
+config.destSE        = 'SMU2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 #config.forceSite     = 'ANALY_CONNECT'
 
 ###############################################################################
 #Systematics
 config.settingsFile  = 'generic_config-mc15-Sys.txt'
-config.suffix        = '19.03.16.Sys'
+config.suffix        = '20.03.16.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
 mc15b                         = TopExamples.grid.Samples(['MC15b'])
 mc15a                         = TopExamples.grid.Samples(['MC15a'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',mc15b)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',mc15b)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',mc15a)
 all_samples = mc15b
 #TopExamples.grid.submit(config,all_samples)
+
+config.settingsFile  = 'generic_config-mc15a-Sys.txt'
 #TopExamples.grid.submit(config,mc15a)
 
 ####################################################################################
 #Nominal
 config.settingsFile  = 'generic_config-mc15.txt'
-config.suffix = '19.03.16.Nominal'
+config.suffix = '20.03.16.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
@@ -39,22 +41,26 @@ nominal_mc15b                         = TopExamples.grid.Samples(['mc15b_nominal
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',nominal_mc15b)
 all_samples += nominal_mc15b
 #TopExamples.grid.submit(config,all_samples)
+
+config.settingsFile  = 'generic_config-mc15a.txt'
 #TopExamples.grid.submit(config,mc15a)
 
 ########################################################################################
 #data
 config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '19.03.16.Data'
+config.suffix = '21.03.16.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-data = TopExamples.grid.Samples(['data_2015_25ns_only_grlv73'])
+#data = TopExamples.grid.Samples(['data_2015_25ns_only_grlv73'])
+data = TopExamples.grid.Samples(['failed'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',data)
-#TopExamples.grid.submit(config, data)
+TopExamples.grid.submit(config, data)
 
 
 #################################################################################
 #PRW
+'''
 samples = samples_zjets_mg + samples_wjets_mg
 def makePRWcommand(samples):
     for sample in samples:
@@ -62,5 +68,5 @@ def makePRWcommand(samples):
             dsid = ds.split('.')[1]
             print 'pathena PileupReweighting/generatePRW_jobOptions.py --inDS="%s/" --outDS="user.%s.tthML.PURWTconfig.%s.26Jan16.root/"' % (ds,config.gridUsername, dsid)
         
-
 #print makePRWcommand(samples)
+'''

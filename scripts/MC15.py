@@ -380,3 +380,8 @@ TopExamples.grid.Add('failed').datasets = [
 'mc15_13TeV.361626.Sherpa_CT10_ZZZ_4l2v.merge.DAOD_HIGG8D1.e4093_s2608_s2183_r6869_r6282_p2501',
 'mc15_13TeV.361625.Sherpa_CT10_ZZZ_6l0v.merge.DAOD_HIGG8D1.e4093_s2608_s2183_r6869_r6282_p2501',
 ]
+TopExamples.grid.Add('ttZ').datasets = [
+'mc15_13TeV.410073.MadGraphPythia8EvtGen_A14NNPDF23LO_ttZnnqq_Np0.merge.AOD.e4631_s2726_r7326_r6282',
+'mc15_13TeV.410074.MadGraphPythia8EvtGen_A14NNPDF23LO_ttZnnqq_Np1.merge.AOD.e4631_s2726_r7326_r6282',
+'mc15_13TeV.410075.MadGraphPythia8EvtGen_A14NNPDF23LO_ttZnnqq_Np2.merge.AOD.e4631_s2726_r7326_r6282',
+]

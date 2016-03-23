@@ -125,6 +125,33 @@
  361442      1.30323e-06          0.9013         1.0    --    -999   1               Sherpa    Ztautau_Pt2000_E_CMS_CFilterBVeto  Full  
  361443      8.67123e-07          0.9013         1.0    --    -999   1               Sherpa         Ztautau_Pt2000_E_CMS_BFilter  Full  
 
+#Low Mass Sherpa Z+Jets
+ 361468          2146.84          0.9013         1.0    --    -999   1               Sherpa           Zee_Mll10to40_Pt0_70_BVeto  Full  
+ 361469          106.231          0.9013         1.0    --    -999   1               Sherpa         Zee_Mll10to40_Pt0_70_BFilter  Full  
+ 361470          6.95992          0.9013         1.0    --    -999   1               Sherpa         Zee_Mll10to40_Pt70_140_BVeto  Full  
+ 361471         0.774166          0.9013         1.0    --    -999   1               Sherpa       Zee_Mll10to40_Pt70_140_BFilter  Full  
+ 361472         0.617445          0.9013         1.0    --    -999   1               Sherpa        Zee_Mll10to40_Pt140_400_BVeto  Full  
+ 361473        0.0742106          0.9013         1.0    --    -999   1               Sherpa      Zee_Mll10to40_Pt140_400_BFilter  Full  
+ 361474       0.00605652          0.9013         1.0    --    -999   1               Sherpa      Zee_Mll10to40_Pt400_E_CMS_BVeto  Full  
+ 361475         0.001498          0.9013         1.0    --    -999   1               Sherpa    Zee_Mll10to40_Pt400_E_CMS_BFilter  Full  
+ 361476          2141.34          0.9013         1.0    --    -999   1               Sherpa         Zmumu_Mll10to40_Pt0_70_BVeto  Full  
+ 361477          106.373          0.9013         1.0    --    -999   1               Sherpa       Zmumu_Mll10to40_Pt0_70_BFilter  Full  
+ 361478          6.93811          0.9013         1.0    --    -999   1               Sherpa       Zmumu_Mll10to40_Pt70_140_BVeto  Full  
+ 361479         0.793501          0.9013         1.0    --    -999   1               Sherpa     Zmumu_Mll10to40_Pt70_140_BFilter  Full  
+ 361480         0.621546          0.9013         1.0    --    -999   1               Sherpa      Zmumu_Mll10to40_Pt140_400_BVeto  Full  
+ 361481        0.0825398          0.9013         1.0    --    -999   1               Sherpa    Zmumu_Mll10to40_Pt140_400_BFilter  Full  
+ 361482       0.00628191          0.9013         1.0    --    -999   1               Sherpa    Zmumu_Mll10to40_Pt400_E_CMS_BVeto  Full  
+ 361483          0.00151          0.9013         1.0    --    -999   1               Sherpa  Zmumu_Mll10to40_Pt400_E_CMS_BFilter  Full  
+ 361484             2159          0.9013         1.0    --    -999   1               Sherpa       Ztautau_Mll10to40_Pt0_70_BVeto  Full  
+ 361485          105.918          0.9013         1.0    --    -999   1               Sherpa     Ztautau_Mll10to40_Pt0_70_BFilter  Full  
+ 361486          6.93153          0.9013         1.0    --    -999   1               Sherpa     Ztautau_Mll10to40_Pt70_140_BVeto  Full  
+ 361487         0.811135          0.9013         1.0    --    -999   1               Sherpa   Ztautau_Mll10to40_Pt70_140_BFilter  Full  
+ 361488         0.617549          0.9013         1.0    --    -999   1               Sherpa    Ztautau_Mll10to40_Pt140_400_BVeto  Full  
+ 361489        0.0833129          0.9013         1.0    --    -999   1               Sherpa  Ztautau_Mll10to40_Pt140_400_BFilter  Full  
+ 361490       0.00700123          0.9013         1.0    --    -999   1               Sherpa  Ztautau_Mll10to40_Pt400_E_CMS_BVeto  Full  
+ 361491         0.001437          0.9013         1.0    --    -999   1               Sherpa  Ztautau_Mll10to40_Pt400_E_CMS_BFilter  Full  
+
+
 #Madgraph Zjets from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/CentralMC15ProductionList
  361500           1401.6           1.232         1.0    --    -999   2     MadGraph+Pythia8                              Zee_Np0  Full  
  361501           211.99           1.232         1.0    --    -999   2     MadGraph+Pythia8                              Zee_Np1  Full  
@@ -344,6 +371,7 @@
  301896           15.297               1         1.0    --    -999   2               Sherpa                    taunugammaPt35_70  Full  
  301897            1.529               1         1.0    --    -999   2               Sherpa                    taunugammaPt70_14  Full  
  301898           0.2426               1         1.0    --    -999   2               Sherpa                      taunugammaPt140  Full  
+
 
 
 
