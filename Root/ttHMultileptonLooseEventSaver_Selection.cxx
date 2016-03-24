@@ -468,6 +468,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
 
   lep.d0 = el.trackParticle()->d0();
   lep.z0 = el.trackParticle()->z0(); 
+  lep.vz = el.trackParticle()->vz(); 
 
   // truth matching, fakes, QMisId
   int truthType = -99;
@@ -545,6 +546,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   // lep.z0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->z0();
   lep.d0 = mu.primaryTrackParticle()->d0();
   lep.z0 = mu.primaryTrackParticle()->z0();
+  lep.vz = mu.primaryTrackParticle()->vz();
 
   // trigger matching, require lepton pt > 21 GeV
   if (mu.pt() > 21e3

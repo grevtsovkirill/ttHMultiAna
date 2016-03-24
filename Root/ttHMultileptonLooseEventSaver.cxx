@@ -382,6 +382,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background); }, *systematicTree, "backgroundFlags");
 
+    // vertex
+    //WrapS(scalarvec, [](const xAOD::Vertex& vtx){ return (float) vtx.z(); }, *systematicTree, "VertexZ");    
+
     // HF classification ttbar
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");   
    
