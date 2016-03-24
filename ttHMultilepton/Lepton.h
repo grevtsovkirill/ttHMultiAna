@@ -25,7 +25,8 @@ namespace ttHMultilepton {
     float SFTTVA[MAXSYST];
     float SFObjTight[MAXSYST];
     float SFObjLoose[MAXSYST];
-    float  D0;
+    float  d0;
+    float  z0;
     float  Z0SinTheta;
     float  MagD0;
     float  Pt;

@@ -30,6 +30,8 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   // impact parameters
   CreateBranch(tree, &sigd0PV,    "lep_sigd0PV_", index);
   CreateBranch(tree, &Z0SinTheta, "lep_Z0SinTheta_", index);
+  CreateBranch(tree, &d0,    "lep_d0_", index);
+  CreateBranch(tree, &z0,    "lep_z0_", index);
   // LH ID
   CreateBranch(tree, &isTightLH,  "lep_isTightLH_", index);
   CreateBranch(tree, &isMediumLH, "lep_isMediumLH_", index);

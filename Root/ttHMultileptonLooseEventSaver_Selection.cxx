@@ -387,6 +387,7 @@ void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
 void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.sigd0PV = part.auxdataConst<float>("d0sig");
   lep.Z0SinTheta = part.auxdataConst<float>("delta_z0_sintheta");
+ 
 }
 
 float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSFSyst SFSyst)
@@ -464,7 +465,10 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isMediumLH = el.auxdataConst<int>("passLHMedium");
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
- 
+
+  lep.d0 = el.trackParticle()->d0();
+  lep.z0 = el.trackParticle()->z0(); 
+
   // truth matching, fakes, QMisId
   int truthType = -99;
   int truthOrigin = -99;
@@ -536,6 +540,12 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.isLoose  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Loose  && muonSelection.passedIDCuts(mu) );
   lep.isMedium = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu) );
   lep.isTight  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Tight  && muonSelection.passedIDCuts(mu) );
+
+  // lep.d0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->d0();
+  // lep.z0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->z0();
+  lep.d0 = mu.primaryTrackParticle()->d0();
+  lep.z0 = mu.primaryTrackParticle()->z0();
+
   // trigger matching, require lepton pt > 21 GeV
   if (mu.pt() > 21e3
       && (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
