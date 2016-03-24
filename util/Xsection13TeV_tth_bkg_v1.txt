@@ -17,6 +17,8 @@
  410015           3.5835           1.054         1.0    --    -999   2               Powheg                      Wt_dilepton_top  Full  
  410016           3.5814           1.054         1.0    --    -999   2               Powheg                  Wt_dilepton_antitop  Full  
  410009            73.33          1.1949         1.0    --    -999   2               Powheg                 ttbar_hdamp172p5_dil  Full  
+ 410121           4.4954          1.1949         1.0    --    -999   2               Powheg         ttbar_hdamp172p5_dil_bfilter  Full  
+ 410159          369.742          1.2236         1.0    --    -999   2               Powheg                      ttbar_nonallhad  Full  
 #Extra Top/SingleTop
  410025           2.0517           1.005         1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full  
  410026           1.2615           1.022         1.0    --    -999   1               Powheg      SingleTopSchan_noAllHad_antitop  Full  
@@ -371,6 +373,7 @@
  301896           15.297               1         1.0    --    -999   2               Sherpa                    taunugammaPt35_70  Full  
  301897            1.529               1         1.0    --    -999   2               Sherpa                    taunugammaPt70_14  Full  
  301898           0.2426               1         1.0    --    -999   2               Sherpa                      taunugammaPt140  Full  
+
 
 
 
