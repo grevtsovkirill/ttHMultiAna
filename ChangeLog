@@ -1,3 +1,8 @@
+2016-03-28 David Hohn <david.hohn@cern.ch>
+	* update JVT cut to use detector eta
+	* save all jets. get them calibrated by AnalysisTop from TStore
+	* add function to TreeAssist to selectively push into the Wrappers
+
 2016-03-23 Harish Potti <harish.potti@utexas.edu>
 	* Add Xsection for Low-mass Z+Jets
 	
