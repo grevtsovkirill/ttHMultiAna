@@ -13,6 +13,9 @@ class ttHMultileptonEventSaver : public top::EventSaverFlatNtuple {
   
   //Run once at the start of the job
   void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches);
+
+  //Keep the asg::AsgTool happy
+  virtual StatusCode initialize(){return StatusCode::SUCCESS;}
   
   //Run for every event (in every systematic) that needs saving
   void saveEvent(const top::Event& event);
