@@ -39,9 +39,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pu_hash(0),
   m_pvNumber(0),
   m_puNumber(0),
+  m_HF_Classification(0.),
   m_met_met(0.),
-  m_met_phi(0.),
-  m_HF_Classification(0.)
+  m_met_phi(0.)
 {
 }
 
@@ -634,9 +634,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       
     }
     
-    
     vec_jet_wrappers.push_back(VectorWrapperCollection(jetvec));
-
+    
     //Taus
     std::vector<VectorWrapper*> tauvec;
     std::string tauprefix = "m_tau_";
@@ -660,7 +659,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     if(!m_doSystematics) {
       //substructure
 
-      /* apparently catching exceptions can be slow, so lets not do this in every event for no reason
+
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  int decayMode = 0;
 	  tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
@@ -675,7 +674,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  return tau.phiPanTauCellBased();
 	}, *systematicTree, std::string(tauprefix+"phiPanTau").c_str());
-      */
+
 
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
@@ -861,7 +860,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //ttbar HF classification
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
-  if (m_mcChannelNumber==410000){
+  if ( top::isSimulation(event) && m_mcChannelNumber==410000){
     m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
@@ -950,7 +949,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       ++i;
     }
   }
-  
+
   
   // for (const auto* const elPtr : event.m_electrons) {
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
@@ -989,13 +988,30 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CopyHT(goodEl, goodMu, goodJet, goodTau);
   CheckIsBlinded();
   doEventSFs();
+
+  //save ALL jets
+  xAOD::JetContainer* calibratedJets(nullptr);
+  top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
+
+  if(m_doSystematics) {
+    vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
+  }
+  else {
+    vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
+  }
+
+  // xAOD::ElectronContainer* calibratedElectrons(nullptr);
+  // top::check(evtStore()->retrieve(calibratedElectrons, m_config->sgKeyElectronsTDS(sysHash)), "Failed to retrieve calibrated electrons");
+  // std::function<bool(const xAOD::Electron&)>elecSelector = [](const xAOD::Electron& el){ return el.auxdataConst<int>("passLHLoose") && el.pt()>5e3 ; };
+  // vec_electron_wrappers[event.m_ttreeIndex].push_selected(*calibratedElectrons, elecSelector);
+
+  vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
-  vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
-  vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
   vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
   //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
+
   m_treeManagers[event.m_ttreeIndex]->fill();
 
 }

@@ -69,6 +69,20 @@ public:
       }
     }
   }
+
+  template<typename T, typename Tref> void push_selected(const DataVector<T>& invec, std::function<bool(Tref)> selector) {
+    for (std::vector<VectorWrapper*>::iterator vw=vws.begin();
+         vw != vws.end(); ++vw) {
+      (*vw)->clear();
+      //std::cout<<"size in push_selected"<<invec.size()<<std::endl;
+      for (unsigned int idx = 0; idx < invec.size(); ++idx) {
+	if (selector( *(invec[idx]) )) {
+	  (*vw)->set_current_entry(idx, invec[idx]);
+	  (*vw)->push_to_stack();
+	}
+      }
+    }
+  }
 };
 
 class ScalarWrapper {

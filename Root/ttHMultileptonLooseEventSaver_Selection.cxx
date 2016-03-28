@@ -129,7 +129,7 @@ ttHMultileptonLooseEventSaver::SelectJets(const top::Event& event) {
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(4);
     if (jetItr->pt() < 60e3
-	&& fabs(jetItr->eta()) < 2.4 
+	&& fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4 
 	&& jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59) {
       continue;
     }
