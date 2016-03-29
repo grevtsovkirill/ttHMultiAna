@@ -3,7 +3,7 @@
 #include "TopEventSelectionTools/TreeManager.h"
 #include <memory>
 #define LEPTON_ARR_SIZE 5
-#define TAU_ARR_SIZE 1
+#define TAU_ARR_SIZE 2
 #define MAXSYST 50
 
 class ttHMultileptonLooseEventSaver;
