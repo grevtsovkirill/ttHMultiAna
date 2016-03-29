@@ -4,6 +4,7 @@
 	* add d0, z0, vz, deltaz0 for flat leptons and vector leptons
 	* deltaz0 and deltaz0sintheta are signed again
 	* overwrite Count histogram content if running skimmed MC with sumWeights info
+	* tag ttHMultiAna-00-01-06
 
 2016-03-28 David Hohn <david.hohn@cern.ch>
 	* update JVT cut to use detector eta
@@ -12,7 +13,7 @@
 
 2016-03-23 Harish Potti <harish.potti@utexas.edu>
 	* Add Xsection for Low-mass Z+Jets
-	
+
 2016-03-18 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Include background flags
 	* Tag ttHMultiAna-00-01-05
