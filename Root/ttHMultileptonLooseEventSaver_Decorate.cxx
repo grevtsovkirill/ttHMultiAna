@@ -12,7 +12,16 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   if(m_config->useTrackJets() == false) no_tjet = true;
   else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
 
+  double vtx_z = m_pvZ;
+  
   for (auto elItr : event.m_electrons) {
+    //delta z0
+    float delta_z0 = elItr->trackParticle()->z0()
+                   + elItr->trackParticle()->vz()
+                   - vtx_z;
+    elItr->auxdecor<float>("delta_z0") = delta_z0;
+    elItr->auxdecor<float>("delta_z0_sintheta") = delta_z0*std::sin( elItr->trackParticle()->theta() );
+    
     // Isolation
     auto isomap = iso_1.accept(*elItr);
     int idx = 0;
@@ -83,6 +92,14 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   }// end elecs
 
   for (auto muItr : event.m_muons) {
+    //delta z0
+    float delta_z0 = muItr->primaryTrackParticle()->z0() +
+		     muItr->primaryTrackParticle()->vz() -
+		     vtx_z;
+    muItr->auxdecor<float>("delta_z0") = delta_z0;
+    muItr->auxdecor<float>("delta_z0_sintheta") = delta_z0*std::sin( muItr->primaryTrackParticle()->theta() );
+
+    
     // Isolation
     auto isomap = iso_1.accept(*muItr);
     int idx = 0;

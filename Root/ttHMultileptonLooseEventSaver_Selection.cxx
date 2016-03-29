@@ -387,7 +387,7 @@ void CopyIso(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
 void CopyIParam(xAOD::IParticle& part, ttHMultilepton::Lepton& lep) {
   lep.sigd0PV = part.auxdataConst<float>("d0sig");
   lep.Z0SinTheta = part.auxdataConst<float>("delta_z0_sintheta");
- 
+  lep.deltaz0 = part.auxdataConst<float>("delta_z0");
 }
 
 float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSFSyst SFSyst)
@@ -827,6 +827,7 @@ ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& 
   MLTau.eta             = xTau.eta();
   MLTau.phi             = xTau.phi();
   MLTau.charge          = xTau.charge();
+  MLTau.e               = xTau.e();
   MLTau.BDTJetScore     = xTau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore);
   MLTau.JetBDTSigLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose);
   MLTau.JetBDTSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium);

@@ -13,6 +13,7 @@ namespace ttHMultilepton {
     float eta;
     float phi;
     float charge;
+    float e;
     double BDTJetScore;
     int JetBDTSigLoose;
     int JetBDTSigMedium;

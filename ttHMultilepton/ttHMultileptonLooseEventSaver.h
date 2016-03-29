@@ -168,6 +168,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float m_mu_ac;
   ULong64_t m_pu_hash;
   int m_pvNumber;
+  float m_pvX;
+  float m_pvY;
+  float m_pvZ;
   int m_puNumber;
   //use with care, don't mix MC and data in same job
   bool m_isMC;
@@ -263,6 +266,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<VectorWrapperCollection> vec_muon_wrappers;
   std::vector<VectorWrapperCollection> vec_jet_wrappers;
   std::vector<VectorWrapperCollection> vec_tau_wrappers;
+  std::vector<VectorWrapperCollection> vec_vtx_wrappers;
   #endif
 
   ClassDef(ttHMultileptonLooseEventSaver, 0);

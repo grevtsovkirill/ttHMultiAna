@@ -1,3 +1,10 @@
+2016-03-29 David Hohn <david.hohn@cern.ch>
+	* add 2nd flat tau, add flat tau E
+	* add all vertices as vector branches and primary vertex also flat
+	* add d0, z0, vz, deltaz0 for flat leptons and vector leptons
+	* deltaz0 and deltaz0sintheta are signed again
+	* overwrite Count histogram content if running skimmed MC with sumWeights info
+
 2016-03-28 David Hohn <david.hohn@cern.ch>
 	* update JVT cut to use detector eta
 	* save all jets. get them calibrated by AnalysisTop from TStore
