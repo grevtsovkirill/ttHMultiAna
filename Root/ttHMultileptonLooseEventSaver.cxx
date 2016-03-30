@@ -15,6 +15,8 @@
 //ROOT
 #include "TFile.h"
 #include "TH1.h"
+#include "TTreeReader.h"
+#include "TTreeReaderValue.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
   m_outputFile(0),
@@ -1072,12 +1074,16 @@ void ttHMultileptonLooseEventSaver::finalize() {
   //overwrite Count histogram with values from CutBookkeepers
   //only for skimmed MC
   if(m_isMC) {
-    auto sumWeights = static_cast<TTree*>(m_outputFile->Get("sumWeights"));
-    // do this GetVal stuff to avoid defining TBranches and looping
-    sumWeights->Draw("totalEvents:totalEventsWeighted","1","para goff");
-    double totalEventsUnskimmed         = *( sumWeights->GetVal(0) );
-    double totalEventsWeightedUnskimmed = *( sumWeights->GetVal(1) );
-    double totalEventsSkimmed           = Count->GetBinContent(3);
+    TTreeReader sumWeightsReader("sumWeights", m_outputFile);
+    TTreeReaderValue<unsigned long long> totalEvents(sumWeightsReader, "totalEvents");
+    TTreeReaderValue<Float_t> totalEventsWeighted(sumWeightsReader, "totalEventsWeighted");
+    double totalEventsUnskimmed         = 0;
+    double totalEventsWeightedUnskimmed = 0;
+    while(sumWeightsReader.Next()) {
+      totalEventsUnskimmed         += *totalEvents;
+      totalEventsWeightedUnskimmed += *totalEventsWeighted;
+    }
+    double totalEventsSkimmed = Count->GetBinContent(3);
     if(totalEventsUnskimmed != totalEventsSkimmed) {
       Count->SetBinContent(1,totalEventsWeightedUnskimmed);
       Count->SetBinContent(2,totalEventsWeightedUnskimmed);

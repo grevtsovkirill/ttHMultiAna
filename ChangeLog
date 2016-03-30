@@ -1,4 +1,7 @@
 2016-03-29 David Hohn <david.hohn@cern.ch>
+	* bugfix for reading the sumWeights TTree
+
+2016-03-29 David Hohn <david.hohn@cern.ch>
 	* add 2nd flat tau, add flat tau E
 	* add all vertices as vector branches and primary vertex also flat
 	* add d0, z0, vz, deltaz0 for flat leptons and vector leptons
