@@ -177,6 +177,19 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     int passEleOLR(0);
     if(m_tauSelectionEleOLR.accept(*tauItr)) passEleOLR = 1;
     tauItr->auxdecor<int>("passEleOLR") = passEleOLR;
+
+    //truth jet flavour
+    int truthJetFlavour(-1);
+    if(tauItr->isAvailable<ElementLink<xAOD::JetContainer> >("truthJetLink")) {
+      auto truthJetLink = tauItr->auxdata<ElementLink<xAOD::JetContainer> >("truthJetLink");
+      if(truthJetLink.isValid() ) {
+	auto truthJet = *truthJetLink;
+	if( truthJet->isAvailable<int>("HadronConeExclTruthLabelID") ){
+	  truthJetFlavour = truthJet->auxdata<int>("HadronConeExclTruthLabelID");
+	}
+      }
+    }
+    tauItr->auxdecor<int>("truthJetFlavour") = truthJetFlavour;
   }//end taus
   
 }//end decorate

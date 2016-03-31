@@ -688,6 +688,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  return tau.phiPanTauCellBased();
 	}, *systematicTree, std::string(tauprefix+"phiPanTau").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	  auto p4 = tau.p4(xAOD::TauJetParameters::PanTauCellBased);
+	  return p4.E();
+	}, *systematicTree, std::string(tauprefix+"EPanTau").c_str());
 
 
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
@@ -711,7 +715,12 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
 	  return tau.auxdata<int>("tauTruthType");
 	}, *systematicTree, std::string(tauprefix+"truthType").c_str());
-    
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<int>("truthJetFlavour");
+	}, *systematicTree, std::string(tauprefix+"truthJetFlavour").c_str());
+
+      
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  return tau.auxdata<float>("ele_match_lhscore");
 	}, *systematicTree, std::string(tauprefix+"ele_match_lhscore").c_str());
