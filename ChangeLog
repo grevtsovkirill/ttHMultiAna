@@ -1,3 +1,6 @@
+2016-04-04 David Hohn <david.hohn@cern.ch>
+	* bugfix triggermatching special case for electrons
+
 2016-03-29 David Hohn <david.hohn@cern.ch>
 	* bugfix for reading the sumWeights TTree
 

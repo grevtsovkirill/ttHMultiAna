@@ -494,12 +494,16 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
     lep.isFakeLep = 0;
 
   // trigger matching, electron pt > 25 GeV
-  if (!m_isMC && el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
-    lep.isTrigMatch = 1;
-  else if (el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"))) //mc
-    lep.isTrigMatch = 1;
-  else
-    lep.isTrigMatch = 0;
+  if (!m_isMC) {
+    if( el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
+      lep.isTrigMatch = 1;
+    else lep.isTrigMatch = 0;
+  }
+  else {
+    if (el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"))) //mc
+      lep.isTrigMatch = 1;
+    else lep.isTrigMatch = 0;
+  }
 
   // isolation variables
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
