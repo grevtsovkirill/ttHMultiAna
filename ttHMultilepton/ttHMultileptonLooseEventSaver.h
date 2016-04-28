@@ -84,6 +84,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CopyTaus(std::shared_ptr<xAOD::TauJetContainer>& goodTau);
   void CheckIsBlinded();
   void CopyHT(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<xAOD::JetContainer>& goodJet, std::shared_ptr<xAOD::TauJetContainer>& goodTau);
+  void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
   
  private:
   ///The file where everything goes

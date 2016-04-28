@@ -1028,10 +1028,12 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(m_doSystematics) {
     //only selected jets
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
+    MakeJetIndices(goodJet, event.m_jets);
   }
   else {
     //all jets
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
+    MakeJetIndices(goodJet, *calibratedJets);
   }
 
   // xAOD::ElectronContainer* calibratedElectrons(nullptr);

@@ -64,6 +64,8 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &SFIDTight[0],   "lep_SFIDTight_", index);
   CreateBranch(tree, &SFTrigLoose[0], "lep_SFTrigLoose_", index);
   CreateBranch(tree, &SFTrigTight[0], "lep_SFTrigTight_", index);
+  CreateBranch(tree, &EffTrigLoose[0], "lep_EffTrigLoose_", index);
+  CreateBranch(tree, &EffTrigTight[0], "lep_EffTrigTight_", index);
   CreateBranch(tree, &SFIsoLoose[0],  "lep_SFIsoLoose_", index);
   CreateBranch(tree, &SFIsoTight[0],  "lep_SFIsoTight_", index);
   CreateBranch(tree, &SFReco[0],      "lep_SFReco_", index);

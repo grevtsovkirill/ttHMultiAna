@@ -1,3 +1,7 @@
+2016-04-28 Peter Onyisi <ponyisi@cern.ch>
+	* Save indices of jets passing OR (selected_jets, selected_jets_T)
+	* Save trigger efficiencies (I think)
+
 2016-04-04 David Hohn <david.hohn@cern.ch>
 	* bugfix triggermatching special case for electrons
 

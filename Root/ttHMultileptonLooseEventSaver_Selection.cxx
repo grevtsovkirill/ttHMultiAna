@@ -743,6 +743,31 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
 }
 
 void
+ttHMultileptonLooseEventSaver::MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets,
+					      const xAOD::JetContainer& allJets) {
+  m_variables->selected_jets.clear();
+  m_variables->selected_jets_T.clear();
+  for (const auto jetItr : *goodJets) {
+    if (!jetItr->template auxdataConst<short>("ttHpassOVR")) continue;
+    auto& goodp4 = jetItr->p4();
+    bool found = false;
+    for (size_t idx = 0; idx < allJets.size(); ++idx) {
+      if (goodp4 == allJets[idx]->p4()) {
+	found = true;
+	m_variables->selected_jets.push_back(idx);
+	if (jetItr->template auxdataConst<short>("ttHpassTauOVR")) {
+	  m_variables->selected_jets_T.push_back(idx);
+	}
+	break;
+      }
+    }
+    if (!found) {
+      std::cerr << "Unable to find a jet match. Sad!" << std::endl;
+    }
+  }
+}
+
+void
 ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goodJets) {
   // don't actually copy anything ATM, just give yields of jets & btags
   m_variables->nJets_OR = goodJets->size();
