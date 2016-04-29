@@ -422,6 +422,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(vtxvec, [](const xAOD::Vertex& vtx){ return (float) vtx.y(); },        *systematicTree, "vtx_y");    
       Wrap2(vtxvec, [](const xAOD::Vertex& vtx){ return (float) vtx.z(); },        *systematicTree, "vtx_z");
       Wrap2(vtxvec, [](const xAOD::Vertex& vtx){ return (int) vtx.vertexType(); }, *systematicTree, "vtx_type");
+      Wrap2(vtxvec, [](const xAOD::Vertex& vtx){ return (int) vtx.nTrackParticles(); }, *systematicTree, "vtx_numTrk");
       // vertexType enum in xAODTracking/xAODTracking/TrackingPrimitives.h: 1 is Primary, 3 is PU
       vec_vtx_wrappers.push_back(VectorWrapperCollection(vtxvec));
     }
