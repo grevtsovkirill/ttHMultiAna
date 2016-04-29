@@ -169,7 +169,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
 
   //Pileup Reweighting Tool from TopToolStore
-  top::check(m_purwtool.retrieve(), "Failed to retrieve Pileup Reweighting Tool");
+  if( m_purwtool.retrieve() ) {}
+
 
   //Trigger Tools
   // Trigger decision tool. 
@@ -859,8 +860,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  //top::check(m_purwtool->apply( *event.m_info ), "Failed to apply pileup weight");
-  m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false); 
+
+  // waiting for fix in TopCorrections
+  //m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false); 
+
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
