@@ -3,6 +3,7 @@
 	* Add Number of tracks in vertex: m_vtx_numTrk
 	* use pileup reweighting tool from TopToolStore
 	* add cut on presence of primary vertex for data
+	* use recommended TTVA cuts for loose leptons also
 
 2016-04-28 Peter Onyisi <ponyisi@cern.ch>
 	* Save indices of jets passing OR (selected_jets, selected_jets_T)
