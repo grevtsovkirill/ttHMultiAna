@@ -27,6 +27,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   trigDecTool("TrigDecTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
+  m_purwtool("CP::PileupReweightingTool"),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
   m_mcWeight(1.),
   m_pileup_weight(1.),
@@ -165,24 +166,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_weight_bTagSF_77_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars() );
 
   //init Tools
-  
-  //Pileup Reweighting Tools
-  m_purwtool = new CP::PileupReweightingTool("prw_tthml");
-  std::vector<std::string> pileup_config = config->PileupConfig();
-  for ( std::string& s: pileup_config )
-    s = PathResolverFindCalibFile( s );
-  std::vector<std::string> pileup_lumi_calc = config->PileupLumiCalc();
-  for ( std::string& s: pileup_lumi_calc )
-    s = PathResolverFindCalibFile( s );
-  // Let's have the option of having one config file per MC sample- set default channel
-  // to < 0 if you are doing this.
-  int default_channel = config->PileupDefaultChannel();
-  if ( default_channel > 0 )
-    top::check( m_purwtool->setProperty("DefaultChannel", default_channel), "Failed to set pileup reweighting config files" );    
-  top::check( m_purwtool->setProperty("ConfigFiles", pileup_config), "Failed to set pileup reweighting config files" );
-  top::check( m_purwtool->setProperty("LumiCalcFiles", pileup_lumi_calc), "Failed to set pileup reweighting lumicalc files");
-  top::check( m_purwtool->setProperty("OutputLevel", MSG::VERBOSE),"m_purwtool fails to set OutputLevel");
-  top::check( m_purwtool->initialize(), "Failed to initialize pileup reweighting tool" );
+
+
+  //Pileup Reweighting Tool from TopToolStore
+  top::check(m_purwtool.retrieve(), "Failed to retrieve Pileup Reweighting Tool");
 
   //Trigger Tools
   // Trigger decision tool. 

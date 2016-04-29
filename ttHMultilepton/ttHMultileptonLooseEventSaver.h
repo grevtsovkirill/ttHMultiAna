@@ -110,9 +110,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   JetCleaningTool*                       cleaningTool;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
-  //  ToolHandle<CP::IPileupReweightingTool>     m_purwtool;
-  //ToolHandle<IPileupReweightingTool>     m_purwtool;
-  PileupReweightingTool*                 m_purwtool;
+  ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   TauSelectionTool                       m_tauSelectionEleOLR;
 
   //for convenience of use with Wrap stuff
