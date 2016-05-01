@@ -12,6 +12,8 @@
 #include "PileupReweighting/PileupReweightingTool.h"
 #include "AsgTools/ToolHandle.h"
 #include "TauAnalysisTools/TauEfficiencyCorrectionsTool.h"
+#include "AssociationUtils/ToolBox.h"
+#include "AssociationUtils/IOverlapRemovalTool.h"
 
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
@@ -112,7 +114,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ttH::TruthSelector                     truthSelector;
   ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   TauSelectionTool                       m_tauSelectionEleOLR;
+  ORUtils::ToolBox                       m_ORtoolBox;
+  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool;
 
+  
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
   const EventInfo*       m_eventInfo;

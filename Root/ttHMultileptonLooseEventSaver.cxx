@@ -18,6 +18,9 @@
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
 
+//ASG OR
+#include "AssociationUtils/OverlapRemovalInit.h"
+
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
   m_outputFile(0),
   m_doSystematics(false),
@@ -463,6 +466,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<int>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<int>("passLHTight"); },  *systematicTree, "electron_isTightLH");
 
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("sharesTrk"); },  *systematicTree, "electron_sharesTrk");
+
     for (std::string trigger_name : triggernames) {
       if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;
       std::string trigmatch_name = "TRIGMATCH_"; trigmatch_name += trigger_name;
@@ -746,6 +751,30 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   // apparently not a question anymore
   m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
 
+
+  //tools for OR
+  // only el/mu for now
+
+  ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
+			    "passPreORSelection");
+  OR_flags.doElectrons = m_config->useElectrons();
+  OR_flags.doMuons     = m_config->useMuons();
+  OR_flags.doJets      = false;
+  OR_flags.doTaus      = false;
+  OR_flags.doPhotons   = false;
+  OR_flags.outputLabel = "sharesTrk";
+
+  top::check(ORUtils::recommendedTools(OR_flags, m_ORtoolBox),
+	     "Failed to setup OR Tool box");
+
+  if (m_config->useMuons() && m_config->useElectrons())
+    top::check(m_ORtoolBox.eleMuORT.setProperty("RemoveCaloMuons", false),
+	       "Failed to set RemoveCaloMuons in eleMuORT");
+
+  top::check(m_ORtoolBox.initialize(),
+	     "Failed to initialize overlap removal tools");
+  m_overlapRemovalTool = std::move(m_ORtoolBox.masterTool);
+  
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -1001,6 +1030,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
   OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
+  top::check( m_overlapRemovalTool->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
   CopyLeptons(goodEl, goodMu);
 
   // dont do the rest if we skim here anyway
