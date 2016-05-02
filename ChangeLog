@@ -1,10 +1,15 @@
+2016-05-02 David Hohn <david.hohn@cern.ch>
+	* protect against vtx not having x/y coordinates in topq1 derivation
+
+2016-05-01 David Hohn <david.hohn@cern.ch>
+	* add electron_sharesTrk for offline el/mu overlap removal a la ASG, should be double checked
+
 2016-04-29 David Hohn <david.hohn@cern.ch>
 	* Move to Top,2.3.49: possibly last release for 20.1
 	* Add Number of tracks in vertex: m_vtx_numTrk
 	* use pileup reweighting tool from TopToolStore
 	* add cut on presence of primary vertex for data
 	* use recommended TTVA cuts for loose leptons also
-	* add electron_sharesTrk for offline el/mu overlap removal a la ASG, should be double checked
 
 2016-04-28 Peter Onyisi <ponyisi@cern.ch>
 	* Save indices of jets passing OR (selected_jets, selected_jets_T)

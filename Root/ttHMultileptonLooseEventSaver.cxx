@@ -1012,9 +1012,15 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   for (const xAOD::Vertex* vtx : *m_vertices){ 
     if(vtx->vertexType() == xAOD::VxType::PriVtx) {
       m_pvNumber++;
-      m_pvX = vtx->x();
-      m_pvY = vtx->y();
-      m_pvZ = vtx->z();
+      try {
+	m_pvX = vtx->x();
+	m_pvY = vtx->y();
+	m_pvZ = vtx->z();
+      }
+      catch(SG::ExcBadAuxVar& e) {
+	//no vtx info
+	//skip
+      }
     }
     else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
   }
