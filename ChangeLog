@@ -1,5 +1,6 @@
 2016-05-02 David Hohn <david.hohn@cern.ch>
 	* protect against vtx not having x/y coordinates in topq1 derivation
+	* fix dependency compilation error
 
 2016-05-01 David Hohn <david.hohn@cern.ch>
 	* add electron_sharesTrk for offline el/mu overlap removal a la ASG, should be double checked
