@@ -795,9 +795,9 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     if (btagging) {
       double mv2c;
       if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
-	if (mv2c > -0.4434) {
+	if (mv2c > 0.4803) {
 	  m_variables->nJets_OR_MV2c20_77++;
-	  if (mv2c > -0.0436) {
+	  if (mv2c > 0.7110) {
 	    m_variables->nJets_OR_MV2c20_70++;
 	  }
 	}
@@ -813,9 +813,9 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
       if (btagging) {
 	double mv2c;
 	if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
-	  if (mv2c > -0.4434) {
+	  if (mv2c > 0.4803) {
 	    m_variables->nJets_OR_T_MV2c20_77++;
-	    if (mv2c > -0.0436) {
+	    if (mv2c > 0.7110) {
 	      m_variables->nJets_OR_T_MV2c20_70++;
 	    }
 	  }

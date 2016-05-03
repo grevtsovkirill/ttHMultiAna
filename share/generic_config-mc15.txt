@@ -30,9 +30,9 @@ OutputEvents SelectedEvents
 PerfStats No
 NEvents 0
 
-PRWConfigFiles ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root ttHMultilepton/tthML.PURWTconfig.341177.root ttHMultilepton/tthML.PURWTconfig.341270.root ttHMultilepton/tthML.PURWTconfig.341271.root ttHMultilepton/tthML.PURWTconfig.341997.root ttHMultilepton/tthML.PURWTconfig.341998.root ttHMultilepton/tthML.PURWTconfig.341999.root ttHMultilepton/tthML.PURWTconfig.342000.root ttHMultilepton/tthML.PURWTconfig.342001.root ttHMultilepton/tthML.PURWTconfig.342002.root ttHMultilepton/tthML.PURWTconfig.342003.root ttHMultilepton/tthML.PURWTconfig.342004.root ttHMultilepton/tthML.PURWTconfig.342005.root ttHMultilepton/tthML.PURWTconfig.342170.root ttHMultilepton/tthML.PURWTconfig.342171.root ttHMultilepton/tthML.PURWTconfig.342172.root ttHMultilepton/tthML.PURWTconfig.361073.root ttHMultilepton/tthML.PURWTconfig.361079.root ttHMultilepton/tthML.PURWTconfig.361085.root ttHMultilepton/tthML.PURWTconfig.361087.root  ttHMultilepton/tthML.PURWTconfig.410080.root ttHMultilepton/tthML.PURWTconfig.410081.root
+PRWConfigFiles ttHMultilepton/merged_prw_mc15c.root
 PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
-PRWDefaultChannel 410009
+PRWDefaultChannel 363372
 
 Systematics Nominal
 
