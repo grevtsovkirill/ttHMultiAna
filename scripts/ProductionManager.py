@@ -226,7 +226,7 @@ if __name__ == '__main__':
     
     #samples that are done on GRID but not yet on EOS
     samplesCopyEOS = list(set(doneSamplesOnGRID) - set(samplesOnEOS))
-    runningBJobs = subprocess.Popen(["bjobs","-lr"],stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()[0].splitlines()
+    runningBJobs = subprocess.Popen(["bjobs","-l"],stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()[0].splitlines()
     submitted = 0
     for copySample in samplesCopyEOS:
         if SampleHasRunningBJob(productionName+'_'+copySample.dsid,runningBJobs):

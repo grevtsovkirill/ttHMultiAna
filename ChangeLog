@@ -1,3 +1,7 @@
+2016-05-03 David Hohn <david.hohn@cern.ch>
+	* add 20.7 repocessed data file list
+	* small bugfix in ProductionManager
+
 2016-05-02 David Hohn <david.hohn@cern.ch>
 	* protect against vtx not having x/y coordinates in topq1 derivation
 	* fix dependency compilation error
