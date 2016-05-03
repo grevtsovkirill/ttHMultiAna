@@ -29,7 +29,6 @@
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopCorrections/ScaleFactorRetriever.h"
-#include "TopCorrections/ScaleFactorCalculator.h"
 #include "ttHMultilepton/TreeAssist.h"
 #include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
@@ -136,8 +135,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   // utility functions
   void CopyElectron(xAOD::Electron&, ttHMultilepton::Lepton&);
-  void CopyMuon(xAOD::Muon&, ttHMultilepton::Lepton&);
-  void CopyTau(xAOD::TauJet&, ttHMultilepton::Tau&);
+  void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
+  void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
   

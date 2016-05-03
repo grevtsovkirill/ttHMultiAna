@@ -1,16 +1,10 @@
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
-#include "TopEvent/Event.h"
+//Top
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
 #include "TopConfiguration/ConfigurationSettings.h"
-#include "TopEventSelectionTools/TreeManager.h"
-
 #include "TopParticleLevel/ParticleLevelEvent.h"
-
-#include "TopCorrections/ScaleFactorRetriever.h"
-
-#include "PathResolver/PathResolver.h"
 
 //ROOT
 #include "TFile.h"
