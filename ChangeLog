@@ -1,3 +1,8 @@
+2016-05-03 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* updated b-tagging WP cuts for 20.7, add 60 and 85% nBjet variables
+	* undo recommended TTVA cuts for loose leptons to loose ones
+	* add mc15c PU RW file and updated config file for mc15c
+
 2016-05-03 David Hohn <david.hohn@cern.ch>
 	* add 20.7 repocessed data file list
 	* small bugfix in ProductionManager
