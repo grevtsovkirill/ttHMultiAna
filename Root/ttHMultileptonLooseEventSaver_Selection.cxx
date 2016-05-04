@@ -773,8 +773,12 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   m_variables->nJets_OR = goodJets->size();
   m_variables->nJets_OR_T = CountPassOR(*goodJets, true);
 
+  m_variables->nJets_OR_MV2c20_85   = 0;
+  m_variables->nJets_OR_MV2c20_60   = 0;
   m_variables->nJets_OR_MV2c20_70   = 0;
   m_variables->nJets_OR_MV2c20_77   = 0;
+  m_variables->nJets_OR_T_MV2c20_85 = 0;
+  m_variables->nJets_OR_T_MV2c20_60 = 0;
   m_variables->nJets_OR_T_MV2c20_70 = 0;
   m_variables->nJets_OR_T_MV2c20_77 = 0;
   
@@ -795,10 +799,16 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     if (btagging) {
       double mv2c;
       if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
-	if (mv2c > -0.4434) {
-	  m_variables->nJets_OR_MV2c20_77++;
-	  if (mv2c > -0.0436) {
-	    m_variables->nJets_OR_MV2c20_70++;
+	if (mv2c > -0.7887) {
+	  m_variables->nJets_OR_MV2c20_85++;
+	  if (mv2c > -0.4434) {
+	    m_variables->nJets_OR_MV2c20_77++;
+	    if (mv2c > -0.0436) {
+	      m_variables->nJets_OR_MV2c20_70++;
+	      if (mv2c > 0.4496) {
+		m_variables->nJets_OR_MV2c20_60++;
+	      }
+	    }
 	  }
 	}
       }
@@ -813,10 +823,16 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
       if (btagging) {
 	double mv2c;
 	if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
-	  if (mv2c > -0.4434) {
-	    m_variables->nJets_OR_T_MV2c20_77++;
-	    if (mv2c > -0.0436) {
-	      m_variables->nJets_OR_T_MV2c20_70++;
+	  if (mv2c > -0.7887) {
+	    m_variables->nJets_OR_T_MV2c20_85++;
+	    if (mv2c > -0.4434) {
+	      m_variables->nJets_OR_T_MV2c20_77++;
+	      if (mv2c > -0.0436) {
+		m_variables->nJets_OR_T_MV2c20_70++;
+		if (mv2c > 0.4496) {
+		  m_variables->nJets_OR_T_MV2c20_60++;
+		}
+	      }
 	    }
 	  }
 	}

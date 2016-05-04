@@ -1,3 +1,7 @@
+2016-05-04 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* add 60 and 85% nBjet variables
+	* undo recommended TTVA cuts for loose leptons to loose ones
+
 2016-05-02 David Hohn <david.hohn@cern.ch>
 	* protect against vtx not having x/y coordinates in topq1 derivation
 	* fix dependency compilation error
