@@ -485,8 +485,20 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       //truth origin HERE
       //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
       //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
-      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrigin");
-      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); },   *systematicTree, "electron_truthType");
+     
+      // Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrigin");
+      // Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); },   *systematicTree, "electron_truthType");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	  int m_el_true_origin = -99;
+	  static SG::AuxElement::Accessor<int> origel("truthOrigin");
+	  if (origel.isAvailable(ele)) m_el_true_origin = origel(ele);
+	  return (int) m_el_true_origin; }, *systematicTree, "electron_truthOrigin");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	  int m_el_true_type = -99;
+	  static SG::AuxElement::Accessor<int> typeel("truthType");
+	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
+	  return (int) m_el_true_type; },   *systematicTree, "electron_truthType");
 
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
     }
@@ -557,27 +569,48 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon. 
       //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
       //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
-      Wrap2(muvec, [=](const xAOD::Muon& mu) { 
-	  const xAOD::TruthParticle* matched_truth_muon=0;
-	  int mu_type = -99;
-	  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
-	    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
-	    if(link.isValid()){
-	      matched_truth_muon = *link;
-	      mu_type = matched_truth_muon->auxdata<int>("truthType");
-	    }
-	  } return (int) mu_type; }, *systematicTree, "muon_truthType");
+
+      
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  static SG::AuxElement::Accessor<int> acc_mctt("truthType");
+	  int m_mu_true_type=-99;
+	  const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
+	  if (mutrack!=nullptr) {
+	    if (acc_mctt.isAvailable(*mutrack)) m_mu_true_type = acc_mctt(*mutrack);
+	  }
+	  return (int) m_mu_true_type; }, *systematicTree, "muon_truthType");
     
-      Wrap2(muvec, [=](const xAOD::Muon& mu) { 
-	  const xAOD::TruthParticle* matched_truth_muon=0;
-	  int mu_orig = -99;
-	  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
-	    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
-	    if(link.isValid()){
-	      matched_truth_muon = *link;
-	      mu_orig = matched_truth_muon->auxdata<int>("truthOrigin");
-	    }
-	  } return (int) mu_orig; }, *systematicTree, "muon_truthOrigin");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  static SG::AuxElement::Accessor<int> acc_mcto("truthOrigin");
+	  int m_mu_true_origin=-99;
+	  const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
+	  if (mutrack!=nullptr) {
+	    if (acc_mcto.isAvailable(*mutrack)) m_mu_true_origin = acc_mcto(*mutrack);
+	  }
+	  return (int) m_mu_true_origin; }, *systematicTree, "muon_truthOrigin");
+    
+
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+      // 	  const xAOD::TruthParticle* matched_truth_muon=0;
+      // 	  int mu_type = -99;
+      // 	  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+      // 	    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+      // 	    if(link.isValid()){
+      // 	      matched_truth_muon = *link;
+      // 	      mu_type = matched_truth_muon->auxdata<int>("truthType");
+      // 	    }
+      // 	  } return (int) mu_type; }, *systematicTree, "muon_truthType");
+    
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+      // 	  const xAOD::TruthParticle* matched_truth_muon=0;
+      // 	  int mu_orig = -99;
+      // 	  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+      // 	    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+      // 	    if(link.isValid()){
+      // 	      matched_truth_muon = *link;
+      // 	      mu_orig = matched_truth_muon->auxdata<int>("truthOrigin");
+      // 	    }
+      // 	  } return (int) mu_orig; }, *systematicTree, "muon_truthOrigin");
     
       //There is a second way to get truth type for all muons, from track particle. See diffs from https://twiki.cern.ch/twiki/bin/view/Atlas/XAODMuon#How_to_retrieve_truth_type_and_o
       Wrap2(muvec, [=](const xAOD::Muon& mu) { 
