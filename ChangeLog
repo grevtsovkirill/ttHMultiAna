@@ -1,3 +1,8 @@
+2016-05-08 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* add LOWPT muon SF uncertainties
+	* add protection to truthOrigin and truthType definitions
+	* add truthOrigin and truthType for leptons after OLR
+
 2016-05-04 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* add 60 and 85% nBjet variables
 	* undo recommended TTVA cuts for loose leptons to loose ones

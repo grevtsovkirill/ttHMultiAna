@@ -474,9 +474,18 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   int truthType = -99;
   int truthOrigin = -99;
   if(m_isMC) {
-    truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
-    truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
+    static SG::AuxElement::Accessor<int> origel("truthOrigin");
+    if (origel.isAvailable(el)) truthOrigin = origel(el);
+    
+    static SG::AuxElement::Accessor<int> typeel("truthType");
+    if (typeel.isAvailable(el)) truthType = typeel(el);
+
+    // truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
+    // truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
   }
+
+  lep.TruthOrigin = truthOrigin;
+  lep.TruthType = truthType;
   
   if (truthType == 2 || truthType == 6)
     lep.isPrompt = 1;
@@ -563,21 +572,37 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   int truthType = -99;
   int truthOrigin = -99;
 
-  const xAOD::TruthParticle* matched_truth_muon=0;
-  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
-    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
-    if(link.isValid()){
-      matched_truth_muon = *link;
-      truthOrigin = matched_truth_muon->auxdata<int>("truthOrigin");
+  if(m_isMC) {
+    static SG::AuxElement::Accessor<int> acc_mctt("truthType");
+    const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
+    if (mutrack!=nullptr) {
+      if (acc_mctt.isAvailable(*mutrack)) truthType = acc_mctt(*mutrack);
+    }
+    
+    static SG::AuxElement::Accessor<int> acc_mcto("truthOrigin");
+    if (mutrack!=nullptr) {
+      if (acc_mcto.isAvailable(*mutrack)) truthOrigin = acc_mcto(*mutrack);
     }
   }
 
-  const xAOD::TrackParticle* idtp=0;
-  ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
-  if(idtpLink.isValid()){
-    idtp = *idtpLink;
-    if(m_isMC) truthType = idtp->auxdata<int>("truthType");
-  }
+  lep.TruthOrigin = truthOrigin;
+  lep.TruthType = truthType;
+
+  // const xAOD::TruthParticle* matched_truth_muon=0;
+  // if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+  //   ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+  //   if(link.isValid()){
+  //     matched_truth_muon = *link;
+  //     truthOrigin = matched_truth_muon->auxdata<int>("truthOrigin");
+  //   }
+  // }
+
+  // const xAOD::TrackParticle* idtp=0;
+  // ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+  // if(idtpLink.isValid()){
+  //   idtp = *idtpLink;
+  //   if(m_isMC) truthType = idtp->auxdata<int>("truthType");
+  // }
  
   if (truthType == 2 || truthType == 6)
     lep.isPrompt = 1;
