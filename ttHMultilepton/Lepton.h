@@ -110,8 +110,8 @@ namespace ttHMultilepton {
     int     Truth_parent_particle_ID;
     int     Truth_particle_ID;
     char    isPrompt;
-    int     TruthType;
-    int     TruthOrigin;
+    int     truthType;
+    int     truthOrigin;
     char    isBremsElec;
     char    isFakeLep;
 
