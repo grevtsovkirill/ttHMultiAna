@@ -471,33 +471,44 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.vz = el.trackParticle()->vz(); 
 
   // truth matching, fakes, QMisId
-  int truthType = -99;
-  int truthOrigin = -99;
+  int TruthType = -99;
+  int TruthOrigin = -99;
+  // int bkgElMotherPdgID = -99;
+  // int bkgElType = -99;
+  // int bkgElOrigin = -99;
+
   if(m_isMC) {
     static SG::AuxElement::Accessor<int> origel("truthOrigin");
-    if (origel.isAvailable(el)) truthOrigin = origel(el);
+    if (origel.isAvailable(el)) TruthOrigin = origel(el);
     
     static SG::AuxElement::Accessor<int> typeel("truthType");
-    if (typeel.isAvailable(el)) truthType = typeel(el);
+    if (typeel.isAvailable(el)) TruthType = typeel(el);
+
+    // static SG::AuxElement::Accessor<int> typebkgel("bkgTruthType");
+    // static SG::AuxElement::Accessor<int> origbkgel("bkgTruthOrigin");
+    // static SG::AuxElement::Accessor<int> bkgMotherPdgID("bkgMotherPdgId");
+    // if (typebkgel.isAvailable(el)) {std::cout << "it is available: type! " << std::endl; bkgElType  = typebkgel(el);}
+    // if (origbkgel.isAvailable(el)) {std::cout << "it is available: origin! " << std::endl; bkgElOrigin= origbkgel(el);}
+    // if (bkgMotherPdgID.isAvailable(el)) {std::cout << "it is available: MotherPDGID! " << std::endl; bkgElMotherPdgID= bkgMotherPdgID(el);}
 
     // truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
     // truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
   }
 
-  lep.TruthOrigin = truthOrigin;
-  lep.TruthType = truthType;
+  lep.truthOrigin = TruthOrigin;
+  lep.truthType = TruthType;
   
-  if (truthType == 2 || truthType == 6)
+  if (TruthType == 2 || TruthType == 6)
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
 
-  if (truthOrigin == 5 && truthType == 4) // assuming most QFlip come from trident events
+  if (TruthOrigin == 5 && TruthType == 4) // assuming most QFlip come from trident events
     lep.isBremsElec = 1;
   else
     lep.isBremsElec = 0;
 
-  if (!(truthType == 2 || truthType == 6) && !(truthOrigin == 5 && truthType == 4))
+  if (!(TruthType == 2 || TruthType == 6) && !(TruthOrigin == 5 && TruthType == 4))
     lep.isFakeLep = 1;
   else
     lep.isFakeLep = 0;
@@ -569,24 +580,24 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
     lep.isTrigMatch = 0;
 
   // truth matching, fakes, QMisId
-  int truthType = -99;
-  int truthOrigin = -99;
+  int TruthType = -99;
+  int TruthOrigin = -99;
 
   if(m_isMC) {
     static SG::AuxElement::Accessor<int> acc_mctt("truthType");
     const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
     if (mutrack!=nullptr) {
-      if (acc_mctt.isAvailable(*mutrack)) truthType = acc_mctt(*mutrack);
+      if (acc_mctt.isAvailable(*mutrack)) TruthType = acc_mctt(*mutrack);
     }
     
     static SG::AuxElement::Accessor<int> acc_mcto("truthOrigin");
     if (mutrack!=nullptr) {
-      if (acc_mcto.isAvailable(*mutrack)) truthOrigin = acc_mcto(*mutrack);
+      if (acc_mcto.isAvailable(*mutrack)) TruthOrigin = acc_mcto(*mutrack);
     }
   }
 
-  lep.TruthOrigin = truthOrigin;
-  lep.TruthType = truthType;
+  lep.truthOrigin = TruthOrigin;
+  lep.truthType = TruthType;
 
   // const xAOD::TruthParticle* matched_truth_muon=0;
   // if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
@@ -604,17 +615,17 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   //   if(m_isMC) truthType = idtp->auxdata<int>("truthType");
   // }
  
-  if (truthType == 2 || truthType == 6)
+  if (TruthType == 2 || TruthType == 6)
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
 
-  if (truthOrigin == 5 && truthType == 4) // assuming most QFlip come from trident events
+  if (TruthOrigin == 5 && TruthType == 4) // assuming most QFlip come from trident events
     lep.isBremsElec = 1;
   else
     lep.isBremsElec = 0;
 
-  if (!(truthType == 2 || truthType == 6) && !(truthOrigin == 5 && truthType == 4))
+  if (!(TruthType == 2 || TruthType == 6) && !(TruthOrigin == 5 && TruthType == 4))
     lep.isFakeLep = 1;
   else
     lep.isFakeLep = 0;

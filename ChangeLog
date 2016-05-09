@@ -1,3 +1,6 @@
+2016-05-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* use same truthOrigin and truthType name convention for leptons after OLR
+
 2016-05-08 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* add LOWPT muon SF uncertainties
 	* add protection to truthOrigin and truthType definitions
