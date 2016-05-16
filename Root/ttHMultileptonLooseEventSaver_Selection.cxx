@@ -807,6 +807,14 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   m_variables->nJets_OR_T_MV2c20_70 = 0;
   m_variables->nJets_OR_T_MV2c20_77 = 0;
   m_variables->nJets_OR_T_MV2c20_60 = 0;
+  m_variables->nJets_OR_MV2c10_85   = 0;
+  m_variables->nJets_OR_MV2c10_70   = 0;
+  m_variables->nJets_OR_MV2c10_77   = 0;
+  m_variables->nJets_OR_MV2c10_60   = 0;
+  m_variables->nJets_OR_T_MV2c10_85 = 0;
+  m_variables->nJets_OR_T_MV2c10_70 = 0;
+  m_variables->nJets_OR_T_MV2c10_77 = 0;
+  m_variables->nJets_OR_T_MV2c10_60 = 0;
   
   m_variables->lead_jetPt = 0;
   m_variables->sublead_jetPt = 0;
@@ -838,6 +846,20 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
 	  }
 	}
       }
+      if( btagging->MVx_discriminant("MV2c10", mv2c) ) {
+	if (mv2c > 0.1758) {
+	  m_variables->nJets_OR_MV2c10_85++;
+	  if (mv2c > 0.6459) {
+	    m_variables->nJets_OR_MV2c10_77++;
+	    if (mv2c > 0.8244) {
+	      m_variables->nJets_OR_MV2c10_70++;
+	      if (mv2c > 0.9349) {
+		m_variables->nJets_OR_MV2c10_60++;
+	      }
+	    }
+	  }
+	}
+      }
     }
   }
 
@@ -857,6 +879,20 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
 		m_variables->nJets_OR_T_MV2c20_70++;
 		if (mv2c > 0.8867) {
 		  m_variables->nJets_OR_T_MV2c20_60++;
+		}
+	      }
+	    }
+	  }
+	}      
+	if( btagging->MVx_discriminant("MV2c10", mv2c) ) {
+	  if (mv2c > 0.1758) {
+	    m_variables->nJets_OR_T_MV2c10_85++;
+	    if (mv2c > 0.6459) {
+	      m_variables->nJets_OR_T_MV2c10_77++;
+	      if (mv2c > 0.8244) {
+		m_variables->nJets_OR_T_MV2c10_70++;
+		if (mv2c > 0.9349) {
+		  m_variables->nJets_OR_T_MV2c10_60++;
 		}
 	      }
 	    }
@@ -956,23 +992,25 @@ ttHMultileptonLooseEventSaver::CheckIsBlinded() {
   if (m_variables->dilep_type) {
     if (abs(m_variables->total_charge) == 2
 	&& m_variables->nJets_OR_T >= 4
-	&& m_variables->nJets_OR_T_MV2c20_77 >= 1) {
+	&& m_variables->nJets_OR_T_MV2c10_77 >= 1) {
       isBlinded = true;
     }
   } else if (m_variables->trilep_type) {
     // remember Mll01 = Mll[0][0] and Mll02 = Mll[0][1]
     if (abs(m_variables->total_charge) == 1
 	&& ((m_variables->nJets_OR_T >=4 
-	     && m_variables->nJets_OR_T_MV2c20_77 >= 1) 
+	     && m_variables->nJets_OR_T_MV2c10_77 >= 1) 
 	    || (m_variables->nJets_OR_T ==3 
-		&& m_variables->nJets_OR_T_MV2c20_77 >= 2))
+		&& m_variables->nJets_OR_T_MV2c10_77 >= 2))
 	&& ! ((m_leptons[0].ID == - m_leptons[1].ID && fabs(m_variables->Mll[0][0] - 91.2e3) < 10e3)
 	      || (m_leptons[0].ID == - m_leptons[2].ID && fabs(m_variables->Mll[0][1] - 91.2e3) < 10e3))
 	) {
       isBlinded = true;
     }
   } else if (m_variables->quadlep_type) {
-    if (m_variables->nJets_OR_T_MV2c20_77 >= 1) {
+    if (m_variables->nJets_OR_T_MV2c10_77 >= 1
+	&& m_variables->nJets_OR_T >= 2
+	&& fabs(m_variables->best_Z_Mll - 91.2e3) > 10e3) {
       isBlinded = true;
     }
   }

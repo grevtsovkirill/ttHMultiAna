@@ -1,3 +1,7 @@
+2016-05-16 Peter Onyisi <ponyisi@cern.ch>
+	* Store MV2c10-based quantities & make default (ATLASTTHML-45)
+	* Update blinding for 4l (ATLASTTHML-46)
+
 2016-05-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* use same truthOrigin and truthType name convention for leptons after OLR
 

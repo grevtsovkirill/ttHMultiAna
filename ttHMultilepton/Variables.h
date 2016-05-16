@@ -32,6 +32,14 @@ namespace ttHMultilepton {
     int nJets_OR_MV2c20_77;
     int nJets_OR_MV2c20_70;
     int nJets_OR_MV2c20_85;
+    int nJets_OR_T_MV2c10_60;
+    int nJets_OR_T_MV2c10_70;
+    int nJets_OR_T_MV2c10_77;
+    int nJets_OR_T_MV2c10_85;
+    int nJets_OR_MV2c10_60;
+    int nJets_OR_MV2c10_77;
+    int nJets_OR_MV2c10_70;
+    int nJets_OR_MV2c10_85;
     int nTaus_OR_Pt25;
     bool isBlinded;
     float HT;

@@ -276,7 +276,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
-    systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c20_77_EventWeight");
+    systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c10_77_EventWeight");
     systematicTree->makeOutputVariable(m_JVT_weight, "JVT_EventWeight");
     
     if ( m_doSFSystematics ) {
@@ -288,7 +288,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       //btag
       //B 
       for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(); ++i) {
-	std::stringstream branchName; branchName << "MV2c20_77_EventWeight_B" << i;
+	std::stringstream branchName; branchName << "MV2c10_77_EventWeight_B" << i;
 	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
 	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
 	
@@ -299,7 +299,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }
       //C
       for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(); ++i) {
-	std::stringstream branchName; branchName << "MV2c20_77_EventWeight_C" << i;
+	std::stringstream branchName; branchName << "MV2c10_77_EventWeight_C" << i;
 	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
 	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
 	
@@ -310,7 +310,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }
       //Light
       for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(); ++i) {
-	std::stringstream branchName; branchName << "MV2c20_77_EventWeight_Light" << i;
+	std::stringstream branchName; branchName << "MV2c10_77_EventWeight_Light" << i;
 	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
 	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
 	
@@ -320,14 +320,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 					   branchNameDown );
       }
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_up,
-					 "MV2c20_77_EventWeight_extrapolation_up" );
+					 "MV2c10_77_EventWeight_extrapolation_up" );
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_down,
-					 "MV2c20_77_EventWeight_extrapolation_down" );
+					 "MV2c10_77_EventWeight_extrapolation_down" );
 
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_up,
-					 "MV2c20_77_EventWeight_extrapolation_from_charm_up" );
+					 "MV2c10_77_EventWeight_extrapolation_from_charm_up" );
       systematicTree->makeOutputVariable(m_weight_bTagSF_77_extrapolation_from_charm_down,
-					 "MV2c20_77_EventWeight_extrapolation_from_charm_down" );
+					 "MV2c10_77_EventWeight_extrapolation_from_charm_down" );
 
       //JVT
       systematicTree->makeOutputVariable(m_JVT_weight_UP,   "JVT_EventWeight_UP");
@@ -652,13 +652,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = cleaningTool->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad"); 
 
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
-    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); }, *systematicTree, "m_jet_OVRStatus");
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
-      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
       // is it the 1 GeV counting we want?
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float> >(xAOD::JetAttribute::SumPtTrkPt500); return (float) (tmp.size() ? tmp[0] : 0.); }, *systematicTree, "m_jet_sumPtTrk");
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[0] : 0);  }, *systematicTree, "m_jet_numTrk");
