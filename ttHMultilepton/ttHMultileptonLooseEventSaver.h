@@ -80,6 +80,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::shared_ptr<xAOD::JetContainer> SelectJets(const top::Event& event);
   std::shared_ptr<xAOD::TauJetContainer> SelectTaus(const top::Event& event);
   void OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow);
+  // here we just remove the objects from the containers
+  void OverlapRemoval_ContOnly(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow);
   void CopyLeptons(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu);
   void CopyJets(std::shared_ptr<xAOD::JetContainer>& goodJet);
   void CopyTaus(std::shared_ptr<xAOD::TauJetContainer>& goodTau);
@@ -113,8 +115,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ttH::TruthSelector                     truthSelector;
   ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   TauSelectionTool                       m_tauSelectionEleOLR;
-  ORUtils::ToolBox                       m_ORtoolBox;
-  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool;
+  // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau
+  ORUtils::ToolBox                       m_ORtoolBox[3];
+  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
 
   
   //for convenience of use with Wrap stuff

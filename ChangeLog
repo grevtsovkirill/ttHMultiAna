@@ -1,3 +1,6 @@
+2016-05-18 Peter Onyisi <ponyisi@cern.ch>
+	* Use ASG OR
+
 2016-05-16 Peter Onyisi <ponyisi@cern.ch>
 	* Store MV2c10-based quantities & make default (ATLASTTHML-45)
 	* Update blinding for 4l (ATLASTTHML-46)
