@@ -189,7 +189,7 @@ template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
   //for (size_t idx = 0; idx < vec.size(); ++idx) {
   //if (passovr(vec, idx)) {
   for (const auto iItr : vec) {
-    if (iItr->template auxdataConst<short>("ttHpassOVR") && (!doTauOR || iItr->template auxdataConst<short>("ttHpassTauOVR") ) ) {
+    if (iItr->template auxdataConst<char>("ttHpassOVR") && (!doTauOR || iItr->template auxdataConst<char>("ttHpassTauOVR") ) ) {
       rv++;
     }
   }
@@ -198,6 +198,7 @@ template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
 
 void
 ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow) {
+  /*
   auto newGoodEl = std::shared_ptr<xAOD::ElectronContainer>(new xAOD::ElectronContainer());
   auto newGoodElAux = new xAOD::AuxContainerBase();
   newGoodEl->setStore(newGoodElAux);
@@ -219,25 +220,26 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 	     "Failed to register jets after OR");
   top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux" ),
 	     "Failed to register taus after OR");
+  */
   for (const auto elItr : *goodEl) {
-    elItr->auxdecor<short>("ttHpassOVR") = 1;
+    elItr->auxdecor<char>("ttHpassOVR") = 1;
   }
   for (const auto muItr : *goodMu) {
-    muItr->auxdecor<short>("ttHpassOVR") = 1;
+    muItr->auxdecor<char>("ttHpassOVR") = 1;
   }
   for (const auto jetItr : *goodJet) {
-    jetItr->auxdecor<short>("ttHpassOVR") = 1;
-    jetItr->auxdecor<short>("ttHpassTauOVR") = 1;
+    jetItr->auxdecor<char>("ttHpassOVR") = 1;
+    jetItr->auxdecor<char>("ttHpassTauOVR") = 1;
   }
   for (const auto tauItr : *goodTau) {
-    tauItr->auxdecor<short>("ttHpassOVR") = 1;
+    tauItr->auxdecor<char>("ttHpassOVR") = 1;
   }
 
   for (const auto elItr : *goodEl) {
     auto p4 = elItr->p4();
     for (const auto muItr : *goodMu) {
        if (p4.DeltaR(muItr->p4()) < 0.1) {
-  	elItr->auxdecor<short>("ttHpassOVR") = 0;
+  	elItr->auxdecor<char>("ttHpassOVR") = 0;
   	break;
       }
     }
@@ -246,34 +248,35 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 
   for (size_t i1 = 0; i1 < goodEl->size(); ++i1) {
     auto elItr = goodEl->at(i1);
-    if (! elItr->auxdataConst<short>("ttHpassOVR")) {
+    if (! elItr->auxdataConst<char>("ttHpassOVR")) {
       continue;
     }
     auto p4 = elItr->p4();
     for (size_t i2 = i1+1; i2 < goodEl->size(); ++i2) {
       auto elItr2 = goodEl->at(i2);
-      if (! elItr2->auxdataConst<short>("ttHpassOVR")) {
+      if (! elItr2->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
       if (p4.DeltaR(elItr2->p4()) < 0.1) {
   	if (elItr2->pt() < elItr->pt()) {
-  	  elItr2->auxdecor<short>("ttHpassOVR") = 0;
+  	  elItr2->auxdecor<char>("ttHpassOVR") = 0;
   	} else {
-  	  elItr->auxdecor<short>("ttHpassOVR") = 0;
+  	  elItr->auxdecor<char>("ttHpassOVR") = 0;
   	}
       }
     }
   }
-  fillCutflow &&m_eleCutflow->Fill(9, CountPassOR(*goodEl));
+  // now done later
+  //fillCutflow &&m_eleCutflow->Fill(9, CountPassOR(*goodEl));
 
   for (const auto jetItr : *goodJet) {
     auto p4 = jetItr->p4();
     for (const auto elItr : *goodEl) {
-      if (! elItr->auxdataConst<short>("ttHpassOVR")) {
+      if (! elItr->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
      if (p4.DeltaR(elItr->p4()) < 0.3) {
-  	jetItr->auxdecor<short>("ttHpassOVR") = 0;
+  	jetItr->auxdecor<char>("ttHpassOVR") = 0;
   	break;
       }
     }
@@ -281,74 +284,76 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   fillCutflow &&m_jetCutflow->Fill(6, CountPassOR(*goodJet));
 
   for (const auto jetItr : *goodJet) {
-    if (! jetItr->auxdataConst<short>("ttHpassOVR")) {
+    if (! jetItr->auxdataConst<char>("ttHpassOVR")) {
       continue;
     }
     auto p4 = jetItr->p4();
     for (const auto muItr : *goodMu) {
-      if (! muItr->auxdataConst<short>("ttHpassOVR")) {
+      if (! muItr->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
      if (p4.DeltaR(muItr->p4()) < 0.04+10e3/muItr->pt()) {
-  	muItr->auxdecor<short>("ttHpassOVR") = 0;
+  	muItr->auxdecor<char>("ttHpassOVR") = 0;
       }
     }
   }
-  fillCutflow &&m_muCutflow->Fill(7, CountPassOR(*goodMu));
+  // now done later
+  //fillCutflow &&m_muCutflow->Fill(7, CountPassOR(*goodMu));
 
   for (const auto tauItr : *goodTau) {
     auto p4 = tauItr->p4();
     for (const auto elItr : *goodEl) {
-      if (! elItr->auxdataConst<short>("ttHpassOVR")) {
+      if (! elItr->auxdataConst<char>("ttHpassOVR")) {
 	continue;
       }
       if (p4.DeltaR(elItr->p4()) < 0.2) {
-	tauItr->auxdecor<short>("ttHpassOVR") = 0;
+	tauItr->auxdecor<char>("ttHpassOVR") = 0;
 	break;
       }
     }
     for (const auto muItr : *goodMu) {
-      if (! muItr->auxdataConst<short>("ttHpassOVR")) {
+      if (! muItr->auxdataConst<char>("ttHpassOVR")) {
 	continue;
       }
       if (p4.DeltaR(muItr->p4()) < 0.2) {
-	tauItr->auxdecor<short>("ttHpassOVR") = 0;
+	tauItr->auxdecor<char>("ttHpassOVR") = 0;
 	break;
       }
     }
-    if (tauItr->auxdataConst<short>("ttHpassOVR")) {
+    if (tauItr->auxdataConst<char>("ttHpassOVR")) {
       for (const auto jetItr : *goodJet) {
 	// don't need additional protection here...
 	if (p4.DeltaR(jetItr->p4()) < 0.3) {
-	  jetItr->auxdecor<short>("ttHpassTauOVR") = 0;
+	  jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
 	}
       }
     }
   }
+  /*
   fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
-
+  
   for (const auto elItr : *goodEl) {
-    if (elItr->auxdataConst<short>("ttHpassOVR")) {
+    if (elItr->auxdataConst<char>("ttHpassOVR")) {
       newGoodEl->push_back(new xAOD::Electron(*elItr));
     }
   }
   for (const auto muItr : *goodMu) {
-    if (muItr->auxdataConst<short>("ttHpassOVR")) {
+    if (muItr->auxdataConst<char>("ttHpassOVR")) {
       auto newMu = new xAOD::Muon();
       newMu->makePrivateStore(*muItr);
       newGoodMu->push_back(newMu);
     }
   }
   for (const auto jetItr : *goodJet) {
-    //jetItr->auxdecor<short>("ttHJetOVRStatus") = jetItr->auxdataConst<short>("ttHpassOVR") + jetItr->auxdataConst<short>("ttHpassTauOVR");
+    //jetItr->auxdecor<char>("ttHJetOVRStatus") = jetItr->auxdataConst<char>("ttHpassOVR") + jetItr->auxdataConst<char>("ttHpassTauOVR");
     //std::cout << std::find(goodJet->begin(), goodJet->end(), *jetItr) << std::endl;
-    if (jetItr->auxdataConst<short>("ttHpassOVR")) {
+    if (jetItr->auxdataConst<char>("ttHpassOVR")) {
       newGoodJet->push_back(new xAOD::Jet(*jetItr));
     }
   }
   for (const auto tauItr : *goodTau) {
-    if (tauItr->auxdataConst<short>("ttHpassOVR")) {
+    if (tauItr->auxdataConst<char>("ttHpassOVR")) {
       auto newTau = new xAOD::TauJet();
       newTau->makePrivateStore(*tauItr);
       newGoodTau->push_back(newTau);
@@ -360,6 +365,67 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   // m_jetCutflow->Fill(6, newGoodJet->size());
   // m_tauCutflow->Fill(8, newGoodTau->size());
   
+  newGoodEl.swap(goodEl);
+  newGoodMu.swap(goodMu);
+  newGoodJet.swap(goodJet);
+  newGoodTau.swap(goodTau);
+  */
+}
+
+void
+ttHMultileptonLooseEventSaver::OverlapRemoval_ContOnly(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow) {
+  fillCutflow &&m_eleCutflow->Fill(9, CountPassOR(*goodEl));
+  fillCutflow &&m_muCutflow->Fill(7, CountPassOR(*goodMu));
+  fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
+  fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
+  auto newGoodEl = std::shared_ptr<xAOD::ElectronContainer>(new xAOD::ElectronContainer());
+  auto newGoodElAux = new xAOD::AuxContainerBase();
+  newGoodEl->setStore(newGoodElAux);
+  auto newGoodMu = std::shared_ptr<xAOD::MuonContainer>(new xAOD::MuonContainer());
+  auto newGoodMuAux = new xAOD::AuxContainerBase();
+  newGoodMu->setStore(newGoodMuAux);
+  auto newGoodJet = std::shared_ptr<xAOD::JetContainer>(new xAOD::JetContainer());
+  auto newGoodJetAux = new xAOD::AuxContainerBase();
+  newGoodJet->setStore(newGoodJetAux);
+  auto newGoodTau = std::shared_ptr<xAOD::TauJetContainer>(new xAOD::TauJetContainer());
+  auto newGoodTauAux = new xAOD::AuxContainerBase();
+  newGoodTau->setStore(newGoodTauAux);
+  // have TStore manage aux
+  top::check(evtStore()->tds()->record( newGoodElAux, "ttHOR"+m_sysName+"ElectronsAux" ),
+	     "Failed to register electrons after OR");
+  top::check(evtStore()->tds()->record( newGoodMuAux, "ttHOR"+m_sysName+"MuonsAux" ),
+	     "Failed to register muons after OR");
+  top::check(evtStore()->tds()->record( newGoodJetAux, "ttHOR"+m_sysName+"JetsAux" ),
+	     "Failed to register jets after OR");
+  top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux" ),
+	     "Failed to register taus after OR");
+
+  for (const auto elItr : *goodEl) {
+    if (elItr->auxdataConst<char>("ttHpassOVR")) {
+      newGoodEl->push_back(new xAOD::Electron(*elItr));
+    }
+  }
+  for (const auto muItr : *goodMu) {
+    if (muItr->auxdataConst<char>("ttHpassOVR")) {
+      auto newMu = new xAOD::Muon();
+      newMu->makePrivateStore(*muItr);
+      newGoodMu->push_back(newMu);
+    }
+  }
+  for (const auto jetItr : *goodJet) {
+    //jetItr->auxdecor<char>("ttHJetOVRStatus") = jetItr->auxdataConst<char>("ttHpassOVR") + jetItr->auxdataConst<char>("ttHpassTauOVR");
+    //std::cout << std::find(goodJet->begin(), goodJet->end(), *jetItr) << std::endl;
+    if (jetItr->auxdataConst<char>("ttHpassOVR")) {
+      newGoodJet->push_back(new xAOD::Jet(*jetItr));
+    }
+  }
+  for (const auto tauItr : *goodTau) {
+    if (tauItr->auxdataConst<char>("ttHpassOVR")) {
+      auto newTau = new xAOD::TauJet();
+      newTau->makePrivateStore(*tauItr);
+      newGoodTau->push_back(newTau);
+    }
+  }
   newGoodEl.swap(goodEl);
   newGoodMu.swap(goodMu);
   newGoodJet.swap(goodJet);
@@ -774,14 +840,14 @@ ttHMultileptonLooseEventSaver::MakeJetIndices(const std::shared_ptr<xAOD::JetCon
   m_variables->selected_jets.clear();
   m_variables->selected_jets_T.clear();
   for (const auto jetItr : *goodJets) {
-    if (!jetItr->template auxdataConst<short>("ttHpassOVR")) continue;
+    if (!jetItr->template auxdataConst<char>("ttHpassOVR")) continue;
     auto& goodp4 = jetItr->p4();
     bool found = false;
     for (size_t idx = 0; idx < allJets.size(); ++idx) {
       if (goodp4 == allJets[idx]->p4()) {
 	found = true;
 	m_variables->selected_jets.push_back(idx);
-	if (jetItr->template auxdataConst<short>("ttHpassTauOVR")) {
+	if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) {
 	  m_variables->selected_jets_T.push_back(idx);
 	}
 	break;
@@ -865,7 +931,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
 
   //same thing for jet with tau OR
   for (const auto jetItr : *goodJets) {
-    if( jetItr->auxdataConst<short>("ttHpassTauOVR") ) {
+    if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
 
       auto btagging = jetItr->btagging(); 
       if (btagging) {
