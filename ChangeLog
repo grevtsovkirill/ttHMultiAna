@@ -1,3 +1,9 @@
+2016-05-20 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Put back common loose definition
+	* Include 2016 triggers
+	* Include runYear flag
+	* Include new 2015 repro GRL and 2016 4.22 pb-1
+
 2016-05-18 Peter Onyisi <ponyisi@cern.ch>
 	* Use ASG OR
 

@@ -539,13 +539,26 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   // truth matching, fakes, QMisId
   int TruthType = -99;
   int TruthOrigin = -99;
+  /*
+  int bkgElMotherPdgID = -99;
+  int bkgElType = -99;
+  int bkgElOrigin = -99;
+  */
+
   if(m_isMC) {
     static SG::AuxElement::Accessor<int> origel("truthOrigin");
     if (origel.isAvailable(el)) TruthOrigin = origel(el);
     
     static SG::AuxElement::Accessor<int> typeel("truthType");
     if (typeel.isAvailable(el)) TruthType = typeel(el);
-
+    /*
+    static SG::AuxElement::Accessor<int> typebkgel("bkgTruthType");
+    static SG::AuxElement::Accessor<int> origbkgel("bkgTruthOrigin");
+    static SG::AuxElement::Accessor<int> bkgMotherPdgID("bkgMotherPdgId");
+    if (typebkgel.isAvailable(el)) {std::cout << "it is available: type! " << std::endl; bkgElType  = typebkgel(el);}
+    if (origbkgel.isAvailable(el)) {std::cout << "it is available: origin! " << std::endl; bkgElOrigin= origbkgel(el);}
+    if (bkgMotherPdgID.isAvailable(el)) {std::cout << "it is available: MotherPDGID! " << std::endl; bkgElMotherPdgID= bkgMotherPdgID(el);}
+    */
     //truthType   = (int) xAOD::TruthHelpers::getParticleTruthType(el);
     //truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
   }
@@ -559,8 +572,10 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   else
     lep.isPrompt = 0;
 
-  if (TruthOrigin == 5 && TruthType == 4) // assuming most QFlip come from trident events
+  if (TruthOrigin == 5 && TruthType == 4){ // assuming most QFlip come from trident events
     lep.isBremsElec = 1;
+    //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
+  }
   else
     lep.isBremsElec = 0;
 
@@ -569,14 +584,21 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   else
     lep.isFakeLep = 0;
 
+
   // trigger matching, electron pt > 25 GeV
   if (!m_isMC) {
-    if( el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
+    //if( el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
+    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) || 
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) || 
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose") ? el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"):0) ) ) //data
       lep.isTrigMatch = 1;
     else lep.isTrigMatch = 0;
   }
   else {
-    if (el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"))) //mc
+    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) || 
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH"):0) || 
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) || 
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose") ? el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"):0) ) ) //MC
       lep.isTrigMatch = 1;
     else lep.isTrigMatch = 0;
   }
@@ -630,7 +652,12 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
 
   // trigger matching, require lepton pt > 21 GeV
   if (mu.pt() > 21e3
-      && (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
+      && ((mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"):0) || //2015
+	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu50") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"):0) || 
+	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu24_iloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_iloose"):0) ||  //2016
+	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu24_ivarloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_ivarloose"):0) || 
+	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu40") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"):0) ))
+      //&& (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
     lep.isTrigMatch = 1;
   else
     lep.isTrigMatch = 0;

@@ -33,6 +33,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
+  m_runYear(2015),
   m_mu(0),
   m_mu_unc(0),  
   m_mu_ac(0),
@@ -210,58 +211,104 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
 
   //define triggers
-      //Items and their PS
-    std::vector<std::string> triggernames
-    {   "HLT_mu20_iloose_L1MU15",
-	"HLT_mu50",
-	"HLT_e24_lhmedium_L1EM18VH",
-	"HLT_e24_lhmedium_L1EM20VH",
-	"HLT_e60_lhmedium", 
-	"HLT_e120_lhloose",
-	};
-
-    if(!m_doSystematics) {
-      for( std::string extra_trigger:
-	{   "HLT_e24_lhmedium_iloose_L1EM18VH",
-	    "HLT_e24_tight_iloose",
-	    "HLT_e24_lhtight_iloose", 
-	    "HLT_e24_tight_iloose_L1EM20VH",
-	    "HLT_e24_lhtight_iloose_L1EM20VH", 
-	    "HLT_e26_tight_iloose",
-	    "HLT_e26_lhtight_iloose",
-	    "HLT_e60_medium",
-	    "HLT_e140_loose",
-	    "HLT_e140_lhloose", 
-	    "HLT_mu24_imedium",
-	    "HLT_mu26_imedium", 
-	    "HLT_mu40",
-	    "HLT_2e12_loose_L12EM10VH",
-	    "HLT_2e12_lhloose_L12EM10VH",
-	    "HLT_e17_lhloose_2e9_lhloose",
-	    "HLT_2mu14",
-	    "HLT_2mu10",
-	    "HLT_mu18_mu8noL1",
-	    "HLT_e17_loose_mu14",
-	    "HLT_e17_lhloose_mu14", 
-	    "HLT_e7_medium_mu24",
-	    "HLT_e7_lhmedium_mu24",
-	    // Added low pt threshold trigger for MM back up
-	    "HLT_mu10",
-	    "HLT_mu14",
-	    "HLT_mu18",
-	    "HLT_mu24",
-	    "HLT_e17_loose",
-	    "HLT_e17_lhloose",
-	    "HLT_e12_loose",
-	    "HLT_e12_lhloose",
-	    "HLT_e5_loose",
-	    "HLT_e5_lhloose",
-	    } )
-	{
-	  triggernames.push_back(extra_trigger);
-	}
-    } 
+  //Items and their PS
+  // For general information:
+  /*
+  std::vector<std::string> triggernames16
+  {   "HLT_e24_lhmedium_L1EM20VH", // < 5e33
+      "HLT_e60_lhmedium",
+      "HLT_e120_lhloose",
+      "HLT_mu24_iloose",
+      "HLT_mu24_ivarloose",
+      "HLT_mu40"
+      "HLT_e24_lhtight_iloose", // < 7e33
+      "HLT_e24_lhtight_ivarloose",
+      "HLT_e60_lhmedium",
+      "HLT_e120_lhloose",
+      "HLT_mu24_imedium",
+      "HLT_mu24_ivarmedium",
+      "HLT_mu40" 
+      };
   
+  if(!m_doSystematics) {
+    for( std::string extra_trigger16:
+      {   "HLT_2e12_lhvloose_nod0_L12EM10VH", // < 5e33
+	  "HLT_2mu10 HLT_mu20_mu8noL1",
+	  "HLT_2e15_lhvloose_nod0_L12EM13VH", // < 7e33
+	  "HLT_2mu14 HLT_mu20_mu8noL1",
+	  "HLT_e17_lhloose_mu14",
+	  "HLT_e24_medium_L1EM20VHI_mu8noL1",
+	  "HLT_e7_medium_mu24"
+	  } )
+      {
+	triggernames16.push_back(extra_trigger16);
+      }
+  } 
+  */
+  std::vector<std::string> triggernames
+  {   "HLT_mu20_iloose_L1MU15",
+      "HLT_mu50",
+      "HLT_e24_lhmedium_L1EM18VH",
+      "HLT_e24_lhmedium_L1EM20VH",
+      "HLT_e60_lhmedium", 
+      "HLT_e120_lhloose",
+      "HLT_mu24_iloose", //2016 onwards
+      "HLT_mu24_ivarloose",
+      "HLT_mu40",
+      "HLT_e24_lhtight_iloose", // < 7e33
+      "HLT_e24_lhtight_ivarloose",
+      "HLT_mu24_imedium",
+      "HLT_mu24_ivarmedium",
+      };
+  
+  if(!m_doSystematics) {
+    for( std::string extra_trigger:
+      {   "HLT_e24_lhmedium_iloose_L1EM18VH",
+	  "HLT_e24_tight_iloose",
+	  "HLT_e24_lhtight_iloose", 
+	  "HLT_e24_tight_iloose_L1EM20VH",
+	  "HLT_e24_lhtight_iloose_L1EM20VH", 
+	  "HLT_e26_tight_iloose",
+	  "HLT_e26_lhtight_iloose",
+	  "HLT_e60_medium",
+	  "HLT_e140_loose",
+	  "HLT_e140_lhloose", 
+	  "HLT_mu24_imedium",
+	  "HLT_mu26_imedium", 
+	  "HLT_mu40",
+	  "HLT_2e12_loose_L12EM10VH",
+	  "HLT_2e12_lhloose_L12EM10VH",
+	  "HLT_e17_lhloose_2e9_lhloose",
+	  "HLT_2mu14",
+	  "HLT_2mu10",
+	  "HLT_mu18_mu8noL1",
+	  "HLT_e17_loose_mu14",
+	  "HLT_e17_lhloose_mu14", 
+	  "HLT_e7_medium_mu24",
+	  "HLT_e7_lhmedium_mu24",
+	  // Added low pt threshold trigger for MM back up
+	  "HLT_mu10",
+	  "HLT_mu14",
+	  "HLT_mu18",
+	  "HLT_mu24",
+	  "HLT_e17_loose",
+	  "HLT_e17_lhloose",
+	  "HLT_e12_loose",
+	  "HLT_e12_lhloose",
+	  "HLT_e5_loose",
+	  "HLT_e5_lhloose",
+	  "HLT_e24_medium_L1EM20VHI_mu8noL1", //2016
+	  "HLT_2e12_lhvloose_nod0_L12EM10VH", // < 5e33
+	  "HLT_2mu10 HLT_mu20_mu8noL1",
+	  "HLT_2e15_lhvloose_nod0_L12EM13VH", // < 7e33
+	  "HLT_2mu14 HLT_mu20_mu8noL1",
+	  } )
+      {
+	triggernames.push_back(extra_trigger);
+      }
+  } 
+
+
   
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
@@ -371,6 +418,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background); }, *systematicTree, "backgroundFlags");
+    systematicTree->makeOutputVariable(m_runYear, "RunYear");
+   
 
     // HF classification ttbar
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");   
@@ -391,7 +440,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
-    
+
     
     for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
@@ -472,8 +521,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  return (int) is_matched;
 	}, *systematicTree, branch_name.c_str() );
     }
-
-
+    
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
@@ -966,6 +1014,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
+  if ( (event.m_info->runNumber())>=296939 ) m_runYear=2016;
 
   // waiting for fix in TopCorrections
   //m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false); 
@@ -1105,7 +1154,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(!m_doSystematics){
     vec_vtx_wrappers[event.m_ttreeIndex].push_all(*m_vertices);
   }
-  
+
+ 
   m_variables->Clear();
   Decorate(event);
   auto goodEl = SelectElectrons(event);
@@ -1152,6 +1202,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
   vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
+  
+  
   //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
 
   m_treeManagers[event.m_ttreeIndex]->fill();

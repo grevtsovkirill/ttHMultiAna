@@ -180,6 +180,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   int m_puNumber;
   //use with care, don't mix MC and data in same job
   bool m_isMC;
+  int m_runYear;
 
   //ttbar HF classification
   int m_HF_Classification;
