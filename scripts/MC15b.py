@@ -1,5 +1,8 @@
 import TopExamples.grid
 
+TopExamples.grid.Add('20.7').datasets = [
+'mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.DAOD_HIGG8D1.e3698_s2608_s2183_r7773_r7676_p2613',
+]
 TopExamples.grid.Add('MC15b').datasets = [
 'mc15_13TeV.343365.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_dilep.merge.AOD.e4706_s2726_r7326_r6282',
 'mc15_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.merge.AOD.e4706_s2726_r7326_r6282',
