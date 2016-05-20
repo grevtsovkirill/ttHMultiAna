@@ -1,0 +1,78 @@
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
+
+GRLDir ttHMultilepton
+GRLFile data16_13TeV.periodAllYear_DetStatus-v76-pro20-01_DQDefects-00-02-02_PHYS_StandardGRL_All_Good.xml
+
+EventInfoName EventInfo
+ElectronCollectionName Electrons
+MuonCollectionName Muons
+JetCollectionName AntiKt4EMTopoJets
+LargeJetCollectionName None
+LargeJetSubstructure None
+TauCollectionName TauJets
+PhotonCollectionName None
+METCollectionName MET_RefFinal_AntiKt4EMTopo
+LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+
+TrackJetCollectionName AntiKt4PV0TrackJets
+ObjectSelectionName ttHMultileptonLooseObjectLoader
+OutputFormat ttHMultileptonLooseEventSaver
+OutputFilename output.root
+OutputEvents SelectedEvents
+PerfStats No
+NEvents 0
+
+#PRWConfigFiles ttHMultilepton/tthML.PURWTconfig.410009.mc15b.root
+#PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root
+
+Systematics Nominal
+
+#Electron cuts
+ElectronID LooseAndBLayerLH
+ElectronIDLoose LooseAndBLayerLH
+ElectronPt 5000.
+ElectronIsolation None
+
+#Muon cuts
+MuonQuality Loose
+MuonQualityLoose Loose
+MuonPt 5000.
+MuonEta 2.7
+MuonIsolation None
+
+#Tau cuts
+#have been moved to ttHMultilepton/data/loose_tau_selection.conf
+#for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
+TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
+TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
+
+#Jet cuts
+JetPt 25000.
+JetEta 2.5
+BTaggingWP 77%
+
+#Other cuts, overlaps, bkgs..
+FakesControlRegionDoLooseMC False
+ApplyElectronInJetSubtraction False
+OverlapRemovalLeptonDef Tight
+
+
+# Don't be clever
+SELECTION dummy
+GRL
+GOODCALO
+PRIVTX
+TRIGDEC HLT_e24_lhmedium_L1EM20VH HLT_e60_lhmedium HLT_e120_lhloose HLT_mu24_iloose HLT_mu24_ivarloose HLT_mu40 HLT_2e12_lhvloose_nod0_L12EM10VH HLT_2mu10 HLT_mu20_mu8noL1 HLT_e17_lhloose_mu14 HLT_e24_medium_L1EM20VHI_mu8noL1 HLT_e7_medium_mu24  
+
+SELECTION loose
+INITIAL
+GRL
+GOODCALO
+PRIVTX
+COUNTHISTO
+JETCLEAN LooseBad
+#TRIGDEC HLT_mu26_imedium 
+#TRIGMATCH HLT_mu26_imedium 
+TTHMULTILEP
+DUPLICATEVETO
+SAVE
