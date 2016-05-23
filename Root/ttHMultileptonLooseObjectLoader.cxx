@@ -35,7 +35,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), false, topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
   } else if (topConfig->electronID().find("LH") != std::string::npos && topConfig->electronIDLoose().find("LH") != std::string::npos) {
     //user wants likelihood electrons
-    auto electronIsolation = new top::StandardIsolation( topConfig->electronIsolation(), topConfig->electronIsolationLoose() );
+    //auto electronIsolation = new top::StandardIsolation( topConfig->electronIsolation(), topConfig->electronIsolationLoose() );
     auto electronSelection = new top::ElectronLikelihoodMC15(topConfig->isPrimaryxAOD(),
 							     topConfig->electronPtcut(), 
 							     topConfig->electronVetoLArCrack(), 
@@ -52,7 +52,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     exit(1);
   }
 
-  auto muonIsolation = new top::StandardIsolation(topConfig->muonIsolation(), topConfig->muonIsolationLoose()  );
+  //auto muonIsolation = new top::StandardIsolation(topConfig->muonIsolation(), topConfig->muonIsolationLoose()  );
   auto muonSelection = new top::MuonMC15(topConfig->muonPtcut(), nullptr); 
   objectSelection->muonSelection( muonSelection );
   objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), /*jvtmin*/ 0.64 ));
