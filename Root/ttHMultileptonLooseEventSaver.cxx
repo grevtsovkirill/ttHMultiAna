@@ -797,17 +797,67 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   OR_flags.doPhotons   = false;
   OR_flags.outputLabel = "sharesTrk";
 
-  top::check(ORUtils::recommendedTools(OR_flags, m_ORtoolBox),
+  top::check(ORUtils::recommendedTools(OR_flags, m_ORtoolBox[0]),
 	     "Failed to setup OR Tool box");
 
   if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox.eleMuORT.setProperty("RemoveCaloMuons", false),
+    top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
 	       "Failed to set RemoveCaloMuons in eleMuORT");
 
-  top::check(m_ORtoolBox.initialize(),
+  top::check(m_ORtoolBox[0].initialize(),
 	     "Failed to initialize overlap removal tools");
-  m_overlapRemovalTool = std::move(m_ORtoolBox.masterTool);
+  m_overlapRemovalTool[0] = std::move(m_ORtoolBox[0].masterTool);
   
+  // everything
+  ORUtils::ORFlags OR_flags_nominal("OverlapRemovalttHNom",
+				    "",
+				    "ttHpassTauOVR");
+  OR_flags_nominal.doElectrons = m_config->useElectrons();
+  OR_flags_nominal.doMuons     = m_config->useMuons();
+  OR_flags_nominal.doJets      = true;
+  OR_flags_nominal.doTaus      = true;
+  OR_flags_nominal.doPhotons   = false;
+  OR_flags_nominal.outputPassValue = true;
+
+  top::check(ORUtils::recommendedTools(OR_flags_nominal,m_ORtoolBox[1]),
+	     "Failed to setup OR Tool box for nominal selections");
+
+  if (m_config->useMuons() && m_config->useElectrons())
+    top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
+	       "Failed to set RemoveCaloMuons in nominal OR");
+  if (m_config->useTaus() && m_config->useElectrons())
+    top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
+						 "DFCommonElectronsLHLoose"),
+	       "Failed to set loose LH for electron def for ORTool");
+
+  top::check(m_ORtoolBox[1].initialize(),
+	     "Failed to initialize overlap removal tools for nominal selection");
+  m_overlapRemovalTool[1] = std::move(m_ORtoolBox[1].masterTool);
+  
+  // everything except tau
+  ORUtils::ORFlags OR_flags_nominal_no_tau("OverlapRemovalttHNomNoTau",
+					   "",
+					   "ttHpassOVR");
+  OR_flags_nominal_no_tau.doElectrons = m_config->useElectrons();
+  OR_flags_nominal_no_tau.doMuons     = m_config->useMuons();
+  OR_flags_nominal_no_tau.doJets      = true;
+  OR_flags_nominal_no_tau.doTaus      = false;
+  OR_flags_nominal_no_tau.doPhotons   = false;
+  OR_flags_nominal_no_tau.outputPassValue = true;
+  OR_flags_nominal_no_tau.outputLabel = "ttHpassOVR";
+
+  top::check(ORUtils::recommendedTools(OR_flags_nominal_no_tau,m_ORtoolBox[2]),
+	     "Failed to setup OR Tool box for nominal-but-tau selections");
+
+  if (m_config->useMuons() && m_config->useElectrons())
+    top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
+	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
+
+  top::check(m_ORtoolBox[2].initialize(),
+	     "Failed to initialize overlap removal tools for nominal selection");
+  m_overlapRemovalTool[2] = std::move(m_ORtoolBox[2].masterTool);
+  
+
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -1068,8 +1118,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodMu = SelectMuons(event);
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
-  OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  top::check( m_overlapRemovalTool->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
+  //OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
+  top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
+  top::check( m_overlapRemovalTool[2]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal-but-tau OR" );
+  top::check( m_overlapRemovalTool[0]->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
+  OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   CopyLeptons(goodEl, goodMu);
 
   // dont do the rest if we skim here anyway

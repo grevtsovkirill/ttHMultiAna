@@ -1,3 +1,7 @@
+2016-05-23 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* use ASG overlap removal as default
+	* use common loose lepton def as default
+
 2016-05-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* use same truthOrigin and truthType name convention for leptons after OLR
 
