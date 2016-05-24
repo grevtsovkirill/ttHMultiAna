@@ -575,7 +575,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	      float m_el_nonprompt_float = -99.;
 	      SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptLepton_" + var);
 	      if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
-	      return (short) m_el_nonprompt_float; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
+	      return (float) m_el_nonprompt_float; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
 	}
       }
     }
@@ -735,7 +735,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	      float m_mu_nonprompt_float = -99.;
 	      SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptLepton_" + var);
 	      if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
-	      return (short) m_mu_nonprompt_float; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
+	      return (float) m_mu_nonprompt_float; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
 	}
       }
     }
