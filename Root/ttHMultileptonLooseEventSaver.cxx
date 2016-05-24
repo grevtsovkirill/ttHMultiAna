@@ -548,7 +548,36 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
 	  return (int) m_el_true_type; },   *systematicTree, "electron_truthType");
 
+      // Add non-prompt electron vars
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	  float m_el_nonprompt_bdt = -99.;
+	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLepton_TagWeight");
+	  if(AccessorNonPromptBDT.isAvailable(ele)) m_el_nonprompt_bdt = AccessorNonPromptBDT(ele);
+	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLepton_TagWeight");
+
+      std::vector<std::string> short_vars = {"TrackJetNTrack", "sv1_ntkv", "jf_ntrkv"};
+      for(std::string var: short_vars) {
+	Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	    short m_el_nonprompt_short = -99;
+	    SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_"+ var);
+	    if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_short = AccessorNonPrompt(ele);
+	    return (short) m_el_nonprompt_short; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
+      }
+
+      bool m_writeAllNonPromptInputVars = false;
+      
+      if(m_writeAllNonPromptInputVars) {
+	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
+	for(std::string var: float_vars) {
+	  Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	      float m_el_nonprompt_float = -99.;
+	      SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptLepton_" + var);
+	      if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
+	      return (short) m_el_nonprompt_float; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
+	}
+      }
     }
     
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
@@ -679,8 +708,36 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	    mu_orig = idtp->auxdata<int>("truthOrigin");
 	  } return (int) mu_orig; }, *systematicTree, "muon_trackOrigin");
 
+      // Add non-prompt muon vars
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "muon_jetFitterComb");
 
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	  float m_mu_nonprompt_bdt = -99.;
+	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLepton_TagWeight");
+	  if(AccessorNonPromptBDT.isAvailable(mu)) m_mu_nonprompt_bdt = AccessorNonPromptBDT(mu);
+	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLepton_TagWeight");
+
+      std::vector<std::string> short_vars = {"TrackJetNTrack", "sv1_ntkv", "jf_ntrkv"};
+      for(std::string &var: short_vars) {
+	Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	    short m_mu_nonprompt_short = -99;
+	    SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_"+ var);
+	    if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_short = AccessorNonPrompt(mu);
+	    return (short) m_mu_nonprompt_short; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
+      }
+
+      bool m_writeAllNonPromptInputVars = false;
+      
+      if(m_writeAllNonPromptInputVars) {
+	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
+	for(std::string &var: float_vars) {
+	  Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	      float m_mu_nonprompt_float = -99.;
+	      SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptLepton_" + var);
+	      if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
+	      return (short) m_mu_nonprompt_float; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
+	}
+      }
     }
     
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
