@@ -28,7 +28,7 @@ mc15c                          = TopExamples.grid.Samples(['mc15c_p2613'])
 #TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',mc15a)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2613',mc15c)
 all_samples = mc15c
-TopExamples.grid.submit(config,mc15c)
+#TopExamples.grid.submit(config,mc15c)
 
 config.settingsFile  = 'generic_config-mc15a-Sys.txt'
 #TopExamples.grid.submit(config,mc15a)
@@ -43,7 +43,7 @@ config.maxNFilesPerJob = ''
 #nominal_mc15b                         = TopExamples.grid.Samples(['mc15b_nominal_only'])
 #TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',nominal_mc15b)
 #all_samples += nominal_mc15b
-TopExamples.grid.submit(config,mc15c)
+#TopExamples.grid.submit(config,mc15c)
 
 config.settingsFile  = 'generic_config-mc15a.txt'
 #TopExamples.grid.submit(config,mc15a)
@@ -51,18 +51,18 @@ config.settingsFile  = 'generic_config-mc15a.txt'
 ########################################################################################
 #data
 config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '20.05.16.Data'
+config.suffix = '24.05.16.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
 #data = TopExamples.grid.Samples(['data_2015_25ns_only_grlv73'])
-data15 = TopExamples.grid.Samples(['data_2015_20.7'])
-data16 = TopExamples.grid.Samples(['data16_grl_v76_only'])
+#data15 = TopExamples.grid.Samples(['data_2015_20.7'])
+data16 = TopExamples.grid.Samples(['data16'])
 #TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',data)
 #TopExamples.grid.submit(config, data15)
 
 config.settingsFile = 'generic_config-data16.txt'
-#TopExamples.grid.submit(config,data16)
+TopExamples.grid.submit(config,data16)
 
 
 #################################################################################

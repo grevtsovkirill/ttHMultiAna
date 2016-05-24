@@ -34,7 +34,7 @@ def getLogicalDSName(dsid):
 
 
 #this is my fuse mount location
-filepath = "/afs/cern.ch/user/d/dhohn/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v6/Sys"
+filepath = "/data/harish/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v12/Data"
 files = [ f for f in os.listdir(filepath) if os.path.isfile(os.path.join(filepath,f)) ] 
 
 total = 0
@@ -60,7 +60,7 @@ for f in files:
     logicalDSName = getLogicalDSName(dsid)
     ds_dict = AtlasAPI.get_dataset_info(client, logicalDSName )
     totalEventsAMI = ds_dict[0]["totalEvents"]
-
+    print dsid,totalEventsAMI, processedEvents
     if int(totalEventsAMI) != int(processedEvents):
         print dsid, "not complete. AMI:",totalEventsAMI, "Processed:",int(processedEvents)
         incomplete += 1
