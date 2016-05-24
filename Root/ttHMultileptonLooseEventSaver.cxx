@@ -33,7 +33,6 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
-  m_runYear(2015),
   m_mu(0),
   m_mu_unc(0),  
   m_mu_ac(0),
@@ -43,6 +42,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pvY(0),
   m_pvZ(0),
   m_puNumber(0),
+  m_runYear(2015),
   m_HF_Classification(0.),
   m_met_met(0.),
   m_met_phi(0.)
@@ -245,7 +245,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }
   } 
   */
-  std::vector<std::string> triggernames
+  std::set<std::string> triggernames
   {   "HLT_mu20_iloose_L1MU15",
       "HLT_mu50",
       "HLT_e24_lhmedium_L1EM18VH",
@@ -265,7 +265,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     for( std::string extra_trigger:
       {   "HLT_e24_lhmedium_iloose_L1EM18VH",
 	  "HLT_e24_tight_iloose",
-	  "HLT_e24_lhtight_iloose", 
 	  "HLT_e24_tight_iloose_L1EM20VH",
 	  "HLT_e24_lhtight_iloose_L1EM20VH", 
 	  "HLT_e26_tight_iloose",
@@ -273,9 +272,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  "HLT_e60_medium",
 	  "HLT_e140_loose",
 	  "HLT_e140_lhloose", 
-	  "HLT_mu24_imedium",
 	  "HLT_mu26_imedium", 
-	  "HLT_mu40",
 	  "HLT_2e12_loose_L12EM10VH",
 	  "HLT_2e12_lhloose_L12EM10VH",
 	  "HLT_e17_lhloose_2e9_lhloose",
@@ -299,16 +296,23 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  "HLT_e5_lhloose",
 	  "HLT_e24_medium_L1EM20VHI_mu8noL1", //2016
 	  "HLT_2e12_lhvloose_nod0_L12EM10VH", // < 5e33
-	  "HLT_2mu10 HLT_mu20_mu8noL1",
+	  "HLT_2mu10",
+	  "HLT_mu20_mu8noL1",
 	  "HLT_2e15_lhvloose_nod0_L12EM13VH", // < 7e33
-	  "HLT_2mu14 HLT_mu20_mu8noL1",
+	  "HLT_2mu14",
+	  "HLT_mu20_mu8noL1",
 	  } )
       {
-	triggernames.push_back(extra_trigger);
+	triggernames.insert(extra_trigger);
       }
   } 
 
-
+  for( std::string trig: triggernames) {
+    if( trig.find(" ") != std::string::npos) {
+      std::string e = "There is a space in triggername "+trig+". Please fix it.";
+      throw std::logic_error(e);
+    }
+  }
   
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
@@ -324,7 +328,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c10_77_EventWeight");
-    systematicTree->makeOutputVariable(m_JVT_weight, "JVT_EventWeight");
+    systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
     
     if ( m_doSFSystematics ) {
 
