@@ -20,8 +20,8 @@ CountHisto::CountHisto(const std::string& name, TFile* outputFile, EL::Worker* w
     m_nominalHashValue = nominal.hash();
 
     m_hists.addHist("Count", ";;Events", 3, 0., 3.);
-    m_hists.hist("Count")->GetXaxis()->SetBinLabel(1,"MCWeightOrg");
-    m_hists.hist("Count")->GetXaxis()->SetBinLabel(2,"PUWeight");
+    m_hists.hist("Count")->GetXaxis()->SetBinLabel(1,"totalEvents");
+    m_hists.hist("Count")->GetXaxis()->SetBinLabel(2,"totalEventsWeighted");
     m_hists.hist("Count")->GetXaxis()->SetBinLabel(3,"totalEventsProcessed");
 }
 
