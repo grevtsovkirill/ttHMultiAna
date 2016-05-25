@@ -1297,8 +1297,8 @@ void ttHMultileptonLooseEventSaver::finalize() {
 
   // copy number of events before event cleaning for data
   // and before PRIVTX for mc
-  double totalEvents = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(1);
-  Count->SetBinContent(3,totalEvents);
+  double totalEventsProcessed = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(1);
+  Count->SetBinContent(3,totalEventsProcessed);
 
   //overwrite Count histogram with values from CutBookkeepers
   //only for skimmed MC
