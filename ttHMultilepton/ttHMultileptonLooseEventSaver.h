@@ -150,16 +150,16 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_pileup_weight_DOWN;
   //btag SF weights
   double m_bTagSF_weight;
-  std::vector<float> m_weight_bTagSF_77_eigen_B_up;
-  std::vector<float> m_weight_bTagSF_77_eigen_B_down;
-  std::vector<float> m_weight_bTagSF_77_eigen_C_up;
-  std::vector<float> m_weight_bTagSF_77_eigen_C_down;
-  std::vector<float> m_weight_bTagSF_77_eigen_Light_up;
-  std::vector<float> m_weight_bTagSF_77_eigen_Light_down;
-  double m_weight_bTagSF_77_extrapolation_up;
-  double m_weight_bTagSF_77_extrapolation_down;
-  double m_weight_bTagSF_77_extrapolation_from_charm_up;
-  double m_weight_bTagSF_77_extrapolation_from_charm_down;
+  std::vector<float> m_weight_bTagSF_70_eigen_B_up;
+  std::vector<float> m_weight_bTagSF_70_eigen_B_down;
+  std::vector<float> m_weight_bTagSF_70_eigen_C_up;
+  std::vector<float> m_weight_bTagSF_70_eigen_C_down;
+  std::vector<float> m_weight_bTagSF_70_eigen_Light_up;
+  std::vector<float> m_weight_bTagSF_70_eigen_Light_down;
+  double m_weight_bTagSF_70_extrapolation_up;
+  double m_weight_bTagSF_70_extrapolation_down;
+  double m_weight_bTagSF_70_extrapolation_from_charm_up;
+  double m_weight_bTagSF_70_extrapolation_from_charm_down;
   // JVT SF weights
   double m_JVT_weight;
   double m_JVT_weight_UP;
