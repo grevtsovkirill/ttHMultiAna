@@ -651,11 +651,11 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.vz = mu.primaryTrackParticle()->vz();
 
   // trigger matching, require lepton pt > 21 GeV
-  if (mu.pt() > 21e3
+  if (mu.pt() > 25e3
       && ((mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"):0) || //2015
 	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu50") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"):0) || 
 	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu24_iloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_iloose"):0) ||  //2016
-	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu24_ivarloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_ivarloose"):0) || 
+	  //(mu.isAvailable<char>("TRIGMATCH_HLT_mu24_ivarloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_ivarloose"):0) || 
 	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu40") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"):0) ))
       //&& (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
     lep.isTrigMatch = 1;

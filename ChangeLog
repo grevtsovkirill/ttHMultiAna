@@ -1,3 +1,7 @@
+2016-05-26 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Removing *ivar* muon trigger from matching
+	* Moving to MV2c10 70% WP - aligned with ttHbb
+
 2016-05-24 Rhys Roberts <rhys.thomas.roberts@cern.ch>
 	* Added b-tagging non-prompt BDT variables to ntuple
 	* Includes input variables to BDT, currently on saving shorts
