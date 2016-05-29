@@ -1,3 +1,6 @@
+2016-05-29  David Hohn  <davidhohn@.cern.ch>
+	* rework triggernames. now only configured in config files and should reduce those bugs..
+
 2016-05-26 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Removing *ivar* muon trigger from matching
 	* Moving to MV2c10 70% WP - aligned with ttHbb

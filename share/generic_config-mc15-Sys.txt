@@ -80,7 +80,7 @@ OverlapRemovalLeptonDef Tight
 TruthBlockInfo True
 
 # Don't be clever
-SELECTION dummy
+SELECTION triggers
 PRIVTX
 TRIGDEC HLT_mu20_iloose_L1MU15 HLT_mu26_imedium HLT_mu40 HLT_mu50 HLT_e24_lhmedium_L1EM18VH HLT_e24_lhmedium_L1EM20VH HLT_e24_lhmedium_iloose_L1EM18VH HLT_e26_lhtight_iloose HLT_e60_lhmedium HLT_e120_lhloose HLT_mu18_mu8noL1 HLT_2mu10 HLT_2e12_lhloose_L12EM10VH HLT_e17_lhloose_2e9_lhloose 
 
