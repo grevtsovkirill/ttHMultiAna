@@ -14,7 +14,7 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
   xAOD::AuxContainerBase* goodElectronsAux = new xAOD::AuxContainerBase();
   goodElectrons->setStore(goodElectronsAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( goodElectronsAux, "ttHSelectedElectrons"+m_sysName+"Aux" ), 
+  top::check(evtStore()->tds()->record( goodElectronsAux, "ttHSelectedElectrons"+m_sysName+"Aux." ), 
 	     "Failed to register selected electrons");
   if (event.m_electrons.size() > 0) {
     //std::cout << "Initial size: " << event.m_electrons.size() << std::endl;
@@ -68,7 +68,7 @@ ttHMultileptonLooseEventSaver::SelectMuons(const top::Event& event) {
   xAOD::AuxContainerBase* goodMuonsAux = new xAOD::AuxContainerBase();
   goodMuons->setStore(goodMuonsAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( goodMuonsAux, "ttHSelected"+m_sysName+"MuonsAux" ),
+  top::check(evtStore()->tds()->record( goodMuonsAux, "ttHSelected"+m_sysName+"MuonsAux." ),
 	     "Failed to register selected muons");
   for (const auto muItr : event.m_muons) {
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(1);
@@ -112,7 +112,7 @@ ttHMultileptonLooseEventSaver::SelectJets(const top::Event& event) {
   xAOD::AuxContainerBase* goodJetsAux = new xAOD::AuxContainerBase();
   goodJets->setStore(goodJetsAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( goodJetsAux, "ttHSelected"+m_sysName+"JetsAux" ),
+  top::check(evtStore()->tds()->record( goodJetsAux, "ttHSelected"+m_sysName+"JetsAux." ),
 	     "Failed to register selected jets");
   for (const auto jetItr : event.m_jets) {
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(1);
@@ -146,7 +146,7 @@ ttHMultileptonLooseEventSaver::SelectTaus(const top::Event& event) {
   auto goodTausAux = new xAOD::AuxContainerBase();
   goodTaus->setStore(goodTausAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( goodTausAux, "ttHSelected"+m_sysName+"TausAux" ),
+  top::check(evtStore()->tds()->record( goodTausAux, "ttHSelected"+m_sysName+"TausAux." ),
 	     "Failed to register selected taus");
   for (const auto tauItr : event.m_tauJets) {
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(1);
@@ -212,13 +212,13 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   auto newGoodTauAux = new xAOD::AuxContainerBase();
   newGoodTau->setStore(newGoodTauAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( newGoodElAux, "ttHOR"+m_sysName+"ElectronsAux" ),
+  top::check(evtStore()->tds()->record( newGoodElAux, "ttHOR"+m_sysName+"ElectronsAux." ),
 	     "Failed to register electrons after OR");
-  top::check(evtStore()->tds()->record( newGoodMuAux, "ttHOR"+m_sysName+"MuonsAux" ),
+  top::check(evtStore()->tds()->record( newGoodMuAux, "ttHOR"+m_sysName+"MuonsAux." ),
 	     "Failed to register muons after OR");
-  top::check(evtStore()->tds()->record( newGoodJetAux, "ttHOR"+m_sysName+"JetsAux" ),
+  top::check(evtStore()->tds()->record( newGoodJetAux, "ttHOR"+m_sysName+"JetsAux." ),
 	     "Failed to register jets after OR");
-  top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux" ),
+  top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux." ),
 	     "Failed to register taus after OR");
   */
   for (const auto elItr : *goodEl) {
@@ -391,13 +391,13 @@ ttHMultileptonLooseEventSaver::OverlapRemoval_ContOnly(std::shared_ptr<xAOD::Ele
   auto newGoodTauAux = new xAOD::AuxContainerBase();
   newGoodTau->setStore(newGoodTauAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( newGoodElAux, "ttHOR"+m_sysName+"ElectronsAux" ),
+  top::check(evtStore()->tds()->record( newGoodElAux, "ttHOR"+m_sysName+"ElectronsAux." ),
 	     "Failed to register electrons after OR");
-  top::check(evtStore()->tds()->record( newGoodMuAux, "ttHOR"+m_sysName+"MuonsAux" ),
+  top::check(evtStore()->tds()->record( newGoodMuAux, "ttHOR"+m_sysName+"MuonsAux." ),
 	     "Failed to register muons after OR");
-  top::check(evtStore()->tds()->record( newGoodJetAux, "ttHOR"+m_sysName+"JetsAux" ),
+  top::check(evtStore()->tds()->record( newGoodJetAux, "ttHOR"+m_sysName+"JetsAux." ),
 	     "Failed to register jets after OR");
-  top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux" ),
+  top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux." ),
 	     "Failed to register taus after OR");
 
   for (const auto elItr : *goodEl) {
