@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python                                                                                                                                                                       
 import TopExamples.grid
 #import DerivationTags
 import Data15
@@ -17,7 +17,7 @@ config.destSE        = 'SMU2_LOCALGROUPDISK' #This is the default (anywhere), or
 ###############################################################################
 #Systematics
 config.settingsFile  = 'generic_config-mc15-Sys.txt'
-config.suffix        = '20.05.16.Sys'
+config.suffix        = '30.05.16.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
@@ -28,7 +28,7 @@ mc15c                          = TopExamples.grid.Samples(['mc15c_p2613'])
 #TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',mc15a)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2613',mc15c)
 all_samples = mc15c
-#TopExamples.grid.submit(config,mc15c)
+TopExamples.grid.submit(config,mc15c)
 
 config.settingsFile  = 'generic_config-mc15a-Sys.txt'
 #TopExamples.grid.submit(config,mc15a)
@@ -36,14 +36,14 @@ config.settingsFile  = 'generic_config-mc15a-Sys.txt'
 ####################################################################################
 #Nominal
 config.settingsFile  = 'generic_config-mc15.txt'
-config.suffix = '20.05.16.Nominal'
+config.suffix = '30.05.16.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
 #nominal_mc15b                         = TopExamples.grid.Samples(['mc15b_nominal_only'])
 #TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2559',nominal_mc15b)
 #all_samples += nominal_mc15b
-#TopExamples.grid.submit(config,mc15c)
+TopExamples.grid.submit(config,mc15c)
 
 config.settingsFile  = 'generic_config-mc15a.txt'
 #TopExamples.grid.submit(config,mc15a)
@@ -51,7 +51,7 @@ config.settingsFile  = 'generic_config-mc15a.txt'
 ########################################################################################
 #data
 config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '24.05.16.Data'
+config.suffix = '30.05.16.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 

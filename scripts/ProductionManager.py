@@ -133,16 +133,23 @@ def getDoneSamplesOnGRID():
     for job in jobList:
         if job.outDS.count(productionName):
             total += 1
+            if job.taskStatus != 'done':
+                #jobUpdated = pbookCore.statusJobJobset(job.JobsetID,forceUpdate=True)
+                pass
             if job.taskStatus == 'done':
                 done += 1
                 DSName = job.outDS.split(',')[0]
                 dsid = DSName.split('.')[2]
                 size = getDSSize(DSName)
                 samples += [Sample(dsid, size, DSName)]
-            if job.taskStatus == 'broken':
+            elif job.taskStatus == 'broken':
                 broken += 1
-            if job.taskStatus == 'finished':
+            elif job.taskStatus == 'finished':
                 finished += 1
+                #pbookCore.retry(job.JobsetID)
+            elif job.taskStatus == 'failed':
+                #pbookCore.retry(job.JobsetID)
+                pass
 
     print '%s jobs in %s' % (total, productionName)
     print 'broken:   %s' % broken
@@ -161,7 +168,8 @@ def createJobScript(outDir,dsid,gridDS,eosPath):
     file.write('source ~/.bashrc								   \n')
     file.write('setupATLAS                                                                         \n')
     file.write('RUCIO_ACCOUNT=hpotti								   \n')
-    file.write('lsetup root rucio								   \n')
+    file.write('lsetup  rucio				               				   \n')
+    file.write('export X509_USER_PROXY=/afs/cern.ch/user/h/hpotti/x509up_u75032                    \n')
     file.write('pwd										   \n')
     txt  = 'source /afs/cern.ch/user/h/hpotti/ProductionManager/hadd.sh \\\n'
     txt += '%s \\\n' % gridDS
