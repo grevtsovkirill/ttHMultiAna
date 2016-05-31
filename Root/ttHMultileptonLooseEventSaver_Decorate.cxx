@@ -184,8 +184,8 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
       auto truthJetLink = tauItr->auxdata<ElementLink<xAOD::JetContainer> >("truthJetLink");
       if(truthJetLink.isValid() ) {
 	auto truthJet = *truthJetLink;
-	if( truthJet->isAvailable<int>("HadronConeExclTruthLabelID") ){
-	  truthJetFlavour = truthJet->auxdata<int>("HadronConeExclTruthLabelID");
+	if( truthJet->isAvailable<int>("PartonTruthLabelID") ){
+	  truthJetFlavour = truthJet->auxdata<int>("PartonTruthLabelID");
 	}
       }
     }
