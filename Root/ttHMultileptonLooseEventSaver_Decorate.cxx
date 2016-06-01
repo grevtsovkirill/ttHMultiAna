@@ -12,7 +12,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   if(m_config->useTrackJets() == false) no_tjet = true;
   else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
 
-  double vtx_z = m_pvZ;
+  double vtx_z = m_pv->z();
   
   for (auto elItr : event.m_electrons) {
     //delta z0

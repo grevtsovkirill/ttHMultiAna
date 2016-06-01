@@ -38,10 +38,8 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_mu_ac(0),
   m_pu_hash(0),
   m_pvNumber(0),
-  m_pvX(0),
-  m_pvY(0),
-  m_pvZ(0),
   m_puNumber(0),
+  m_pv(nullptr),
   m_runYear(2015),
   m_HF_Classification(0.),
   m_met_met(0.),
@@ -325,9 +323,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background); }, *systematicTree, "backgroundFlags");
+    WrapS(scalarvec, [&](const top::Event&){ return m_pv->x(); }, *systematicTree, "m_vxp_x");
+    WrapS(scalarvec, [&](const top::Event&){ return m_pv->y(); }, *systematicTree, "m_vxp_y");
+    WrapS(scalarvec, [&](const top::Event&){ return m_pv->z(); }, *systematicTree, "m_vxp_z");
+
+
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
    
-
     // HF classification ttbar
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");   
    
@@ -339,9 +341,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
     systematicTree->makeOutputVariable(m_pu_hash, "pileupHash");
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
-    systematicTree->makeOutputVariable(m_pvX,      "m_vxp_x");
-    systematicTree->makeOutputVariable(m_pvY,      "m_vxp_y");
-    systematicTree->makeOutputVariable(m_pvZ,      "m_vxp_z");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
 
     //met
@@ -666,14 +665,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); }, *systematicTree, "m_jet_OVRStatus");
-
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_numTrk");
+    
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
       // is it the 1 GeV counting we want?
-      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float> >(xAOD::JetAttribute::SumPtTrkPt500); return (float) (tmp.size() ? tmp[0] : 0.); }, *systematicTree, "m_jet_sumPtTrk");
-      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[0] : 0);  }, *systematicTree, "m_jet_numTrk");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float> >(xAOD::JetAttribute::SumPtTrkPt500); return (float) (tmp.size() ? tmp[m_pv->index()] : 0.); }, *systematicTree, "m_jet_sumPtTrk");
       Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("EMFrac"); }, *systematicTree, "m_jet_emfrac");
       // No label tagging in sample MC
       Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<int>("ConeTruthLabelID"); }, *systematicTree, "m_jet_flavor_truth_label");
@@ -702,6 +701,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
 
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<int>("IsHadronic");
+      }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
+    
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       //substructure
@@ -737,10 +740,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	}, *systematicTree, std::string(tauprefix+"isTruthMatched").c_str());
 
       //decorated in ttHMultileptonLooseEventSaver_Decorate.cxx
-      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-	  return tau.auxdata<int>("IsHadronic");
-	}, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
-    
       Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
 	  return tau.auxdata<int>("tauTruthOrigin");
 	}, *systematicTree, std::string(tauprefix+"truthOrigin").c_str());
@@ -1099,18 +1098,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   m_pvNumber = 0;
   m_puNumber = 0;
+  m_pv = nullptr;
   for (const xAOD::Vertex* vtx : *m_vertices){ 
     if(vtx->vertexType() == xAOD::VxType::PriVtx) {
       m_pvNumber++;
-      try {
-	m_pvX = vtx->x();
-	m_pvY = vtx->y();
-	m_pvZ = vtx->z();
-      }
-      catch(SG::ExcBadAuxVar& e) {
-	//no vtx info
-	//skip
-      }
+      m_pv = vtx;
     }
     else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
   }
