@@ -1,4 +1,7 @@
-2016-05-29  David Hohn  <davidhohn@.cern.ch>
+2016-06-02  David Hohn  <david.hohn@cern.ch>
+	* enable writing non-prompt lep tagging variables
+
+2016-05-29  David Hohn  <david.hohn@cern.ch>
 	* rework triggernames. now only configured in config files and should reduce those bugs..
 
 2016-05-26 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>

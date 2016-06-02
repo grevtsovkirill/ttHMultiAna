@@ -472,7 +472,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	    return (short) m_el_nonprompt_short; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
       }
 
-      bool m_writeAllNonPromptInputVars = false;
+      bool m_writeAllNonPromptInputVars = true;
       
       if(m_writeAllNonPromptInputVars) {
 	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
@@ -632,7 +632,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	    return (short) m_mu_nonprompt_short; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
       }
 
-      bool m_writeAllNonPromptInputVars = false;
+      bool m_writeAllNonPromptInputVars = true;
       
       if(m_writeAllNonPromptInputVars) {
 	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
