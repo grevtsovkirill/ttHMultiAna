@@ -16,13 +16,13 @@ void DummyOverlapRemoval::overlapremoval(const xAOD::PhotonContainer* /* ph */,
 					 const xAOD::TauJetContainer* tau,
 					 const xAOD::JetContainer* jet,
 					 const xAOD::JetContainer* ljet,
-					 std::vector<unsigned int>& goodPhotons,
+					 std::vector<unsigned int>& /*goodPhotons*/,
 					 std::vector<unsigned int>& goodElectrons,
 					 std::vector<unsigned int>& goodMuons,
 					 std::vector<unsigned int>& goodTaus,
 					 std::vector<unsigned int>& goodJets,
 					 std::vector<unsigned int>& goodLargeRJets,
-					 const bool isLoose )
+					 const bool /*isLoose*/ )
   {
     std::string passTopCuts("passPreORSelection");
   
