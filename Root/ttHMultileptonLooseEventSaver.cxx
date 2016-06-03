@@ -153,6 +153,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
 
+  m_sherpaRW = new PMGCorrsAndSysts(false);
+  
   //prepare btag eigen vectors
   m_weight_bTagSF_70_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars() );
   m_weight_bTagSF_70_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars() );
@@ -316,6 +318,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
     
     //event info
+    //scalar aka once per event stuff
     std::vector<ScalarWrapper*> scalarvec; 
     systematicTree->makeOutputVariable(m_eventNumber, "EventNumber");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->runNumber(); }, *systematicTree, "RunNumber");
@@ -326,6 +329,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->x(); }, *systematicTree, "m_vxp_x");
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->y(); }, *systematicTree, "m_vxp_y");
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->z(); }, *systematicTree, "m_vxp_z");
+    WrapS(scalarvec, [&](const top::Event& event)
+	  {
+	    return event.m_info->isAvailable<float>("TTHML_SherpaNJetRW") ? event.m_info->auxdataConst<float>("TTHML_SherpaNJetRW") : 1.0;
+	  }, *systematicTree, "SherpaNJetWeight");
+    WrapS(scalarvec, [&](const top::Event& event)
+	  {
+	    return event.m_info->isAvailable<int>("TTHML_NTruthJet") ? event.m_info->auxdataConst<int>("TTHML_NTruthJet") : 0.0;
+	  }, *systematicTree, "nTruthJets");
 
 
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
@@ -997,6 +1008,21 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
 
+  //sherpa rw
+  if( top::isSimulation(event) and ( ( m_mcChannelNumber >= 363102 and m_mcChannelNumber <= 363122 ) or
+				     ( m_mcChannelNumber >= 363331 and m_mcChannelNumber <= 363354 ) or
+				     ( m_mcChannelNumber >= 363361 and m_mcChannelNumber <= 363483 )
+				     )
+      ) {
+      const xAOD::JetContainer* truthJets(nullptr);
+      top::check( evtStore()->retrieve(truthJets, "AntiKt4TruthJets"), "Failed to retrieve AntiKt4TruthWZJets for Sherpa reweighting." );
+
+      uint nTruthJets = truthSelector.CountJets(truthJets, event.m_truth);
+      
+      event.m_info->auxdecor<float>("TTHML_SherpaNJetRW") = m_sherpaRW->Get_Sherpa22VJets_NJetCorrection(nTruthJets);
+      event.m_info->auxdecor<int>("TTHML_NTruthJet") = nTruthJets;
+    }
+  
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 

@@ -10,6 +10,7 @@
 
 // xAOD
 #include "xAODTruth/TruthEventContainer.h"
+#include "xAODJet/JetContainer.h"
 
 //Root
 #include <TH1F.h>
@@ -59,6 +60,10 @@ namespace ttH
     const std::vector<TruthPart>& SelectTruth(const xAOD::TruthParticleContainer *truths);
  
     decaymode GetHiggsDecayMode(const xAOD::TruthParticleContainer* truthCont);
+
+    unsigned int CountJets(const xAOD::JetContainer* truthJets,
+			   const xAOD::TruthParticleContainer* truthParticles);
+    
   private:
     
     bool IsGoodTop    (const int pdgId, const std::vector<int>& children);
@@ -70,7 +75,6 @@ namespace ttH
     bool IsListA      (const int pdgId, const std::vector<int>& children);
     bool IsHadronicTau(const int pdgId, const std::vector<int>& children);
     bool HasThisChild (const int child, const std::vector<int>& children);
-
     bool IsStable(const xAOD::TruthParticle& truth) const;
     bool IsLepton(const xAOD::TruthParticle& truth) const;
     bool IsGenerator(int status, int barcode) const;

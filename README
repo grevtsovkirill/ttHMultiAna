@@ -1,5 +1,5 @@
 >> setupATLAS
->> lsetup "rcSetup Top,2.3.49"
+>> lsetup "rcSetup Top,2.4.6"
 
 **************
 Note -- if you already have ttHMultilepton checked out locally AND wish to set up both RC and the grid-related accoutrements, you can do: 

@@ -1,3 +1,7 @@
+2016-06-03  David Hohn  <david.hohn@cern.ch>
+	* use PMGCorrsAndSysts to save Sherpa 2.2 Njet weight
+	** update your setup script to check out PMGTools
+
 2016-06-02  David Hohn  <david.hohn@cern.ch>
 	* enable writing non-prompt lep tagging variables
 

@@ -26,6 +26,9 @@
 //Isolation
 #include "IsolationSelection/IsolationSelectionTool.h"
 
+//Sherpa 2.2 reweight
+#include "PMGTools/PMGCorrsAndSysts.h"
+
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopCorrections/ScaleFactorRetriever.h"
@@ -195,6 +198,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //ttHF classification
   ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
+  //sherpa RW
+  PMGCorrsAndSysts* m_sherpaRW;
+  
   //MC  
   int m_higgsMode;
   std::vector<float> m_mc_m;

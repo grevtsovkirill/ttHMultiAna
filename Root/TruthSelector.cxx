@@ -519,3 +519,24 @@ void ttH::TruthSelector::PruneSelectedParticles()
     }
   }
 }
+
+
+//=========================================================================
+unsigned int ttH::TruthSelector::CountJets(const xAOD::JetContainer* truthJets, const xAOD::TruthParticleContainer* truthParticles)
+{
+  uint jet_n = 0;
+  for( auto jet: *truthJets) {
+    bool overlaps = false;
+    for( auto tp: *truthParticles){
+      if( IsStable(*tp) and IsLepton(*tp) and tp->pt() > 25e3 and fabs(tp->eta()) < 2.5) {
+	if(tp->p4().DeltaR(jet->p4()) < 0.2) {
+	  overlaps = true;
+	  break;
+	}
+      }
+    }
+    if( not overlaps and jet->pt() > 20e3 and fabs(jet->eta() ) < 4.5 ) ++jet_n;
+  }
+
+  return jet_n;
+}
