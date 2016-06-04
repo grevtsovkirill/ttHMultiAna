@@ -104,7 +104,7 @@ StatusCode TruthMatchAlgo :: doTruthMatching( const xAOD::IParticle* lep ) {
       return StatusCode::SUCCESS;
     }
     if ( ! (*m_truthPLAcc)( *lep ).isValid() ) {
-      ATH_MSG_WARNING("doTruthMatching() :: Link to truth match for this reco electron is invalid. This shouldn't happen. Returning");
+      ATH_MSG_VERBOSE("doTruthMatching() :: Link to truth match for this reco electron is invalid. This shouldn't happen. Returning");
       return StatusCode::SUCCESS;
     }
     const xAOD::TruthParticle* truthMatch = *( (*m_truthPLAcc)(*lep) );
