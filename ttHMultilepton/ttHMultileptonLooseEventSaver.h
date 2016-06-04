@@ -7,10 +7,10 @@
 #include "TrigDecisionTool/TrigDecisionTool.h"
 
 // CP tools
-#include "MuonSelectorTools/MuonSelectionTool.h"
-#include "JetSelectorTools/JetCleaningTool.h"
-#include "PileupReweighting/PileupReweightingTool.h"
 #include "AsgTools/ToolHandle.h"
+#include "MuonSelectorTools/MuonSelectionTool.h"
+#include "JetInterface/IJetSelector.h"
+#include "PileupReweighting/PileupReweightingTool.h"
 #include "TauAnalysisTools/TauEfficiencyCorrectionsTool.h"
 #include "AssociationUtils/ToolBox.h"
 #include "AssociationUtils/IOverlapRemovalTool.h"
@@ -43,11 +43,11 @@
 #include <TH1F.h>
 #include <TString.h>
 
-using namespace Trig;
-using namespace TrigConf;
 using namespace xAOD;
-using namespace CP;
+//using namespace CP;
 using namespace ttHMultilepton;
+using CP::IsolationSelectionTool;
+using CP::MuonSelectionTool;
 using TauAnalysisTools::TauEfficiencyCorrectionsTool;
 using TauAnalysisTools::TauSelectionTool;
 
@@ -110,13 +110,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ///Scale factors
   std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
 
-  xAODConfigTool                         configTool;
-  TrigDecisionTool                       trigDecTool;
+  ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
+  ToolHandle<CP::IPileupReweightingTool> m_purwtool;
+  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
   MuonSelectionTool                      muonSelection;
-  JetCleaningTool*                       cleaningTool;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
-  ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   TauSelectionTool                       m_tauSelectionEleOLR;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau
   ORUtils::ToolBox                       m_ORtoolBox[3];

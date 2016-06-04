@@ -1,3 +1,6 @@
+2016-06-04  David Hohn  <david.hohn@cern.ch>
+	* clean up our tools a bit, take them from Top tool store when possible
+
 2016-06-03  David Hohn  <david.hohn@cern.ch>
 	* use PMGCorrsAndSysts to save Sherpa 2.2 Njet weight
 	** update your setup script to check out PMGTools

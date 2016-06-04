@@ -16,34 +16,34 @@
 #include "AssociationUtils/OverlapRemovalInit.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() : 
-  m_outputFile(0),
-  m_doSystematics(false),
-  m_doSFSystematics(true),
-  m_sfRetriever(nullptr),
-  configTool("xAODConfigTool"),
-  trigDecTool("TrigDecTool"),
-  muonSelection("MuonSelection"),
-  iso_1( "iso_1" ),
-  m_purwtool("CP::PileupReweightingTool"),
-  m_tauSelectionEleOLR("TauSelectionEleOLR"),
-  m_mcWeight(1.),
-  m_pileup_weight(1.),
-  m_bTagSF_weight(1.),
-  m_JVT_weight(1.),
-  m_eventNumber(0),
-  m_runNumber(0),
-  m_mcChannelNumber(0),
-  m_mu(0),
-  m_mu_unc(0),  
-  m_mu_ac(0),
-  m_pu_hash(0),
-  m_pvNumber(0),
-  m_puNumber(0),
-  m_pv(nullptr),
-  m_runYear(2015),
-  m_HF_Classification(0.),
-  m_met_met(0.),
-  m_met_phi(0.)
+  m_outputFile			(nullptr),
+  m_doSystematics		(false),
+  m_doSFSystematics		(true),
+  m_sfRetriever			(nullptr),
+  m_trigDecTool			("Trig::TrigDecisionTool"),
+  m_purwtool			("CP::PileupReweightingTool"),
+  m_jetCleaningToolLooseBad	("JetCleaningToolLooseBad"),
+  muonSelection			("MuonSelection"),
+  iso_1				( "iso_1" ),
+  m_tauSelectionEleOLR		("TauSelectionEleOLR"),
+  m_mcWeight			(1.),
+  m_pileup_weight		(1.),
+  m_bTagSF_weight		(1.),
+  m_JVT_weight			(1.),
+  m_eventNumber			(0),
+  m_runNumber			(0),
+  m_mcChannelNumber		(0),
+  m_mu				(0),
+  m_mu_unc			(0),  
+  m_mu_ac			(0),
+  m_pu_hash			(0),
+  m_pvNumber			(0),
+  m_puNumber			(0),
+  m_pv				(nullptr),
+  m_runYear			(2015),
+  m_HF_Classification		(0.),
+  m_met_met			(0.),
+  m_met_phi			(0.)
 {
 }
 
@@ -169,17 +169,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //Pileup Reweighting Tool from TopToolStore
   if( m_purwtool.retrieve() ) {}
 
-
-  //Trigger Tools
-  // Trigger decision tool. 
-  ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
-  top::check( configHandle->initialize(),"xAODConfigTool fails to initialize");   
-  // The decision tool
-  top::check( trigDecTool.setProperty("ConfigTool",configHandle),"TrigDecTool fails to set configHandle");
-  //top::check( trigDecTool.setProperty("OutputLevel", MSG::VERBOSE),"TrigDecTool fails to set OutputLevel");
-  top::check( trigDecTool.setProperty("TrigDecisionKey","xTrigDecision"),"TrigDecTool fails to set TrigDecisionKey");
-  top::check(trigDecTool.initialize(),"TrigDecTool fails to initialize");    
-
+  //Trigger Tool from TopToolStore
+  top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
+  
   //Isolation tools for leptons
   //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
   //    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
@@ -197,13 +189,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");   
 
-  //Jet Tools
-  //Jet cleaning tool is initialized here
-  cleaningTool = new JetCleaningTool("MyCleaningTool");
-  top::check( cleaningTool->setProperty("CutLevel", "LooseBad"), "Jet Cleaning tool failed to set cut level"); // also "TightBad"
-  top::check( cleaningTool->setProperty("DoUgly", false), "Jet Cleaning tool failed to set value for DoUgly flag");
-  top::check( cleaningTool->initialize(), "Jet Cleaning tool failed to initialize");
-
+  //Jet Tool from Top Tool Store
+  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );  
+  
   //Tau Tools
   //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
   top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
@@ -214,7 +202,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //Items and their PS
   // defined in config files with TRIGDEC selectors
   // "triggers" is the name of that dummy selection
-
   std::vector<std::string> triggernames = config->allTriggers("triggers");
   
   //make a tree for each systematic
@@ -360,8 +347,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     
     for (auto trigger : triggernames) {
-      WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
-      if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) trigDecTool.getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
+      WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) m_trigDecTool->isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
+      if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) m_trigDecTool->getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
     }
     //END trigger
     vec_scalar_wrappers.push_back(scalarvec);
@@ -671,7 +658,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.jetP4("JetEMScaleMomentum").eta(); }, *systematicTree, "m_jet_etaEM");    
     Wrap2(jetvec, [](const xAOD::Jet& jet) { float this_jvt = -999.; if(jet.isAvailable<float>("AnalysisTop_JVT")) this_jvt = jet.auxdataConst<float>("AnalysisTop_JVT"); return this_jvt;}, *systematicTree, "m_jet_jvt");
     //Jet cleaning flag
-    Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = cleaningTool->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad"); 
+    Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad"); 
 
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");

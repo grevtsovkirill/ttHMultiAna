@@ -116,7 +116,7 @@ ttHMultileptonLooseEventSaver::SelectJets(const top::Event& event) {
 	     "Failed to register selected jets");
   for (const auto jetItr : event.m_jets) {
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(1);
-    if (!cleaningTool->keep(*jetItr)) {
+    if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(2);
