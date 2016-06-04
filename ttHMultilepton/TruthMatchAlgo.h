@@ -40,7 +40,9 @@ namespace ttHMultilepton {
   SG::AuxElement::Decorator< float >*   m_truthMDecor;            //! /* m of the match particle */
   SG::AuxElement::Decorator< float >*   m_truthEDecor;            //! /* E of the match particle */
   SG::AuxElement::Decorator< float >*   m_truthRapidityDecor;     //! /* rapidity of the match particle */
-  SG::AuxElement::Decorator< char >*    m_isQMisIDDecor;          //! /* reco has opposite charge wrt to primitive truth ancestor */
+  SG::AuxElement::Decorator< char >*    m_isQMisIDDecor;          //! /* reco has opposite charge wrt to primitive truth lepton ancestor */
+  SG::AuxElement::Decorator< char >*    m_isConvPhDecor;          //! /* reco comes ultimately from a photon that is not ISR/FSR. Will not be accounted as 'QMisID' */
+  SG::AuxElement::Decorator< char >*    m_isISR_FSR_PhDecor;      //! /* reco comes from an ancestor lepton originating from ISR/FSR photon. */
   SG::AuxElement::Decorator< char >*    m_isBremsDecor;           //! /* reco is matched to a bremmstrahlung lepton (i.e, ancestor emitted a photon by brem) */
   SG::AuxElement::Decorator< int >*     m_ancestorTruthTypeDecor;    //! /* type of the primitive ancestor (according to MCTruthClassifier) - need it for brem leptons*/
   SG::AuxElement::Decorator< int >*     m_ancestorTruthPdgIdDecor;   //! /* pdgId of the primitive ancestor (according to MCTruthClassifier) - need it for brem leptons*/
@@ -49,6 +51,8 @@ namespace ttHMultilepton {
 
   SG::AuxElement::Accessor< char >*        m_isTruthMatchedAcc;   //!
   SG::AuxElement::Accessor< char >*        m_isQMisIDAcc;         //!
+  SG::AuxElement::Accessor< char >*        m_isISR_FSR_PhAcc;     //!
+  SG::AuxElement::Accessor< char >*        m_isConvPhAcc;         //!
   SG::AuxElement::Accessor< char >*        m_isBremsAcc;          //!
   typedef ElementLink< xAOD::TruthParticleContainer > TruthLink_t;
   SG::AuxElement::Accessor< TruthLink_t >* m_truthPLAcc;          //!

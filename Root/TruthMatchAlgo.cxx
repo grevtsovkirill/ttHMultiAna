@@ -26,6 +26,8 @@ TruthMatchAlgo :: TruthMatchAlgo() :
   m_truthEDecor                  = new SG::AuxElement::Decorator< float >("truthE");
   m_truthRapidityDecor           = new SG::AuxElement::Decorator< float >("truthRapidity");
   m_isQMisIDDecor                = new SG::AuxElement::Decorator< char >("isQMisID");
+  m_isConvPhDecor                = new SG::AuxElement::Decorator< char >("isConvPh");
+  m_isISR_FSR_PhDecor            = new SG::AuxElement::Decorator< char >("isISR_FSR_Ph");
   m_isBremsDecor                 = new SG::AuxElement::Decorator< char >("isBrems");
   m_ancestorTruthTypeDecor       = new SG::AuxElement::Decorator< int >("ancestorTruthType");
   m_ancestorTruthPdgIdDecor      = new SG::AuxElement::Decorator< int >("ancestorTruthPdgId");
@@ -34,6 +36,8 @@ TruthMatchAlgo :: TruthMatchAlgo() :
 
   m_isTruthMatchedAcc        = new SG::AuxElement::Accessor< char >("isTruthMatched");
   m_isQMisIDAcc              = new SG::AuxElement::Accessor< char >("isQMisID");
+  m_isConvPhAcc              = new SG::AuxElement::Accessor< char >("isConvPh");
+  m_isISR_FSR_PhAcc          = new SG::AuxElement::Accessor< char >("isISR_FSR_Ph");
   m_isBremsAcc               = new SG::AuxElement::Accessor< char >("isBrems");
   m_truthPLAcc               = new SG::AuxElement::Accessor< TruthLink_t >("truthParticleLink");
   m_truthTypeAcc             = new SG::AuxElement::ConstAccessor< int >("truthType");
@@ -167,7 +171,7 @@ StatusCode TruthMatchAlgo :: muonTrackMatching( const xAOD::IParticle* lep )
     return StatusCode::SUCCESS;
   }
   if ( ! (*m_truthPLAcc)( *trk ).isValid() ) {
-    ATH_MSG_WARNING("muonTrackMatching() :: Link to truth match for this reco muon's ID track is invalid. This shouldn't happen. Returning");
+    ATH_MSG_VERBOSE("muonTrackMatching() :: Link to truth match for this reco muon's ID track is invalid. This shouldn't happen. Returning");
     return StatusCode::SUCCESS;
   }
   const xAOD::TruthParticle* truthMatch = *( (*m_truthPLAcc)(*trk) );
@@ -367,6 +371,8 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   // default decorations
   //
   (*m_isQMisIDDecor)( *lep )             = 0;
+  (*m_isISR_FSR_PhDecor)( *lep )         = 0;
+  (*m_isConvPhDecor)( *lep )             = 0;
   (*m_isBremsDecor)( *lep )              = 0;
   (*m_ancestorTruthTypeDecor)( *lep )    = 0;
   (*m_ancestorTruthPdgIdDecor)( *lep )   = 0;
@@ -415,13 +421,13 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   // look at 'Background'-type el/mu (see MCTruthClassifier.h)
   //
 
-  // used later for debugging
-  //
-  bool isBrems(false);
+  bool isBkgLep(false);
 
   int pdgId_primitive(-999);
 
   if ( (*m_truthTypeAcc)( *lep ) == 4 || (*m_truthTypeAcc)( *lep ) == 8 ) {
+
+    isBkgLep = true;
 
     ATH_MSG_DEBUG("checkTruthQMisID() :: This reco lepton (charge: " << reco_charge << " ) is matched to a secondary truth lepton. Let's go back until we find the primitive");
 
@@ -459,35 +465,22 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
 
       } else {
 
+	// Ok, we found the primitive!
+	foundPrimitive = true;
+
 	ATH_MSG_DEBUG("checkTruthQMisID() :: \t We found the primitive! pdgId: " << pdgId_primitive << ", prodVtx barcode: " << primitiveTruth->prodVtx()->barcode() );
-
-	// Ok, we found the primitive! If it's an electron or a muon, flag it as 'bremmstrahlung',
-	// get its type and origin (with MCTruthClassifier) and status, and finally check whether it's charge flip.
-	// Otherwise, just return to skip the charge flip check
-	//
-	if ( primitiveTruth->isElectron() || primitiveTruth->isMuon() ) {
-
-	  (*m_isBremsDecor)( *lep ) = 1; isBrems = true;
-	  foundPrimitive = true;
-
-	} else {
-	  ATH_MSG_DEBUG("checkTruthQMisID() :: \t The primitive is NOT an electron/muon! Will not check whether reco lepton it's charge flip. Returning \n *****" );
-	  return StatusCode::SUCCESS;
-	}
 
       }
 
       ++iGeneration;
     }
 
-  }
+  } else {
   // case 2:
   //
   // Lepton is matched to a truth lepton which is not produced in a secondary interaction.
   // Will check the charge directly on the truth match.
   //
-  else
-  {
     primitiveTruth = const_cast<xAOD::TruthParticle*>( truthMatch );
     if ( pdgIdAcc.isAvailable( *primitiveTruth ) ) { pdgId_primitive = primitiveTruth->pdgId(); }
   }
@@ -508,29 +501,61 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   int truth_norm_charge = ( truth_charge ) ? static_cast<int>( truth_charge / fabs(truth_charge) ) : 0;
   int reco_norm_charge  = ( reco_charge )  ? static_cast<int>( reco_charge  / fabs(reco_charge)  ) : 0;
 
+  // Flag a lepton as 'isBrems' only if:
+  //
+  // -) the primitive ancestor is NOT a photon
+  //   AND
+  // -) it is a "background" (aka, secondary) lepton
+  //
   // Flag a lepton as 'isQMisID' only if:
   //
-  // -) the charge has actually flipped in reco ;-)
+  // -) the primitive ancestor is NOT a photon
   //   AND
   // -) the primitve origin of the lepton is not ISR/FSR...
+  //   AND
+  // -) the charge has actually flipped in reco ;-)
   //
+  // Flag a lepton as 'isConvPh' only if:
+  //
+  // -) the primitve origin of the lepton is ISR/FSR (regardless it's charge flip or not)
+  //   OR
+  // -) the primitive ancestor is a photon itself
+
+  if ( !primitiveTruth->isPhoton() ) {
+
+    if ( ( reco_norm_charge * truth_norm_charge ) < 0 ) { (*m_isQMisIDDecor)( *lep ) = 1; }
+
+    // Check if it comes from ISR/FSR photon, or it's a prompt lepton
+    // which did bremsstrahlung...
+    //
+    if ( ancestor_info.second != 39 && ancestor_info.second != 40  ) {
+      if ( isBkgLep ) { (*m_isBremsDecor)( *lep ) = 1; }
+    } else {
+      (*m_isISR_FSR_PhDecor)( *lep ) = 1;
+    }
+
+  } else {
+
+    (*m_isConvPhDecor)( *lep ) = 1;
+
+  }
+
   ATH_MSG_DEBUG( "checkTruthQMisID() :: \n\nPrimitive TRUTH: \n" <<
 		 "norm charge: " << truth_norm_charge << "\n" <<
 		 "pdgId: " << pdgId_primitive << "\n" <<
 		 "prodVtxBarcode: " << primitiveTruth->prodVtx()->barcode() << "\n" <<
 		 "status: " << primitiveTruth->status() << "\n" <<
-		 "isBrems: " << isBrems << "\n" <<
 		 "type: " << ancestor_info.first << "\n" <<
 		 "origin: " << ancestor_info.second << "\n" <<
+		 "-----------\n" <<
+		 "isBkgLep? " << isBkgLep << "\n" <<
+		 "isBrems? " << (*m_isBremsAcc)( *lep ) << "\n" <<
+		 "isConvPh? " << (*m_isConvPhAcc)( *lep ) << "\n" <<
+		 "is from ISR/FSR? " << (*m_isISR_FSR_PhDecor)( *lep ) << "\n" <<
 		 "-----------\nRECO: \n" <<
-		 "norm charge: " << reco_norm_charge << " \n\n");
-
-  if ( ( reco_norm_charge * truth_norm_charge ) < 0 && ( ancestor_info.second != 39 && ancestor_info.second != 40 ) ) {
-    (*m_isQMisIDDecor)( *lep ) = 1;
-    ATH_MSG_DEBUG( "It's a charge flip! \n\n ************************************");
-  } else {
-    ATH_MSG_DEBUG( "--> It's NOT a charge flip! \n\n ************************************");
-  }
+		 "norm charge: " << reco_norm_charge << " \n" <<
+		 "-----------\n" <<
+		 "isQMisID? " << (*m_isQMisIDAcc)( *lep ) << "\n\n");
 
   return StatusCode::SUCCESS;
 

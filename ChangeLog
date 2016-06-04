@@ -1,3 +1,6 @@
+2016-06-04  Marco Milesi  <marco.milesi@cern.ch>
+	* Add TruhtMatchAlgo class to perform truth matching. In particular, get truth QMisID match.
+
 2016-06-02  David Hohn  <david.hohn@cern.ch>
 	* enable writing non-prompt lep tagging variables
 
@@ -172,7 +175,7 @@
 
 2016-01-11 Peter Onyisi <ponyisi@cern.ch>
 	* Some additional tweaks & fixes to lepton SF & systematics
- 
+
 2016-01-11 David Hohn <david.hohn@cern.ch>
 	* more slimming
 	* not even truth in Nominal tree when doing systematics
@@ -225,10 +228,10 @@
 2015-12-10 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* clean up of empty unused variables: some lep_*, JetBDT* tau, and muons variables not needed anymore
 	* include topoetcone/ptvarcone variables for lep_*
-	
+
 2015-12-10 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: add PURWT confog file for new MC15b 410009
-	
+
 2015-12-09 David Hohn <david.hohn@cern.ch>
 	* add tau substructure variables, electron LH score if overlapping with tau, empty until available in derivation
 	* add flat taus, just one for now but is extensible
@@ -237,15 +240,15 @@
 2015-12-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* include missing variables: HT, HT_lep, HT_jets, sublead/lead_jetPt/Eta/Phi
 	* fill empty variables: lep_isTrigMatch_X, lep_sigd0PV_X, lep_Z0SinTheta_X
-	
+
 2015-12-08 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: correct name of Btag weight per event
-	
+
 2015-12-04 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added Btag weight per event
 	* generic_config-*15.txt changed jet pt and eta selections, changed
 	PUrew reference MC file to 410000
-	
+
 2015-11-19 David Hohn <david.hohn@cern.ch>
 	* take electron LH WP values from derivation, only one electron LH WP available when using PxAODs
 	* use default electron selector from AnalysisTop, remove custom electron selector
@@ -257,7 +260,7 @@
 
 2015-11-18 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonElectronLikelihoodDC14: updated confDir to latest (mc15_20150712)
-	
+
 2015-11-17 David Hohn <david.hohn@cern.ch>
 	* update README with Top,2.3.33
 
@@ -266,24 +269,24 @@
 	* now some new issue with tau truth particle links
 
 2015-11-07 Harish Potti <harish.potti@cern.ch>
-	* Added new GRL and IlumiCalc file 
-	
+	* Added new GRL and IlumiCalc file
+
 2015-11-06 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: moving to getCorrectedMu method for PURWtool
-	
+
 2015-10-30 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for dilep triggers and L1EM20 for data 2015
 	* generic_config-*15.txt added corresponding strings to check match
-	
+
 2015-10-28 Harish Potti <hpotti@cern.ch>
 	* Xsection13TeV_tth_sig_v1.txt Updated Xsections with Latest TopDataPreparation package
 2015-10-26 Harish Potti <hpotti@cern.ch>
 	* Xsection13TeV_tth_bkg_v1.txt Added all the missing xsections
-	
+
 2015-10-23 Rohin Narayan <narayan@cern.ch>
 	* Changing higgsdecaymode to int type
 	* Also changed the name of the branch to "higgsDecayMode" in tune with
-	Run1 scheme. 
+	Run1 scheme.
 
 2015-10-22 Rohin T Narayan <narayan@cern.ch>
 	* Adding higgs decay mode to the ntuples
@@ -295,11 +298,11 @@
 	* protect data from TauEfficiencyCorrections
 
 2015-10-15 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver: split lepton SF into trigger and others 
-	
+	* ttHMultileptonLooseEventSaver: split lepton SF into trigger and others
+
 2015-10-15 Giuseppe Salamanna <salaman AT cern.ch>
 	* TruthSelector: lowered pt cut to 1 GeV and checking against geant leptons
-	
+
 2015-10-15 David Hohn <dhohn@cern.ch>
 	* change name: electron_truthOrig ->electron_truthOrigin, consistent with muons and taus
 
@@ -325,16 +328,16 @@
 
 2015-10-01 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: added variable for ele match to HLT_e24_lhmedium_iloose_L1EM18VH (see https://its.cern.ch/jira/browse/ATLASTTHML-13)
-	Added HLT_mu18_mu8noL1 decision and PS. 
+	Added HLT_mu18_mu8noL1 decision and PS.
 	* generic_config-mc15.txt added corresponding string to check match
-	
+
 2015-09-29 Harish Potti <harish.potti@utexas.edu>
 	* data Added PURWTconfig files for 361500 and 361524
 	* generic_config-mc15.txt Incorporated above files to the PURWT list
 2015-09-27 Harish Potti <harish.potti@cern.ch>
 	* data Added latest v65 grl and PRWLumiCalcFiles
 	* generic_config-*15.txt Updated grl and PRWlumicalc file instructions
-	
+
 2015-09-20 Harish Potti <harish.potti@cern.ch>
 	* data Added 25ns purwt config files
 	* generic_config-mc15.txt Added above files to list under PURWT instructions
@@ -347,25 +350,25 @@
 
 2015-09-02 Harish Potti <harish.potti@utexas.edu>
 	* update_xsection.cxx Added ttV files
-	
+
 2015-08-26 Harish Potti <harish.potti@utexas.edu>
 	* update_xsection.cxx changed format of output into a table
 	* Xsection13TeV_tth_bkg_v1.txt Added Sherpa Z+jets xsections to the file
 	* data15_13TeV.periodAllYear_DetStatus-v63-pro18-01_DQDefects-00-01-02_PHYS_StandardGRL_All_Good.xml Added New version of v63 GRL
 2015-08-26 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: adding latest greatest 50ns GRL
-	
+
 2015-08-26 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: committing data lumicalc file for D1-D3 (up to run 276511), L=33300.5 nb-1
 	* generic_config-data15.txt: added above file to list under PURWT instructions
-	
+
 2015-08-16 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: committing MC mu profile root file for AF2 samples (runN=222525)
 	* generic_config-mc15.txt: added above file to list under PURWT instructions
-	
+
 2015-08-11 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: committing GRL for 50 ns
-	
+
 2015-08-10 David Hohn <david.hohn@cern.ch>
 	* Peter added all lepton isolation WPs
 	* tagged version ttHMultiAna-00-00-02 for first group production
@@ -380,46 +383,46 @@
 2015-08-03 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: added mu profile reference root file for Ztautau (361108)
 	* generic_config-mc15.txt: updated consequently
-	
+
 2015-08-02 Giuseppe Salamanna <salaman AT cern.ch>
 	* data: added mu profile reference root file for Zee,Zmm (361106/7)
 	* generic_config-mc15.txt: updated consequently
-	
+
 2015-08-02 David Hohn <david.hohn@cern.ch>
 	* implement TauEfficiencyCorrectionsTool
 	* reorder tau code to Decorator
 	* added some crosssections by hand
 
 2015-07-31 Giuseppe Salamanna <salaman AT cern.ch>
-	* data: added lumicalc profile root file for all 50ns periods, 
+	* data: added lumicalc profile root file for all 50ns periods,
 	85 pb-1, with unPS'd triggers
 	* generic_config-mc15.txt: switched to new ilumi profile file
-	
+
 2015-07-30 Peter Onyisi <ponyisi AT cern.ch>
 	* Add "flat" variables for light leptons, blinding variable (not
 	blinded tree yet), object cutflow histograms
 
 2015-07-29 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver: PRW hash only for MC. Mu corrected same as Mu default for MC.  
-	
+	* ttHMultileptonLooseEventSaver: PRW hash only for MC. Mu corrected same as Mu default for MC.
+
 2015-07-28 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver: changes to the purw tool instance here to write out corrected mu (but doeasn't work yet..). 
+	* ttHMultileptonLooseEventSaver: changes to the purw tool instance here to write out corrected mu (but doeasn't work yet..).
 	Also add PRWtool Hash to be able to re-generate PU weights with changing mu profile in future
-	
+
 2015-07-28 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: fixed bug in lep z0sinTh to vertex correction
-	
+
 2015-07-26 Giuseppe Salamanna <salaman AT cern.ch>
-	* data: added lumicalc profile root file for all 50ns periods, 85 pb-1 
+	* data: added lumicalc profile root file for all 50ns periods, 85 pb-1
 	* generic_config-mc15.txt: switched to new ilumi profile file
-	
+
 2015-07-25 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: adding lepton SF from top SF retriever
 	* generic_config-mc15.txt: switched SF calculation on
-	
+
 2015-07-24 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: adding eta at EM scale per jet; it's for JVT acceptance cut
-	
+
 2015-07-21 David Hohn <david.hohn@cern.ch>
 	* wrote own Tau object selector as the top:: one could not be configured to be loose enough.
 	* move to Top,2.3.20: no API changes required this time
@@ -427,36 +430,36 @@
 
 2015-07-20 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: adding LooseBad per jet; preparing to call PURW, but still commented out for now
-	
+
 2015-07-20 David Hohn <david.hohn@cern.ch>
 	* optimise Count histo for data: will now copy the content of TopAnalysis builtin cutflow histo to our Count histo at the end of jobs for data
 
 2015-07-16 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver: adding 50ns un-prescaled triggers according to 
+	* ttHMultileptonLooseEventSaver: adding 50ns un-prescaled triggers according to
 	https://twiki.cern.ch/twiki/bin/viewauth/Atlas/LowestUnprescaled#Data_Periods
-	
+
 2015-07-13 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver: switched to post-calib JVT from TopAna decoration
-	
+
 2015-07-10 David Hohn <david.hohn@cern.ch>
 	* fix Count histo for data: the LooseEventSaver now sees all events and decides which events to save.
 
 2015-07-10 Giuseppe Salamanna <salaman AT cern.ch>
 	* generic_config-mc15.txt: eliminate reference to GRL
-	
+
 2015-07-09 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonElectronLikelihoodDC14: updated confDir to latest (20150429) and change in LH computation
 	from author softe to AuthorAmbiguous
-	
+
 2015-07-08 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseObjectLoader: make things a bit more configurable
-	* generic-..txt: clean up mc15 one and add lepton and jet cuts; create data15 one 
-	
+	* generic-..txt: clean up mc15 one and add lepton and jet cuts; create data15 one
+
 2015-07-07 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonElectronLikelihoodDC14: moved from eta to etaBE(2) cut 
+	* ttHMultileptonElectronLikelihoodDC14: moved from eta to etaBE(2) cut
 	* ttHMultileptonLooseEventSaver: added etaBE(2), loose isolation from tool and ele match; and d0sig from AODTrackingHelpers
 	* README: updated to Top,20.3.18
-	
+
 2015-07-03 David Hohn <david.hohn@cern.ch>
 	* loosen tau cuts
 
@@ -467,13 +470,13 @@
 	* Add "Count" histogram for normalisation
 
 2015-06-29 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver and ttHMultileptonLooseObjectSaver: various changes to make pkg compile under 
+	* ttHMultileptonLooseEventSaver and ttHMultileptonLooseObjectSaver: various changes to make pkg compile under
 	Top,20.3.15b
 	* ttHMultileptonLooseEventSaver.cxx: add passEventCleaning
-	
+
 2015-06-29 Giuseppe Salamanna <salaman AT cern.ch>
 	* Tagging the trunk that worked with 20.3.13 as ttHMultiAna-00-00-01 and make a branch of it
-	
+
 2015-06-26 David Hohn <david.hohn@cern.ch>
 	* Remove TauTruthMatchingTool, matching is now done in derivation
 	* Update tau truth variables to read decorations
@@ -482,16 +485,16 @@
 	* Add TruthSelector tool
 	* Select W, Z, H, tau, top and direct children
 	* Select stable leptons with pt>5 GeV and their direct parents
-	
+
 2015-06-18 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver.cxx: some fixes for things that weren't called as in Run 1 ntuple and some duplicate trigger items; 
+	* ttHMultileptonLooseEventSaver.cxx: some fixes for things that weren't called as in Run 1 ntuple and some duplicate trigger items;
 	jet_truth_label now works: it has been switched on
-	
+
 2015-06-17 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver.cxx: d0 not corrected for PV, as per ID Tracking recommendations; 
+	* ttHMultileptonLooseEventSaver.cxx: d0 not corrected for PV, as per ID Tracking recommendations;
 	z0 corrected for PV, now accessed by checking xAOD::VxType. Added var for N(PU vertices)
-	
-	
+
+
 2015-06-16 Peter Onyisi <ponyisi AT cern.ch>
 	* add ScalarWrapper to allow clean adding of non-vector variables
 	* reorganize trigger code for easy extensibility
@@ -499,17 +502,17 @@
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: prelim implementation of d0 and z0 correction for PV position.
 	Note that the corrected d0 is unsigned, needs a final touch!
-	
+
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseObjectLoader.cxx: removed cut on crack regions for electrons
 
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: d0 and sigd0 renamed _uncorr
-	
+
 2015-06-16 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver.cxx: lepton ID branches now follow sign convention of Run 1 and PDG; 
+	* ttHMultileptonLooseEventSaver.cxx: lepton ID branches now follow sign convention of Run 1 and PDG;
 	z0sinTheta --> z0sinTheta_uncorr as it signals it's not corrected for PV position
-	
+
 2015-06-16 David Hohn <david.hohn@cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: change m_tau_nTracks to numTrack
 
@@ -517,79 +520,79 @@
 	* ttHMultileptonLooseEventSaver.cxx: jets and taus now follow same Run 1 naming scheme
 	* ttHMultileptonLooseEventSaver.cxx: added empty branches for truth jets (not yet available in top analysis)
 	* ttHMultileptonLooseEventSaver.cxx: reverted change of name for MuonSpectrometerPt
-	
+
 2015-06-15 Giuseppe Salamanna <salaman AT cern.ch>
-	* ttHMultileptonLooseEventSaver.cxx: Fixed pdf info, now ok on those samples for which pdf correctly  filled 
-	
-2015-06-12 Dave DeMarco <david.demarco@cern.ch> 
+	* ttHMultileptonLooseEventSaver.cxx: Fixed pdf info, now ok on those samples for which pdf correctly  filled
+
+2015-06-12 Dave DeMarco <david.demarco@cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx/h: Pass/fail event selection variables
 	for each event selection region now written to output tree (from EventSaverFlatNtuple)
 
 2015-06-11 Giuseppe Salamanna <salaman AT cern.ch>
 	* ttHMultileptonLooseEventSaver.cxx: Added pdf info (but still always zero -- to be validated)
 	* ttHMultileptonLooseEventSaver.cxx: Added trigger matching variables for two muon items
-	* generic_config-mc15.txt: set PDF info to truth; added trigger dummy selections to 
+	* generic_config-mc15.txt: set PDF info to truth; added trigger dummy selections to
 	activate trigger matching tool
-	
+
 2015-06-09 David Hohn <david.hohn@cern.ch>
 	* disabling TauTruthMatchingTool, current version is leaking
 
 2015-06-09 Giuseppe Salamanna <salaman AT cern.ch>
 	* Call MET variables same way as Run 1
-	
+
 2015-06-09 Giuseppe Salamanna <salaman AT cern.ch>
 	* Change of variable names for EventNumber,RunNumber,averageIntPerXing,mc_channel_number
 	and addition of actualIntPerXing - using same naming as Run 1
-	
+
 2015-06-08 Peter Onyisi <ponyisi AT cern.ch>
 	* Enable running on data (do not try to make loose tree)
 
 2015-06-08 David Hohn <david.hohn@cern.ch>
 	* protect data from TauTruthMatchingTool
-	
+
 2015-06-05 David Hohn <david.hohn@cern.ch>
 	* update to Top,2.3.13, needed for a newer version of TauTruthMatchingTool
 	* implement TauTruthMatchingTool, fix type of some tau variables
-	
+
 2015-06-05 Giuseppe Salamanna <salaman AT cern.ch>
 	* Added electron cluster eta and run/evt/mc channel nrs
-	
+
 2015-06-03 Rustem Ospanov <rustem at cern.ch>
 	* Fill truth branches only for selected truth particles
 	* Change muon ID and n prec hits variables to short
 	* Fix compilation warnings from ordering of varibles in ctor
 	* Change PtME to PtMS
 	* Save loose muons with eta up to 2.7
-	
+
 2015-06-02 Giuseppe Salamanna <salaman AT cern.ch>
 	* Added truth origin and type for leptons (from MCTruthClassifier)
 	* Changed muon quality type to unsigned short int from bool
 	* Added muon type and lepton d0
 	* Lowered cuts for leptons and jets to very low values to be genuinely inclusive
-	
+
 2015-05-29 David Hohn <david.hohn@cern.ch>
 	* Added reading/writing of taus
 
 2015-05-29 Giuseppe Salamanna <salaman AT cern.ch>
 	* Adding a setup script for grid: setupRCandGrid.sh
 	* Updated README instructions
-	
+
 2015-05-28 Giuseppe Salamanna <salaman AT cern.ch>
-	* Moved to using theta() from TrackParticle class to 
+	* Moved to using theta() from TrackParticle class to
 	compute lepton z0sinTh
-	
+
 2015-05-28 Giuseppe Salamanna <salaman AT cern.ch>
 	* Wrap2 et al. now use std::function.  This means you can use capturing lambdas
 	to define variables (Peter).
 	* Added some  more muon variables, among which quality flags
-	
+
 2015-05-22 Giuseppe Salamanna <salaman AT cern.ch>
 	* Update README instructions to point to new common area
-	
+
 2015-05-22 Giuseppe Salamanna <salaman AT cern.ch>
 	* First import into common area atlasphys-hsg8/browser/Physics/Higgs/HSG8/AnalysisCode/multileptons/xAOD
 	* Add trigger decision tool config, trigger decisions and associated PS
-	
+
 2015-05-09 Peter Onyisi <ponyisi AT cern.ch>
 	* Catch exceptions for variables that don't actually exist in input, log failure but
 	  keep going

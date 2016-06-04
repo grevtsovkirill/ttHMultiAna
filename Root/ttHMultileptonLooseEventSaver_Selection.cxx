@@ -14,7 +14,7 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
   xAOD::AuxContainerBase* goodElectronsAux = new xAOD::AuxContainerBase();
   goodElectrons->setStore(goodElectronsAux);
   // have TStore manage aux
-  top::check(evtStore()->tds()->record( goodElectronsAux, "ttHSelectedElectrons"+m_sysName+"Aux." ), 
+  top::check(evtStore()->tds()->record( goodElectronsAux, "ttHSelectedElectrons"+m_sysName+"Aux." ),
 	     "Failed to register selected electrons");
   if (event.m_electrons.size() > 0) {
     //std::cout << "Initial size: " << event.m_electrons.size() << std::endl;
@@ -79,7 +79,7 @@ ttHMultileptonLooseEventSaver::SelectMuons(const top::Event& event) {
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(2);
     if (muItr->pt() < 10e3) {
       continue;
-    }    
+    }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(3);
     if (fabs(muItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
       continue;
@@ -129,7 +129,7 @@ ttHMultileptonLooseEventSaver::SelectJets(const top::Event& event) {
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(4);
     if (jetItr->pt() < 60e3
-	&& fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4 
+	&& fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4
 	&& jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59) {
       continue;
     }
@@ -332,7 +332,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   /*
   fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
-  
+
   for (const auto elItr : *goodEl) {
     if (elItr->auxdataConst<char>("ttHpassOVR")) {
       newGoodEl->push_back(new xAOD::Electron(*elItr));
@@ -364,7 +364,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   // m_muCutflow->Fill(7, newGoodMu->size());
   // m_jetCutflow->Fill(6, newGoodJet->size());
   // m_tauCutflow->Fill(8, newGoodTau->size());
-  
+
   newGoodEl.swap(goodEl);
   newGoodMu.swap(goodMu);
   newGoodJet.swap(goodJet);
@@ -462,19 +462,19 @@ float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSF
   if (x.isAvailable<float>("MU_EFF_Trigger_"+id)) {
     sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id);
   }
-  
+
   if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_UP) {
     if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_STAT_UP")) {
       sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_STAT_UP");
     }
   }
-  
+
   if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_DOWN) {
     if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_STAT_DOWN")) {
       sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_STAT_DOWN");
     }
   }
-  
+
   if (SFSyst == top::topSFSyst::MU_SF_Trigger_SYST_UP) {
     if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_SYST_UP")) {
       sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_SYST_UP");
@@ -489,36 +489,36 @@ float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSF
   return sf;
 }
 
-float electronEff_Trigger(const xAOD::Electron& x,const std::string& id,const top::topSFSyst SFSyst) 
+float electronEff_Trigger(const xAOD::Electron& x,const std::string& id,const top::topSFSyst SFSyst)
 {
   float sf(1.);
   if (x.isAvailable<float>("EL_EFF_Trigger_"+id)) {
     sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id);
   }
-  
+
   if (SFSyst == top::topSFSyst::EL_SF_Trigger_UP) {
     if (x.isAvailable<float>("EL_EFF_Trigger_"+id+"_UP")) {
       sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id+"_UP");
     }
   }
-  
+
   if (SFSyst == top::topSFSyst::EL_SF_Trigger_DOWN) {
     if (x.isAvailable<float>("EL_EFF_Trigger_"+id+"_DOWN")) {
       sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id+"_DOWN");
     }
   }
-  
+
   return sf;
 }
 
 
 void ttHMultileptonLooseEventSaver::
 CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
-    // const SG::IConstAuxStore* store = el.container()->getConstStore(); 
-    // const SG::auxid_set_t& auxids = store->getAuxIDs(); 
+    // const SG::IConstAuxStore* store = el.container()->getConstStore();
+    // const SG::auxid_set_t& auxids = store->getAuxIDs();
     // SG::AuxTypeRegistry& reg = SG::AuxTypeRegistry::instance();
     // //std::cout << "=============" << std::endl;
-    // for( auto auxid : auxids ) { 
+    // for( auto auxid : auxids ) {
     //   //std::cout << reg.getName( auxid ) << std::endl;
     // }
 
@@ -533,8 +533,8 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
 
   lep.d0 = el.trackParticle()->d0();
-  lep.z0 = el.trackParticle()->z0(); 
-  lep.vz = el.trackParticle()->vz(); 
+  lep.z0 = el.trackParticle()->z0();
+  lep.vz = el.trackParticle()->vz();
 
   // truth matching, fakes, QMisId
   int TruthType = -99;
@@ -548,7 +548,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   if(m_isMC) {
     static SG::AuxElement::Accessor<int> origel("truthOrigin");
     if (origel.isAvailable(el)) TruthOrigin = origel(el);
-    
+
     static SG::AuxElement::Accessor<int> typeel("truthType");
     if (typeel.isAvailable(el)) TruthType = typeel(el);
     /*
@@ -563,41 +563,81 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
     //truthOrigin = (int) xAOD::TruthHelpers::getParticleTruthOrigin(el);
   }
 
-  lep.truthOrigin = TruthOrigin;
-  lep.truthType = TruthType;
-
-  
   if (TruthType == 2 || TruthType == 6)
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
 
-  if (TruthOrigin == 5 && TruthType == 4){ // assuming most QFlip come from trident events
-    lep.isBremsElec = 1;
-    //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
-  }
-  else
-    lep.isBremsElec = 0;
+  static SG::AuxElement::Accessor<char> QMisID("isQMisID");
+  lep.isQMisID = ( QMisID.isAvailable(el) ) ?  QMisID(el) : -1;
 
-  if (!(TruthType == 2 || TruthType == 6) && !(TruthOrigin == 5 && TruthType == 4))
-    lep.isFakeLep = 1;
-  else
-    lep.isFakeLep = 0;
+  static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
+  lep.isConvPh = ( ConvPh.isAvailable(el) ) ?  ConvPh(el) : -1;
 
+  static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
+  lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(el) ) ?  ISR_FSR_Ph(el) : -1;
+
+  static SG::AuxElement::Accessor<char> isBrems("isBrems");
+  lep.isBrems = ( isBrems.isAvailable(el) ) ? isBrems(el) : -1;
+  //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
+
+  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 || lep.isConvPh == 1 || lep.isISR_FSR_Ph == 1 ) );
+
+  static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
+  lep.isTruthMatched = ( isTruthMatched.isAvailable(el) ) ? isTruthMatched(el) : -1;
+
+  lep.truthOrigin = TruthOrigin;
+  lep.truthType = TruthType;
+
+  static SG::AuxElement::Accessor<int> truthPdgId("truthPdgId");
+  lep.truthPdgId = ( truthPdgId.isAvailable(el) ) ? truthPdgId(el) : -1;
+
+  static SG::AuxElement::Accessor<int> truthStatus("truthStatus");
+  lep.truthStatus = ( truthStatus.isAvailable(el) ) ? truthStatus(el) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentType("ancestorTruthType");
+  lep.truthParentType = ( truthParentType.isAvailable(el) ) ? truthParentType(el) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentOrigin("ancestorTruthOrigin");
+  lep.truthParentOrigin = ( truthParentOrigin.isAvailable(el) ) ? truthParentOrigin(el) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentPdgId("ancestorTruthPdgId");
+  lep.truthParentPdgId = ( truthParentPdgId.isAvailable(el) ) ? truthParentPdgId(el) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentStatus("ancestorTruthStatus");
+  lep.truthParentStatus = ( truthParentStatus.isAvailable(el) ) ? truthParentStatus(el) : -1;
+
+  static SG::AuxElement::Accessor<float> truthPt("truthPt");
+  lep.truthPt = ( truthPt.isAvailable(el) ) ? truthPt(el) : -1;
+
+  static SG::AuxElement::Accessor<float> truthEta("truthEta");
+  lep.truthEta = ( truthEta.isAvailable(el) ) ? truthEta(el) : -1;
+
+  static SG::AuxElement::Accessor<float> truthPhi("truthPhi");
+  lep.truthPhi = ( truthPhi.isAvailable(el) ) ? truthPhi(el) : -1;
+
+  static SG::AuxElement::Accessor<float> truthM("truthM");
+  lep.truthM = ( truthM.isAvailable(el) ) ? truthM(el) : -1;
+
+  static SG::AuxElement::Accessor<float> truthE("truthE");
+  lep.truthE = ( truthE.isAvailable(el) ) ? truthE(el) : -1;
+
+  static SG::AuxElement::Accessor<float> truthRapidity("truthRapidity");
+  lep.truthRapidity = ( truthRapidity.isAvailable(el) ) ? truthRapidity(el) : -1;
 
   // trigger matching, electron pt > 25 GeV
   if (!m_isMC) {
     //if( el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
-    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) || 
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) || 
+    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) ||
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) ||
 			   (el.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose") ? el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"):0) ) ) //data
       lep.isTrigMatch = 1;
     else lep.isTrigMatch = 0;
   }
   else {
-    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) || 
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH"):0) || 
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) || 
+    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) ||
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH"):0) ||
+			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) ||
 			   (el.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose") ? el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"):0) ) ) //MC
       lep.isTrigMatch = 1;
     else lep.isTrigMatch = 0;
@@ -610,7 +650,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone20); lep.topoEtcone20 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
-  
+
   // scale factors
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
@@ -653,9 +693,9 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   // trigger matching, require lepton pt > 21 GeV
   if (mu.pt() > 25e3
       && ((mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"):0) || //2015
-	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu50") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"):0) || 
+	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu50") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"):0) ||
 	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu24_iloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_iloose"):0) ||  //2016
-	  //(mu.isAvailable<char>("TRIGMATCH_HLT_mu24_ivarloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_ivarloose"):0) || 
+	  //(mu.isAvailable<char>("TRIGMATCH_HLT_mu24_ivarloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_ivarloose"):0) ||
 	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu40") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"):0) ))
       //&& (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
     lep.isTrigMatch = 1;
@@ -672,15 +712,12 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
     if (mutrack!=nullptr) {
       if (acc_mctt.isAvailable(*mutrack)) TruthType = acc_mctt(*mutrack);
     }
-    
+
     static SG::AuxElement::Accessor<int> acc_mcto("truthOrigin");
     if (mutrack!=nullptr) {
       if (acc_mcto.isAvailable(*mutrack)) TruthOrigin = acc_mcto(*mutrack);
     }
   }
-
-  lep.truthOrigin = TruthOrigin;
-  lep.truthType = TruthType;
 
   // const xAOD::TruthParticle* matched_truth_muon=0;
   // if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
@@ -697,21 +734,68 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   //   idtp = *idtpLink;
   //   if(m_isMC) truthType = idtp->auxdata<int>("truthType");
   // }
- 
+
   if (TruthType == 2 || TruthType == 6)
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
 
-  if (TruthOrigin == 5 && TruthType == 4) // assuming most QFlip come from trident events
-    lep.isBremsElec = 1;
-  else
-    lep.isBremsElec = 0;
+  static SG::AuxElement::Accessor<char> QMisID("isQMisID");
+  lep.isQMisID = ( QMisID.isAvailable(mu) ) ?  QMisID(mu) : -1;
 
-  if (!(TruthType == 2 || TruthType == 6) && !(TruthOrigin == 5 && TruthType == 4))
-    lep.isFakeLep = 1;
-  else
-    lep.isFakeLep = 0;
+  static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
+  lep.isConvPh = ( ConvPh.isAvailable(mu) ) ?  ConvPh(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
+  lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(mu) ) ?  ISR_FSR_Ph(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> isBrems("isBrems");
+  lep.isBrems = ( isBrems.isAvailable(mu) ) ? isBrems(mu) : -1;
+  //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
+
+  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 || lep.isConvPh == 1 || lep.isISR_FSR_Ph == 1 ) );
+
+  static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
+  lep.isTruthMatched = ( isTruthMatched.isAvailable(mu) ) ? isTruthMatched(mu) : -1;
+
+  lep.truthOrigin = TruthOrigin;
+  lep.truthType = TruthType;
+
+  static SG::AuxElement::Accessor<int> truthPdgId("truthPdgId");
+  lep.truthPdgId = ( truthPdgId.isAvailable(mu) ) ? truthPdgId(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthStatus("truthStatus");
+  lep.truthStatus = ( truthStatus.isAvailable(mu) ) ? truthStatus(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentType("ancestorTruthType");
+  lep.truthParentType = ( truthParentType.isAvailable(mu) ) ? truthParentType(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentOrigin("ancestorTruthOrigin");
+  lep.truthParentOrigin = ( truthParentOrigin.isAvailable(mu) ) ? truthParentOrigin(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentPdgId("ancestorTruthPdgId");
+  lep.truthParentPdgId = ( truthParentPdgId.isAvailable(mu) ) ? truthParentPdgId(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentStatus("ancestorTruthStatus");
+  lep.truthParentStatus = ( truthParentStatus.isAvailable(mu) ) ? truthParentStatus(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthPt("truthPt");
+  lep.truthPt = ( truthPt.isAvailable(mu) ) ? truthPt(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthEta("truthEta");
+  lep.truthEta = ( truthEta.isAvailable(mu) ) ? truthEta(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthPhi("truthPhi");
+  lep.truthPhi = ( truthPhi.isAvailable(mu) ) ? truthPhi(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthM("truthM");
+  lep.truthM = ( truthM.isAvailable(mu) ) ? truthM(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthE("truthE");
+  lep.truthE = ( truthE.isAvailable(mu) ) ? truthE(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthRapidity("truthRapidity");
+  lep.truthRapidity = ( truthRapidity.isAvailable(mu) ) ? truthRapidity(mu) : -1;
 
   // isolation variables
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
@@ -784,7 +868,7 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
       }
     }
   }
-  
+
   size_t idx = 0;
   for (const auto elItr : *goodEl) {
     sorter.push_back(std::make_tuple(&(elItr->p4()), idx++, ttHMultilepton::ELECTRON));
@@ -908,7 +992,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   m_variables->nJets_OR_T_MV2c10_70 = 0;
   m_variables->nJets_OR_T_MV2c10_77 = 0;
   m_variables->nJets_OR_T_MV2c10_60 = 0;
-  
+
   m_variables->lead_jetPt = 0;
   m_variables->sublead_jetPt = 0;
   m_variables->lead_jetEta = 0;
@@ -922,7 +1006,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   for (const auto jetItr : *goodJets) {
     sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
 
-    auto btagging = jetItr->btagging(); 
+    auto btagging = jetItr->btagging();
     if (btagging) {
       double mv2c;
       if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
@@ -960,7 +1044,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   for (const auto jetItr : *goodJets) {
     if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
 
-      auto btagging = jetItr->btagging(); 
+      auto btagging = jetItr->btagging();
       if (btagging) {
 	double mv2c;
 	if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
@@ -976,7 +1060,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
 	      }
 	    }
 	  }
-	}      
+	}
 	if( btagging->MVx_discriminant("MV2c10", mv2c) ) {
 	  if (mv2c > 0.1758) {
 	    m_variables->nJets_OR_T_MV2c10_85++;
@@ -1006,7 +1090,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     std::tie(p4, lidx) = sorter_jets[idx1];
     p4s.push_back(p4);
   }
-  
+
   if (goodJets->size() > 0){
     m_variables->lead_jetPt  = p4s[0]->Pt();
     m_variables->lead_jetEta = p4s[0]->Eta();
@@ -1017,7 +1101,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     m_variables->sublead_jetEta = p4s[1]->Eta();
     m_variables->sublead_jetPhi = p4s[1]->Phi();
   }
-  
+
 
 }
 
@@ -1061,7 +1145,7 @@ ttHMultileptonLooseEventSaver::CopyHT(std::shared_ptr<xAOD::ElectronContainer>& 
   m_variables->HT = 0;
   m_variables->HT_lep = 0;
   m_variables->HT_jets = 0;
-  
+
   for (const auto jetItr : *goodJets) {
     m_variables->HT += jetItr->pt();
     m_variables->HT_jets += jetItr->pt();
@@ -1091,9 +1175,9 @@ ttHMultileptonLooseEventSaver::CheckIsBlinded() {
   } else if (m_variables->trilep_type) {
     // remember Mll01 = Mll[0][0] and Mll02 = Mll[0][1]
     if (abs(m_variables->total_charge) == 1
-	&& ((m_variables->nJets_OR_T >=4 
-	     && m_variables->nJets_OR_T_MV2c10_77 >= 1) 
-	    || (m_variables->nJets_OR_T ==3 
+	&& ((m_variables->nJets_OR_T >=4
+	     && m_variables->nJets_OR_T_MV2c10_77 >= 1)
+	    || (m_variables->nJets_OR_T ==3
 		&& m_variables->nJets_OR_T_MV2c10_77 >= 2))
 	&& ! ((m_leptons[0].ID == - m_leptons[1].ID && fabs(m_variables->Mll[0][0] - 91.2e3) < 10e3)
 	      || (m_leptons[0].ID == - m_leptons[2].ID && fabs(m_variables->Mll[0][1] - 91.2e3) < 10e3))
