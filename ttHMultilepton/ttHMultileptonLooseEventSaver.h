@@ -3,7 +3,6 @@
 
 
 // Trigger
-#include "TrigConfxAOD/xAODConfigTool.h"
 #include "TrigDecisionTool/TrigDecisionTool.h"
 
 // CP tools
@@ -11,7 +10,7 @@
 #include "MuonSelectorTools/MuonSelectionTool.h"
 #include "JetInterface/IJetSelector.h"
 #include "PileupReweighting/PileupReweightingTool.h"
-#include "TauAnalysisTools/TauEfficiencyCorrectionsTool.h"
+#include "TauAnalysisTools/TauSelectionTool.h"
 #include "AssociationUtils/ToolBox.h"
 #include "AssociationUtils/IOverlapRemovalTool.h"
 
@@ -44,11 +43,9 @@
 #include <TString.h>
 
 using namespace xAOD;
-//using namespace CP;
 using namespace ttHMultilepton;
 using CP::IsolationSelectionTool;
 using CP::MuonSelectionTool;
-using TauAnalysisTools::TauEfficiencyCorrectionsTool;
 using TauAnalysisTools::TauSelectionTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
