@@ -11,6 +11,9 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(quadlep_type,  "quadlep_type");
   tree->makeOutputVariable(total_charge,  "total_charge");
   tree->makeOutputVariable(total_leptons, "total_leptons");
+  tree->makeOutputVariable(isQMisIDEvent, "isQMisIDEvent");
+  tree->makeOutputVariable(isConvPhEvent, "isConvPhEvent");
+
   //tree->makeOutputVariable(Mll01, "Mll01");
   format XXmn("%1%%2%%3%"), XXmno("%1%%2%%3%%4%"), XXmnop("%1%%2%%3%%4%%5%");
   for (size_t idx1 = 0; idx1 < LEPTON_ARR_SIZE-1; ++idx1) {

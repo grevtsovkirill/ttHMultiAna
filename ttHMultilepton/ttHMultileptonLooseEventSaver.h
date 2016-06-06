@@ -190,6 +190,13 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //met
   float m_met_met;
   float m_met_phi;
+  
+  // MET Truth
+  float m_truthMET_px;
+  float m_truthMET_py;
+  float m_truthMET_phi;
+  float m_truthMET_sumet;
+  
 
   // leptons to save
   Lepton m_leptons[LEPTON_ARR_SIZE];

@@ -846,8 +846,39 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
     m_variables->quadlep_type = keyval;
     break;
   }
-  for (const auto elItr : *goodEl) { m_variables->total_charge += elItr->charge(); }
-  for (const auto muItr : *goodMu) { m_variables->total_charge += muItr->charge(); }
+  
+  ConstDataVector<xAOD::IParticleContainer> leptons(SG::VIEW_ELEMENTS);
+  
+  for (const auto elItr : *goodEl) { m_variables->total_charge += elItr->charge(); leptons.push_back( elItr ); }
+  for (const auto muItr : *goodMu) { m_variables->total_charge += muItr->charge(); leptons.push_back( muItr ); }
+  
+  
+  // Flag event if there's at least one truth-QMisID lepton
+
+  if(m_isMC) {
+  
+    static SG::AuxElement::Accessor<char> QMisID("isQMisID");
+    static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
+  
+    m_variables->isQMisIDEvent = 0; // default
+    for ( const auto lep : leptons ) {
+      if ( QMisID.isAvailable( *lep ) && QMisID( *lep ) == 1 ) {
+    	m_variables->isQMisIDEvent = 1;
+    	break;
+      }
+    }
+    m_variables->isConvPhEvent = 0; // default
+    for ( const auto lep : leptons ) {
+      if ( ConvPh.isAvailable( *lep ) && ConvPh( *lep ) == 1 ) {
+    	m_variables->isConvPhEvent = 1;
+    	break;
+      }
+    }  
+  } else {
+    m_variables->isQMisIDEvent = -1; // default for data
+    m_variables->isConvPhEvent = -1; // default for data
+  }
+
   // Do a sorting for objects
   // (pt, idx, leptype)
   // 3l |q| = 1 has special sorting by Delta R from OS lepton

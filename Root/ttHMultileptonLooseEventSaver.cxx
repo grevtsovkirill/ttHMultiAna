@@ -1,5 +1,7 @@
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
+#include "xAODMissingET/MissingETContainer.h"
+
 //Top
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
@@ -44,7 +46,11 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_truthMatchAlgo(nullptr),
   m_HF_Classification(0.),
   m_met_met(0.),
-  m_met_phi(0.)
+  m_met_phi(0.),
+  m_truthMET_px(-1.0),
+  m_truthMET_py(-1.0),
+  m_truthMET_phi(-999.0),
+  m_truthMET_sumet(-1.0)
 {
 }
 
@@ -351,7 +357,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
 
-
+    if(!m_doSystematics) {
+      systematicTree->makeOutputVariable(m_truthMET_px, "MET_Truth_px");
+      systematicTree->makeOutputVariable(m_truthMET_py, "MET_Truth_py");
+      systematicTree->makeOutputVariable(m_truthMET_phi, "MET_Truth_phi");
+      systematicTree->makeOutputVariable(m_truthMET_sumet, "MET_Truth_sumet");
+    }
+    
     for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
       if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) trigDecTool.getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
@@ -1011,6 +1023,21 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //met
   m_met_met = event.m_met->met();
   m_met_phi = event.m_met->phi();
+
+  if(!m_doSystematics) {
+    // MET Truth
+    const xAOD::MissingETContainer* truthMETCont(nullptr);
+    top::check( evtStore()->retrieve(truthMETCont, "MET_Truth"),"Failed to retrieve MET_Truth container"); 
+
+    // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/Run2xAODMissingET
+    //
+    const xAOD::MissingET* truthMET = *(truthMETCont->find("NonInt"));
+
+    m_truthMET_px = truthMET->mpx();
+    m_truthMET_py = truthMET->mpy();
+    m_truthMET_phi = truthMET->phi();
+    m_truthMET_sumet = truthMET->sumet();
+  }
 
   //MC particle
   if (event.m_truth != nullptr) {
