@@ -1,4 +1,8 @@
 2016-06-07 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Add more electron 2016 triggers in TRIGDEC in configs
+	* Tag ttHMultiAna-00-01-09
+
+2016-06-07 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Include TopAnalysis-00-04-36 in setupRCandGrid.sh
 
 2016-06-07  Marco Milesi  <marco.milesi@cern.ch>
