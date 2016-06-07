@@ -1,3 +1,11 @@
+/**
+ * @file   TruthMatchAlgo.h
+ * @author Marco Milesi <marco.milesi@cern.ch>
+ * @brief  This class performs a detailed classification of reco leptons based on truth matching.
+ *
+ */
+
+
 #ifndef ttHMultilepton_TruthMatchAlgo_H_
 #define ttHMultilepton_TruthMatchAlgo_H_
 
