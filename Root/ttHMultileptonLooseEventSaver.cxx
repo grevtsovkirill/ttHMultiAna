@@ -18,15 +18,15 @@
 #include "AssociationUtils/OverlapRemovalInit.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
-  m_outputFile(0),
+  m_outputFile(nullptr),
   m_doSystematics(false),
   m_doSFSystematics(true),
   m_sfRetriever(nullptr),
-  configTool("xAODConfigTool"),
-  trigDecTool("TrigDecTool"),
+  m_trigDecTool("Trig::TrigDecisionTool"),
+  m_purwtool("CP::PileupReweightingTool"),
+  m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
-  m_purwtool("CP::PileupReweightingTool"),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
   m_mcWeight(1.),
   m_pileup_weight(1.),
@@ -43,16 +43,14 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_puNumber(0),
   m_pv(nullptr),
   m_runYear(2015),
-  m_truthMatchAlgo(nullptr),
   m_HF_Classification(0.),
   m_met_met(0.),
   m_met_phi(0.),
-  m_truthMET_px(-1.0),
-  m_truthMET_py(-1.0),
+  m_truthMET_px(-999.0),
+  m_truthMET_py(-999.0),
   m_truthMET_phi(-999.0),
   m_truthMET_sumet(-1.0)
-{
-}
+{}
 
 ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
 
@@ -163,6 +161,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
 
+  m_sherpaRW = new PMGCorrsAndSysts(false);
+
   //prepare btag eigen vectors
   m_weight_bTagSF_70_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars() );
   m_weight_bTagSF_70_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars() );
@@ -173,20 +173,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   //init Tools
 
-
   //Pileup Reweighting Tool from TopToolStore
   if( m_purwtool.retrieve() ) {}
 
-
-  //Trigger Tools
-  // Trigger decision tool.
-  ToolHandle<TrigConf::ITrigConfigTool> configHandle(&configTool);
-  top::check( configHandle->initialize(),"xAODConfigTool fails to initialize");
-  // The decision tool
-  top::check( trigDecTool.setProperty("ConfigTool",configHandle),"TrigDecTool fails to set configHandle");
-  //top::check( trigDecTool.setProperty("OutputLevel", MSG::VERBOSE),"TrigDecTool fails to set OutputLevel");
-  top::check( trigDecTool.setProperty("TrigDecisionKey","xTrigDecision"),"TrigDecTool fails to set TrigDecisionKey");
-  top::check(trigDecTool.initialize(),"TrigDecTool fails to initialize");
+  //Trigger Tool from TopToolStore
+  top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
 
   //Isolation tools for leptons
   //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
@@ -205,12 +196,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
 
-  //Jet Tools
-  //Jet cleaning tool is initialized here
-  cleaningTool = new JetCleaningTool("MyCleaningTool");
-  top::check( cleaningTool->setProperty("CutLevel", "LooseBad"), "Jet Cleaning tool failed to set cut level"); // also "TightBad"
-  top::check( cleaningTool->setProperty("DoUgly", false), "Jet Cleaning tool failed to set value for DoUgly flag");
-  top::check( cleaningTool->initialize(), "Jet Cleaning tool failed to initialize");
+  //Jet Tool from Top Tool Store
+  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
   //Tau Tools
   //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
@@ -222,7 +209,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //Items and their PS
   // defined in config files with TRIGDEC selectors
   // "triggers" is the name of that dummy selection
-
   std::vector<std::string> triggernames = config->allTriggers("triggers");
 
   //make a tree for each systematic
@@ -326,6 +312,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
 
     //event info
+
+    //scalar aka once per event stuff
     std::vector<ScalarWrapper*> scalarvec;
     systematicTree->makeOutputVariable(m_eventNumber, "EventNumber");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->runNumber(); }, *systematicTree, "RunNumber");
@@ -336,6 +324,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->x(); }, *systematicTree, "m_vxp_x");
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->y(); }, *systematicTree, "m_vxp_y");
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->z(); }, *systematicTree, "m_vxp_z");
+    WrapS(scalarvec, [&](const top::Event& event)
+	  {
+	    return event.m_info->isAvailable<float>("TTHML_SherpaNJetRW") ? event.m_info->auxdataConst<float>("TTHML_SherpaNJetRW") : 1.0;
+	  }, *systematicTree, "SherpaNJetWeight");
+    WrapS(scalarvec, [&](const top::Event& event)
+	  {
+	    return event.m_info->isAvailable<int>("TTHML_NTruthJet") ? event.m_info->auxdataConst<int>("TTHML_NTruthJet") : 0.0;
+	  }, *systematicTree, "nTruthJets");
 
 
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
@@ -363,10 +359,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_truthMET_phi, "MET_Truth_phi");
       systematicTree->makeOutputVariable(m_truthMET_sumet, "MET_Truth_sumet");
     }
-    
+
     for (auto trigger : triggernames) {
-      WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) trigDecTool.isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
-      if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) trigDecTool.getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
+      WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) m_trigDecTool->isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
+      if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) m_trigDecTool->getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
     }
     //END trigger
     vec_scalar_wrappers.push_back(scalarvec);
@@ -676,8 +672,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.jetP4("JetEMScaleMomentum").eta(); }, *systematicTree, "m_jet_etaEM");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { float this_jvt = -999.; if(jet.isAvailable<float>("AnalysisTop_JVT")) this_jvt = jet.auxdataConst<float>("AnalysisTop_JVT"); return this_jvt;}, *systematicTree, "m_jet_jvt");
     //Jet cleaning flag
-    Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = cleaningTool->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
-
+    Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); }, *systematicTree, "m_jet_OVRStatus");
@@ -821,9 +816,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
 	     "Failed to setup OR Tool box");
 
-  if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
-	       "Failed to set RemoveCaloMuons in eleMuORT");
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in eleMuORT");
 
   top::check(m_ORtoolBox[0].initialize(),
 	     "Failed to initialize overlap removal tools");
@@ -843,13 +838,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check(ORUtils::recommendedTools(OR_flags_nominal,m_ORtoolBox[1]),
 	     "Failed to setup OR Tool box for nominal selections");
 
-  if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
-	       "Failed to set RemoveCaloMuons in nominal OR");
-  if (m_config->useTaus() && m_config->useElectrons())
-    top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
-						 "DFCommonElectronsLHLoose"),
-	       "Failed to set loose LH for electron def for ORTool");
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in nominal OR");
+  // if (m_config->useTaus() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
+  // 						 "DFCommonElectronsLHLoose"),
+  // 	       "Failed to set loose LH for electron def for ORTool");
 
   top::check(m_ORtoolBox[1].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
@@ -870,9 +865,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check(ORUtils::recommendedTools(OR_flags_nominal_no_tau,m_ORtoolBox[2]),
 	     "Failed to setup OR Tool box for nominal-but-tau selections");
 
-  if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
-	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
 
   top::check(m_ORtoolBox[2].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
@@ -1017,6 +1012,21 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
 
+  //sherpa rw
+  if( top::isSimulation(event) and ( ( m_mcChannelNumber >= 363102 and m_mcChannelNumber <= 363122 ) or
+				     ( m_mcChannelNumber >= 363331 and m_mcChannelNumber <= 363354 ) or
+				     ( m_mcChannelNumber >= 363361 and m_mcChannelNumber <= 363483 )
+				     )
+      ) {
+      const xAOD::JetContainer* truthJets(nullptr);
+      top::check( evtStore()->retrieve(truthJets, "AntiKt4TruthJets"), "Failed to retrieve AntiKt4TruthWZJets for Sherpa reweighting." );
+
+      uint nTruthJets = truthSelector.CountJets(truthJets, event.m_truth);
+
+      event.m_info->auxdecor<float>("TTHML_SherpaNJetRW") = m_sherpaRW->Get_Sherpa22VJets_NJetCorrection(nTruthJets);
+      event.m_info->auxdecor<int>("TTHML_NTruthJet") = nTruthJets;
+    }
+
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 
@@ -1027,7 +1037,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(!m_doSystematics) {
     // MET Truth
     const xAOD::MissingETContainer* truthMETCont(nullptr);
-    top::check( evtStore()->retrieve(truthMETCont, "MET_Truth"),"Failed to retrieve MET_Truth container"); 
+    top::check( evtStore()->retrieve(truthMETCont, "MET_Truth"),"Failed to retrieve MET_Truth container");
 
     // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/Run2xAODMissingET
     //

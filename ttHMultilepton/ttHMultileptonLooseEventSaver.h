@@ -3,15 +3,14 @@
 
 
 // Trigger
-#include "TrigConfxAOD/xAODConfigTool.h"
 #include "TrigDecisionTool/TrigDecisionTool.h"
 
 // CP tools
-#include "MuonSelectorTools/MuonSelectionTool.h"
-#include "JetSelectorTools/JetCleaningTool.h"
-#include "PileupReweighting/PileupReweightingTool.h"
 #include "AsgTools/ToolHandle.h"
-#include "TauAnalysisTools/TauEfficiencyCorrectionsTool.h"
+#include "MuonSelectorTools/MuonSelectionTool.h"
+#include "JetInterface/IJetSelector.h"
+#include "PileupReweighting/PileupReweightingTool.h"
+#include "TauAnalysisTools/TauSelectionTool.h"
 #include "AssociationUtils/ToolBox.h"
 #include "AssociationUtils/IOverlapRemovalTool.h"
 
@@ -25,6 +24,9 @@
 
 //Isolation
 #include "IsolationSelection/IsolationSelectionTool.h"
+
+//Sherpa 2.2 reweight
+#include "PMGTools/PMGCorrsAndSysts.h"
 
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
@@ -41,12 +43,10 @@
 #include <TH1F.h>
 #include <TString.h>
 
-using namespace Trig;
-using namespace TrigConf;
 using namespace xAOD;
-using namespace CP;
 using namespace ttHMultilepton;
-using TauAnalysisTools::TauEfficiencyCorrectionsTool;
+using CP::IsolationSelectionTool;
+using CP::MuonSelectionTool;
 using TauAnalysisTools::TauSelectionTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
@@ -108,13 +108,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ///Scale factors
   std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
 
-  xAODConfigTool                         configTool;
-  TrigDecisionTool                       trigDecTool;
+  ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
+  ToolHandle<CP::IPileupReweightingTool> m_purwtool;
+  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
   MuonSelectionTool                      muonSelection;
-  JetCleaningTool*                       cleaningTool;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
-  ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   TauSelectionTool                       m_tauSelectionEleOLR;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau
   ORUtils::ToolBox                       m_ORtoolBox[3];
@@ -190,13 +189,13 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //met
   float m_met_met;
   float m_met_phi;
-  
+
   // MET Truth
   float m_truthMET_px;
   float m_truthMET_py;
   float m_truthMET_phi;
   float m_truthMET_sumet;
-  
+
 
   // leptons to save
   Lepton m_leptons[LEPTON_ARR_SIZE];
@@ -205,6 +204,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   //ttHF classification
   ttHMultilepton::ClassifyHF* m_classifyttbarHF;
+
+  //sherpa RW
+  PMGCorrsAndSysts* m_sherpaRW;
 
   //MC
   int m_higgsMode;

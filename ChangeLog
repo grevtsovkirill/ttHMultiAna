@@ -2,6 +2,16 @@
 	* Add TruhtMatchAlgo class to perform truth matching. In particular, get truth QMisID match.
 	* Add truth matching variables for reco leptons, and truth MET as well
 
+2016-06-07 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Using "Standard" ASG OLR
+
+2016-06-04  David Hohn  <david.hohn@cern.ch>
+	* clean up our tools a bit, take them from Top tool store when possible
+
+2016-06-03  David Hohn  <david.hohn@cern.ch>
+	* use PMGCorrsAndSysts to save Sherpa 2.2 Njet weight
+	** update your setup script to check out PMGTools
+
 2016-06-02  David Hohn  <david.hohn@cern.ch>
 	* enable writing non-prompt lep tagging variables
 
