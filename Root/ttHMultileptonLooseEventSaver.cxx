@@ -803,9 +803,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
 	     "Failed to setup OR Tool box");
 
-  if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
-	       "Failed to set RemoveCaloMuons in eleMuORT");
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in eleMuORT");
 
   top::check(m_ORtoolBox[0].initialize(),
 	     "Failed to initialize overlap removal tools");
@@ -825,13 +825,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check(ORUtils::recommendedTools(OR_flags_nominal,m_ORtoolBox[1]),
 	     "Failed to setup OR Tool box for nominal selections");
 
-  if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
-	       "Failed to set RemoveCaloMuons in nominal OR");
-  if (m_config->useTaus() && m_config->useElectrons())
-    top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
-						 "DFCommonElectronsLHLoose"),
-	       "Failed to set loose LH for electron def for ORTool");
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in nominal OR");
+  // if (m_config->useTaus() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
+  // 						 "DFCommonElectronsLHLoose"),
+  // 	       "Failed to set loose LH for electron def for ORTool");
 
   top::check(m_ORtoolBox[1].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
@@ -852,9 +852,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check(ORUtils::recommendedTools(OR_flags_nominal_no_tau,m_ORtoolBox[2]),
 	     "Failed to setup OR Tool box for nominal-but-tau selections");
 
-  if (m_config->useMuons() && m_config->useElectrons())
-    top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
-	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
 
   top::check(m_ORtoolBox[2].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
