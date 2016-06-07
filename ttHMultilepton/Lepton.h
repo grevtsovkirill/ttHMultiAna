@@ -8,7 +8,7 @@
 
 namespace ttHMultilepton {
   enum LepType { ELECTRON, MUON, GENERIC };
-  struct Lepton 
+  struct Lepton
   {
     float SFIDTight[MAXSYST];
     float SFIDLoose[MAXSYST];
@@ -109,11 +109,29 @@ namespace ttHMultilepton {
     int     D3PDIndex;
     int     Truth_parent_particle_ID;
     int     Truth_particle_ID;
+
     char    isPrompt;
+    char    isFakeLep;
+    char    isQMisID;
+    char    isConvPh;
+    char    isISR_FSR_Ph;
+    char    isBrems;
+
+    char    isTruthMatched;
+    int     truthPdgId;
+    int     truthStatus;
     int     truthType;
     int     truthOrigin;
-    char    isBremsElec;
-    char    isFakeLep;
+    int     truthParentPdgId;
+    int     truthParentStatus;
+    int     truthParentType;
+    int     truthParentOrigin;
+    float   truthPt;
+    float   truthEta;
+    float   truthPhi;
+    float   truthM;
+    float   truthE;
+    float   truthRapidity;
 
     float   topoEtcone20;
     float   topoEtcone30;
@@ -124,7 +142,7 @@ namespace ttHMultilepton {
 
     float   EffTrigLoose[MAXSYST];
     float   EffTrigTight[MAXSYST];
-    
+
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 
     bool operator==(const Lepton &other) {

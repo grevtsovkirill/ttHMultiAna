@@ -36,6 +36,7 @@
 #include "ttHMultilepton/Lepton.h"
 #include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/Variables.h"
+#include "ttHMultilepton/TruthMatchAlgo.h"
 #include "ttHMultilepton/ClassifyHF.h"
 
 //root
@@ -54,16 +55,16 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  public:
   //Default - so root can load based on a name
   ttHMultileptonLooseEventSaver();
-  
+
   //Default - so we can clean up
   ~ttHMultileptonLooseEventSaver();
-  
+
   //Run once at the start of the job
   virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches);
 
   //Keep the asg::AsgTool happy
   virtual StatusCode initialize(){return StatusCode::SUCCESS;}
-  
+
   //Run for every event (in every systematic) that needs saving
   void saveEvent(const top::Event& event);
 
@@ -88,7 +89,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CheckIsBlinded();
   void CopyHT(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<xAOD::JetContainer>& goodJet, std::shared_ptr<xAOD::TauJetContainer>& goodTau);
   void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
-  
+
  private:
   ///The file where everything goes
   TFile* m_outputFile;
@@ -98,7 +99,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::shared_ptr<top::TopConfig> m_config;
   bool m_doSystematics;
   bool m_doSFSystematics;
-  
+
   TH1* m_eleCutflow;
   TH1* m_muCutflow;
   TH1* m_jetCutflow;
@@ -118,11 +119,11 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
 
-  
+
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
   const EventInfo*       m_eventInfo;
-  
+
   ///A simple way to write out branches, without having to worry about the type.
   std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
 
@@ -141,7 +142,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
-  
+
   //some event weights
   double m_mcWeight;
   double m_pileup_weight;
@@ -179,6 +180,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   bool m_isMC;
   int m_runYear;
 
+  // Truth matching
+  ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
+
   //ttbar HF classification
   int m_HF_Classification;
 
@@ -186,18 +190,25 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float m_met_met;
   float m_met_phi;
 
+  // MET Truth
+  float m_truthMET_px;
+  float m_truthMET_py;
+  float m_truthMET_phi;
+  float m_truthMET_sumet;
+
+
   // leptons to save
   Lepton m_leptons[LEPTON_ARR_SIZE];
   Tau m_taus[TAU_ARR_SIZE];
   ttHMultilepton::Variables* m_variables;
- 
+
   //ttHF classification
   ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
   PMGCorrsAndSysts* m_sherpaRW;
-  
-  //MC  
+
+  //MC
   int m_higgsMode;
   std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
@@ -214,7 +225,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_PDFinfo_x1;
   std::vector<float> m_PDFinfo_x2;
   std::vector<int> m_PDFinfo_id1;
-  std::vector<int> m_PDFinfo_id2;   
+  std::vector<int> m_PDFinfo_id2;
   std::vector<float> m_PDFinfo_scalePDF;
   std::vector<float> m_PDFinfo_pdf1;
   std::vector<float> m_PDFinfo_pdf2;
@@ -261,17 +272,17 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   // names tau SFs
   std::map<top::topSFSyst, std::string> m_tau_sf_names{
       { top::topSFSyst::nominal, "nominal" },
-      { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },  
+      { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN, "TAU_SF_ELEOLR_TOTAL_DOWN"},
-      { top::topSFSyst::TAU_SF_JETID_TOTAL_UP,	  "TAU_SF_JETID_TOTAL_UP"   },	 
+      { top::topSFSyst::TAU_SF_JETID_TOTAL_UP,	  "TAU_SF_JETID_TOTAL_UP"   },
       { top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN,  "TAU_SF_JETID_TOTAL_DOWN" },
-      { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,	  "TAU_SF_RECO_TOTAL_UP"    },	 
+      { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,	  "TAU_SF_RECO_TOTAL_UP"    },
       { top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN,   "TAU_SF_RECO_TOTAL_DOWN"  },
 	};
 
   TH1F * h_decayMode;
 
-  #ifndef __CINT__ 
+  #ifndef __CINT__
   std::vector<ScalarWrapperCollection> vec_scalar_wrappers;
   std::vector<VectorWrapperCollection> vec_electron_wrappers;
   std::vector<VectorWrapperCollection> vec_muon_wrappers;

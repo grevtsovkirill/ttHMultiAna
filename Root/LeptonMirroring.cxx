@@ -1,8 +1,8 @@
 #include "ttHMultilepton/Lepton.h"
 #include "boost/format.hpp"
 
-template<typename PTR> void CreateBranch(std::shared_ptr<top::TreeManager> tree, PTR addr, 
-		    const char* basename, 
+template<typename PTR> void CreateBranch(std::shared_ptr<top::TreeManager> tree, PTR addr,
+		    const char* basename,
 		    int index) {
   boost::format fmt1("%1%%2%");
   fmt1 % basename % index;
@@ -54,12 +54,28 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
   // truth matching
   CreateBranch(tree, &isPrompt,    "lep_isPrompt_", index);
-  CreateBranch(tree, &truthType,   "lep_truthType_", index);
-  CreateBranch(tree, &truthOrigin, "lep_truthOrigin_", index);
-  // bremmstrahlung electron (~ QFlip)
-  CreateBranch(tree, &isBremsElec, "lep_isBremsElec_", index);
   // fake lepton (non-prompt and NOT QFlip)
   CreateBranch(tree, &isFakeLep, "lep_isFakeLep_", index);
+  CreateBranch(tree, &isQMisID, "lep_isQMisID_", index);
+  CreateBranch(tree, &isConvPh, "lep_isConvPh_", index);
+  CreateBranch(tree, &isISR_FSR_Ph, "lep_isISRFSRPh_", index);
+  CreateBranch(tree, &isBrems, "lep_isBrems_", index);
+
+  CreateBranch(tree, &isTruthMatched,"lep_isTruthMatched_", index);
+  CreateBranch(tree, &truthType,     "lep_truthType_", index);
+  CreateBranch(tree, &truthOrigin,   "lep_truthOrigin_", index);
+  CreateBranch(tree, &truthPdgId,    "lep_truthPdgId_", index);
+  CreateBranch(tree, &truthStatus,   "lep_truthStatus_", index);
+  CreateBranch(tree, &truthParentType,     "lep_truthParentType_", index);
+  CreateBranch(tree, &truthParentOrigin,   "lep_truthParentOrigin_", index);
+  CreateBranch(tree, &truthParentPdgId,    "lep_truthParentPdgId_", index);
+  CreateBranch(tree, &truthParentStatus,   "lep_truthParentStatus_", index);
+  CreateBranch(tree, &truthPt,       "lep_truthPt_", index);
+  CreateBranch(tree, &truthEta,      "lep_truthEta_", index);
+  CreateBranch(tree, &truthPhi,      "lep_truthPhi_", index);
+  CreateBranch(tree, &truthM,        "lep_truthM_", index);
+  CreateBranch(tree, &truthE,        "lep_truthE_", index);
+  CreateBranch(tree, &truthRapidity, "lep_truthRapidity_", index);
 
   // SFs
   CreateBranch(tree, &SFIDLoose[0],   "lep_SFIDLoose_", index);
@@ -74,5 +90,5 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &SFTTVA[0],      "lep_SFTTVA_", index);
   CreateBranch(tree, &SFObjLoose[0],  "lep_SFObjLoose_", index);
   CreateBranch(tree, &SFObjTight[0],  "lep_SFObjTight_", index);
- 
+
 }

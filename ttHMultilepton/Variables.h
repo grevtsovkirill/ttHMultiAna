@@ -16,6 +16,8 @@ namespace ttHMultilepton {
     int quadlep_type;
     int total_leptons;
     int total_charge;
+    char isQMisIDEvent;
+    char isConvPhEvent;
     float Mll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float Ptll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float DRll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
