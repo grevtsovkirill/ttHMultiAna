@@ -6,6 +6,7 @@ lsetup "rcsetup Top,2.4.6" panda rucio pyami
 
 rc checkout_pkg atlasoff/PhysicsAnalysis/AnalysisCommon/PMGTools/trunk
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopAnalysis/tags/TopAnalysis-00-04-36
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk
 rc build
 
 echo "Alright - done."

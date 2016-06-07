@@ -2,15 +2,7 @@ import TopExamples.grid
 import TopExamples.ami
 
 
-TopExamples.grid.Add('data16_grl_v76_only').datasets = [
-'data16_13TeV.00298591.physics_Main.merge.DAOD_HIGG8D1.f695_m1588_p2623',
-'data16_13TeV.00297730.physics_Main.merge.DAOD_HIGG8D1.f692_m1583_p2623',
-'data16_13TeV.00297447.physics_Main.merge.DAOD_HIGG8D1.f693_m1583_p2623',
-]
-
-
 TopExamples.grid.Add('data16').datasets = [
-
 'data16_13TeV.00297730.physics_Main.merge.DAOD_HIGG8D1.f694_m1583_p2623',
 'data16_13TeV.00298595.physics_Main.merge.DAOD_HIGG8D1.f698_m1594_p2623',
 'data16_13TeV.00298609.physics_Main.merge.DAOD_HIGG8D1.f698_m1594_p2623',
@@ -26,7 +18,8 @@ TopExamples.grid.Add('data16').datasets = [
 'data16_13TeV.00299147.physics_Main.merge.DAOD_HIGG8D1.f698_m1594_p2623',
 'data16_13TeV.00299184.physics_Main.merge.DAOD_HIGG8D1.f698_m1594_p2623',
 'data16_13TeV.00299243.physics_Main.merge.DAOD_HIGG8D1.f698_m1594_p2623',
-
+'data16_13TeV.00299584.physics_Main.merge.DAOD_HIGG8D1.f703_m1600_p2623',
+'data16_13TeV.00300279.physics_Main.merge.DAOD_HIGG8D1.f705_m1606_p2623',
 ]
 
 def get_grlruns(grl):
@@ -48,7 +41,7 @@ if __name__ == '__main__':
    
     scope = 'data16_13TeV'
     ptag  = '_p2623'            #p-tag of Data Derivations
-    grl   = 'data16_13TeV.periodAllYear_DetStatus-v76-pro20-02_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml'
+    grl   = 'data16_13TeV.periodAllYear_DetStatus-v77-pro20-03_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml'
         #specify ONLY the name of grl file. By default, it will look for it in ttHMultilepton/data folder 
     
     grl_runs = get_grlruns(grl)

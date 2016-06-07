@@ -28,10 +28,10 @@ OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 1000
+NEvents 0
 
 PRWConfigFiles ttHMultilepton/merged_prw_mc15c.root
-PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_297447-298591.root
+PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_HLT_mu20_iloose_L1MU15_276262-284484.root ttHMultilepton/ilumicalc_histograms_None_297730-300279.root
 PRWDefaultChannel 363372
 
 Systematics Nominal
