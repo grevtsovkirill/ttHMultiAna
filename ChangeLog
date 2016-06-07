@@ -1,3 +1,6 @@
+2016-06-07 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Include TopAnalysis-00-04-36 in setupRCandGrid.sh
+
 2016-06-07  Marco Milesi  <marco.milesi@cern.ch>
 	* Add TruhtMatchAlgo class to perform truth matching. In particular, get truth QMisID match.
 	* Add truth matching variables for reco leptons, and truth MET as well
