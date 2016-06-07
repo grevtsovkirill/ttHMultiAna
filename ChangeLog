@@ -3,7 +3,7 @@
 	* Add truth matching variables for reco leptons, and truth MET as well
 
 2016-06-07 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
-	* Using "Standard" ASG OLR
+	* Using "Standard" ASG OLR (still specifying LHLoose for TauEle to work with p2613 derivations)
 
 2016-06-04  David Hohn  <david.hohn@cern.ch>
 	* clean up our tools a bit, take them from Top tool store when possible

@@ -841,10 +841,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
   // 	       "Failed to set RemoveCaloMuons in nominal OR");
-  // if (m_config->useTaus() && m_config->useElectrons())
-  //   top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
-  // 						 "DFCommonElectronsLHLoose"),
-  // 	       "Failed to set loose LH for electron def for ORTool");
+  if (m_config->useTaus() && m_config->useElectrons())
+    top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
+						    "DFCommonElectronsLHLoose"),
+  	       "Failed to set loose LH for electron def for ORTool");
 
   top::check(m_ORtoolBox[1].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
