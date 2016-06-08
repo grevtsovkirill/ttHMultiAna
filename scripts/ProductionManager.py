@@ -122,10 +122,12 @@ def getDoneSamplesOnGRID():
     pbookCore.clean()
     pbookCore.updateTaskJobsetMap()
 
-    done = 0
-    broken = 0
+    done     = 0
+    broken   = 0
     finished = 0
-    total = 0
+    failed   = 0
+    running  = 0
+    total    = 0
 
     samples = []
     
@@ -133,9 +135,9 @@ def getDoneSamplesOnGRID():
     for job in jobList:
         if job.outDS.count(productionName):
             total += 1
-            if job.taskStatus != 'done':
-                #jobUpdated = pbookCore.statusJobJobset(job.JobsetID,forceUpdate=True)
-                pass
+            if job.taskStatus == 'finished' or job.taskStatus == 'failed':
+                # these are the jobs that we sometimes retry and for which the status might not be up to date
+                job = pbookCore.statusJobJobset(job.JobsetID,forceUpdate=True)
             if job.taskStatus == 'done':
                 done += 1
                 DSName = job.outDS.split(',')[0]
@@ -148,12 +150,16 @@ def getDoneSamplesOnGRID():
                 finished += 1
                 #pbookCore.retry(job.JobsetID)
             elif job.taskStatus == 'failed':
+                failed += 1
                 #pbookCore.retry(job.JobsetID)
-                pass
+            elif job.taskStatus == 'running':
+                running +=1
 
     print '%s jobs in %s' % (total, productionName)
     print 'broken:   %s' % broken
     print 'finished: %s' % finished
+    print 'failed:   %s' % failed
+    print 'running:  %s' % running
     print 'done:     %s' % done
 
     return samples
@@ -167,11 +173,11 @@ def createJobScript(outDir,dsid,gridDS,eosPath):
     file.write('#!/bin/sh                                                                          \n')
     file.write('source ~/.bashrc								   \n')
     file.write('setupATLAS                                                                         \n')
-    file.write('RUCIO_ACCOUNT=hpotti								   \n')
+    file.write('RUCIO_ACCOUNT=dhohn								   \n')
     file.write('lsetup  rucio				               				   \n')
-    file.write('export X509_USER_PROXY=/afs/cern.ch/user/h/hpotti/x509up_u75032                    \n')
+    #file.write('export X509_USER_PROXY=/afs/cern.ch/user/h/hpotti/x509up_u75032                    \n')
     file.write('pwd										   \n')
-    txt  = 'source /afs/cern.ch/user/h/hpotti/ProductionManager/hadd.sh \\\n'
+    txt  = 'source /afs/cern.ch/user/d/dhohn/ProductionManager/hadd.sh \\\n'
     txt += '%s \\\n' % gridDS
     txt += '%s \\\n' % eosPath
     txt += '%s \\\n' % (dsid+'.root')
@@ -220,13 +226,13 @@ if __name__ == '__main__':
 
     eosMGM = 'root://eospublic.cern.ch/'
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/data'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/Nominal'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/bookkeep'
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/Sys'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
-    gridNickName = 'hpotti'
+    gridNickName = 'dhohn'
     #productionName = '26.1.16.v4.Data'
-    productionName = '26.1.16.v4.Nominal'
+    productionName = 'bookkeep'
     #productionName = '26.1.16.v4.Sys'
 
     
@@ -249,7 +255,7 @@ if __name__ == '__main__':
                 os.makedirs(outDir)
             jobScript = createJobScript(outDir, copySample.dsid, copySample.gridName, eosMGM+eosPath)
             job = BJob(outDir, jobScript)
-            job.setQ('1nd')
+            job.setQ('1nh')
             job.setPool(copySample.size)
             print job
             job.submit()
