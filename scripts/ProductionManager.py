@@ -255,7 +255,7 @@ if __name__ == '__main__':
                 os.makedirs(outDir)
             jobScript = createJobScript(outDir, copySample.dsid, copySample.gridName, eosMGM+eosPath)
             job = BJob(outDir, jobScript)
-            job.setQ('1nh')
+            job.setQ('1nd')
             job.setPool(copySample.size)
             print job
             job.submit()
