@@ -1,6 +1,8 @@
 2016-06-08  David Hohn  <david.hohn@cern.ch>
 	* protect MET_Truth in data
 	* overlap flags not working yet
+	* tag ttHMultiAna-02-04-06
+	** lets follow the AnalysisTop version numbers...
 
 2016-06-07 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Add more electron 2016 triggers in TRIGDEC in configs
