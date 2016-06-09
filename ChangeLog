@@ -1,3 +1,7 @@
+2016-06-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Update b-tagging SF nominal and uncertainties function calls
+	* Working version with AnalysisTop,2.4.10
+
 2016-06-08  David Hohn  <david.hohn@cern.ch>
 	* protect MET_Truth in data
 	* overlap flags not working yet

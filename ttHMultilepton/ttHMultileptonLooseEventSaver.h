@@ -89,6 +89,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CheckIsBlinded();
   void CopyHT(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<xAOD::JetContainer>& goodJet, std::shared_ptr<xAOD::TauJetContainer>& goodTau);
   void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
+  std::string betterBtagNamedSyst (const std::string WP);
 
  private:
   ///The file where everything goes
@@ -156,10 +157,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_weight_bTagSF_70_eigen_C_down;
   std::vector<float> m_weight_bTagSF_70_eigen_Light_up;
   std::vector<float> m_weight_bTagSF_70_eigen_Light_down;
-  double m_weight_bTagSF_70_extrapolation_up;
-  double m_weight_bTagSF_70_extrapolation_down;
-  double m_weight_bTagSF_70_extrapolation_from_charm_up;
-  double m_weight_bTagSF_70_extrapolation_from_charm_down;
+  std::unordered_map<std::string, float> m_weight_bTagSF_70_eigen_Others_up;
+  std::unordered_map<std::string, float> m_weight_bTagSF_70_eigen_Others_down;
+  /* double m_weight_bTagSF_70_extrapolation_up; */
+  /* double m_weight_bTagSF_70_extrapolation_down; */
+  /* double m_weight_bTagSF_70_extrapolation_from_charm_up; */
+  /* double m_weight_bTagSF_70_extrapolation_from_charm_down; */
   // JVT SF weights
   double m_JVT_weight;
   double m_JVT_weight_UP;
