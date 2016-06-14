@@ -440,7 +440,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<int>("passLHTight"); },  *systematicTree, "electron_isTightLH");
 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("sharesTrk"); },  *systematicTree, "electron_sharesTrk");
-    //Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
 
     for (std::string trigger_name : triggernames) {
       if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;
@@ -547,7 +547,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
 
-    //Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
+
+    Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
     
     //Trigger matching
 
@@ -693,8 +695,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); }, *systematicTree, "m_jet_OVRStatus");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_numTrk");
 
-    //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
-    //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
     
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
@@ -726,7 +728,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); }, *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); }, *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
 
-    //Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
     
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("passEleOLR");
@@ -1193,19 +1195,58 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CheckIsBlinded();
   doEventSFs();
 
+  
+  //blame David and the other vector people for this...
+  for(auto allel : event.m_electrons) {
+    allel->auxdecor<char>("ttHpassOVR") = 0;
+    for(auto goodel : *goodEl ) {
+      if( goodel->p4() == allel->p4() )
+	allel->auxdecor<char>("ttHpassOVR") = goodel->auxdecor<char>("ttHpassOVR");
+    }
+  }
+
+  for(auto allmu : event.m_muons) {
+    allmu->auxdecor<char>("ttHpassOVR") = 0;
+    for(auto goodmu : *goodMu ) {
+      if( goodmu->p4() == allmu->p4() )
+	allmu->auxdecor<char>("ttHpassOVR") = goodmu->auxdecor<char>("ttHpassOVR");
+    }
+  }
+
+  for(auto alltau : event.m_tauJets) {
+    alltau->auxdecor<char>("ttHpassOVR") = 0;
+    for(auto goodtau : *goodTau ) {
+      if( goodtau->p4() == alltau->p4() )
+	alltau->auxdecor<char>("ttHpassOVR") = goodtau->auxdecor<char>("ttHpassOVR");
+    }
+  }
+
+  
   //save ALL jets
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
 
+
+  for(auto alljet : *calibratedJets) {
+    alljet->auxdecor<char>("ttHpassOVR") = 0;
+    alljet->auxdecor<char>("ttHpassTauOVR") = 0;
+    for(auto goodjet : *goodJet ) {
+      if( goodjet->p4() == alljet->p4() ) {
+	alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
+	alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
+      }
+    }
+  }
+  
   if(m_doSystematics) {
     //only selected jets
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
-    MakeJetIndices(goodJet, event.m_jets);
+    MakeJetIndices(goodJet, event.m_jets);    
   }
   else {
     //all jets
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
-    MakeJetIndices(goodJet, *calibratedJets);
+    MakeJetIndices(goodJet, *calibratedJets);  
   }
 
   // xAOD::ElectronContainer* calibratedElectrons(nullptr);
