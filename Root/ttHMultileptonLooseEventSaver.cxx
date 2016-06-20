@@ -201,8 +201,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   //Tau Tools
   //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
-  top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
-  top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
+  //top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
+  //top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
 
 
   //define triggers
@@ -1165,6 +1165,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
 
+  //top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initialiseEvent TauSelectionTool for EleOLR" );
+  
   m_variables->Clear();
   Decorate(event);
   auto goodEl = SelectElectrons(event);

@@ -145,7 +145,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 
   }//end muons
 
-  top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
+  //top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
   
   for( auto tauItr : event.m_tauJets) {
     //truth
@@ -174,10 +174,10 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     tauItr->auxdecor<int>("tauTruthOrigin") = tauTruthOrigin;
 
     //EleOLR
-    int passEleOLR(0);
-    if(m_tauSelectionEleOLR.accept(*tauItr)) passEleOLR = 1;
+    int passEleOLR = tauItr->isAvailable<char>("ele_olr_pass") ? tauItr->auxdata<char>("ele_olr_pass") : 0;
+    //if(m_tauSelectionEleOLR.accept(*tauItr)) passEleOLR = 1;
     tauItr->auxdecor<int>("passEleOLR") = passEleOLR;
-
+	
     //truth jet flavour
     int truthJetFlavour(-1);
     if(tauItr->isAvailable<ElementLink<xAOD::JetContainer> >("truthJetLink")) {
