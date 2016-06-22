@@ -420,7 +420,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval_ContOnly(std::shared_ptr<xAOD::Ele
     }
   }
   for (const auto tauItr : *goodTau) {
-    if (tauItr->auxdataConst<char>("ttHpassOVR")) {
+    if (tauItr->auxdataConst<char>("ttHpassTauOVR")) {
       auto newTau = new xAOD::TauJet();
       newTau->makePrivateStore(*tauItr);
       newGoodTau->push_back(newTau);
