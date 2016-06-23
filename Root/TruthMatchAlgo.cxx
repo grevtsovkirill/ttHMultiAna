@@ -370,10 +370,10 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
 
   // default decorations
   //
-  (*m_isQMisIDDecor)( *lep )             = 0;
-  (*m_isISR_FSR_PhDecor)( *lep )         = 0;
-  (*m_isConvPhDecor)( *lep )             = 0;
-  (*m_isBremsDecor)( *lep )              = 0;
+  (*m_isQMisIDDecor)( *lep )             = -1;
+  (*m_isISR_FSR_PhDecor)( *lep )         = -1;
+  (*m_isConvPhDecor)( *lep )             = -1;
+  (*m_isBremsDecor)( *lep )              = -1;
   (*m_ancestorTruthTypeDecor)( *lep )    = 0;
   (*m_ancestorTruthPdgIdDecor)( *lep )   = 0;
   (*m_ancestorTruthOriginDecor)( *lep )  = 0;
@@ -511,33 +511,35 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   //
   // -) the primitive ancestor is NOT a photon
   //   AND
-  // -) the primitve origin of the lepton is not ISR/FSR...
+  // -) the primitve ancestor origin is not ISR/FSR...
   //   AND
   // -) the charge has actually flipped in reco ;-)
   //
+  // Flag a lepton as 'isISR_FSR' only if:
+  //
+  // -) the primitive ancestor is NOT a photon
+  //   AND
+  // -) the primitive ancestor origin is ISR/FSR
+  //
   // Flag a lepton as 'isConvPh' only if:
   //
-  // -) the primitve origin of the lepton is ISR/FSR (regardless it's charge flip or not)
-  //   OR
   // -) the primitive ancestor is a photon itself
 
-  if ( !primitiveTruth->isPhoton() ) {
+  // NB in this scheme: primitive ancestor --> first non-GEANT-originated particle
 
-    if ( ( reco_norm_charge * truth_norm_charge ) < 0 ) { (*m_isQMisIDDecor)( *lep ) = 1; }
+  (*m_isBremsDecor)( *lep )      = 0;
+  (*m_isQMisIDDecor)( *lep )     = 0;
+  (*m_isISR_FSR_PhDecor)( *lep ) = 0;
+  (*m_isConvPhDecor)( *lep )     = 0;
+  
+  if ( primitiveTruth->isLepton() && !primitiveTruth->isPhoton() ) {
 
-    // Check if it comes from ISR/FSR photon, or it's a prompt lepton
-    // which did bremsstrahlung...
-    //
-    if ( ancestor_info.second != 39 && ancestor_info.second != 40  ) {
-      if ( isBkgLep ) { (*m_isBremsDecor)( *lep ) = 1; }
-    } else {
-      (*m_isISR_FSR_PhDecor)( *lep ) = 1;
-    }
+    if ( isBkgLep ) { (*m_isBremsDecor)( *lep ) = 1; }
+    if ( !(ancestor_info.second == 39 || ancestor_info.second == 40) && ( reco_norm_charge * truth_norm_charge ) < 0 ) { (*m_isQMisIDDecor)( *lep ) = 1; }
+    if ( ancestor_info.second == 39 || ancestor_info.second == 40 ) { (*m_isISR_FSR_PhDecor)( *lep ) = 1; }
 
-  } else {
-
+  } else if ( primitiveTruth->isPhoton() ) {
     (*m_isConvPhDecor)( *lep ) = 1;
-
   }
 
   ATH_MSG_DEBUG( "checkTruthQMisID() :: \n\nPrimitive TRUTH: \n" <<

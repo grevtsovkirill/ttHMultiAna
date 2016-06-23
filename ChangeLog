@@ -1,3 +1,7 @@
+2016-06-23 Marco Milesi <marco.milesi@cern.ch>
+	* Fixing check on ISR/FSR photon for QMisID case
+	* Make sure default values for truth branches are assigned correctly
+
 2016-06-23 Robert Wolff <robert.wolff@cern.ch>
 	* Working version with AnalysisTop,2.4.12
 	* random RunNumber/RunYear for MC from PURW tool

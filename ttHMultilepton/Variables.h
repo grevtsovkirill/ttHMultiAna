@@ -17,7 +17,8 @@ namespace ttHMultilepton {
     int total_leptons;
     int total_charge;
     char isQMisIDEvent;
-    char isConvPhEvent;
+    char isFakeEvent;
+    char isLepFromPhEvent; // Lepton coming from a non-GEANT photon
     float Mll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float Ptll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float DRll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];

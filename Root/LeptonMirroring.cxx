@@ -54,11 +54,11 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
   // truth matching
   CreateBranch(tree, &isPrompt,    "lep_isPrompt_", index);
-  // fake lepton (non-prompt and NOT QFlip)
+  // fake lepton (!prompt and NOT QFlip --> includes non prompt HF leptons, photon conversions, brems leptons which are not QMisID,...)
   CreateBranch(tree, &isFakeLep, "lep_isFakeLep_", index);
   CreateBranch(tree, &isQMisID, "lep_isQMisID_", index);
   CreateBranch(tree, &isConvPh, "lep_isConvPh_", index);
-  CreateBranch(tree, &isISR_FSR_Ph, "lep_isISRFSRPh_", index);
+  CreateBranch(tree, &isISR_FSR_Ph, "lep_isISR_FSR_Ph_", index);
   CreateBranch(tree, &isBrems, "lep_isBrems_", index);
 
   CreateBranch(tree, &isTruthMatched,"lep_isTruthMatched_", index);
