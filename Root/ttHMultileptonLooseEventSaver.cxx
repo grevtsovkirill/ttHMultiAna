@@ -42,7 +42,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pvNumber(0),
   m_puNumber(0),
   m_pv(nullptr),
-  m_runYear(2015),
+  m_runYear(0),
   m_HF_Classification(0.),
   m_met_met(0.),
   m_met_phi(0.),
@@ -170,7 +170,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_weight_bTagSF_70_eigen_C_down    .resize(m_config->btagging_num_C_eigenvars("FixedCutBEff_70") );
   m_weight_bTagSF_70_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars("FixedCutBEff_70") );
   m_weight_bTagSF_70_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars("FixedCutBEff_70") );
- 
+
   //init Tools
 
   //Pileup Reweighting Tool from TopToolStore
@@ -272,7 +272,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	std::stringstream branchName; branchName << "MV2c10_70_EventWeight_" << betterBtagNamedSyst(name);
 	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
 	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
-	  
+
 	systematicTree->makeOutputVariable(m_weight_bTagSF_70_eigen_Others_up[name],
 					   branchNameUp );
 	systematicTree->makeOutputVariable(m_weight_bTagSF_70_eigen_Others_down[name],
@@ -328,7 +328,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //scalar aka once per event stuff
     std::vector<ScalarWrapper*> scalarvec;
     systematicTree->makeOutputVariable(m_eventNumber, "EventNumber");
-    WrapS(scalarvec, [](const top::Event& event){ return event.m_info->runNumber(); }, *systematicTree, "RunNumber");
+    //WrapS(scalarvec, [](const top::Event& event){ return event.m_info->runNumber(); }, *systematicTree, "RunNumber");
+    systematicTree->makeOutputVariable(m_runNumber, "RunNumber");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->lumiBlock(); }, *systematicTree, "lbn");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
     WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
@@ -550,7 +551,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
-    
+
     //Trigger matching
 
     for (std::string trigger_name : triggernames) {
@@ -697,7 +698,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
-    
+
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
@@ -729,7 +730,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); }, *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
 
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
-    
+
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
@@ -959,14 +960,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 					 top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
 					 m_weight_bTagSF_70_eigen_Light_up,
 					 m_weight_bTagSF_70_eigen_Light_down, "FixedCutBEff_70");
-  
+
 	for (auto name : m_config->btagging_namedSysts("FixedCutBEff_70")) {
 	  m_weight_bTagSF_70_eigen_Others_up[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_UP, "FixedCutBEff_70", false, name );
 	  m_weight_bTagSF_70_eigen_Others_down[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_DOWN, "FixedCutBEff_70", false, name );
 	  //std::cout << "m_weight_bTagSF_70_eigen_Others_up[name] " << m_weight_bTagSF_70_eigen_Others_up[name] << std::endl;
 	}
 
-    
+
 
 	//normalise
 	for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars("FixedCutBEff_70"); ++i) {
@@ -985,7 +986,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	  m_weight_bTagSF_70_eigen_Others_up[name]   /= m_bTagSF_weight;
 	  m_weight_bTagSF_70_eigen_Others_down[name] /= m_bTagSF_weight;
 	}
-	
+
 	// JVT SF
 	m_JVT_weight_UP = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_UP);
 	m_JVT_weight_DOWN = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_DOWN);
@@ -1000,11 +1001,22 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //event info
   m_eventNumber = event.m_info->eventNumber();
-  m_runNumber = event.m_info->runNumber();
+  if (top::isSimulation(event)) {
+    m_runNumber = m_purwtool->getRandomRunNumber(*event.m_info);
+  } else {
+    m_runNumber = event.m_info->runNumber();
+  }
+  std::cout << m_runNumber << " ";
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  if ( (event.m_info->runNumber())>=296939 ) m_runYear=2016;
+  if (m_runNumber >= 290000) {
+    m_runYear = 2016;
+  } else if (m_runNumber > 0) {
+    m_runYear = 2015;
+  } else {
+    m_runYear = 0;
+  }
 
   // waiting for fix in TopCorrections
   //m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
@@ -1195,7 +1207,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CheckIsBlinded();
   doEventSFs();
 
-  
+
   //blame David and the other vector people for this...
   for(auto allel : event.m_electrons) {
     allel->auxdecor<char>("ttHpassOVR") = 0;
@@ -1221,7 +1233,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
 
-  
+
   //save ALL jets
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
@@ -1237,16 +1249,16 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       }
     }
   }
-  
+
   if(m_doSystematics) {
     //only selected jets
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
-    MakeJetIndices(goodJet, event.m_jets);    
+    MakeJetIndices(goodJet, event.m_jets);
   }
   else {
     //all jets
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
-    MakeJetIndices(goodJet, *calibratedJets);  
+    MakeJetIndices(goodJet, *calibratedJets);
   }
 
   // xAOD::ElectronContainer* calibratedElectrons(nullptr);

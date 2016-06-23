@@ -1,3 +1,7 @@
+2016-06-23 Robert Wolff <robert.wolff@cern.ch>
+	* Working version with AnalysisTop,2.4.12
+	* random RunNumber/RunYear for MC from PURW tool
+
 2016-06-09 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Update b-tagging SF nominal and uncertainties function calls
 	* Uncomment the PURW instance in data15/16 config (needed by Muon SF tools)
