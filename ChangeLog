@@ -1,3 +1,6 @@
+2016-06-23 Peter Onyisi <ponyisi@cern.ch>
+	* Update lepton trigger matching
+
 2016-06-23 Marco Milesi <marco.milesi@cern.ch>
 	* Fixing check on ISR/FSR photon for QMisID case
 	* Make sure default values for truth branches are assigned correctly
