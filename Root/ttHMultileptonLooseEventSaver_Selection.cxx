@@ -581,7 +581,8 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.isBrems = ( isBrems.isAvailable(el) ) ? isBrems(el) : -1;
   //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
 
-  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 || lep.isConvPh == 1 || lep.isISR_FSR_Ph == 1 ) );
+  // Whatever is not a prompt or a QMisID, is a fake to us!
+  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
 
   static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
   lep.isTruthMatched = ( isTruthMatched.isAvailable(el) ) ? isTruthMatched(el) : -1;
@@ -753,7 +754,8 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.isBrems = ( isBrems.isAvailable(mu) ) ? isBrems(mu) : -1;
   //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
 
-  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 || lep.isConvPh == 1 || lep.isISR_FSR_Ph == 1 ) );
+  // Whatever is not a prompt or a QMisID, is a fake to us!
+  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
 
   static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
   lep.isTruthMatched = ( isTruthMatched.isAvailable(mu) ) ? isTruthMatched(mu) : -1;
@@ -846,38 +848,9 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
     m_variables->quadlep_type = keyval;
     break;
   }
-  
-  ConstDataVector<xAOD::IParticleContainer> leptons(SG::VIEW_ELEMENTS);
-  
-  for (const auto elItr : *goodEl) { m_variables->total_charge += elItr->charge(); leptons.push_back( elItr ); }
-  for (const auto muItr : *goodMu) { m_variables->total_charge += muItr->charge(); leptons.push_back( muItr ); }
-  
-  
-  // Flag event if there's at least one truth-QMisID lepton
 
-  if(m_isMC) {
-  
-    static SG::AuxElement::Accessor<char> QMisID("isQMisID");
-    static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
-  
-    m_variables->isQMisIDEvent = 0; // default
-    for ( const auto lep : leptons ) {
-      if ( QMisID.isAvailable( *lep ) && QMisID( *lep ) == 1 ) {
-    	m_variables->isQMisIDEvent = 1;
-    	break;
-      }
-    }
-    m_variables->isConvPhEvent = 0; // default
-    for ( const auto lep : leptons ) {
-      if ( ConvPh.isAvailable( *lep ) && ConvPh( *lep ) == 1 ) {
-    	m_variables->isConvPhEvent = 1;
-    	break;
-      }
-    }  
-  } else {
-    m_variables->isQMisIDEvent = -1; // default for data
-    m_variables->isConvPhEvent = -1; // default for data
-  }
+  for (const auto elItr : *goodEl) { m_variables->total_charge += elItr->charge(); }
+  for (const auto muItr : *goodMu) { m_variables->total_charge += muItr->charge(); }
 
   // Do a sorting for objects
   // (pt, idx, leptype)
@@ -972,6 +945,39 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
       }
       m_variables->best_Z_other_Mll = m_variables->Mll[otherleps[0]][otherleps[1]-1];
     }
+  }
+
+  // Flag event if there's at least one truth-QMisID/truth-fake/truth-From-Non-GEANT-Photon lepton
+  //
+  // By construction, "isLepFromPhEvent==1" is a subset of "isFakeEvent==1"
+  //
+  if ( m_isMC && totleptons >= 1 ) {
+
+    m_variables->isQMisIDEvent = 0; // default
+    for (short idx = 0; idx < capped_totleptons; ++idx) {
+      if ( m_leptons[idx].isQMisID == 1 ) {
+    	m_variables->isQMisIDEvent = 1;
+    	break;
+      }
+    }
+    m_variables->isFakeEvent = 0; // default
+    for (short idx = 0; idx < capped_totleptons; ++idx) {
+      if ( m_leptons[idx].isFakeLep == 1 ) {
+    	m_variables->isFakeEvent = 1;
+    	break;
+      }
+    }
+    m_variables->isLepFromPhEvent = 0; // default
+    for (short idx = 0; idx < capped_totleptons; ++idx) {
+	if ( m_leptons[idx].isConvPh == 1 || m_leptons[idx].isISR_FSR_Ph == 1 ) {
+    	m_variables->isLepFromPhEvent = 1;
+    	break;
+      }
+    }
+  } else {
+    m_variables->isQMisIDEvent    = -1; // default for data
+    m_variables->isFakeEvent      = -1; // default for data
+    m_variables->isLepFromPhEvent = -1; // default for data
   }
 
 }
