@@ -1006,7 +1006,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   } else {
     m_runNumber = event.m_info->runNumber();
   }
-  std::cout << m_runNumber << " ";
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
