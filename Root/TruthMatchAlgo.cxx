@@ -531,10 +531,10 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   (*m_isQMisIDDecor)( *lep )     = 0;
   (*m_isISR_FSR_PhDecor)( *lep ) = 0;
   (*m_isConvPhDecor)( *lep )     = 0;
-  
+
   if ( primitiveTruth->isLepton() && !primitiveTruth->isPhoton() ) {
 
-    if ( isBkgLep ) { (*m_isBremsDecor)( *lep ) = 1; }
+    if ( isBkgLep && !(ancestor_info.second == 39 || ancestor_info.second == 40) ) { (*m_isBremsDecor)( *lep ) = 1; }
     if ( !(ancestor_info.second == 39 || ancestor_info.second == 40) && ( reco_norm_charge * truth_norm_charge ) < 0 ) { (*m_isQMisIDDecor)( *lep ) = 1; }
     if ( ancestor_info.second == 39 || ancestor_info.second == 40 ) { (*m_isISR_FSR_PhDecor)( *lep ) = 1; }
 
