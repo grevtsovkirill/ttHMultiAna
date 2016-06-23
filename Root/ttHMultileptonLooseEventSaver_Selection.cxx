@@ -8,6 +8,14 @@
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 #include "TH1F.h"
 
+
+template<typename T, typename U> T returnDecoIfAvailable(const U& obj, const std::string& deconame, T defaultval) {
+  //return defaultval;
+  T result = (obj.template isAvailable<T>(deconame) ? obj.template auxdataConst<T>(deconame) : defaultval);
+  return result;
+}
+
+
 std::shared_ptr<xAOD::ElectronContainer>
 ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
   xAOD::ElectronContainer* goodElectrons = new xAOD::ElectronContainer();
@@ -627,19 +635,17 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.truthRapidity = ( truthRapidity.isAvailable(el) ) ? truthRapidity(el) : -1;
 
   // trigger matching, electron pt > 25 GeV
-  if (!m_isMC) {
-    //if( el.pt() > 25e3 && (el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") || el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium") || el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose")) ) //data
-    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) ||
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) ||
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose") ? el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"):0) ) ) //data
+  if (m_runYear == 2015) {
+    if( el.pt() > 25e3 && (returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_L1EM20VH", (char) 0) ||
+			   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
+			   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)))
       lep.isTrigMatch = 1;
     else lep.isTrigMatch = 0;
-  }
-  else {
-    if( el.pt() > 25e3 && ((el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM20VH"):0) ||
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH") ? el.auxdataConst<char>("TRIGMATCH_HLT_e24_lhmedium_L1EM18VH"):0) ||
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e60_lhmedium") ? el.auxdataConst<char>("TRIGMATCH_HLT_e60_lhmedium"):0) ||
-			   (el.isAvailable<char>("TRIGMATCH_HLT_e120_lhloose") ? el.auxdataConst<char>("TRIGMATCH_HLT_e120_lhloose"):0) ) ) //MC
+  } else {
+    // both data and MC
+    if ( el.pt() > 25e3 && (returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhtight_nod0_ivarloose", (char) 0) ||
+			    returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
+			    returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)))
       lep.isTrigMatch = 1;
     else lep.isTrigMatch = 0;
   }
@@ -691,17 +697,24 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.z0 = mu.primaryTrackParticle()->z0();
   lep.vz = mu.primaryTrackParticle()->vz();
 
-  // trigger matching, require lepton pt > 21 GeV
-  if (mu.pt() > 25e3
-      && ((mu.isAvailable<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15"):0) || //2015
-	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu50") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu50"):0) ||
-	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu24_iloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_iloose"):0) ||  //2016
-	  //(mu.isAvailable<char>("TRIGMATCH_HLT_mu24_ivarloose") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu24_ivarloose"):0) ||
-	  (mu.isAvailable<char>("TRIGMATCH_HLT_mu40") ? mu.auxdataConst<char>("TRIGMATCH_HLT_mu40"):0) ))
-      //&& (mu.auxdataConst<char>("TRIGMATCH_HLT_mu20_iloose_L1MU15") || mu.auxdataConst<char>("TRIGMATCH_HLT_mu50")))
-    lep.isTrigMatch = 1;
-  else
-    lep.isTrigMatch = 0;
+  // trigger matching
+  if (m_runYear == 2015) {
+    if (mu.pt() > 21e3
+	&& (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)))
+      lep.isTrigMatch = 1;
+    else
+      lep.isTrigMatch = 0;
+  } else { // 2016
+    if (mu.pt() > 25e3
+	&& (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu24_ivarmedium", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)))
+      lep.isTrigMatch = 1;
+    else
+      lep.isTrigMatch = 0;
+  }
 
   // truth matching, fakes, QMisId
   int TruthType = -99;
