@@ -1,5 +1,6 @@
 2016-06-23 Peter Onyisi <ponyisi@cern.ch>
 	* Update lepton trigger matching
+	* Fix Higgs mass hypothesis in xsec files
 
 2016-06-23 Marco Milesi <marco.milesi@cern.ch>
 	* Fixing check on ISR/FSR photon for QMisID case
