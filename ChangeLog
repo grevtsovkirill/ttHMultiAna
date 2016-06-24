@@ -1,3 +1,6 @@
+2016-06-24 Rhys Roberts <rhys.thomas.roberts@cern.ch>
+	* Include prompt bdt vars in systematic ntuples
+
 2016-06-23 Peter Onyisi <ponyisi@cern.ch>
 	* Update lepton trigger matching
 	* Fix Higgs mass hypothesis in xsec files
