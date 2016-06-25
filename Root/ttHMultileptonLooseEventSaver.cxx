@@ -442,6 +442,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("sharesTrk"); },  *systematicTree, "electron_sharesTrk");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassJetOVR"); }, *systematicTree, "electron_passJetOR");
 
     //non-prompt bdt vars
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
@@ -554,9 +555,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
 
-
     Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassJetOVR"); }, *systematicTree, "muon_passJetOR");
 
     //non-prompt bdt vars
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
@@ -908,6 +909,43 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	     "Failed to initialize overlap removal tools for nominal selection");
   m_overlapRemovalTool[2] = std::move(m_ORtoolBox[2].masterTool);
 
+  // Ele - jet only
+  ORUtils::ORFlags OR_flags_nominal_ele_jet("OverlapRemovalttHEleJet",
+					   "",
+					   "ttHpassJetOVR");
+  OR_flags_nominal_ele_jet.doElectrons = m_config->useElectrons();
+  OR_flags_nominal_ele_jet.doMuons     = false;
+  OR_flags_nominal_ele_jet.doJets      = true;
+  OR_flags_nominal_ele_jet.doTaus      = false;
+  OR_flags_nominal_ele_jet.doPhotons   = false;
+  OR_flags_nominal_ele_jet.outputPassValue = true;
+  OR_flags_nominal_ele_jet.outputLabel = "ttHpassJetOVR";
+
+  top::check(ORUtils::recommendedTools(OR_flags_nominal_ele_jet,m_ORtoolBox[3]),
+	     "Failed to setup OR Tool box for ele-jet");
+
+  top::check(m_ORtoolBox[3].initialize(),
+	     "Failed to initialize overlap removal tools for electron jet");
+	     m_overlapRemovalTool[3] = std::move(m_ORtoolBox[3].masterTool);
+
+  // Muon - jet only
+  ORUtils::ORFlags OR_flags_nominal_muon_jet("OverlapRemovalttHMuonJet",
+					     "",
+					     "ttHpassJetOVR");
+  OR_flags_nominal_muon_jet.doElectrons = false;
+  OR_flags_nominal_muon_jet.doMuons     = m_config->useMuons();
+  OR_flags_nominal_muon_jet.doJets      = true;
+  OR_flags_nominal_muon_jet.doTaus      = false;
+  OR_flags_nominal_muon_jet.doPhotons   = false;
+  OR_flags_nominal_muon_jet.outputPassValue = true;
+  OR_flags_nominal_muon_jet.outputLabel = "ttHpassJetOVR";
+
+  top::check(ORUtils::recommendedTools(OR_flags_nominal_muon_jet,m_ORtoolBox[4]),
+	     "Failed to setup OR Tool box for muon-jet");
+
+  top::check(m_ORtoolBox[4].initialize(),
+	     "Failed to initialize overlap removal tools for muon jet");
+	     m_overlapRemovalTool[4] = std::move(m_ORtoolBox[4].masterTool);
 
 }
 
@@ -1202,10 +1240,15 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodMu = SelectMuons(event);
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
+
   //OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
   top::check( m_overlapRemovalTool[2]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal-but-tau OR" );
   top::check( m_overlapRemovalTool[0]->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
+
+  top::check( m_overlapRemovalTool[3]->removeOverlaps( goodEl.get(), 0, goodJet.get() ) , "Failed to do ele-jet OR" );
+  top::check( m_overlapRemovalTool[4]->removeOverlaps( 0, goodMu.get(), goodJet.get() ) , "Failed to do muon-jet OR" );
+  
   OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   CopyLeptons(goodEl, goodMu);
 
@@ -1222,17 +1265,23 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //blame David and the other vector people for this...
   for(auto allel : event.m_electrons) {
     allel->auxdecor<char>("ttHpassOVR") = 0;
+    allel->auxdecor<char>("ttHpassJetOVR") = 0;
     for(auto goodel : *goodEl ) {
-      if( goodel->p4() == allel->p4() )
-	allel->auxdecor<char>("ttHpassOVR") = goodel->auxdecor<char>("ttHpassOVR");
+      if( goodel->p4() == allel->p4() ) {
+	allel->auxdecor<char>("ttHpassOVR")    = goodel->auxdecor<char>("ttHpassOVR");
+	allel->auxdecor<char>("ttHpassJetOVR") = goodel->auxdecor<char>("ttHpassJetOVR");
+      }
     }
   }
 
   for(auto allmu : event.m_muons) {
     allmu->auxdecor<char>("ttHpassOVR") = 0;
+    allmu->auxdecor<char>("ttHpassJetOVR") = 0;
     for(auto goodmu : *goodMu ) {
-      if( goodmu->p4() == allmu->p4() )
-	allmu->auxdecor<char>("ttHpassOVR") = goodmu->auxdecor<char>("ttHpassOVR");
+      if( goodmu->p4() == allmu->p4() ) {
+	allmu->auxdecor<char>("ttHpassOVR")    = goodmu->auxdecor<char>("ttHpassOVR");
+	allmu->auxdecor<char>("ttHpassJetOVR") = goodmu->auxdecor<char>("ttHpassJetOVR");
+      }
     }
   }
 
