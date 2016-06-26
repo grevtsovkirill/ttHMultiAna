@@ -116,9 +116,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
   TauSelectionTool                       m_tauSelectionEleOLR;
-  // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau; 3 = ele-jet; 4= muon-jet
-  ORUtils::ToolBox                       m_ORtoolBox[5];
-  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[5];
+  // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau; 
+  ORUtils::ToolBox                       m_ORtoolBox[3];
+  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
 
 
   //for convenience of use with Wrap stuff

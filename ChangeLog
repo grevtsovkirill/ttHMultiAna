@@ -1,6 +1,3 @@
-2016-06-25 Rhys Roberts <rhys.thomas.roberts@cern.ch>
-	* Add flag to leptons for lepton-jet OR
-
 2016-06-24 Rhys Roberts <rhys.thomas.roberts@cern.ch>
 	* Include prompt bdt vars in systematic ntuples
 
