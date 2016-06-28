@@ -46,6 +46,11 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_HF_Classification(0.),
   m_met_met(0.),
   m_met_phi(0.),
+  m_met_sumet(0.),                                                                                                                                               
+  MET_softTrk_et(-999.0),    
+  MET_softTrk_phi(-999.0),                                                                                                                                   
+  MET_softClus_et(-999.0),                                                                                                                                   
+  MET_softClus_phi(-999.0), 
   m_truthMET_px(-999.0),
   m_truthMET_py(-999.0),
   m_truthMET_phi(-999.0),
@@ -365,6 +370,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
+    systematicTree->makeOutputVariable(m_met_sumet, "MET_RefFinal_sumet");    
+    systematicTree->makeOutputVariable(MET_softTrk_et, "MET_RefFinal_softTrk_et");                                                                               
+    systematicTree->makeOutputVariable(MET_softTrk_phi, "MET_RefFinal_softTrk_phi");                                                                             
+    systematicTree->makeOutputVariable(MET_softClus_et, "MET_RefFinal_softClus_et");                                                                         
+    systematicTree->makeOutputVariable(MET_softClus_phi, "MET_RefFinal_softClus_phi"); 
 
     if(!m_doSystematics) {
       systematicTree->makeOutputVariable(m_truthMET_px, "MET_Truth_px");
@@ -1070,6 +1080,19 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //met
   m_met_met = event.m_met->met();
   m_met_phi = event.m_met->phi();
+  m_met_sumet = event.m_met->sumet();
+
+  const xAOD::MissingETContainer *newMetContainer = new xAOD::MissingETContainer();                  
+  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET_Truth container");            
+  
+  const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];                                                                                       
+  MET_softTrk_et = softTrkMet->met();                                                                                                                            
+  MET_softTrk_phi = softTrkMet->phi();                                                                                                                           
+  
+  const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];                                                                                            
+  MET_softClus_et = softClusMet->met();                                                                                                                          
+  MET_softClus_phi = softClusMet->phi();   
+
 
   if(top::isSimulation(event) and !m_doSystematics) {
     // MET Truth

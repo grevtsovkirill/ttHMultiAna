@@ -192,7 +192,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //met
   float m_met_met;
   float m_met_phi;
-
+  float m_met_sumet; 
+  float MET_softTrk_et;                                                                                                                                           
+  float MET_softTrk_phi;                                                                                                                                          
+  float MET_softClus_et;                                                                                                                                          
+  float MET_softClus_phi;
+  
   // MET Truth
   float m_truthMET_px;
   float m_truthMET_py;
