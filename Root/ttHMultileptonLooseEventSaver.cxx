@@ -1239,10 +1239,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   for(auto alltau : event.m_tauJets) {
-    alltau->auxdecor<char>("ttHpassOVR") = 0;
+    alltau->auxdecor<char>("ttHpassTauOVR") = 0;
     for(auto goodtau : *goodTau ) {
       if( goodtau->p4() == alltau->p4() )
-	alltau->auxdecor<char>("ttHpassOVR") = goodtau->auxdecor<char>("ttHpassOVR");
+	alltau->auxdecor<char>("ttHpassTauOVR") = goodtau->auxdecor<char>("ttHpassTauOVR");
     }
   }
 
