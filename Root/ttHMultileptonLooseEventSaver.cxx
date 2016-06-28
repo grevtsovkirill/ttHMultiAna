@@ -564,7 +564,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
 
-    Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
 
     //non-prompt bdt vars
