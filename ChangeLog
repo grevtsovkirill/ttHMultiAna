@@ -1,3 +1,9 @@
+2016-06-29 Robert Wolff <robert.wolff@cern.ch>
+	* Muon ICHEP recommendations
+	* Instructions for new b-tagging CDI file
+	* latest TauAnalysisTools
+	* latest Electron recommendation
+
 2016-06-28 Marco Sessa <marco.sessa@cern.ch>
 	* Add new MET variables in the output tree: sumet, softTrk_et, softTrk_phi, softClus_et, softClus_phi
 
