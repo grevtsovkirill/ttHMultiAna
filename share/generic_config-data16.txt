@@ -51,7 +51,7 @@ TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_70
+BTaggingWP FixedCutBEff_70 FixedCutBEff_77
 
 #Other cuts, overlaps, bkgs..
 FakesControlRegionDoLooseMC False
@@ -73,8 +73,8 @@ GOODCALO
 PRIVTX
 COUNTHISTO
 JETCLEAN LooseBad
-#TRIGDEC HLT_mu26_imedium 
-#TRIGMATCH HLT_mu26_imedium 
+#TRIGDEC HLT_mu26_imedium
+#TRIGMATCH HLT_mu26_imedium
 TTHMULTILEP
 DUPLICATEVETO
 SAVE

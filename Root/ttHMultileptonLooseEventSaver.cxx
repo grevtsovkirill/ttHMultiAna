@@ -46,11 +46,11 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_HF_Classification(0.),
   m_met_met(0.),
   m_met_phi(0.),
-  m_met_sumet(0.),                                                                                                                                               
-  MET_softTrk_et(-999.0),    
-  MET_softTrk_phi(-999.0),                                                                                                                                   
-  MET_softClus_et(-999.0),                                                                                                                                   
-  MET_softClus_phi(-999.0), 
+  m_met_sumet(0.),
+  MET_softTrk_et(-999.0),
+  MET_softTrk_phi(-999.0),
+  MET_softClus_et(-999.0),
+  MET_softClus_phi(-999.0),
   m_truthMET_px(-999.0),
   m_truthMET_py(-999.0),
   m_truthMET_phi(-999.0),
@@ -230,6 +230,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c10_70_EventWeight");
+    systematicTree->makeOutputVariable(m_bTagSF77_weight, "MV2c10_77_EventWeight");
     systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
 
     if ( m_doSFSystematics ) {
@@ -370,11 +371,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
-    systematicTree->makeOutputVariable(m_met_sumet, "MET_RefFinal_sumet");    
-    systematicTree->makeOutputVariable(MET_softTrk_et, "MET_RefFinal_softTrk_et");                                                                               
-    systematicTree->makeOutputVariable(MET_softTrk_phi, "MET_RefFinal_softTrk_phi");                                                                             
-    systematicTree->makeOutputVariable(MET_softClus_et, "MET_RefFinal_softClus_et");                                                                         
-    systematicTree->makeOutputVariable(MET_softClus_phi, "MET_RefFinal_softClus_phi"); 
+    systematicTree->makeOutputVariable(m_met_sumet, "MET_RefFinal_sumet");
+    systematicTree->makeOutputVariable(MET_softTrk_et, "MET_RefFinal_softTrk_et");
+    systematicTree->makeOutputVariable(MET_softTrk_phi, "MET_RefFinal_softTrk_phi");
+    systematicTree->makeOutputVariable(MET_softClus_et, "MET_RefFinal_softClus_et");
+    systematicTree->makeOutputVariable(MET_softClus_phi, "MET_RefFinal_softClus_phi");
 
     if(!m_doSystematics) {
       systematicTree->makeOutputVariable(m_truthMET_px, "MET_Truth_px");
@@ -516,7 +517,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
       bool m_writeAllNonPromptInputVars = true;
 
-      if(m_writeAllNonPromptInputVars) {	
+      if(m_writeAllNonPromptInputVars) {
 	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
 	for(std::string var: float_vars) {
 	  Wrap2(elevec, [=](const xAOD::Electron& ele) {
@@ -577,7 +578,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	short m_mu_nonprompt_short = -99;
 	static SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_TrackJetNTrack");
 	if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_short = AccessorNonPrompt(mu);
-	return (short) m_mu_nonprompt_short; }, *systematicTree, "muon_PromptLepton_TrackJetNTrack");  
+	return (short) m_mu_nonprompt_short; }, *systematicTree, "muon_PromptLepton_TrackJetNTrack");
 
     //Trigger matching
 
@@ -956,6 +957,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     if(m_sfRetriever){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
+      m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
       m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
 
       //do sys weights only in "nominal" tree
@@ -1082,16 +1084,16 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_met_phi = event.m_met->phi();
   m_met_sumet = event.m_met->sumet();
 
-  const xAOD::MissingETContainer *newMetContainer = new xAOD::MissingETContainer();                  
-  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET_Truth container");            
-  
-  const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];                                                                                       
-  MET_softTrk_et = softTrkMet->met();                                                                                                                            
-  MET_softTrk_phi = softTrkMet->phi();                                                                                                                           
-  
-  const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];                                                                                            
-  MET_softClus_et = softClusMet->met();                                                                                                                          
-  MET_softClus_phi = softClusMet->phi();   
+  const xAOD::MissingETContainer *newMetContainer = new xAOD::MissingETContainer();
+  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET_Truth container");
+
+  const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];
+  MET_softTrk_et = softTrkMet->met();
+  MET_softTrk_phi = softTrkMet->phi();
+
+  const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];
+  MET_softClus_et = softClusMet->met();
+  MET_softClus_phi = softClusMet->phi();
 
 
   if(top::isSimulation(event) and !m_doSystematics) {
@@ -1228,7 +1230,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
   top::check( m_overlapRemovalTool[2]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal-but-tau OR" );
   top::check( m_overlapRemovalTool[0]->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
-  
+
   OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   CopyLeptons(goodEl, goodMu);
 

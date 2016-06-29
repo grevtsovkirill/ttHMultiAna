@@ -116,7 +116,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
   TauSelectionTool                       m_tauSelectionEleOLR;
-  // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau; 
+  // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
 
@@ -151,6 +151,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_pileup_weight_DOWN;
   //btag SF weights
   double m_bTagSF_weight;
+  double m_bTagSF77_weight;
   std::vector<float> m_weight_bTagSF_70_eigen_B_up;
   std::vector<float> m_weight_bTagSF_70_eigen_B_down;
   std::vector<float> m_weight_bTagSF_70_eigen_C_up;
@@ -192,12 +193,12 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //met
   float m_met_met;
   float m_met_phi;
-  float m_met_sumet; 
-  float MET_softTrk_et;                                                                                                                                           
-  float MET_softTrk_phi;                                                                                                                                          
-  float MET_softClus_et;                                                                                                                                          
+  float m_met_sumet;
+  float MET_softTrk_et;
+  float MET_softTrk_phi;
+  float MET_softClus_et;
   float MET_softClus_phi;
-  
+
   // MET Truth
   float m_truthMET_px;
   float m_truthMET_py;
