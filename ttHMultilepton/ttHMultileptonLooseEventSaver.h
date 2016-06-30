@@ -1,7 +1,6 @@
 #ifndef TTHMULTILEPTONLOOSEEVENTSAVER_H_
 #define TTHMULTILEPTONLOOSEEVENTSAVER_H_
 
-
 // Trigger
 #include "TrigDecisionTool/TrigDecisionTool.h"
 
