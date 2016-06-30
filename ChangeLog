@@ -1,6 +1,10 @@
+2016-09-30 Robert Wolff <robert.wolff@cern.ch>
+	* Bugfix for running on data
+
 2016-06-29 Harish Potti <harish.potti@cern.ch>
 	* Move to AnalysisTop, 2.4.13
 	* Update grid submission scripts
+
 2016-06-29 Robert Wolff <robert.wolff@cern.ch>
 	* Muon ICHEP recommendations
 	* Instructions for new b-tagging CDI file

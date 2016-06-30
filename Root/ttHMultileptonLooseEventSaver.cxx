@@ -169,13 +169,14 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_sherpaRW = new PMGCorrsAndSysts(false);
 
   //prepare btag eigen vectors
-  m_weight_bTagSF_70_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars("FixedCutBEff_70") );
-  m_weight_bTagSF_70_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars("FixedCutBEff_70") );
-  m_weight_bTagSF_70_eigen_C_up      .resize(m_config->btagging_num_C_eigenvars("FixedCutBEff_70") );
-  m_weight_bTagSF_70_eigen_C_down    .resize(m_config->btagging_num_C_eigenvars("FixedCutBEff_70") );
-  m_weight_bTagSF_70_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars("FixedCutBEff_70") );
-  m_weight_bTagSF_70_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars("FixedCutBEff_70") );
-
+  if (m_isMC) {
+    m_weight_bTagSF_70_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars("FixedCutBEff_70") );
+    m_weight_bTagSF_70_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars("FixedCutBEff_70") );
+    m_weight_bTagSF_70_eigen_C_up      .resize(m_config->btagging_num_C_eigenvars("FixedCutBEff_70") );
+    m_weight_bTagSF_70_eigen_C_down    .resize(m_config->btagging_num_C_eigenvars("FixedCutBEff_70") );
+    m_weight_bTagSF_70_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars("FixedCutBEff_70") );
+    m_weight_bTagSF_70_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars("FixedCutBEff_70") );
+  }
   //init Tools
 
   //Pileup Reweighting Tool from TopToolStore
