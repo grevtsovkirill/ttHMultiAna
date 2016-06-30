@@ -25,7 +25,7 @@ mc15c                          = TopExamples.grid.Samples(['ptag_p2666'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',mc15c)
 all_samples = mc15c
 
-TopExamples.grid.submit(config,mc15c)
+#TopExamples.grid.submit(config,mc15c)
 
 ####################################################################################
 #Nominal
