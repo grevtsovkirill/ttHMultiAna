@@ -858,7 +858,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   OR_flags.doTaus      = false;
   OR_flags.doPhotons   = false;
   OR_flags.outputLabel = "sharesTrk";
-
+  
   top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
 	     "Failed to setup OR Tool box");
 
@@ -883,6 +883,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   top::check(ORUtils::recommendedTools(OR_flags_nominal,m_ORtoolBox[1]),
 	     "Failed to setup OR Tool box for nominal selections");
+
+  top::check(m_ORtoolBox[1].muJetORT.setProperty("MuJetPtRatio", 100000),
+  	     "Failed to set MuJetPtRatio to a crazy threshold");
+  top::check(m_ORtoolBox[1].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
+             "Failed to set MuJetTrkPtRatio to a crazy threshold");
 
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
@@ -914,6 +919,12 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
   // 	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
+
+  top::check(m_ORtoolBox[2].muJetORT.setProperty("MuJetPtRatio", 100000),
+             "Failed to set MuJetPtRatio to a crazy threshold");
+  top::check(m_ORtoolBox[2].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
+             "Failed to set MuJetTrkPtRatio to a crazy threshold");
+
 
   top::check(m_ORtoolBox[2].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
