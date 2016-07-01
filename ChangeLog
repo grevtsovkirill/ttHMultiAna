@@ -1,4 +1,7 @@
 2016-07-01 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Revert to Run-1 OLR
+
+2016-07-01 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Increase MuJetPtRatio and MuJetTrkPtRatio to 100000 to eliminate these requirements from ASG OLR
 
 2016-09-30 Robert Wolff <robert.wolff@cern.ch>
