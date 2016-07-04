@@ -1,3 +1,7 @@
+2016-07-04 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Revert to Run-1 OLR (bug-fix)
+	* Include new MuonEfficiencyCorrections and IsolationCorrections locally
+
 2016-07-01 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Revert to Run-1 OLR
 

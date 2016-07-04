@@ -11,6 +11,8 @@ rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysis
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCorrections/tags/TopCorrections-00-00-86
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-01
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopAnalysis/tags/TopAnalysis-00-04-49
+rc checkout_pkg atlasoff/PhysicsAnalysis/MuonID/MuonIDAnalysis/MuonEfficiencyCorrections/tags/MuonEfficiencyCorrections-03-03-06
+rc checkout_pkg atlasoff/PhysicsAnalysis/ElectronPhotonID/IsolationCorrections/tags/IsolationCorrections-00-01-04
 rc build
 
 echo "Alright - done."
