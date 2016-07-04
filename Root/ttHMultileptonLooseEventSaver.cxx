@@ -1238,14 +1238,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
 
-  OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  /*
+  //OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
+  
   top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
   top::check( m_overlapRemovalTool[2]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal-but-tau OR" );
   top::check( m_overlapRemovalTool[0]->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
 
   OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  */
+  
   CopyLeptons(goodEl, goodMu);
 
   // dont do the rest if we skim here anyway
