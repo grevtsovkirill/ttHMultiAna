@@ -17,7 +17,7 @@ config.destSE        = 'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere)
 ###############################################################################
 #Systematics
 config.settingsFile  = 'generic_config-mc15-Sys.txt'
-config.suffix        = '29.06.16.Sys'
+config.suffix        = '05.07.16.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
@@ -25,12 +25,12 @@ mc15c                          = TopExamples.grid.Samples(['ptag_p2666'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',mc15c)
 all_samples = mc15c
 
-#TopExamples.grid.submit(config,mc15c)
+TopExamples.grid.submit(config,mc15c)
 
 ####################################################################################
 #Nominal
 config.settingsFile  = 'generic_config-mc15.txt'
-config.suffix = '29.06.16.Nominal'
+config.suffix = '05.07.16.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
@@ -40,7 +40,7 @@ TopExamples.grid.submit(config,mc15c)
 ########################################################################################
 #data
 config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '29.06.16.Data'
+config.suffix = '05.07.16.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 

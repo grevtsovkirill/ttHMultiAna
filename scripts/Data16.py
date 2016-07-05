@@ -38,6 +38,14 @@ TopExamples.grid.Add('data16').datasets = [
 'data16_13TeV.00301918.physics_Main.merge.DAOD_HIGG8D1.f709_m1611_p2667',
 'data16_13TeV.00301932.physics_Main.merge.DAOD_HIGG8D1.f709_m1611_p2667',
 'data16_13TeV.00301973.physics_Main.merge.DAOD_HIGG8D1.f709_m1611_p2667',
+'data16_13TeV.00302053.physics_Main.merge.DAOD_HIGG8D1.f709_m1611_p2689',
+'data16_13TeV.00302137.physics_Main.merge.DAOD_HIGG8D1.f709_m1620_p2689',
+'data16_13TeV.00302265.physics_Main.merge.DAOD_HIGG8D1.f709_m1620_p2689',
+'data16_13TeV.00302269.physics_Main.merge.DAOD_HIGG8D1.f709_m1620_p2689',
+'data16_13TeV.00302300.physics_Main.merge.DAOD_HIGG8D1.f711_m1620_p2689',
+'data16_13TeV.00302347.physics_Main.merge.DAOD_HIGG8D1.f711_m1620_p2689',
+'data16_13TeV.00302380.physics_Main.merge.DAOD_HIGG8D1.f711_m1620_p2689',
+'data16_13TeV.00302391.physics_Main.merge.DAOD_HIGG8D1.f711_m1620_p2689',
 ]
 
 def get_grlruns(grl):
@@ -58,8 +66,8 @@ def get_grlruns(grl):
 if __name__ == '__main__':
    
     scope = 'data16_13TeV'
-    ptag  = '_p2667'            #p-tag of Data Derivations
-    grl   = 'data16_13TeV.periodAllYear_DetStatus-v79-pro20-05_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml'
+    ptag  = '_p2689'            #p-tag of Data Derivations
+    grl   = 'data16_13TeV.periodAllYear_DetStatus-v79-pro20-06_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml'
         #specify ONLY the name of grl file. By default, it will look for it in ttHMultilepton/data folder 
     
     grl_runs = get_grlruns(grl)
