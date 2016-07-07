@@ -59,7 +59,7 @@
  361085           7.4151            0.91         1.0    --    -999   2               Sherpa                             WZ->qqvv  Full  
  361086           2.3647            0.91         1.0    --    -999   2               Sherpa                             ZZ->qqll  Full  
  361087           4.6336            0.91         1.0    --    -999   2               Sherpa                             ZZ->qqvv  Full  
- 361090           1.5948            0.91         1.0    --    -999   1               Sherpa                          llll_M4l100  Full  
+ 361090           1.5948            0.91         1.0    --    -999   2               Sherpa                          llll_M4l100  Full  
  361091           24.885            0.91         1.0    --    -999   1               Sherpa              WplvWmqq_SHv21_improved  Full  
  361092           24.857            0.91         1.0    --    -999   1               Sherpa              WpqqWmlv_SHv21_improved  Full  
  361093           11.494            0.91         1.0    --    -999   1               Sherpa                WlvZqq_SHv21_improved  Full  
