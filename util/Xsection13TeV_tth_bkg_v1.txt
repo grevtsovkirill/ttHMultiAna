@@ -52,13 +52,22 @@
  361078           0.3763            0.91         1.0    --    -999   2               Sherpa                        ggllvvNoHiggs  Full  
  361079           0.5374            0.91         1.0    --    -999   2               Sherpa                      ggllvvOnlyHiggs  Full  
  361080           0.0508            0.91         1.0    --    -999   2               Sherpa                        ggllvv_ZZcuts  Full  
- 361081           25.995            0.91         1.0    --    -999   1               Sherpa                             WW->lvqq  Full  
- 361082           25.974            0.91         1.0    --    -999   1               Sherpa                             WW->qqlv  Full  
- 361083           12.543            0.91         1.0    --    -999   1               Sherpa                             WZ->lvqq  Full  
- 361084           3.7583            0.91         1.0    --    -999   1               Sherpa                             WZ->qqll  Full  
- 361085           7.4151            0.91         1.0    --    -999   1               Sherpa                             WZ->qqvv  Full  
- 361086           2.3647            0.91         1.0    --    -999   1               Sherpa                             ZZ->qqll  Full  
- 361087           4.6336            0.91         1.0    --    -999   1               Sherpa                             ZZ->qqvv  Full  
+ 361081           25.995            0.91         1.0    --    -999   2               Sherpa                             WW->lvqq  Full  
+ 361082           25.974            0.91         1.0    --    -999   2               Sherpa                             WW->qqlv  Full  
+ 361083           12.543            0.91         1.0    --    -999   2               Sherpa                             WZ->lvqq  Full  
+ 361084           3.7583            0.91         1.0    --    -999   2               Sherpa                             WZ->qqll  Full  
+ 361085           7.4151            0.91         1.0    --    -999   2               Sherpa                             WZ->qqvv  Full  
+ 361086           2.3647            0.91         1.0    --    -999   2               Sherpa                             ZZ->qqll  Full  
+ 361087           4.6336            0.91         1.0    --    -999   2               Sherpa                             ZZ->qqvv  Full  
+ 361090           1.5948            0.91         1.0    --    -999   1               Sherpa                          llll_M4l100  Full  
+ 361091           24.885            0.91         1.0    --    -999   1               Sherpa              WplvWmqq_SHv21_improved  Full  
+ 361092           24.857            0.91         1.0    --    -999   1               Sherpa              WpqqWmlv_SHv21_improved  Full  
+ 361093           11.494            0.91         1.0    --    -999   1               Sherpa                WlvZqq_SHv21_improved  Full  
+ 361094           3.4234            0.91         1.0    --    -999   1               Sherpa                WqqZll_SHv21_improved  Full  
+ 361095            6.777            0.91         1.0    --    -999   1               Sherpa                WqqZvv_SHv21_improved  Full  
+ 361096           16.445            0.91         1.0    --    -999   1               Sherpa                ZqqZll_SHv21_improved  Full  
+ 361097           16.432            0.91         1.0    --    -999   1               Sherpa                ZqqZvv_SHv21_improved  Full  
+
 
 # Z+Jets Sherpa from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/CentralMC15ProductionList
  361372          1716.59          0.9013         1.0    --    -999   1               Sherpa                Zee_Pt0_70_CVetoBVeto  Full  
@@ -179,25 +188,33 @@
  361514           7.2749           1.232         1.0    --    -999   2     MadGraph+Pythia8                          Ztautau_Np4  Full  
 
 #ttV
- 410066          0.17656            1.32         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np0  Full  
- 410067          0.14062            1.32         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np1  Full  
- 410068           0.1368            1.32         1.0    --    -999   1     MadGraph+Pythia8                              ttW_Np2  Full  
+ 410066          0.17656            1.32         1.0    --    -999   2     MadGraph+Pythia8                              ttW_Np0  Full  
+ 410067          0.14062            1.32         1.0    --    -999   2     MadGraph+Pythia8                              ttW_Np1  Full  
+ 410068           0.1368            1.32         1.0    --    -999   2     MadGraph+Pythia8                              ttW_Np2  Full  
  410069         0.018103             1.2         1.0    --    -999   2     MadGraph+Pythia8                     ttZllonshell_Np0  Full  
  410070         0.030629             1.2         1.0    --    -999   2     MadGraph+Pythia8                     ttZllonshell_Np1  Full  
  410073          0.17321            1.47         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np0  Full  
  410074          0.16533            1.47         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np1  Full  
  410075          0.17427            1.47         1.0    --    -999   1     MadGraph+Pythia8                          ttZnnqq_Np2  Full  
- 410080        0.0091622          1.0042         1.0    --    -999   1     MadGraph+Pythia8                               4topSM  Full  
- 410081        0.0080975          1.2231         1.0    --    -999   1     MadGraph+Pythia8                              ttbarWW  Full  
- 410111        0.0096235            1.51         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np0  Full  
- 410112         0.017344            1.51         1.0    --    -999   1     MadGraph+Pythia8                             ttee_Np1  Full  
- 410113        0.0096462            1.51         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np0  Full  
- 410114         0.017361            1.51         1.0    --    -999   1     MadGraph+Pythia8                           ttmumu_Np1  Full  
- 410115        0.0098874            1.51         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np0  Full  
- 410116          0.01779            1.51         1.0    --    -999   1     MadGraph+Pythia8                         tttautau_Np1  Full  
+ 410080        0.0091622          1.0042         1.0    --    -999   2     MadGraph+Pythia8                               4topSM  Full  
+ 410081        0.0080975          1.2231         1.0    --    -999   2     MadGraph+Pythia8                              ttbarWW  Full  
+ 410111        0.0096235            1.51         1.0    --    -999   2     MadGraph+Pythia8                             ttee_Np0  Full  
+ 410112         0.017344            1.51         1.0    --    -999   2     MadGraph+Pythia8                             ttee_Np1  Full  
+ 410113        0.0096462            1.51         1.0    --    -999   2     MadGraph+Pythia8                           ttmumu_Np0  Full  
+ 410114         0.017361            1.51         1.0    --    -999   2     MadGraph+Pythia8                           ttmumu_Np1  Full  
+ 410115        0.0098874            1.51         1.0    --    -999   2     MadGraph+Pythia8                         tttautau_Np0  Full  
+ 410116          0.01779            1.51         1.0    --    -999   2     MadGraph+Pythia8                         tttautau_Np1  Full  
  410142          0.11309            1.09         1.0    --    -999   2               Sherpa                                 ttll   AF2  
  410143           0.6881             1.1         1.0    --    -999   2               Sherpa                              ttZnnqq   AF2  
  410144           0.6008            1.04         1.0    --    -999   2               Sherpa                                  ttW   AF2  
+
+# NLO+ttV
+ 410155           0.5483             1.1         1.0    --    -999   1      aMc@Nlo+Pythia8                                  ttW  Full  
+ 410156          0.15499            1.11         1.0    --    -999   1      aMc@Nlo+Pythia8                              ttZnunu  Full  
+ 410157          0.52771            1.11         1.0    --    -999   1      aMc@Nlo+Pythia8                                ttZqq  Full  
+ 410218         0.036888            1.12         1.0    --    -999   1      aMc@Nlo+Pythia8                                 ttee  Full  
+ 410219         0.036895            1.12         1.0    --    -999   1      aMc@Nlo+Pythia8                               ttmumu  Full  
+ 410220         0.036599            1.12         1.0    --    -999   1      aMc@Nlo+Pythia8                             tttautau  Full  
 
 #Double Charged Higgs
  302449         0.020179             1.0         1.0    --    -999   2              Pythia8                               DCH300  AFII  
@@ -529,6 +546,9 @@
  301896           15.297               1         1.0    --    -999   2               Sherpa                    taunugammaPt35_70  Full  
  301897            1.529               1         1.0    --    -999   2               Sherpa                    taunugammaPt70_14  Full  
  301898           0.2426               1         1.0    --    -999   2               Sherpa                      taunugammaPt140  Full  
+
+
+
 
 
 
