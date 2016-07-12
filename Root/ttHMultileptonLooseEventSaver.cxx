@@ -180,7 +180,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //init Tools
 
   //Pileup Reweighting Tool from TopToolStore
-  if( m_purwtool.retrieve() ) {}
+  top::check( m_purwtool.retrieve() , "Failed to retrieve PileupReweightingTool" );
 
   //Trigger Tool from TopToolStore
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
@@ -566,8 +566,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
 
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
 
     //non-prompt bdt vars
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
@@ -930,6 +930,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	     "Failed to initialize overlap removal tools for nominal selection");
   m_overlapRemovalTool[2] = std::move(m_ORtoolBox[2].masterTool);
 
+  //for decorating the OR decision back onto the vectors
+  m_decor_ttHpassOVR    = new SG::AuxElement::Decorator< char >("ttHpassOVR");
+  m_decor_ttHpassTauOVR = new SG::AuxElement::Decorator< char >("ttHpassTauOVR");
+
+  
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -1052,7 +1057,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   // waiting for fix in TopCorrections
-  //m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
+  m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
 
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
@@ -1062,7 +1067,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
 
   // Truth Matching
-  if ( top::isSimulation(event) ) {
+  if ( top::isSimulation(event) and !m_doSystematics ) {
     top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
   }
 
@@ -1096,8 +1101,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_met_phi = event.m_met->phi();
   m_met_sumet = event.m_met->sumet();
 
-  const xAOD::MissingETContainer *newMetContainer = new xAOD::MissingETContainer();
-  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET_Truth container");
+  const xAOD::MissingETContainer *newMetContainer(nullptr);
+  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET container");
 
   const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];
   MET_softTrk_et = softTrkMet->met();
@@ -1106,7 +1111,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];
   MET_softClus_et = softClusMet->met();
   MET_softClus_phi = softClusMet->phi();
-
 
   if(top::isSimulation(event) and !m_doSystematics) {
     // MET Truth
@@ -1124,7 +1128,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //MC particle
-  if (event.m_truth != nullptr) {
+  if (event.m_truth != nullptr and !m_doSystematics) {
 
     if( !m_doSystematics ){
       m_mc_m       .clear();
@@ -1260,28 +1264,34 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //blame David and the other vector people for this...
   for(auto allel : event.m_electrons) {
-    allel->auxdecor<char>("ttHpassOVR") = 0;
+    (*m_decor_ttHpassOVR)(*allel) = 0;
+    //allel->auxdecor<char>("ttHpassOVR") = 0;
     for(auto goodel : *goodEl ) {
       if( goodel->p4() == allel->p4() ) {
-	allel->auxdecor<char>("ttHpassOVR")    = goodel->auxdecor<char>("ttHpassOVR");
+	(*m_decor_ttHpassOVR)(*allel) = (*m_decor_ttHpassOVR)(*goodel);
+	//allel->auxdecor<char>("ttHpassOVR")    = goodel->auxdecor<char>("ttHpassOVR");
       }
     }
   }
 
   for(auto allmu : event.m_muons) {
-    allmu->auxdecor<char>("ttHpassOVR") = 0;
+    //allmu->auxdecor<char>("ttHpassOVR") = 0;
+    (*m_decor_ttHpassOVR)(*allmu) = 0;
     for(auto goodmu : *goodMu ) {
       if( goodmu->p4() == allmu->p4() ) {
-	allmu->auxdecor<char>("ttHpassOVR")    = goodmu->auxdecor<char>("ttHpassOVR");
+	(*m_decor_ttHpassOVR)(*allmu) = (*m_decor_ttHpassOVR)(*goodmu);
+	//allmu->auxdecor<char>("ttHpassOVR")    = goodmu->auxdecor<char>("ttHpassOVR");
       }
     }
   }
 
   for(auto alltau : event.m_tauJets) {
-    alltau->auxdecor<char>("ttHpassTauOVR") = 0;
+    //alltau->auxdecor<char>("ttHpassTauOVR") = 0;
+    (*m_decor_ttHpassTauOVR)(*alltau) = 0;
     for(auto goodtau : *goodTau ) {
       if( goodtau->p4() == alltau->p4() )
-	alltau->auxdecor<char>("ttHpassTauOVR") = goodtau->auxdecor<char>("ttHpassTauOVR");
+	(*m_decor_ttHpassTauOVR)(*alltau) = (*m_decor_ttHpassTauOVR)(*goodtau);
+      //alltau->auxdecor<char>("ttHpassTauOVR") = goodtau->auxdecor<char>("ttHpassTauOVR");
     }
   }
 
@@ -1290,25 +1300,43 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
 
-
-  for(auto alljet : *calibratedJets) {
-    alljet->auxdecor<char>("ttHpassOVR") = 0;
-    alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-    for(auto goodjet : *goodJet ) {
-      if( goodjet->p4() == alljet->p4() ) {
-	alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
-      }
-    }
-  }
-
   if(m_doSystematics) {
     //only selected jets
+    for(auto alljet : event.m_jets) {
+      //alljet->auxdecor<char>("ttHpassOVR") = 0;
+      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
+      (*m_decor_ttHpassOVR)(*alljet) = 0;
+      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
+      for(auto goodjet : *goodJet ) {
+	if( goodjet->p4() == alljet->p4() ) {
+	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
+	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
+	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
+	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
+	}
+      }
+    }
+    
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
     MakeJetIndices(goodJet, event.m_jets);
   }
   else {
     //all jets
+    for(auto alljet : *calibratedJets) {
+      //alljet->auxdecor<char>("ttHpassOVR") = 0;
+      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
+      (*m_decor_ttHpassOVR)(*alljet) = 0;
+      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
+      for(auto goodjet : *goodJet ) {
+	if( goodjet->p4() == alljet->p4() ) {
+	  (*m_decor_ttHpassOVR)(*alljet) = 0;
+	  (*m_decor_ttHpassTauOVR)(*alljet) = 0;
+	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
+	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
+	}
+      }
+    }
+    
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
     MakeJetIndices(goodJet, *calibratedJets);
   }

@@ -119,7 +119,10 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
 
-
+  //decorate all the things in all the sys
+  SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;    
+  SG::AuxElement::Decorator< char >* m_decor_ttHpassTauOVR;
+  
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
   const EventInfo*       m_eventInfo;
