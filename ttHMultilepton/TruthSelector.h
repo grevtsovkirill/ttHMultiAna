@@ -60,6 +60,7 @@ namespace ttH
     const std::vector<TruthPart>& SelectTruth(const xAOD::TruthParticleContainer *truths);
  
     decaymode GetHiggsDecayMode(const xAOD::TruthParticleContainer* truthCont);
+    float     GetHiggsEta      (const xAOD::TruthParticleContainer* truthCont);
 
     unsigned int CountJets(const xAOD::JetContainer* truthJets,
 			   const xAOD::TruthParticleContainer* truthParticles);

@@ -220,7 +220,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   PMGCorrsAndSysts* m_sherpaRW;
 
   //MC
-  int m_higgsMode;
+  int   m_higgsMode;
+  float m_higgsEta;
   std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;

@@ -360,6 +360,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
 
     systematicTree->makeOutputVariable(m_higgsMode,"higgsDecayMode");
+    systematicTree->makeOutputVariable(m_higgsEta, "higgsEta");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_mu_unc, "averageIntPerXing_uncorr");
@@ -1067,7 +1068,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
 
   // Truth Matching
-  if ( top::isSimulation(event) and !m_doSystematics ) {
+  if ( top::isSimulation(event) and m_doSFSystematics ) {
     top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
   }
 
@@ -1128,6 +1129,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //MC particle
+  if (event.m_truth != nullptr) {
+    m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
+    m_higgsEta  = truthSelector.GetHiggsEta(event.m_truth);
+  }
+  
   if (event.m_truth != nullptr and !m_doSystematics) {
 
     if( !m_doSystematics ){
@@ -1159,11 +1165,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       }
     }
 
-    m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
   }
 
   //TruthEvent info here (pdf, MC weights, etc)
-  if (event.m_truthEvent != nullptr && !m_doSystematics ) {
+  if (event.m_truthEvent != nullptr and m_doSFSystematics ) {
     unsigned int i(0);
     unsigned int truthEventSize = event.m_truthEvent->size();
     m_PDFinfo_x1.resize(truthEventSize);
