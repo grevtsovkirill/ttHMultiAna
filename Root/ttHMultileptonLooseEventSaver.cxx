@@ -1068,7 +1068,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
 
   // Truth Matching
-  if ( top::isSimulation(event) and m_doSFSystematics ) {
+  if ( top::isSimulation(event) ) {
     top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
   }
 
