@@ -1,3 +1,6 @@
+2016-07-16 David Hohn <david.hohn@cern.ch>
+	* Fix new Sherpa 2.2 RW
+
 2016-07-16 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Move to AT,2.4.15
 	* New PMGTool Z+jets Sherpa 2.2 RW functions - WARNING: not fully working!
