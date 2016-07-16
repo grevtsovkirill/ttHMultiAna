@@ -217,7 +217,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
-  //PMGCorrsAndSysts* m_sherpaRW;
   ToolHandle<PMGSherpa22VJetsWeightTool> m_sherpaRW;
 
   //MC

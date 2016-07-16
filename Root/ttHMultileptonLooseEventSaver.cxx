@@ -167,10 +167,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
 
-  //m_sherpaRW = new PMGCorrsAndSysts(false);
-
   if (m_isMC){
-    top::check(m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool");
+    top::check( m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool" );
+    top::check( m_sherpaRW->setProperty("TruthJetContainer", "AntiKt4TruthJets"),
+		"Failed to set TruthJetContainer of PMGSherpa22VJetsWeightTool" );
   }
 
   //prepare btag eigen vectors
@@ -351,7 +351,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->z(); }, *systematicTree, "m_vxp_z");
     WrapS(scalarvec, [&](const top::Event& event)
 	  {
-	    return event.m_info->isAvailable<float>("TTHML_SherpaNJetRW") ? event.m_info->auxdataConst<float>("TTHML_SherpaNJetRW") : 1.0;
+	    return event.m_info->isAvailable<double>("TTHML_SherpaNJetRW") ? event.m_info->auxdataConst<double>("TTHML_SherpaNJetRW") : 1.0;
 	  }, *systematicTree, "SherpaNJetWeight");
     WrapS(scalarvec, [&](const top::Event& event)
 	  {
@@ -1090,18 +1090,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 				     ( m_mcChannelNumber >= 363361 and m_mcChannelNumber <= 363483 )
 				     )
       ) {
-    const xAOD::JetContainer* truthJets(nullptr);
-    top::check( evtStore()->retrieve(truthJets, "AntiKt4TruthJets"), "Failed to retrieve AntiKt4TruthWZJets for Sherpa reweighting." );
+    uint nTruthJets      = m_sherpaRW->getSherpa22VJets_NJet("AntiKt4TruthJets");
+    double sherpa_weight = m_sherpaRW->getSherpa22VJets_NJetCorrection(nTruthJets);
     
-    uint nTruthJets = truthSelector.CountJets(truthJets, event.m_truth);
-    //event.m_info->auxdecor<float>("TTHML_SherpaNJetRW") = m_sherpaRW->Get_Sherpa22VJets_NJetCorrection(nTruthJets);
-    event.m_info->auxdecor<int>("TTHML_NTruthJet") = nTruthJets;
-    
-    double sherpa_weight = m_sherpaRW->getWeight();
+    event.m_info->auxdecor<int>   ("TTHML_NTruthJet")    = nTruthJets;
     event.m_info->auxdecor<double>("TTHML_SherpaNJetRW") = sherpa_weight;
-    
   }
-
+  
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 
