@@ -10,7 +10,7 @@
 PACKAGE              = ttHMultilepton
 
 # the libraries to link with this one:
-PACKAGE_PRELOAD      = PMGTools
+PACKAGE_PRELOAD      = 
 
 # additional compilation flags to pass (not propagated to dependent packages):
 PACKAGE_CXXFLAGS     = -std=c++11
