@@ -73,7 +73,9 @@ if __name__ == '__main__':
     
     print("GRL Runs are: ",grl_runs)
     
-    print "DS names",ds_names
+    print "DS names"
+    for ds in ds_names:
+        print ds
 
     print "Runs in 2015:",len(TopExamples.grid.Samples(['data15'])[0].datasets)
     print "Runs in 2016:",len(TopExamples.grid.Samples(['data16'])[0].datasets)

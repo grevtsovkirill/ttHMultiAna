@@ -62,16 +62,16 @@ class BJob:
         self.q = q
 
     def setPool(self, pool):
-        self.pool = pool
+        #pool is requested in MB, assumed to be provided in B
+        self.pool = max(1,pool/1e6)
         
     def command(self):
         if os.getenv("LSB_STDOUT_DIRECT") == None:
             command = ['bsub', '-q', self.q]
             if self.pool != None:
-                command += ['-R "rusage[pool=%d]"' %max(1,(2*(self.pool/1000000)))]
-                #pool is requested in MB, assumed to be provided in B
+                command += ['-R "rusage[pool=%d]"' %self.pool]
             command += ['-o %s.out' % self.jobScript[:-3] ]
-            command += ['source', self.jobScript]
+            command += ['/bin/bash', self.jobScript]
             return command
         else:
             raise Exception("LSB_STDOUT_DIRECT is set. No pool resource can be requested.")
@@ -165,22 +165,34 @@ def getDoneSamplesOnGRID():
     return samples
 
 #============================================================================
-def createJobScript(outDir,dsid,gridDS,eosPath):
+def createJobScript(outDir,sample,eosMGM,eosPath):
+
+    jobScript = '%s_%s' % (productionName, sample.dsid)
+    jobScript += '.sh'
+
+    copyPath = eosMGM+eosPath
+    runScript = 'hadd.sh'
     
-    jobScript = '%s_%s.sh' % (productionName, dsid)
+    if sample.size > 100e9:
+        eosMkdirCmd = 'eos '+eosMGM+' mkdir -p '+eosPath+'/'+sample.dsid
+        eosMkdir = subprocess.Popen(eosMkdirCmd.split(' '))
+        eosMkdir.wait()
+        if eosMkdir.returncode != 0:
+            raise RuntimeError('Couldnt eos mkdir')
+        
+        runScript = 'nohadd.sh'
     
     file = open(outDir+ '/' + jobScript, 'w') 
     file.write('#!/bin/sh                                                                          \n')
     file.write('source ~/.bashrc								   \n')
     file.write('setupATLAS                                                                         \n')
     file.write('RUCIO_ACCOUNT=dhohn								   \n')
-    file.write('lsetup  rucio				               				   \n')
-    #file.write('export X509_USER_PROXY=/afs/cern.ch/user/h/hpotti/x509up_u75032                    \n')
+    file.write('lsetup "rcsetup Top,2.4.15" panda rucio pyami    				   \n')
     file.write('pwd										   \n')
-    txt  = 'source /afs/cern.ch/user/d/dhohn/ProductionManager/hadd.sh \\\n'
-    txt += '%s \\\n' % gridDS
-    txt += '%s \\\n' % eosPath
-    txt += '%s \\\n' % (dsid+'.root')
+    txt  = 'source /afs/cern.ch/user/d/dhohn/Run2/ttHMultilepton/scripts/%s \\\n' % runScript
+    txt += '%s \\\n' % sample.gridName
+    txt += '%s \\\n' % copyPath
+    txt += '%s \\\n' % sample.dsid
     file.write(txt)
     file.close() 
 
@@ -203,6 +215,11 @@ if __name__ == '__main__':
     import os, sys
     import subprocess
 
+    try:
+        os.environ['X509_USER_PROXY']
+    except KeyError:
+        raise RuntimeError('Please setup your GRID certificate as described in the README.')
+    
     #link pbook to pbook.py in working directory so it can be imported
     pbookPath = os.environ['ATLAS_LOCAL_PANDACLIENT_PATH']+'/bin/pbook'
     pbookLinkname = os.getcwd()+"/pbook.py"
@@ -225,15 +242,15 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
 
     eosMGM = 'root://eospublic.cern.ch/'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/data'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/bookkeep'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v4/Sys'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v18/Nominal'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v18/Data'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v18/Sys'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
     gridNickName = 'dhohn'
-    #productionName = '26.1.16.v4.Data'
-    productionName = 'bookkeep'
-    #productionName = '26.1.16.v4.Sys'
+    #productionName = '17.07.16.Data'
+    #productionName = '17.07.16.Nominal.x'
+    productionName = '17.07.16.Sys.x'
 
     
     doneSamplesOnGRID = getDoneSamplesOnGRID()
@@ -253,10 +270,12 @@ if __name__ == '__main__':
             outDir = productionName+'/'+copySample.dsid+'_jobdir'
             if not os.path.isdir(outDir):
                 os.makedirs(outDir)
-            jobScript = createJobScript(outDir, copySample.dsid, copySample.gridName, eosMGM+eosPath)
+            jobScript = createJobScript(outDir, copySample, eosMGM, eosPath)
             job = BJob(outDir, jobScript)
             job.setQ('1nd')
-            job.setPool(copySample.size)
+            job.setPool(2*copySample.size)
+            if copySample.size > 100e6:
+                job.setPool(copySample.size)
             print job
             job.submit()
             submitted += 1
@@ -269,4 +288,11 @@ if __name__ == '__main__':
     print "GRID jobs that are done: %s"        % len(doneSamplesOnGRID)
     print "of which %s are already on EOS"     % len(list(set(doneSamplesOnGRID) & set(samplesOnEOS)))
     print "%s bjobs have been submitted now"   % submitted
-    print "Total Size: %s"                     %totalSize
+    print "Total Size: %s"                     % totalSize
+
+    '''
+    extras = set(doneSamplesOnGRID) - set(samplesOnEOS)
+    for e in list(extras):
+        print e.gridName
+    '''
+    

@@ -37,21 +37,22 @@ echo ls -l
 ls -l
 echo
 
-echo "Will hadd $(ls -1 *.root*|wc -l) files"
-hadd -n 5 $fileName *.root*
-haddExit=$?
-echo "hadd exit $haddExit"
-[ $haddExit -eq 0 ] || cleanExit 2
 
 
-ls -l $fileName
 
-echo xrdcp -f -np $fileName $eosPath/$fileName
-xrdcp -f -np $fileName $eosPath/$fileName
-eoscpExit=$?
-echo "eos cp exit $haddExit"
-[ $eoscpExit -eq 0 ] || cleanExit 3
 
+
+
+
+
+for file in $(ls *.root*); do
+    echo xrdcp -f -np  $file $eosPath/$DSID/
+    xrdcp -f -np $file $eosPath/$DSID/
+    eoscpExit=$?
+    echo "eos cp exit $haddExit"
+    [ $eoscpExit -eq 0 ] || cleanExit 3
+done
+    
 echo "alles goed"
 
 cleanExit 0

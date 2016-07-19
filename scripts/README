@@ -1,6 +1,6 @@
 TO SUBMIT:
 
-0. Setup Panda and Rucio: lsetup panda ruco
+0. Setup Panda and Rucio: lsetup panda rucio
    Edit gridNickName in ProductionManager.py
    Edit the path of the hadding script in createJobScript
 
