@@ -325,7 +325,7 @@ ttH::decaymode ttH::TruthSelector::GetHiggsDecayMode(const xAOD::TruthParticleCo
     return unclassified;
 }
 
-float ttH::TruthSelector::GetHiggsEta(const xAOD::TruthParticleContainer* cont)
+const xAOD::TruthParticle* ttH::TruthSelector::GetHiggs(const xAOD::TruthParticleContainer* cont)
 {
     m_truths    = cont;
     for(const xAOD::TruthParticle *part: *m_truths)
@@ -336,9 +336,11 @@ float ttH::TruthSelector::GetHiggsEta(const xAOD::TruthParticleContainer* cont)
         }
         if(IsGoodHiggs(part->pdgId(),GetChildren(*part)))
         {
-	  return part->p4().Eta();
+	  return part;
 	}
     }
+    
+    return nullptr;
 }
 
 //=========================================================================

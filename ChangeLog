@@ -1,3 +1,6 @@
+2016-07-20 David Hohn <david.hohn@cern.ch>
+	* add truth higgs 4-vec and rapidity
+
 2016-07-16 David Hohn <david.hohn@cern.ch>
 	* Fix new Sherpa 2.2 RW
 

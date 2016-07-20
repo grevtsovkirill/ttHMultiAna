@@ -55,7 +55,8 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_truthMET_py(-999.0),
   m_truthMET_phi(-999.0),
   m_truthMET_sumet(-1.0),
-  m_sherpaRW("PMGSherpa22VJetsWeightTool")
+  m_sherpaRW("PMGSherpa22VJetsWeightTool"),
+  m_higgs(nullptr)
 {}
 
 ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
@@ -358,14 +359,18 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	    return event.m_info->isAvailable<int>("TTHML_NTruthJet") ? event.m_info->auxdataConst<int>("TTHML_NTruthJet") : 0.0;
 	  }, *systematicTree, "nTruthJets");
 
+    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
+    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
+    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->phi()            : 0.0; }, *systematicTree, "higgs_phi");
+    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->e()              : 0.0; }, *systematicTree, "higgs_E");
+    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->p4().Rapidity()  : 0.0; }, *systematicTree, "higgs_rapidity");
 
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 
     // HF classification ttbar
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
 
-    systematicTree->makeOutputVariable(m_higgsMode,"higgsDecayMode");
-    systematicTree->makeOutputVariable(m_higgsEta, "higgsEta");
+    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_mu_unc, "averageIntPerXing_uncorr");
@@ -1134,7 +1139,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //MC particle
   if (event.m_truth != nullptr) {
     m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
-    m_higgsEta  = truthSelector.GetHiggsEta(event.m_truth);
+    m_higgs     = truthSelector.GetHiggs(event.m_truth);
   }
   
   if (event.m_truth != nullptr and !m_doSystematics) {
