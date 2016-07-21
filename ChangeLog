@@ -1,3 +1,6 @@
+2016-07-22 Robert Wolff <robert.wolff@cern.ch>
+	* prepare for v19 setup (manual change of TopObjectSelectionTools needed
+
 2016-07-21 Harish Potti <harish.potti@cern.ch>
 	* add new Lumicalc files with new lumi tag OflLumi-13TeV-005.root
 	
