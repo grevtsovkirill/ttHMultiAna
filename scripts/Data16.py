@@ -53,7 +53,7 @@ grl15 = 'data15_13TeV.periodAllYear_DetStatus-v79-repro20-02_DQDefects-00-02-02_
 grl_runs15 = get_grlruns(grl15)
 ds_names15 = get_data_all('data15_13TeV', grl_runs15)
 
-grl16 = 'data16_13TeV.periodAllYear_DetStatus-v80-pro20-07_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns_TriggerMenu1e34only.xml'
+grl16 = 'data16_13TeV.periodAllYear_DetStatus-v80-pro20-08_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns_TriggerMenu1e34only.xml'
 grl_runs16 = get_grlruns(grl16)
 ds_names16 = get_data_all('data16_13TeV', grl_runs16)
 
