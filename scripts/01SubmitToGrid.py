@@ -17,15 +17,15 @@ config.destSE        = 'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere)
 ###############################################################################
 #Systematics
 config.settingsFile  = 'generic_config-mc15-Sys.txt'
-config.suffix        = '21.07.16.Sys'
+config.suffix        = '22.07.16.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
-mc15c                          = TopExamples.grid.Samples(['ttH'])
+mc15c                          = TopExamples.grid.Samples(['ptag_p2666'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',mc15c)
 all_samples = mc15c
 
-#TopExamples.grid.submit(config,mc15c)
+#~ TopExamples.grid.submit(config,mc15c)
 
 ####################################################################################
 #Nominal
@@ -34,22 +34,24 @@ config.suffix = '21.07.16.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-TopExamples.grid.submit(config,mc15c)
+#~ TopExamples.grid.submit(config,mc15c)
 
 
 ########################################################################################
 #data
-config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '05.07.16.Data'
+#config.settingsFile  = 'generic_config-data15.txt'
+config.suffix = '22.07.16.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-data15 = TopExamples.grid.Samples(['data_2015_20.7'])
-data16 = TopExamples.grid.Samples(['data16'])
-#TopExamples.grid.submit(config, data15)
+#data15 = TopExamples.grid.Samples(['data_2015_20.7'])
+data15 = TopExamples.grid.Samples(['data15'])
+config.settingsFile = 'generic_config-data15.txt'
+TopExamples.grid.submit(config, data15)
 
+data16 = TopExamples.grid.Samples(['data16'])
 config.settingsFile = 'generic_config-data16.txt'
-#TopExamples.grid.submit(config,data16)
+TopExamples.grid.submit(config,data16)
 
 
 #################################################################################
