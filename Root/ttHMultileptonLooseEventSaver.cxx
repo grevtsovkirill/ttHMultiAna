@@ -1342,8 +1342,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
-	  (*m_decor_ttHpassOVR)(*alljet) = 0;
-	  (*m_decor_ttHpassTauOVR)(*alljet) = 0;
+	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
+	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
 	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
 	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}

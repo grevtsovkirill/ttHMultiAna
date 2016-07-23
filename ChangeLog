@@ -1,3 +1,6 @@
+2016-07-23 Robert Wolff <robert.wolff@cern.ch>
+	* bugfix for OR flags for m_jet vectors
+
 2016-07-22 Robert Wolff <robert.wolff@cern.ch>
 	* prepare for v19 setup (manual change of TopObjectSelectionTools needed
 	* added new GRL file for 2016 data 10514.3 pb-1
