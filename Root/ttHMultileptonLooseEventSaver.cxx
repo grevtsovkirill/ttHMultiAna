@@ -172,6 +172,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     top::check( m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool" );
     top::check( m_sherpaRW->setProperty("TruthJetContainer", "AntiKt4TruthJets"),
 		"Failed to set TruthJetContainer of PMGSherpa22VJetsWeightTool" );
+		top::check( m_sampleXsection.readFromFile((std::string(getenv("ROOTCOREBIN"))+"/data/TopDataPreparation/XSection-MC15-13TeV.data").c_str()),
+		"Failed to open AMI X-section file");
   }
 
   //prepare btag eigen vectors
@@ -345,7 +347,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_runNumber, "RunNumber");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->lumiBlock(); }, *systematicTree, "lbn");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->bcid(); }, *systematicTree, "bcid");
-    WrapS(scalarvec, [](const top::Event& event){ bool passClean=true; if( (event.m_info->errorState(EventInfo::Tile)==EventInfo::Error) || (event.m_info->errorState(EventInfo::LAr)==EventInfo::Error) ) passClean=false; return (bool) passClean; }, *systematicTree, "passEventCleaning");
+    WrapS(scalarvec, [](const top::Event& event){ return (event.m_info->errorState(EventInfo::Tile)!=EventInfo::Error && event.m_info->errorState(EventInfo::LAr)!=EventInfo::Error); }, *systematicTree, "passEventCleaning");
     WrapS(scalarvec, [](const top::Event& event){ return event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background); }, *systematicTree, "backgroundFlags");
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->x(); }, *systematicTree, "m_vxp_x");
     WrapS(scalarvec, [&](const top::Event&){ return m_pv->y(); }, *systematicTree, "m_vxp_y");
@@ -373,6 +375,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
+    WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getXsection(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_xSection");
+    WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getRawXsection(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_rawXSection");
+    WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getKfactor(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_kFactor");
+    WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getShoweringIndex(event.m_info->mcChannelNumber()) : -1; }, *systematicTree, "mc_showering");
     systematicTree->makeOutputVariable(m_mu_unc, "averageIntPerXing_uncorr");
     systematicTree->makeOutputVariable(m_mu, "averageIntPerXing");
     systematicTree->makeOutputVariable(m_mu_ac, "actualIntPerXing");
@@ -869,7 +875,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   OR_flags.doTaus      = false;
   OR_flags.doPhotons   = false;
   OR_flags.outputLabel = "sharesTrk";
-  
+
   top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
 	     "Failed to setup OR Tool box");
 
@@ -945,7 +951,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_decor_ttHpassOVR    = new SG::AuxElement::Decorator< char >("ttHpassOVR");
   m_decor_ttHpassTauOVR = new SG::AuxElement::Decorator< char >("ttHpassTauOVR");
 
-  
+
 }
 
 void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
@@ -981,6 +987,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   if (top::isSimulation(event)){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
+
     m_mcWeight        = event.m_info->mcEventWeight();
     if(m_sfRetriever){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
@@ -1097,11 +1104,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       ) {
     uint nTruthJets      = m_sherpaRW->getSherpa22VJets_NJet("AntiKt4TruthJets");
     double sherpa_weight = m_sherpaRW->getSherpa22VJets_NJetCorrection(nTruthJets);
-    
+
     event.m_info->auxdecor<int>   ("TTHML_NTruthJet")    = nTruthJets;
     event.m_info->auxdecor<double>("TTHML_SherpaNJetRW") = sherpa_weight;
   }
-  
+
   //Event selection variable for each event selection region (pass/fail)
   recordSelectionDecision(event);
 
@@ -1141,7 +1148,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
     m_higgs     = truthSelector.GetHiggs(event.m_truth);
   }
-  
+
   if (event.m_truth != nullptr and !m_doSystematics) {
 
     if( !m_doSystematics ){
@@ -1256,13 +1263,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodTau = SelectTaus(event);
 
   //OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  
+
   top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
   top::check( m_overlapRemovalTool[2]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal-but-tau OR" );
   top::check( m_overlapRemovalTool[0]->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
 
   OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  
+
   CopyLeptons(goodEl, goodMu);
 
   // dont do the rest if we skim here anyway
@@ -1329,7 +1336,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	}
       }
     }
-    
+
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
     MakeJetIndices(goodJet, event.m_jets);
   }
@@ -1349,7 +1356,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	}
       }
     }
-    
+
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
     MakeJetIndices(goodJet, *calibratedJets);
   }

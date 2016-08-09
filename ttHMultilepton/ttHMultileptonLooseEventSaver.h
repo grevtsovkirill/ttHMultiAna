@@ -30,6 +30,7 @@
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopCorrections/ScaleFactorRetriever.h"
+#include "TopDataPreparation/SampleXsection.h"
 #include "ttHMultilepton/TreeAssist.h"
 #include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
@@ -120,9 +121,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
 
   //decorate all the things in all the sys
-  SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;    
+  SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
   SG::AuxElement::Decorator< char >* m_decor_ttHpassTauOVR;
-  
+
   //for convenience of use with Wrap stuff
   const VertexContainer* m_vertices;
   const EventInfo*       m_eventInfo;
@@ -185,6 +186,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //use with care, don't mix MC and data in same job
   bool m_isMC;
   int m_runYear;
+  SampleXsection m_sampleXsection;
 
   // Truth matching
   ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
