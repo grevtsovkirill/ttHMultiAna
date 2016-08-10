@@ -206,7 +206,7 @@ template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
 
 void
 ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow) {
-  
+
   auto newGoodEl = std::shared_ptr<xAOD::ElectronContainer>(new xAOD::ElectronContainer());
   auto newGoodElAux = new xAOD::AuxContainerBase();
   newGoodEl->setStore(newGoodElAux);
@@ -228,7 +228,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 	     "Failed to register jets after OR");
   top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux." ),
 	     "Failed to register taus after OR");
-  
+
   for (const auto elItr : *goodEl) {
     elItr->auxdecor<char>("ttHpassOVR") = 1;
   }
@@ -337,7 +337,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
       }
     }
   }
-  
+
   fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
 
@@ -377,7 +377,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   newGoodMu.swap(goodMu);
   newGoodJet.swap(goodJet);
   newGoodTau.swap(goodTau);
-  
+
 }
 
 void
@@ -636,18 +636,28 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
 
   // trigger matching, electron pt > 25 GeV
   if (m_runYear == 2015) {
-    if( el.pt() > 25e3 && (returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_L1EM20VH", (char) 0) ||
-			   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
-			   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)))
-      lep.isTrigMatch = 1;
-    else lep.isTrigMatch = 0;
-  } else {
-    // both data and MC
-    if ( el.pt() > 25e3 && (returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhtight_nod0_ivarloose", (char) 0) ||
-			    returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
-			    returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)))
-      lep.isTrigMatch = 1;
-    else lep.isTrigMatch = 0;
+    lep.isTrigMatch = ( el.pt() > 25e3 && (
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_L1EM20VH", (char) 0) ||
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)));
+  } else if (m_runNumber == 298687) { // for full statistics in this run
+    lep.isTrigMatch = ( el.pt() > 25e3 && (
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhtight_nod0_ivarloose", (char) 0) ||
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_nod0_L1EM20VH", (char) 0) ||
+			returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
+			returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)));
+  } else if (m_runYear == 2016 && m_runNumber < 302900) { // period A to D3 in 2016 data
+    lep.isTrigMatch = ( el.pt() > 25e3 && (
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhtight_nod0_ivarloose", (char) 0) ||
+			returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
+			returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)));
+  } else if (m_runYear == 2016) { // since period D4 in 2016 data (high luminosity triggers)
+    lep.isTrigMatch = ( el.pt() > 27e3 && (
+      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e26_lhtight_nod0_ivarloose", (char) 0) ||
+			returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
+			returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)));
+  } else { // MC events with pileupEventWeight==0
+    lep.isTrigMatch = 0;
   }
 
   // isolation variables
@@ -699,21 +709,19 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
 
   // trigger matching
   if (m_runYear == 2015) {
-    if (mu.pt() > 21e3
-	&& (
-	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
-	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)))
-      lep.isTrigMatch = 1;
-    else
-      lep.isTrigMatch = 0;
-  } else { // 2016
-    if (mu.pt() > 25e3
-	&& (
+    lep.isTrigMatch = (mu.pt() > 21e3 && (
+      returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else if (m_runYear == 2016 && m_runNumber < 302900) { // period A to D3 in 2016 data
+    lep.isTrigMatch = (mu.pt() > 25e3 && (
 	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu24_ivarmedium", (char) 0) ||
-	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)))
-      lep.isTrigMatch = 1;
-    else
-      lep.isTrigMatch = 0;
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else if (m_runYear == 2016) { // since period D4 on in 2016 data (high luminosity triggers)
+    lep.isTrigMatch = (mu.pt() > 27e3 && (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu26_ivarmedium", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else { // MC events with pileupEventWeight==0
+    lep.isTrigMatch = 0;
   }
 
   // truth matching, fakes, QMisId

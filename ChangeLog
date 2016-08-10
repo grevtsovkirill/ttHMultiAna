@@ -1,3 +1,7 @@
+2016-08-10 Robert Wolff <robert.wolff@cern.ch>
+	* add lowest unprescaled triggers in triggermatching for high-lumi runs
+	* add some tH and VVV samples to submission scripts
+
 2016-08-09 Robert Wolff <robert.wolff@cern.ch>
 	* add x-section and k-factor branches from TopDataPreparation
 
