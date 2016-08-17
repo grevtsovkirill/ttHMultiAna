@@ -1034,8 +1034,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   	     "Failed to set MuJetPtRatio to a crazy threshold");
   top::check(m_ORtoolBox[1].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
              "Failed to set MuJetTrkPtRatio to a crazy threshold");
-  //top::check(m_ORtoolBox[1].muJetORT.setProperty("UseGhostAssociation",false),
-  //	     "Failed to set UseGhostAssociation to false");
+  top::check(m_ORtoolBox[1].muJetORT.setProperty("UseGhostAssociation",false),
+  	     "Failed to set UseGhostAssociation to false");
 
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
@@ -1073,8 +1073,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
              "Failed to set MuJetPtRatio to a crazy threshold");
   top::check(m_ORtoolBox[2].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
              "Failed to set MuJetTrkPtRatio to a crazy threshold");
-  //top::check(m_ORtoolBox[2].muJetORT.setProperty("UseGhostAssociation",false),
-  //	     "Failed to set UseGhostAssociation to false");
+  top::check(m_ORtoolBox[2].muJetORT.setProperty("UseGhostAssociation",false),
+  	     "Failed to set UseGhostAssociation to false");
 
 
   top::check(m_ORtoolBox[2].initialize(),
