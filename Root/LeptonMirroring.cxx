@@ -27,6 +27,9 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &ptVarcone20,  "lep_ptVarcone20_", index);
   CreateBranch(tree, &ptVarcone30,  "lep_ptVarcone30_", index);
   CreateBranch(tree, &ptVarcone40,  "lep_ptVarcone40_", index);
+  CreateBranch(tree, &ptcone20,  "lep_ptcone20_", index);
+  CreateBranch(tree, &ptcone30,  "lep_ptcone30_", index);
+  CreateBranch(tree, &ptcone40,  "lep_ptcone40_", index);
   // impact parameters
   CreateBranch(tree, &sigd0PV,    "lep_sigd0PV_", index);
   CreateBranch(tree, &Z0SinTheta, "lep_Z0SinTheta_", index);
@@ -91,4 +94,31 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &SFObjLoose[0],  "lep_SFObjLoose_", index);
   CreateBranch(tree, &SFObjTight[0],  "lep_SFObjTight_", index);
 
+  // specific observables for electron
+  CreateBranch(tree, &wstot,    "lep_wstot_", index);
+  CreateBranch(tree, &Reta,     "lep_Reta_", index);
+  CreateBranch(tree, &Rphi,     "lep_Rphi_", index);
+  CreateBranch(tree, &Rhad1,    "lep_Rhad1_", index);
+  CreateBranch(tree, &Rhad,     "lep_Rhad_", index);
+  CreateBranch(tree, &ws3,      "lep_ws3_", index);
+  CreateBranch(tree, &w2,       "lep_w2_", index);
+  CreateBranch(tree, &f1,       "lep_f1_", index);
+  CreateBranch(tree, &Eratio,   "lep_Eratio_", index);
+  CreateBranch(tree, &f3,       "lep_f3_", index);
+  CreateBranch(tree, &deltaEta, "lep_deltaEta_", index);
+  CreateBranch(tree, &deltaPhiRescaled2, "lep_deltaPhiRescaled2_", index);
+  CreateBranch(tree, &QoverP,   "lep_QoverP_", index);
+  CreateBranch(tree, &EoverP,   "lep_EoverP_", index);
+
+  // specific observables for muon
+  CreateBranch(tree, &momBalSignif,    "lep_momBalSignif_", index);
+  CreateBranch(tree, &scatCurvSignif,  "lep_scatCurvSignif_", index);
+  CreateBranch(tree, &scatNeighSignif, "lep_scatNeighSignif_", index);
+  //CreateBranch(tree, &qOverP,          "lep_qOverP_", index);
+  CreateBranch(tree, &rho,             "lep_rho_", index);
+  CreateBranch(tree, &qOverPsigma,     "lep_qOverPsigma_", index);
+  CreateBranch(tree, &qOverPsignif,    "lep_qOverPsignif_", index);
+  CreateBranch(tree, &reducedChi2,     "lep_reducedChi2_", index);
+  CreateBranch(tree, &numPrecLayers,   "lep_numPrecLayers_", index);
+ 
 }

@@ -60,18 +60,6 @@ namespace ttHMultilepton {
     bool   Match_EF_e45_medium1;
     bool   Match_EF_e60_medium1;
     bool   Match_EF_e12Tvh_loose1;
-    float  Etcone20;
-    float  Etcone30;
-    float  Etcone40;
-    float  Etcone20Uncorr;
-    float  Etcone30Uncorr;
-    float  Etcone40Uncorr;
-    float  Ptcone20;
-    float  Ptcone30;
-    float  Ptcone40;
-    int    Nucone20;
-    int    Nucone30;
-    int    Nucone40;
     float  MI10_max40_ptsum;
     float  Eiso90Etcone20;
     float  Eiso90ptcone30;
@@ -139,9 +127,37 @@ namespace ttHMultilepton {
     float   ptVarcone20;
     float   ptVarcone30;
     float   ptVarcone40;
+    float   ptcone20;
+    float   ptcone30;
+    float   ptcone40;
 
     float   EffTrigLoose[MAXSYST];
     float   EffTrigTight[MAXSYST];
+
+    float wstot;
+    float Reta;
+    float Rphi;
+    float Rhad1;
+    float Rhad;
+    float ws3;
+    float w2;
+    float f1;
+    float Eratio;
+    float f3;
+    float deltaEta;
+    float deltaPhiRescaled2;
+    float QoverP;
+    float EoverP;
+    float momBalSignif;
+    float scatCurvSignif;
+    float scatNeighSignif;
+    float qOverP;
+    float rho;
+    float qOverPsigma;
+    float qOverPsignif;
+    float reducedChi2;
+    uint8_t numPrecLayers;
+    
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 

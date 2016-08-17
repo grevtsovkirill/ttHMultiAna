@@ -634,6 +634,50 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   static SG::AuxElement::Accessor<float> truthRapidity("truthRapidity");
   lep.truthRapidity = ( truthRapidity.isAvailable(el) ) ? truthRapidity(el) : -1;
 
+  // extra variables for electrons
+  
+  float wstot=-9999;  el.showerShapeValue(wstot, xAOD::EgammaParameters::wtots1);
+  lep.wstot = wstot;
+  float Reta=-9999;  el.showerShapeValue(Reta, xAOD::EgammaParameters::Reta);
+  lep.Reta = Reta;
+  float Rphi=-9999;  el.showerShapeValue(Rphi, xAOD::EgammaParameters::Rphi);
+  lep.Rphi = Rphi;
+  float Rhad1=-9999; el.showerShapeValue(Rhad1, xAOD::EgammaParameters::Rhad1);
+  lep.Rhad1 = Rhad1;
+  float Rhad=-9999;  el.showerShapeValue(Rhad, xAOD::EgammaParameters::Rhad);
+  lep.Rhad = Rhad;
+  float ws3=-9999;   el.showerShapeValue(ws3, xAOD::EgammaParameters::weta1);
+  lep.ws3 = ws3;
+  float w2=-9999;    el.showerShapeValue(w2, xAOD::EgammaParameters::weta2); 
+  lep.w2 = w2;
+  float f1=-9999;    el.showerShapeValue(f1, xAOD::EgammaParameters::f1); 
+  lep.f1 = f1;
+  float Eratio=-9999;el.showerShapeValue(Eratio, xAOD::EgammaParameters::Eratio);
+  lep.Eratio = Eratio;
+  float f3=-9999;    el.showerShapeValue(f3, xAOD::EgammaParameters::f3); 
+  lep.f3 = f3;
+  
+  float deltaEta=-9999;
+  el.trackCaloMatchValue(deltaEta, xAOD::EgammaParameters::deltaEta1);
+  lep.deltaEta = deltaEta;
+
+  float deltaPhiRescaled2=-9999;
+  el.trackCaloMatchValue(deltaPhiRescaled2, xAOD::EgammaParameters::deltaPhiRescaled2);
+  lep.deltaPhiRescaled2 = deltaPhiRescaled2;
+
+  float QoverP=-9999;
+  const xAOD::TrackParticle* t  = el.trackParticle();
+  QoverP = t->qOverP();
+  lep.QoverP = QoverP;
+
+  float EoverP=-9999;
+  const xAOD::CaloCluster* cluster = el.caloCluster();
+  const double energy =  cluster->e();
+  EoverP = fabs(t->qOverP()) * energy;
+  lep.EoverP = EoverP;
+
+
+  /*
   // trigger matching, electron pt > 25 GeV
   if (m_runYear == 2015) {
     lep.isTrigMatch = ( el.pt() > 25e3 && (
@@ -659,8 +703,28 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   } else { // MC events with pileupEventWeight==0
     lep.isTrigMatch = 0;
   }
+  */
+
+  // trigger matching, electron pt > 25 GeV
+  if (m_runYear == 2015) {
+    if( el.pt() > 25e3 && (returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_L1EM20VH", (char) 0) ||
+			   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
+			   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)))
+      lep.isTrigMatch = 1;
+    else lep.isTrigMatch = 0;
+  } else {
+    // both data and MC
+    if ( el.pt() > 25e3 && (returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhtight_nod0_ivarloose", (char) 0) ||
+			    returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
+			    returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)))
+      lep.isTrigMatch = 1;
+    else lep.isTrigMatch = 0;
+  }
 
   // isolation variables
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptcone20); lep.ptcone20 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptcone30); lep.ptcone30 = iso;}
+  {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptcone40); lep.ptcone40 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone30); lep.ptVarcone30 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone40); lep.ptVarcone40 = iso;}
@@ -707,6 +771,67 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.z0 = mu.primaryTrackParticle()->z0();
   lep.vz = mu.primaryTrackParticle()->vz();
 
+  // specific muon-reco variables
+  lep.momBalSignif    = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance);
+  lep.scatCurvSignif  = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance);
+  lep.scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance);
+
+  //const xAOD::TrackParticle* cbtrack = mu.trackParticle( xAOD::Muon::CombinedTrackParticle );
+  const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+  const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+
+  //lep.qOverP          = cbtrack->qOverP();
+  
+  if( idtrack && metrack ) {
+    float mePt = -999999., idPt = -999999.;
+    
+    try{
+      static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+      static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+      mePt = mePt_acc(mu);
+      idPt = idPt_acc(mu);
+    } catch ( SG::ExcNoAuxStore b ) {
+      ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+		     "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+      throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+    }
+    
+    float cbPt = mu.pt();
+    float meP  = 1.0 / ( sin(metrack->theta()) / mePt);
+    float idP  = 1.0 / ( sin(idtrack->theta()) / idPt);
+    
+    lep.rho           = fabs( idPt - mePt ) / cbPt;
+    float qOverPSigma = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+    lep.qOverPsigma   = qOverPSigma;
+    lep.qOverPsignif  = fabs( (metrack->charge() / meP) - (idtrack->charge() / idP) ) / qOverPSigma;        
+    lep.reducedChi2   = mu.primaryTrackParticle()->chiSquared()/mu.primaryTrackParticle()->numberDoF();
+ 
+    uint8_t nprecisionLayers;
+    if( fabs(mu.eta()) > 2.0 ) {
+	  nprecisionLayers = 0;
+	  uint8_t innerSmallHits, innerLargeHits, middleSmallHits, middleLargeHits, outerSmallHits, outerLargeHits;
+	  if ( !mu.summaryValue(innerSmallHits, xAOD::MuonSummaryType::innerSmallHits) ||
+	       !mu.summaryValue(innerLargeHits, xAOD::MuonSummaryType::innerLargeHits) ||
+	       !mu.summaryValue(middleSmallHits, xAOD::MuonSummaryType::middleSmallHits) ||
+	       !mu.summaryValue(middleLargeHits, xAOD::MuonSummaryType::middleLargeHits) ||
+	       !mu.summaryValue(outerSmallHits, xAOD::MuonSummaryType::outerSmallHits) ||
+	       !mu.summaryValue(outerLargeHits, xAOD::MuonSummaryType::outerLargeHits) ){
+
+	    ATH_MSG_VERBOSE("getQuality - Muon in CSC region and MS hits information missing!!!");
+	  }
+	  else {
+	    if( innerSmallHits>1  || innerLargeHits>1  ) nprecisionLayers += 1;
+	    if( middleSmallHits>2 || middleLargeHits>2 ) nprecisionLayers += 1;
+	    if( outerSmallHits>2  || outerLargeHits>2  ) nprecisionLayers += 1;
+	  }
+    }
+    else {
+      mu.summaryValue(nprecisionLayers, xAOD::SummaryType::numberOfPrecisionLayers);
+    }
+    lep.numPrecLayers = nprecisionLayers;
+  }
+    
+  /*
   // trigger matching
   if (m_runYear == 2015) {
     lep.isTrigMatch = (mu.pt() > 21e3 && (
@@ -722,6 +847,26 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
 	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
   } else { // MC events with pileupEventWeight==0
     lep.isTrigMatch = 0;
+  }
+  */
+
+  // trigger matching
+  if (m_runYear == 2015) {
+    if (mu.pt() > 21e3
+	&& (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)))
+      lep.isTrigMatch = 1;
+    else
+      lep.isTrigMatch = 0;
+  } else { // 2016
+    if (mu.pt() > 25e3
+	&& (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu24_ivarmedium", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)))
+      lep.isTrigMatch = 1;
+    else
+      lep.isTrigMatch = 0;
   }
 
   // truth matching, fakes, QMisId
@@ -821,6 +966,9 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.truthRapidity = ( truthRapidity.isAvailable(mu) ) ? truthRapidity(mu) : -1;
 
   // isolation variables
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone20); lep.ptcone20 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone30); lep.ptcone30 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone40); lep.ptcone40 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); lep.ptVarcone30 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); lep.ptVarcone40 = iso;}

@@ -453,9 +453,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("d0sig"); },             *systematicTree, "electron_sigd0PV");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("delta_z0_sintheta"); }, *systematicTree, "electron_z0SinTheta");
 
-    //Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "electron_ptcone20");
-    //Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "electron_ptcone30");
-    //Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "electron_ptcone40");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "electron_ptcone20");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "electron_ptcone30");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "electron_ptcone40");
 
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "electron_topoetcone20");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "electron_topoetcone30");
@@ -521,6 +521,42 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
 	  return (int) m_el_true_type; },   *systematicTree, "electron_truthType");
 
+      // extra electron ID observables
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float wstot=-9999; ele.showerShapeValue(wstot, xAOD::EgammaParameters::wtots1); return wstot;	},   *systematicTree, "electron_wstot");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float Reta=-9999;  ele.showerShapeValue(Reta, xAOD::EgammaParameters::Reta); return Reta;	},   *systematicTree, "electron_Reta");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float Rphi=-9999;  ele.showerShapeValue(Rphi, xAOD::EgammaParameters::Rphi); return Rphi;	},   *systematicTree, "electron_Rphi");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float Rhad1=-9999; ele.showerShapeValue(Rhad1, xAOD::EgammaParameters::Rhad1); return Rhad1;	},   *systematicTree, "electron_Rhad1");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float Rhad=-9999;  ele.showerShapeValue(Rhad, xAOD::EgammaParameters::Rhad); return Rhad;	},   *systematicTree, "electron_Rhad");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float ws3=-9999;   ele.showerShapeValue(ws3, xAOD::EgammaParameters::weta1); return ws3;	},   *systematicTree, "electron_ws3");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float w2=-9999;    ele.showerShapeValue(w2, xAOD::EgammaParameters::weta2); return w2;	},           *systematicTree, "electron_w2");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float f1=-9999;    ele.showerShapeValue(f1, xAOD::EgammaParameters::f1); return f1;	},           *systematicTree, "electron_f1");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float Eratio=-9999;ele.showerShapeValue(Eratio, xAOD::EgammaParameters::Eratio); return Eratio;},   *systematicTree, "electron_Eratio");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float f3=-9999;    ele.showerShapeValue(f3, xAOD::EgammaParameters::f3); return f3;	},           *systematicTree, "electron_f3");
+      
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  float deltaEta=-9999;
+	  ele.trackCaloMatchValue(deltaEta, xAOD::EgammaParameters::deltaEta1);
+	  return deltaEta;	},   *systematicTree, "electron_deltaEta");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  float deltaPhiRescaled2=-9999;
+	  ele.trackCaloMatchValue(deltaPhiRescaled2, xAOD::EgammaParameters::deltaPhiRescaled2);
+	  return deltaPhiRescaled2;	},   *systematicTree, "electron_deltaPhiRescaled2");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  float QoverP=-9999;
+	  const xAOD::TrackParticle* t  = ele.trackParticle();
+	  QoverP = t->qOverP();
+	  return QoverP;	},   *systematicTree, "electron_QoverP");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  float EoverP=-9999;
+	  const xAOD::CaloCluster* cluster = ele.caloCluster();
+	  const double energy =  cluster->e();
+	  const xAOD::TrackParticle* t  = ele.trackParticle();
+	  EoverP = fabs(t->qOverP()) * energy;
+	  return EoverP;	},   *systematicTree, "electron_EoverP");
+
       // Add non-prompt electron vars
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
 
@@ -559,21 +595,112 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))  isqual=1; return isqual;},*systematicTree, "muon_isTight");
     // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("InnerDetectorPt"); },    *systematicTree, "muon_PtID");
     // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
-    // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (-13*mu.charge()); }, *systematicTree, "muon_ID");
 
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("d0sig"); }, *systematicTree, "muon_sigd0PV");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("delta_z0_sintheta"); }, *systematicTree, "muon_z0SinTheta");
 
-    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
-    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
-    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
-    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float qOverPSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
+
+    // Wrap2(muvec, [=](const xAOD::Muon& mu) {
+    // 	 const xAOD::TrackParticle* cbtrack = mu.trackParticle( xAOD::Muon::CombinedTrackParticle );
+    // 	 float qOverP = cbtrack->qOverP();
+    // 	 return qOverP; }, *systematicTree, "muon_qOverP");
+    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float rho=-9999;
+	if( idtrack && metrack ) {
+	  float mePt = -999999., idPt = -999999.;
+
+	  try{
+	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+	    mePt = mePt_acc(mu);
+	    idPt = idPt_acc(mu);
+	  } catch ( SG::ExcNoAuxStore b ) {
+	    ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+	  }
+	  
+	  
+	  float cbPt = mu.pt();
+	  rho           = fabs( idPt - mePt ) / cbPt;
+	}
+	return rho; }, *systematicTree, "muon_rho");
+    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float qOverPsigma = -9999;
+	if( idtrack && metrack ) {
+	  qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+	}
+	return qOverPsigma; }, *systematicTree, "muon_qOverPsigma");  
+      
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float qOverPsignif = -9999;
+	if( idtrack && metrack ) {
+	  float mePt = -999999., idPt = -999999.;
+	  
+	  try{
+	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+	    mePt = mePt_acc(mu);
+	    idPt = idPt_acc(mu);
+	  } catch ( SG::ExcNoAuxStore b ) {
+	    ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+	  }
+
+	  float meP  = 1.0 / ( sin(metrack->theta()) / mePt);
+	  float idP  = 1.0 / ( sin(idtrack->theta()) / idPt);
+	  float qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+	  qOverPsignif  = fabs( (metrack->charge() / meP) - (idtrack->charge() / idP) ) / qOverPsigma;        
+	}
+	return qOverPsignif; }, *systematicTree, "muon_qOverPsignif");
+
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float reducedChi2   = mu.primaryTrackParticle()->chiSquared()/mu.primaryTrackParticle()->numberDoF();return reducedChi2; }, *systematicTree, "muon_reducedChi2");
+  
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	uint8_t nprecisionLayers;
+
+	if( fabs(mu.eta()) > 2.0 ) {
+	  nprecisionLayers = 0;
+	  uint8_t innerSmallHits, innerLargeHits, middleSmallHits, middleLargeHits, outerSmallHits, outerLargeHits;
+	  if ( !mu.summaryValue(innerSmallHits, xAOD::MuonSummaryType::innerSmallHits) ||
+	       !mu.summaryValue(innerLargeHits, xAOD::MuonSummaryType::innerLargeHits) ||
+	       !mu.summaryValue(middleSmallHits, xAOD::MuonSummaryType::middleSmallHits) ||
+	       !mu.summaryValue(middleLargeHits, xAOD::MuonSummaryType::middleLargeHits) ||
+	       !mu.summaryValue(outerSmallHits, xAOD::MuonSummaryType::outerSmallHits) ||
+	       !mu.summaryValue(outerLargeHits, xAOD::MuonSummaryType::outerLargeHits) ){
+
+	    ATH_MSG_VERBOSE("getQuality - Muon in CSC region and MS hits information missing!!!");
+	  }
+	  else {
+	    if( innerSmallHits>1  || innerLargeHits>1  ) nprecisionLayers += 1;
+	    if( middleSmallHits>2 || middleLargeHits>2 ) nprecisionLayers += 1;
+	    if( outerSmallHits>2  || outerLargeHits>2  ) nprecisionLayers += 1;
+	  }
+	}
+	else {
+	  mu.summaryValue(nprecisionLayers, xAOD::SummaryType::numberOfPrecisionLayers);
+	}
+	return nprecisionLayers; }, *systematicTree, "muon_numPrecLayers");
+  
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { return (short) mu.uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers); }, *systematicTree, "muon_numPrecLayers");
 
-    // Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "muon_ptcone20");
-    // Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "muon_ptcone30");
-    // Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "muon_ptcone40");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "muon_ptcone20");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "muon_ptcone30");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "muon_ptcone40");
     // topoiso
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "muon_topoetcone20");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "muon_topoetcone30");
@@ -871,6 +998,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 			    "passPreORSelection");
   OR_flags.doElectrons = m_config->useElectrons();
   OR_flags.doMuons     = m_config->useMuons();
+  OR_flags.boostedLeptons = true;
   OR_flags.doJets      = false;
   OR_flags.doTaus      = false;
   OR_flags.doPhotons   = false;
@@ -893,6 +1021,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 				    "ttHpassTauOVR");
   OR_flags_nominal.doElectrons = m_config->useElectrons();
   OR_flags_nominal.doMuons     = m_config->useMuons();
+  OR_flags_nominal.boostedLeptons = true;
   OR_flags_nominal.doJets      = true;
   OR_flags_nominal.doTaus      = true;
   OR_flags_nominal.doPhotons   = false;
@@ -905,6 +1034,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   	     "Failed to set MuJetPtRatio to a crazy threshold");
   top::check(m_ORtoolBox[1].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
              "Failed to set MuJetTrkPtRatio to a crazy threshold");
+  //top::check(m_ORtoolBox[1].muJetORT.setProperty("UseGhostAssociation",false),
+  //	     "Failed to set UseGhostAssociation to false");
 
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
@@ -924,6 +1055,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 					   "ttHpassOVR");
   OR_flags_nominal_no_tau.doElectrons = m_config->useElectrons();
   OR_flags_nominal_no_tau.doMuons     = m_config->useMuons();
+  OR_flags_nominal_no_tau.boostedLeptons = true;
   OR_flags_nominal_no_tau.doJets      = true;
   OR_flags_nominal_no_tau.doTaus      = false;
   OR_flags_nominal_no_tau.doPhotons   = false;
@@ -941,6 +1073,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
              "Failed to set MuJetPtRatio to a crazy threshold");
   top::check(m_ORtoolBox[2].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
              "Failed to set MuJetTrkPtRatio to a crazy threshold");
+  //top::check(m_ORtoolBox[2].muJetORT.setProperty("UseGhostAssociation",false),
+  //	     "Failed to set UseGhostAssociation to false");
 
 
   top::check(m_ORtoolBox[2].initialize(),
