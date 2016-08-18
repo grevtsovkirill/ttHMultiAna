@@ -1,7 +1,7 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
 GRLDir ttHMultilepton
-GRLFile data16_13TeV.periodAllYear_DetStatus-v80-pro20-08_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns_TriggerMenu1e34only.xml
+GRLFile data16_13TeV.periodAllYear_DetStatus-v81-pro20-10_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -23,7 +23,7 @@ PerfStats No
 NEvents 0
 
 PRWConfigFiles ttHMultilepton/merged_prw_mc15c.root
-PRWLumiCalcFiles ttHMultilepton/ilumicalc_histograms_None_297730-303560_OflLumi-13TeV-005.root
+PRWLumiCalcFiles ttHMultilepton/ilumicalc_histograms_None_297730-304494_OflLumi-13TeV-005.root
 PRWDefaultChannel 363372
 
 

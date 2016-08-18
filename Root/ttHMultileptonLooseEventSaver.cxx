@@ -172,7 +172,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     top::check( m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool" );
     top::check( m_sherpaRW->setProperty("TruthJetContainer", "AntiKt4TruthJets"),
 		"Failed to set TruthJetContainer of PMGSherpa22VJetsWeightTool" );
-		top::check( m_sampleXsection.readFromFile((std::string(getenv("ROOTCOREBIN"))+"/data/TopDataPreparation/XSection-MC15-13TeV.data").c_str()),
+    top::check( m_sampleXsection.readFromFile((std::string(getenv("ROOTCOREBIN"))+"/data/TopDataPreparation/XSection-MC15-13TeV.data").c_str()),
 		"Failed to open AMI X-section file");
   }
 

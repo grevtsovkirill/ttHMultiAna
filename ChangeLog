@@ -1,3 +1,7 @@
+2016-08-18 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Move to AT,2.4.18
+	* Add new 2016 GRL (v81, 15019.8 pb-1) and ilumicalc file
+
 2016-08-10 Robert Wolff <robert.wolff@cern.ch>
 	* add lowest unprescaled triggers in triggermatching for high-lumi runs
 	* add some tH and VVV samples to submission scripts

@@ -31,7 +31,7 @@ PerfStats No
 NEvents 0
 
 PRWConfigFiles ttHMultilepton/merged_prw_mc15c.root
-PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_None_276262-284484_OflLumi-13TeV-005.root ttHMultilepton/ilumicalc_histograms_None_297730-303560_OflLumi-13TeV-005.root
+PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_None_276262-284484_OflLumi-13TeV-005.root ttHMultilepton/ilumicalc_histograms_None_297730-304494_OflLumi-13TeV-005.root
 PRWDefaultChannel 363372
 
 Systematics Nominal
