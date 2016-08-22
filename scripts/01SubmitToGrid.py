@@ -1,17 +1,17 @@
 
 import TopExamples.grid
 #import DerivationTags
-import Data15
+#import Data15
 import MC_ichep
 import Data16
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'hpotti'
-config.excludedSites = 'ANALY_GOEGRID'
+config.gridUsername  = 'dhohn'
+config.excludedSites = ''#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
-config.destSE        = 'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
+config.destSE        = ''#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 #config.forceSite     = 'ANALY_CONNECT'
 
 ###############################################################################
@@ -21,26 +21,28 @@ config.suffix        = '22.07.16.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
-mc15c                          = TopExamples.grid.Samples(['ptag_p2666'])
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',mc15c)
-all_samples = mc15c
+reduced = TopExamples.grid.Samples(['reduced'])
+full    = TopExamples.grid.Samples(['full'])
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full)
+all_samples = reduced + full
 
 #~ TopExamples.grid.submit(config,mc15c)
 
 ####################################################################################
 #Nominal
 config.settingsFile  = 'generic_config-mc15.txt'
-config.suffix = '21.07.16.Nominal'
+config.suffix = '18.08.16.Nominal-04'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-#~ TopExamples.grid.submit(config,mc15c)
+TopExamples.grid.submit(config,all_samples)
 
 
 ########################################################################################
 #data
 #config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '22.07.16.Data'
+config.suffix = '18.08.16.Data-04'
 config.memory = ''
 config.maxNFilesPerJob = ''
 

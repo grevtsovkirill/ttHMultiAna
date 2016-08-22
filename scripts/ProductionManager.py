@@ -148,10 +148,12 @@ def getDoneSamplesOnGRID():
                 broken += 1
             elif job.taskStatus == 'finished':
                 finished += 1
-                #pbookCore.retry(job.JobsetID)
+                print 'Retry finished job with DS', job.inDS
+                pbookCore.retry(job.JobID)
             elif job.taskStatus == 'failed':
                 failed += 1
-                #pbookCore.retry(job.JobsetID)
+                print 'Retry failed job with DS', job.inDS
+                pbookCore.retry(job.JobID)
             elif job.taskStatus == 'running':
                 running +=1
 
@@ -184,11 +186,13 @@ def createJobScript(outDir,sample,eosMGM,eosPath):
     
     file = open(outDir+ '/' + jobScript, 'w') 
     file.write('#!/bin/sh                                                                          \n')
-    file.write('source ~/.bashrc								   \n')
-    file.write('setupATLAS                                                                         \n')
-    file.write('RUCIO_ACCOUNT=dhohn								   \n')
-    file.write('lsetup "rcsetup Top,2.4.15" panda rucio pyami    				   \n')
-    file.write('pwd										   \n')
+    file.write('date                                                                               \n')
+    file.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh        \n')
+    #file.write('setupATLAS                                                                         \n')
+    file.write('RUCIO_ACCOUNT=dhohn                                                                \n')
+    file.write('lsetup "rcsetup Top,2.4.16" rucio -f                                               \n')
+    file.write('pwd                                                                                \n')
+    file.write('which root                                                                         \n')
     txt  = 'source /afs/cern.ch/user/d/dhohn/Run2/ttHMultilepton/scripts/%s \\\n' % runScript
     txt += '%s \\\n' % sample.gridName
     txt += '%s \\\n' % copyPath
@@ -219,7 +223,12 @@ if __name__ == '__main__':
         os.environ['X509_USER_PROXY']
     except KeyError:
         raise RuntimeError('Please setup your GRID certificate as described in the README.')
-    
+
+    #passing the env variables to lxbatch is a bit weird. better start clean.
+    for env_var in ['ROOTCOREBIN','ROOTSYS']:
+        if env_var in os.environ.keys():
+            raise RuntimeError('Please use a clean shell. The environment variable passing to the batch jobs is finicky.')
+
     #link pbook to pbook.py in working directory so it can be imported
     pbookPath = os.environ['ATLAS_LOCAL_PANDACLIENT_PATH']+'/bin/pbook'
     pbookLinkname = os.getcwd()+"/pbook.py"
@@ -242,15 +251,14 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
 
     eosMGM = 'root://eospublic.cern.ch/'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v18/Nominal'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v18/Data'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v18/Sys'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v20/04/Data'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v20/02/Nominal'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
     gridNickName = 'dhohn'
-    #productionName = '17.07.16.Data'
-    #productionName = '17.07.16.Nominal.x'
-    productionName = '17.07.16.Sys.x'
+    #productionName = '18.08.16.Data-04'
+    productionName = '18.08.16.Nominal-02'
+    #productionName = '17.07.16.Sys.x'
 
     
     doneSamplesOnGRID = getDoneSamplesOnGRID()

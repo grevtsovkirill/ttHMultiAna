@@ -5,7 +5,7 @@ TopExamples.grid.Add('ttH').datasets = [
 'mc15_13TeV.343367.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad.merge.AOD.e4706_s2726_r7772_r7676',
 ]
 
-TopExamples.grid.Add('ptag_p2666').datasets = [
+TopExamples.grid.Add('reduced').datasets = [
 #ttH
 'mc15_13TeV.343365.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_dilep.merge.AOD.e4706_s2726_r7772_r7676',
 'mc15_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.merge.AOD.e4706_s2726_r7772_r7676',
@@ -129,6 +129,9 @@ TopExamples.grid.Add('ptag_p2666').datasets = [
 'mc15_13TeV.361095.Sherpa_CT10_WqqZvv_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
 'mc15_13TeV.361096.Sherpa_CT10_ZqqZll_SHv21_improved.merge.AOD.e4607_s2726_r7725_r7676',
 'mc15_13TeV.361097.Sherpa_CT10_ZqqZvv_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
+]
+
+TopExamples.grid.Add('full').datasets = [
 #Triboson Sherpa
 'mc15_13TeV.361620.Sherpa_CT10_WWW_3l3v.merge.AOD.e4093_s2608_s2183_r8112_r7676',
 'mc15_13TeV.361621.Sherpa_CT10_WWZ_4l2v.merge.AOD.e4053_s2608_s2183_r8112_r7676',
