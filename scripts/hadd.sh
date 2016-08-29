@@ -38,7 +38,7 @@ grep -q "Files that cannot be downloaded :             0" rucio.log
 rucioFail=$?
 echo "rucio failed to download? $rucioFail"
 echo 
-([ $rucioExit -eq 0 ] && [ $rucioFail -eq 0 ]) || echo $inDS >> ${LSB_OUTDIR}/../rucio.fail; cleanExit 1
+([ $rucioExit -eq 0 ] && [ $rucioFail -eq 0 ]) || ( echo $inDS >> ${LSB_OUTDIR}/../rucio.fail; cleanExit 1 )
 
 cd $outDS
 echo ls -l
