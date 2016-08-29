@@ -1,19 +1,25 @@
 # /bin/bash
 
+start=`date +%s`
+
 function cleanExit {
-    rm -rf $RUNDIR/$gridName
+    end=`date +%s`
+    runtime=$((end-start))
+    echo runtime $runtime seconds
+
+    rm -rf $RUNDIR/$outDS
     echo exit $1
     exit $1
 }
 
-
-gridName=$1
+outDS=$1
 eosPath=$2
 DSID=$3
 fileName=${DSID}.root
+inDS=$4
 
 echo "Job Info"
-echo "Download from: $gridName"
+echo "Download from: $outDS"
 echo "Upload to    : $eosPath/$fileName"
 echo
 
@@ -21,18 +27,20 @@ echo
 #echo $TMPDIR
 #echo $pwd
 RUNDIR=$(pwd)
-mkdir $gridName
-cd $gridName
+mkdir $outDS
+cd $outDS
 
-echo "Will download $gridName"
-rucio download $gridName|tee rucio.log
+echo "Will download $outDS"
+rucio download $outDS|tee rucio.log
 rucioExit=$?
 echo "rucio exit $rucioExit"
-[ $rucioExit -eq 0 ] || cleanExit 1
 grep -q "Files that cannot be downloaded :             0" rucio.log
-[ $? -eq 0 ] || cleanExit 1
+rucioFail=$?
+echo "rucio failed to download? $rucioFail"
+echo 
+([ $rucioExit -eq 0 ] && [ $rucioFail -eq 0 ]) || echo $inDS >> ${LSB_OUTDIR}/../rucio.fail; cleanExit 1
 
-cd $gridName
+cd $outDS
 echo ls -l
 ls -l
 echo
@@ -42,7 +50,6 @@ hadd -n 5 $fileName *.root*
 haddExit=$?
 echo "hadd exit $haddExit"
 [ $haddExit -eq 0 ] || cleanExit 2
-
 
 ls -l $fileName
 

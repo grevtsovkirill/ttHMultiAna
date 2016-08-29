@@ -31,16 +31,22 @@ class link:
 
 #============================================================================
 class Sample:
-    def __init__(self,dsid, size=0, gridName=""):
-        self.dsid     = str(dsid)
-        self.size     = int(size)
-        self.gridName = str(gridName)
+    def __init__(self,job=None):
+        ''' takes a pandatools.LocalJobsetSpec'''
+        if job:
+            outDS = job.outDS.split(',')[0]
+            dsid  = outDS.split('.')[2]
+            size  = getDSSize(outDS)
+            self.dsid     = str(dsid)
+            self.size     = int(size)
+            self.outDS    = str(outDS)
+            self.inDS     = str(job.inDS)
 
     def __eq__(self, other):
         return self.dsid == other.dsid
         
     def __str__(self):
-        return "DSID: %s   Size: %s"  % (self.dsid, self.size)
+        return "DSID: %s"  % self.dsid
 
     def __hash__(self):
         return hash(self.dsid)
@@ -104,7 +110,9 @@ def getSamplesOnEOS(eosMGM,eosPath):
     for f in eosFilesList:
         filename = f.split('/')[-1]
         dsid = filename.split('.')[0]
-        samples += [Sample(dsid)]
+        sample = Sample()
+        sample.dsid = dsid
+        samples += [sample]
     return samples
 
 #============================================================================
@@ -140,20 +148,33 @@ def getDoneSamplesOnGRID():
                 job = pbookCore.statusJobJobset(job.JobsetID,forceUpdate=True)
             if job.taskStatus == 'done':
                 done += 1
-                DSName = job.outDS.split(',')[0]
-                dsid = DSName.split('.')[2]
-                size = getDSSize(DSName)
-                samples += [Sample(dsid, size, DSName)]
+                samples += [Sample(job)]
             elif job.taskStatus == 'broken':
                 broken += 1
             elif job.taskStatus == 'finished':
                 finished += 1
-                print 'Retry finished job with DS', job.inDS
-                pbookCore.retry(job.JobID)
+                print job
+                status_map = {}
+                # jobStatus look like:
+                #>>> job.jobStatus
+                #'finished*109,failed*1'
+                for status in job.jobStatus.split(','):
+                    status_name  = status.split('*')[0]
+                    status_count = status.split('*')[1]
+                    status_map[status_name] = int(status_count)
+                #call anything with more than 95% a success for mc
+                finish_fraction = float(status_map['finished'])/float(sum(status_map.values()))
+                if finish_fraction > 0.95 and not job.inDS.count('data'):
+                    print 'Uploading job with %s finish fraction and DS %s' %( finish_fraction, job.inDS)
+                    samples += [Sample(job)]
+                else:
+                    #print 'Retrying finished job with DS', job.inDS
+                    #pbookCore.retry(job.JobID)
+                    pass
             elif job.taskStatus == 'failed':
                 failed += 1
-                print 'Retry failed job with DS', job.inDS
-                pbookCore.retry(job.JobID)
+                #print 'Retry failed job with DS', job.inDS
+                #pbookCore.retry(job.JobID)
             elif job.taskStatus == 'running':
                 running +=1
 
@@ -193,10 +214,11 @@ def createJobScript(outDir,sample,eosMGM,eosPath):
     file.write('lsetup "rcsetup Top,2.4.16" rucio -f                                               \n')
     file.write('pwd                                                                                \n')
     file.write('which root                                                                         \n')
-    txt  = 'source /afs/cern.ch/user/d/dhohn/Run2/ttHMultilepton/scripts/%s \\\n' % runScript
-    txt += '%s \\\n' % sample.gridName
+    txt  = 'source /afs/cern.ch/user/d/dhohn/Run2pro/ttHMultilepton/scripts/%s \\\n' % runScript
+    txt += '%s \\\n' % sample.outDS
     txt += '%s \\\n' % copyPath
     txt += '%s \\\n' % sample.dsid
+    txt += '%s \\\n' % sample.inDS
     file.write(txt)
     file.close() 
 
@@ -280,9 +302,12 @@ if __name__ == '__main__':
                 os.makedirs(outDir)
             jobScript = createJobScript(outDir, copySample, eosMGM, eosPath)
             job = BJob(outDir, jobScript)
-            job.setQ('1nd')
+            if copySample.size > 10e9:
+                job.setQ('1nd')
+            else:
+                job.setQ('8nh')
             job.setPool(2*copySample.size)
-            if copySample.size > 100e6:
+            if copySample.size > 100e9:
                 job.setPool(copySample.size)
             print job
             job.submit()
@@ -301,6 +326,6 @@ if __name__ == '__main__':
     '''
     extras = set(doneSamplesOnGRID) - set(samplesOnEOS)
     for e in list(extras):
-        print e.gridName
+        print e.outDS
     '''
     
