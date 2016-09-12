@@ -637,10 +637,22 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   // trigger matching, electron pt > 25 GeV
   if (m_runYear == 2015) {
     lep.isTrigMatch = ( el.pt() > 25e3 && (
-      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_L1EM20VH", (char) 0) ||
-      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
-      returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)));
-  } else if (m_runNumber == 298687) { // for full statistics in this run
+					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_L1EM20VH", (char) 0) ||
+					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
+					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)));
+  }
+  else if (m_runYear == 2016) {
+    lep.isTrigMatch = ( el.pt() > 27e3 && (
+					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e26_lhtight_nod0_ivarloose", (char) 0) ||
+					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
+					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e140_lhloose_nod0", (char) 0)));
+  } else { // MC events with pileupEventWeight==0
+    lep.isTrigMatch = 0;
+  }
+  
+
+  /* //////// Different pT threshold for pre and post-ICHEP dataset
+  else if (m_runNumber == 298687) { // for full statistics in this run
     lep.isTrigMatch = ( el.pt() > 25e3 && (
       returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhtight_nod0_ivarloose", (char) 0) ||
       returnDecoIfAvailable(el, "TRIGMATCH_HLT_e24_lhmedium_nod0_L1EM20VH", (char) 0) ||
@@ -659,6 +671,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   } else { // MC events with pileupEventWeight==0
     lep.isTrigMatch = 0;
   }
+  */
 
   // isolation variables
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
@@ -710,9 +723,18 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   // trigger matching
   if (m_runYear == 2015) {
     lep.isTrigMatch = (mu.pt() > 21e3 && (
-      returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
-	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
-  } else if (m_runYear == 2016 && m_runNumber < 302900) { // period A to D3 in 2016 data
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else if (m_runYear == 2016) { // since period D4 on in 2016 data (high luminosity triggers)
+    lep.isTrigMatch = (mu.pt() > 27e3 && (
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu26_ivarmedium", (char) 0) ||
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else { // MC events with pileupEventWeight==0
+    lep.isTrigMatch = 0;
+  }
+  
+  /* //////// Different pT threshold for pre and post-ICHEP dataset
+  else if (m_runYear == 2016 && m_runNumber < 302900) { // period A to D3 in 2016 data
     lep.isTrigMatch = (mu.pt() > 25e3 && (
 	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu24_ivarmedium", (char) 0) ||
 	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
@@ -723,6 +745,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   } else { // MC events with pileupEventWeight==0
     lep.isTrigMatch = 0;
   }
+  */
 
   // truth matching, fakes, QMisId
   int TruthType = -99;

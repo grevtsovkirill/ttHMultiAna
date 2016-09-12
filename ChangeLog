@@ -1,3 +1,7 @@
+2016-09-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Move to post-ICHEP trigger pT thresholds for 2016
+	* Add new 2016 GRL (v82-pro20-12, 18857.4 pb-1) and ilumicalc file
+
 2016-08-18 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Move to AT,2.4.18
 	* Add new 2016 GRL (v81, 15019.8 pb-1) and ilumicalc file
