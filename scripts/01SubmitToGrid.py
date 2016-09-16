@@ -23,9 +23,11 @@ config.memory = ''
 
 reduced = TopExamples.grid.Samples(['reduced'])
 full    = TopExamples.grid.Samples(['full'])
+new     = TopExamples.grid.Samples(['new'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full)
-all_samples = reduced + full
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new)
+all_samples = reduced + full + new
 
 #~ TopExamples.grid.submit(config,mc15c)
 

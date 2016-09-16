@@ -1,3 +1,6 @@
+2016-09-16 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
+	* Add new datasets in Data16.py and new MC in MC_ichep.py
+
 2016-09-12 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Move to post-ICHEP trigger pT thresholds for 2016
 	* Add new 2016 GRL (v82-pro20-12, 18857.4 pb-1) and ilumicalc file

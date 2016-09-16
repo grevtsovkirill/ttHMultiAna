@@ -5,12 +5,55 @@ TopExamples.grid.Add('ttH').datasets = [
 'mc15_13TeV.343367.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad.merge.AOD.e4706_s2726_r7772_r7676',
 ]
 
-TopExamples.grid.Add('reduced').datasets = [
-#ttH
+TopExamples.grid.Add('new').datasets = [
+## ttH NLO
 'mc15_13TeV.343365.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_dilep.merge.AOD.e4706_s2726_r7772_r7676',
 'mc15_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.merge.AOD.e4706_s2726_r7772_r7676',
 'mc15_13TeV.343367.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad.merge.AOD.e4706_s2726_r7772_r7676',
 'mc15_13TeV.343436.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_gamgam.merge.AOD.e4704_s2726_r7772_r7676',
+## ttV NLO
+'mc15_13TeV.410155.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW.merge.AOD.e5070_s2726_r7772_r7676',
+'mc15_13TeV.410156.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu.merge.AOD.e5070_s2726_r7772_r7676',
+'mc15_13TeV.410157.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq.merge.AOD.e5070_s2726_r7772_r7676',
+'mc15_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.merge.AOD.e5070_s2726_r7772_r7676',
+'mc15_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.merge.AOD.e5070_s2726_r7772_r7676',
+'mc15_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.merge.AOD.e5070_s2726_r7772_r7676',
+## tZ
+'mc15_13TeV.410049.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_trilepton.merge.AOD.e4440_s2608_r7725_r7676',
+'mc15_13TeV.410050.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_noAllHad.merge.AOD.e4279_s2608_s2183_r7725_r7676',
+## ttbar and single top
+'mc15_13TeV.410007.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_allhad.merge.AOD.e4135_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410009.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil.merge.AOD.e4511_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410120.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad_bfilter.merge.AOD.e4373_s2608_r7725_r7676',
+'mc15_13TeV.410121.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil_bfilter.merge.AOD.e4426_s2726_r7725_r7676',
+'mc15_13TeV.343637.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_threelepton.merge.AOD.e4948_s2726_r7772_r7676',
+'mc15_13TeV.410011.PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top.merge.AOD.e3824_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410012.PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop.merge.AOD.e3824_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410013.PowhegPythiaEvtGen_P2012_Wt_inclusive_top.merge.AOD.e3753_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410014.PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop.merge.AOD.e3753_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410015.PowhegPythiaEvtGen_P2012_Wt_dilepton_top.merge.AOD.e3753_a766_a818_r7676',
+'mc15_13TeV.410015.PowhegPythiaEvtGen_P2012_Wt_dilepton_top.merge.AOD.e3753_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410016.PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop.merge.AOD.e3753_a766_a818_r7676',
+'mc15_13TeV.410016.PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop.merge.AOD.e3753_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410025.PowhegPythiaEvtGen_P2012_SingleTopSchan_noAllHad_top.merge.AOD.e3998_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410026.PowhegPythiaEvtGen_P2012_SingleTopSchan_noAllHad_antitop.merge.AOD.e3998_s2608_s2183_r7725_r7676',
+'mc15_13TeV.410001.PowhegPythiaEvtGen_P2012radHi_ttbar_hdamp345_down_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
+'mc15_13TeV.410002.PowhegPythiaEvtGen_P2012radLo_ttbar_hdamp172_up_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
+#Diboson b-filter Sherpa
+'mc15_13TeV.344422.Sherpa_CT10_llll_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344423.Sherpa_CT10_llll_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344424.Sherpa_CT10_lllvSFMinus_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344425.Sherpa_CT10_lllvSFMinus_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344426.Sherpa_CT10_lllvOFMinus_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344427.Sherpa_CT10_lllvOFMinus_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344428.Sherpa_CT10_lllvSFPlus_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344429.Sherpa_CT10_lllvSFPlus_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344430.Sherpa_CT10_lllvOFPlus_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
+'mc15_13TeV.344431.Sherpa_CT10_lllvOFPlus_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
+]
+
+TopExamples.grid.Add('reduced').datasets = [
+#ttH
 'mc15_13TeV.341177.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10ME_ttH125_dil.merge.AOD.e4277_s2608_s2183_a821_r7676',
 'mc15_13TeV.341270.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10ME_ttH125_semilep.merge.AOD.e4277_s2608_s2183_a821_r7676',
 'mc15_13TeV.341271.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10ME_ttH125_allhad.merge.AOD.e4277_s2608_s2183_a821_r7676',
@@ -57,26 +100,8 @@ TopExamples.grid.Add('reduced').datasets = [
 'mc15_13TeV.410142.Sherpa_NNPDF30NNLO_ttll_mll5.merge.AOD.e4686_a766_a818_r7676',
 'mc15_13TeV.410143.Sherpa_NNPDF30NNLO_ttZnnqq.merge.AOD.e4686_a766_a818_r7676',
 'mc15_13TeV.410144.Sherpa_NNPDF30NNLO_ttW.merge.AOD.e4686_a766_a818_r7676',
-'mc15_13TeV.410155.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW.merge.AOD.e5070_s2726_r7772_r7676',
-#NLO ttV
-'mc15_13TeV.410155.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW.merge.AOD.e5070_s2726_r7772_r7676',
-'mc15_13TeV.410156.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu.merge.AOD.e5070_s2726_r7772_r7676',
-'mc15_13TeV.410157.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq.merge.AOD.e5070_s2726_r7772_r7676',
-'mc15_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.merge.AOD.e5070_s2726_r7772_r7676',
-'mc15_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.merge.AOD.e5070_s2726_r7772_r7676',
-'mc15_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.merge.AOD.e5070_s2726_r7772_r7676',
-
-#tZ
-'mc15_13TeV.410049.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_trilepton.merge.AOD.e4440_s2608_r7725_r7676',
-'mc15_13TeV.410050.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_noAllHad.merge.AOD.e4279_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.AOD.e4851_s2726_r7725_r7676',
 #ttbar and single top
-'mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r7773_r7676',
 'mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410007.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_allhad.merge.AOD.e4135_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410009.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil.merge.AOD.e4511_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410120.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad_bfilter.merge.AOD.e4373_s2608_r7725_r7676',
-'mc15_13TeV.410121.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil_bfilter.merge.AOD.e4426_s2726_r7725_r7676',
 'mc15_13TeV.410500.PowhegPythia8EvtGen_A14_ttbar_hdamp172p5_nonallhad.merge.AOD.e4797_s2726_r7725_r7676',
 'mc15_13TeV.410159.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttbar_nonallhad.merge.AOD.e4683_s2726_r7725_r7676',
 'mc15_13TeV.410187.Sherpa_NNPDF30NNLO_ttbar_SingleLeptonP_MEPS_NLO.merge.AOD.e4714_s2726_r7725_r7676',
@@ -84,14 +109,6 @@ TopExamples.grid.Add('reduced').datasets = [
 'mc15_13TeV.410189.Sherpa_NNPDF30NNLO_ttbar_dilepton_MEPS_NLO.merge.AOD.e4714_s2726_r7725_r7676',
 'mc15_13TeV.410001.PowhegPythiaEvtGen_P2012radHi_ttbar_hdamp345_down_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
 'mc15_13TeV.410002.PowhegPythiaEvtGen_P2012radLo_ttbar_hdamp172_up_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
-'mc15_13TeV.410011.PowhegPythiaEvtGen_P2012_singletop_tchan_lept_top.merge.AOD.e3824_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410012.PowhegPythiaEvtGen_P2012_singletop_tchan_lept_antitop.merge.AOD.e3824_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410025.PowhegPythiaEvtGen_P2012_SingleTopSchan_noAllHad_top.merge.AOD.e3998_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410026.PowhegPythiaEvtGen_P2012_SingleTopSchan_noAllHad_antitop.merge.AOD.e3998_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410013.PowhegPythiaEvtGen_P2012_Wt_inclusive_top.merge.AOD.e3753_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410014.PowhegPythiaEvtGen_P2012_Wt_inclusive_antitop.merge.AOD.e3753_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410015.PowhegPythiaEvtGen_P2012_Wt_dilepton_top.merge.AOD.e3753_s2608_s2183_r7725_r7676',
-'mc15_13TeV.410016.PowhegPythiaEvtGen_P2012_Wt_dilepton_antitop.merge.AOD.e3753_s2608_s2183_r7725_r7676',
 #Dibosons Sherpa
 'mc15_13TeV.361063.Sherpa_CT10_llll.merge.AOD.e3836_s2608_s2183_r7725_r7676',
 'mc15_13TeV.361064.Sherpa_CT10_lllvSFMinus.merge.AOD.e3836_s2608_s2183_r7725_r7676',

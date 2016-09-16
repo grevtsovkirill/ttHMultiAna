@@ -17,7 +17,7 @@ def get_grlruns(grl):
 
 def get_logical_dataset_names(scope, grl_runs):
     ami_list = []
-    for ptag in ['p2667','p2689']:
+    for ptag in ['p2667','p2689','p2769']:
         ami_list += TopExamples.grid.listDatasets(scope,'*.physics_Main.merge.DAOD_HIGG8D1.*_'+ptag)
     #ami_list = sorted(TopExamples.ami.askAmi('data16_13TeV*physics_Main.merge.DAOD_HIGG8D1*_p2623'))
     ami_list = [ds.encode("ascii") for ds in ami_list] # convert Uni-string to ASCII
@@ -39,7 +39,7 @@ grl15 = 'data15_13TeV.periodAllYear_DetStatus-v79-repro20-02_DQDefects-00-02-02_
 grl_runs15 = get_grlruns(grl15)
 ds_names15 = get_logical_dataset_names('data15_13TeV', grl_runs15)
 
-grl16 = 'data16_13TeV.periodAllYear_DetStatus-v80-pro20-08_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns_TriggerMenu1e34only.xml'
+grl16 = 'data16_13TeV.periodAllYear_DetStatus-v82-pro20-12_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml'
 grl_runs16 = get_grlruns(grl16)
 ds_names16 = get_logical_dataset_names('data16_13TeV', grl_runs16)
 
