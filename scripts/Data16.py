@@ -39,7 +39,7 @@ grl15 = 'data15_13TeV.periodAllYear_DetStatus-v79-repro20-02_DQDefects-00-02-02_
 grl_runs15 = get_grlruns(grl15)
 ds_names15 = get_logical_dataset_names('data15_13TeV', grl_runs15)
 
-grl16 = 'data16_13TeV.periodAllYear_DetStatus-v82-pro20-12_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml'
+grl16 = 'data16_13TeV.periodAllYear_DetStatus-v82-pro20-13_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml'
 grl_runs16 = get_grlruns(grl16)
 ds_names16 = get_logical_dataset_names('data16_13TeV', grl_runs16)
 
