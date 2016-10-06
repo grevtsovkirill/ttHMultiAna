@@ -1,3 +1,7 @@
+2016-10-06 Babar Ali <babar.ali@cern.ch>
+	* Added New GRL and ilumiCalc file. 
+	* Updated The GRL and lumiCalc files in share/config files and also in Data16.py
+
 2016-09-16 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Add new datasets in Data16.py and new MC in MC_ichep.py
 
