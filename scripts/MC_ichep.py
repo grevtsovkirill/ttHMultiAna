@@ -1,10 +1,10 @@
 import TopExamples.grid
 TopExamples.grid.Add('requestXimo').datasets = [
 'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.AOD.e4404_a766_a821_r7676',
-'mc15_13TeV:mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.AOD.e4851_s2726_r7725_r7676',
+'mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.AOD.e4851_s2726_r7725_r7676',
 'mc15_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.merge.AOD.e4324_a766_a818_r7676',
 'mc15_13TeV.341471.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_ggH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
-'mc15_13TeV:mc15_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
+'mc15_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
 ]
 
 TopExamples.grid.Add('ttH').datasets = [
@@ -48,7 +48,7 @@ TopExamples.grid.Add('new').datasets = [
 'mc15_13TeV.410001.PowhegPythiaEvtGen_P2012radHi_ttbar_hdamp345_down_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
 'mc15_13TeV.410002.PowhegPythiaEvtGen_P2012radLo_ttbar_hdamp172_up_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
 'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.AOD.e4404_a766_a821_r7676',
-'mc15_13TeV:mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.AOD.e4851_s2726_r7725_r7676',
+'mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.AOD.e4851_s2726_r7725_r7676',
 'mc15_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.merge.AOD.e4324_a766_a818_r7676',
 #Diboson b-filter Sherpa
 'mc15_13TeV.344422.Sherpa_CT10_llll_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
@@ -63,7 +63,7 @@ TopExamples.grid.Add('new').datasets = [
 'mc15_13TeV.344431.Sherpa_CT10_lllvOFPlus_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
 #Diboson PowhegPythia8
 'mc15_13TeV.341471.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_ggH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
-'mc15_13TeV:mc15_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
+'mc15_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
 ]
 
 TopExamples.grid.Add('reduced').datasets = [
