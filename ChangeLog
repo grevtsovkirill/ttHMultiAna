@@ -1,3 +1,10 @@
+2016-10-14 Robert Wolff	<robert.wolff@cern.ch>
+	* fix tag for one MC sample in submission
+	* added latest TopDataPreparation package to manual checkout for Vgamma samples
+
+2016-10-12 Robert Wolff <robert.wolff@cern.ch>
+	* fix rc checkout in setupRCandGrid.sh
+
 2016-10-11 Robert Wolff <robert.wolff@cern.ch>
 	* added samples (request by Ximo)
 	* added bad electron handling without crashing
