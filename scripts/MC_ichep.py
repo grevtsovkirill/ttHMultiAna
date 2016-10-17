@@ -1,4 +1,22 @@
 import TopExamples.grid
+import TopExamples.analysis
+import os
+
+TopExamples.grid.Add('requestXimo').datasets = [
+'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.AOD.e4404_a766_a821_r7676',
+'mc15_13TeV.410215.aMcAtNloPythia8EvtGen_A14_NNPDF23LO_260000_tWZDR.merge.AOD.e4851_s2726_r7725_r7676',
+'mc15_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.merge.AOD.e4324_a766_a818_r7676',
+'mc15_13TeV.341471.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_ggH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
+'mc15_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
+]
+TopExamples.grid.Add('requestRobert').datasets = [
+'mc15_13TeV.301887.Sherpa_CT10_enugammaPt10_35.merge.AOD.e4452_s2726_r7725_r7676',
+'mc15_13TeV.301888.Sherpa_CT10_munugammaPt10_35.merge.AOD.e4452_s2608_s2183_r7725_r7676',
+'mc15_13TeV.301889.Sherpa_CT10_taunugammaPt10_35.merge.AOD.e4452_s2608_s2183_r7725_r7676',
+'mc15_13TeV.304776.Sherpa_CT10_tautaugammaPt10_35.merge.AOD.e4687_s2726_r7725_r7676',
+'mc15_13TeV.343243.Sherpa_CT10_tautaugammaPt10_35.merge.AOD.e4759_s2726_r7725_r7676',
+]
+
 TopExamples.grid.Add('ttH').datasets = [
 'mc15_13TeV.343365.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_dilep.merge.AOD.e4706_s2726_r7772_r7676',
 'mc15_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.merge.AOD.e4706_s2726_r7772_r7676',
@@ -732,3 +750,20 @@ TopExamples.grid.Add('sherpa22').datasets = [
 'mc15_13TeV.363353.Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_CFilterBVeto.merge.AOD.e4709_s2726_r7725_r7676',
 'mc15_13TeV.363354.Sherpa_NNPDF30NNLO_Wtaunu_Pt2000_E_CMS_BFilter.merge.AOD.e4709_s2726_r7725_r7676',
 ]
+
+noShowerDatasets = []
+tdp = TopExamples.analysis.TopDataPreparation(os.getenv('ROOTCOREBIN') + '/data/TopDataPreparation/XSection-MC15-13TeV.data')
+for TopSample in TopExamples.grid.availableDatasets.values():
+    for sample in TopSample.datasets:
+        dsid = sample.split('.')[1]
+        dsid = int(dsid)
+        #print tdp.hasID(dsid), tdp.getShower(dsid)
+        hasShower = tdp.getShower(dsid) in ['sherpa','pythia','pythia8','herwigpp']
+        if not tdp.hasID(dsid) or not hasShower:
+            noShowerDatasets += [dsid]
+
+if len(noShowerDatasets) > 0:
+    print 'The following datasets dont have a showering algorithm defined in TopDataPreparation and will fail on the grid.'
+    for ds in noShowerDatasets:
+        print ds
+    raise RuntimeError("Datasets without shower.")
