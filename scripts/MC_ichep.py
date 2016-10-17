@@ -764,6 +764,6 @@ for TopSample in TopExamples.grid.availableDatasets.values():
 
 if len(noShowerDatasets) > 0:
     print 'The following datasets dont have a showering algorithm defined in TopDataPreparation and will fail on the grid.'
-    for ds in noShowerDatasets:
+    for ds in set(noShowerDatasets):
         print ds
     raise RuntimeError("Datasets without shower.")
