@@ -1,3 +1,6 @@
+2016-10-18 Robert Wolff <robert.wolff@cern.ch>
+	* added dilepton trigger HLT_e26_lhmedium_nod0_L1EM22VHI_mu8noL1
+
 2016-10-14 Robert Wolff	<robert.wolff@cern.ch>
 	* fix tag for one MC sample in submission
 	* added latest TopDataPreparation package to manual checkout for Vgamma samples
