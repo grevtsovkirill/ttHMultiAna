@@ -20,7 +20,7 @@ OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename output.root
 OutputEvents SelectedEvents
 PerfStats No
-NEvents 1000
+NEvents 0
 
 PRWConfigFiles ttHMultilepton/merged_prw_mc15c.root
 PRWLumiCalcFiles ttHMultilepton/ilumicalc_histograms_None_297730-308084_OflLumi-13TeV-005.root
