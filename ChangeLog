@@ -1,6 +1,7 @@
 2016-11-03 Robert Wolff <robert.wolff@cern.ch>
 	* added additional triggers (dilepton and lepton+tau)
 	* updated for AnalysisTop, 2.4.21
+	* updated GRL and iLumiCalc file for full 2016 luminosity
 
 2016-10-18 Robert Wolff <robert.wolff@cern.ch>
 	* added dilepton trigger HLT_e26_lhmedium_nod0_L1EM22VHI_mu8noL1
