@@ -248,6 +248,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;
   std::vector<float> m_trjet_e;
+  std::vector<int>   m_trjet_Wcount, m_trjet_Zcount, m_trjet_Hcount, m_trjet_Tcount;
 
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{

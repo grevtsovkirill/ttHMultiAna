@@ -327,6 +327,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
       systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
       systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
+      systematicTree->makeOutputVariable(m_trjet_Wcount,   "m_truth_jet_Wcount");
+      systematicTree->makeOutputVariable(m_trjet_Zcount,   "m_truth_jet_Zcount");
+      systematicTree->makeOutputVariable(m_trjet_Hcount,   "m_truth_jet_Hcount");
+      systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
 
       //truthEvent information
       systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
@@ -1385,11 +1389,19 @@ void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLe
   m_trjet_eta.resize(plEvent.m_jets->size());
   m_trjet_phi.resize(plEvent.m_jets->size());
   m_trjet_e.resize(plEvent.m_jets->size());
+  m_trjet_Hcount.resize(plEvent.m_jets->size());
+  m_trjet_Tcount.resize(plEvent.m_jets->size());
+  m_trjet_Wcount.resize(plEvent.m_jets->size());
+  m_trjet_Zcount.resize(plEvent.m_jets->size());
   for (const auto & jetPtr : * plEvent.m_jets) {
     m_trjet_pt[i] = jetPtr->pt();
     m_trjet_eta[i] = jetPtr->eta();
     m_trjet_phi[i] = jetPtr->phi();
     m_trjet_e[i] = jetPtr->e();
+    m_trjet_Hcount[i] = jetPtr->getAttribute<int>("GhostHBosonsCount");
+    m_trjet_Tcount[i] = jetPtr->getAttribute<int>("GhostTQuarksFinalCount");
+    m_trjet_Wcount[i] = jetPtr->getAttribute<int>("GhostWBosonsCount");
+    m_trjet_Zcount[i] = jetPtr->getAttribute<int>("GhostZBosonsCount");
     ++i;
   }
 }
