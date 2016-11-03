@@ -6,6 +6,7 @@
 
 // CP tools
 #include "AsgTools/ToolHandle.h"
+#include "ElectronPhotonSelectorTools/AsgElectronChargeFlipTaggerTool.h"
 #include "MuonSelectorTools/MuonSelectionTool.h"
 #include "JetInterface/IJetSelector.h"
 #include "PileupReweighting/PileupReweightingTool.h"
@@ -112,6 +113,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
   ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
+  AsgElectronChargeFlipTaggerTool        m_electronChargeFlipTagger;
   MuonSelectionTool                      muonSelection;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
@@ -248,6 +250,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;
   std::vector<float> m_trjet_e;
+  std::vector<int>   m_trjet_Wcount, m_trjet_Zcount, m_trjet_Hcount, m_trjet_Tcount;
 
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{

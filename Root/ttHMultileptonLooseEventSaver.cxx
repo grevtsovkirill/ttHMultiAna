@@ -25,6 +25,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_trigDecTool("Trig::TrigDecisionTool"),
   m_purwtool("CP::PileupReweightingTool"),
   m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
+  m_electronChargeFlipTagger("AsgElectronChargeFlipTaggerTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -205,6 +206,12 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   /// special case for FixedCutTight (el only)
   top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
 
+  //Electron Charge Flip Tagger Tool
+  top::check( m_electronChargeFlipTagger.setProperty("TrainingFile", "ttHMultilepton/CFT_tight.root"), "ElectronChargeFlipTaggerTool: Failed to set training file." );
+  top::check( m_electronChargeFlipTagger.setProperty("CutOnBDT", 0), "ElectronChargeFlipTaggerTool: Failed to set cut on BDT value." );
+  top::check( m_electronChargeFlipTagger.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeFlipTaggerTool: Failed to set output level." );
+  top::check( m_electronChargeFlipTagger.initialize(), "ElectronChargeFlipTaggerTool: Failed to initialize." );
+
   //Muon Tools
   //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
@@ -327,6 +334,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
       systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
       systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
+      systematicTree->makeOutputVariable(m_trjet_Wcount,   "m_truth_jet_Wcount");
+      systematicTree->makeOutputVariable(m_trjet_Zcount,   "m_truth_jet_Zcount");
+      systematicTree->makeOutputVariable(m_trjet_Hcount,   "m_truth_jet_Hcount");
+      systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
 
       //truthEvent information
       systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
@@ -483,6 +494,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_TrackJetNTrack");
 	if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_short = AccessorNonPrompt(ele);
 	return (short) m_el_nonprompt_short; }, *systematicTree, "electron_PromptLepton_TrackJetNTrack");
+
+    // electron charge flip tagger tool
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeFlipTagger.calculate(&ele); }, *systematicTree, "electron_ChargeFlipTaggerBDT");
 
     for (std::string trigger_name : triggernames) {
       if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;
@@ -1385,11 +1399,19 @@ void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLe
   m_trjet_eta.resize(plEvent.m_jets->size());
   m_trjet_phi.resize(plEvent.m_jets->size());
   m_trjet_e.resize(plEvent.m_jets->size());
+  m_trjet_Hcount.resize(plEvent.m_jets->size());
+  m_trjet_Tcount.resize(plEvent.m_jets->size());
+  m_trjet_Wcount.resize(plEvent.m_jets->size());
+  m_trjet_Zcount.resize(plEvent.m_jets->size());
   for (const auto & jetPtr : * plEvent.m_jets) {
     m_trjet_pt[i] = jetPtr->pt();
     m_trjet_eta[i] = jetPtr->eta();
     m_trjet_phi[i] = jetPtr->phi();
     m_trjet_e[i] = jetPtr->e();
+    m_trjet_Hcount[i] = jetPtr->getAttribute<int>("GhostHBosonsCount");
+    m_trjet_Tcount[i] = jetPtr->getAttribute<int>("GhostTQuarksFinalCount");
+    m_trjet_Wcount[i] = jetPtr->getAttribute<int>("GhostWBosonsCount");
+    m_trjet_Zcount[i] = jetPtr->getAttribute<int>("GhostZBosonsCount");
     ++i;
   }
 }

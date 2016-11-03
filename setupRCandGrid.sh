@@ -9,6 +9,9 @@ lsetup "rcsetup Top,2.4.21" panda rucio pyami
 rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
+# for Charge Flip Tagger Tool
+rc checkout_pkg atlasoff/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/branches/ElectronPhotonSelectorTools-00-02-92-branch
+
 rc build
 
 echo "Alright - done."

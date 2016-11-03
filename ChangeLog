@@ -2,6 +2,8 @@
 	* added additional triggers (dilepton and lepton+tau)
 	* updated for AnalysisTop, 2.4.21
 	* updated GRL and iLumiCalc file for full 2016 luminosity
+	* added electron Charge Flip Tagger Tool BDT output
+	* added truth H,Top,W,Z count for truth jets
 
 2016-10-18 Robert Wolff <robert.wolff@cern.ch>
 	* added dilepton trigger HLT_e26_lhmedium_nod0_L1EM22VHI_mu8noL1
