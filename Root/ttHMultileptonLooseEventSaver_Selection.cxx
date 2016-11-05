@@ -1198,6 +1198,7 @@ ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& 
   MLTau.JetBDTSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium);
   MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
   MLTau.numTrack        = xTau.nTracks();
+  MLTau.isHadronic      = xTau.auxdata<int>("IsHadronic");
 
   for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
