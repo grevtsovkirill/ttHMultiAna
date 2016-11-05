@@ -20,6 +20,7 @@ void ttHMultilepton::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, 
   CreateBranch(tree, &JetBDTSigMedium, "tau_JetBDTSigMedium_",  index);
   CreateBranch(tree, &JetBDTSigTight,  "tau_JetBDTSigTight_",   index);
   CreateBranch(tree, &numTrack,        "tau_numTrack_",         index);
+  CreateBranch(tree, &isHadronic,      "tau_isHadronic_",       index);
   CreateBranch(tree, &SFTight[0],      "tau_SFTight_",          index);
   CreateBranch(tree, &SFLoose[0],      "tau_SFLoose_",          index);
 }
