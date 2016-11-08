@@ -30,7 +30,7 @@ namespace ttH
     int   pdgId;
     int   status;
     int   barcode;
-    int   parentPdgId;  
+    int   parentPdgId;
 
     std::vector<int> bc_children;
     std::vector<int> bc_parents;
@@ -59,8 +59,10 @@ namespace ttH
     
     const std::vector<TruthPart>& SelectTruth(const xAOD::TruthParticleContainer *truths);
  
-    decaymode GetHiggsDecayMode(const xAOD::TruthParticleContainer* truthCont);
-    const xAOD::TruthParticle* GetHiggs(const xAOD::TruthParticleContainer* truthCont);
+    decaymode GetHiggsDecayMode          (const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetHiggs  (const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetTop    (const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetAntiTop(const xAOD::TruthParticleContainer* truthCont);
 
     unsigned int CountJets(const xAOD::JetContainer* truthJets,
 			   const xAOD::TruthParticleContainer* truthParticles);
@@ -68,7 +70,6 @@ namespace ttH
   private:
     
     bool IsGoodTop    (const int pdgId, const std::vector<int>& children);
-    bool IsGoodHiggs  (const int pdgId, const std::vector<ttH::TruthPart> &children);
     bool IsGoodHiggs  (const int pdgId, const std::vector<int>& children);
     bool IsGoodW      (const int pdgId, const std::vector<int>& children);
     bool IsGoodZ      (const int pdgId, const std::vector<int>& children);

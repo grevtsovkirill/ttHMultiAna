@@ -98,21 +98,21 @@ ttH::TruthSelector::TruthSelector():
   m_debug (false),
   m_truths(nullptr)
 {
-     decaymodestr[bb]    = "bb";
-     decaymodestr[cc]    = "cc";
-     decaymodestr[ss]    = "ss";
-     decaymodestr[WW]    = "WW";
-     decaymodestr[ZZ]    = "ZZ";
-     decaymodestr[gg]    = "gg";
-     decaymodestr[tautau]= "tautau";
-     decaymodestr[mumu]  = "mumu";
-     decaymodestr[gamgam]= "gamgam";
-     decaymodestr[Zgamma]= "Zgamma";
-     decaymodestr[taugamma]= "taugamma";
-     decaymodestr[unclassified]  = "unclassified";
-     decaymodestr[noproducts]    = "noproducts";
-     decaymodestr[nohiggs]       = "nohiggs";
-     decaymodestr[problem]       = "problem";
+     decaymodestr[bb]           = "bb";
+     decaymodestr[cc]           = "cc";
+     decaymodestr[ss]           = "ss";
+     decaymodestr[WW]           = "WW";
+     decaymodestr[ZZ]           = "ZZ";
+     decaymodestr[gg]           = "gg";
+     decaymodestr[tautau]       = "tautau";
+     decaymodestr[mumu]         = "mumu";
+     decaymodestr[gamgam]       = "gamgam";
+     decaymodestr[Zgamma]       = "Zgamma";
+     decaymodestr[taugamma]     = "taugamma";
+     decaymodestr[unclassified] = "unclassified";
+     decaymodestr[noproducts]   = "noproducts";
+     decaymodestr[nohiggs]      = "nohiggs";
+     decaymodestr[problem]      = "problem";
 }
 
 //=========================================================================
@@ -209,7 +209,8 @@ ttH::decaymode ttH::TruthSelector::GetHiggsDecayMode(const xAOD::TruthParticleCo
         {
             continue;
         }
-        if(IsGoodHiggs(part->pdgId(),GetChildren(*part)))
+	TruthPart p(*part);
+        if(IsGoodHiggs(p.pdgId,p.bc_children) )
         {
             std::vector<int> higgs_cpdg;
             higgs_cpdg.clear();
@@ -325,6 +326,7 @@ ttH::decaymode ttH::TruthSelector::GetHiggsDecayMode(const xAOD::TruthParticleCo
     return unclassified;
 }
 
+//=========================================================================
 const xAOD::TruthParticle* ttH::TruthSelector::GetHiggs(const xAOD::TruthParticleContainer* cont)
 {
     m_truths    = cont;
@@ -334,7 +336,48 @@ const xAOD::TruthParticle* ttH::TruthSelector::GetHiggs(const xAOD::TruthParticl
         {
             continue;
         }
-        if(IsGoodHiggs(part->pdgId(),GetChildren(*part)))
+	TruthPart p(*part);
+        if(IsGoodHiggs(p.pdgId,p.bc_children))
+        {
+	  return part;
+	}
+    }
+    
+    return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetTop(const xAOD::TruthParticleContainer* cont)
+{
+    m_truths    = cont;
+    for(const xAOD::TruthParticle *part: *m_truths)
+    {
+        if(!part)
+        {
+            continue;
+        }
+	TruthPart p(*part);
+        if(IsGoodTop(p.pdgId,p.bc_children) && p.pdgId>0 )
+        {
+	  return part;
+	}
+    }
+    
+    return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetAntiTop(const xAOD::TruthParticleContainer* cont)
+{
+    m_truths    = cont;
+    for(const xAOD::TruthParticle *part: *m_truths)
+    {
+        if(!part)
+        {
+            continue;
+        }
+	TruthPart p(*part);
+        if(IsGoodTop(p.pdgId,p.bc_children) && p.pdgId<0 )
         {
 	  return part;
 	}
@@ -350,11 +393,6 @@ bool ttH::TruthSelector::IsGoodTop(const int pdgId, const vector<int>& children)
 }
 
 //=========================================================================
-
-bool ttH::TruthSelector::IsGoodHiggs(const int pdgId, const std::vector<ttH::TruthPart>& children)
-{
-    return std::abs(pdgId) == PDG_HIGGS && children.size() >=2;
-}
 bool ttH::TruthSelector::IsGoodHiggs(const int pdgId, const vector<int>& children)
 {
   return std::abs(pdgId) == PDG_HIGGS && children.size() >= 2;
