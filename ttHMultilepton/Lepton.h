@@ -102,6 +102,7 @@ namespace ttHMultilepton {
     int    isolationFixedCutLoose;
 
     char    isTrigMatch;
+    char    isTrigMatchDLT;
     char    isFakable;
     int     Author;
     int     allAuthor;

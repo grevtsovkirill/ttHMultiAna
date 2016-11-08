@@ -1,5 +1,6 @@
 2016-11-08 Robert Wolff <robert.wolff@cern.ch>
 	* added more lep+tau triggers
+	* added trigger matching for dilepton triggers (lep.isTrigMatchDLT_X)
 
 2016-11-05 Babar Ali <babar.ali@cern.ch>
 	* added isHadronic info in flat vars.
