@@ -1,6 +1,9 @@
+2016-11-08 Robert Wolff <robert.wolff@cern.ch>
+	* added more lep+tau triggers
+
 2016-11-05 Babar Ali <babar.ali@cern.ch>
 	* added isHadronic info in flat vars.
-	
+
 2016-11-03 Robert Wolff <robert.wolff@cern.ch>
 	* added additional triggers (dilepton and lepton+tau)
 	* updated for AnalysisTop, 2.4.21
