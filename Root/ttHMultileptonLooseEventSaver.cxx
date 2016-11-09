@@ -581,6 +581,102 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("d0sig"); }, *systematicTree, "muon_sigd0PV");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("delta_z0_sintheta"); }, *systematicTree, "muon_z0SinTheta");
 
+Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
+
+    // Wrap2(muvec, [=](const xAOD::Muon& mu) {
+    // 	 const xAOD::TrackParticle* cbtrack = mu.trackParticle( xAOD::Muon::CombinedTrackParticle );
+    // 	 float qOverP = cbtrack->qOverP();
+    // 	 return qOverP; }, *systematicTree, "muon_qOverP");
+    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float rho=-9999;
+	if( idtrack && metrack ) {
+	  float mePt = -999999., idPt = -999999.;
+
+	  try{
+	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+	    mePt = mePt_acc(mu);
+	    idPt = idPt_acc(mu);
+	  } catch ( SG::ExcNoAuxStore b ) {
+	    ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+	  }
+	  
+	  
+	  float cbPt = mu.pt();
+	  rho           = fabs( idPt - mePt ) / cbPt;
+	}
+	return rho; }, *systematicTree, "muon_rho");
+    
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float qOverPsigma = -9999;
+	if( idtrack && metrack ) {
+	  qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+	}
+	return qOverPsigma; }, *systematicTree, "muon_qOverPsigma");  
+      
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float qOverPsignif = -9999;
+	if( idtrack && metrack ) {
+	  float mePt = -999999., idPt = -999999.;
+	  
+	  try{
+	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+	    mePt = mePt_acc(mu);
+	    idPt = idPt_acc(mu);
+	  } catch ( SG::ExcNoAuxStore b ) {
+	    ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+	  }
+
+	  float meP  = 1.0 / ( sin(metrack->theta()) / mePt);
+	  float idP  = 1.0 / ( sin(idtrack->theta()) / idPt);
+	  float qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+	  qOverPsignif  = fabs( (metrack->charge() / meP) - (idtrack->charge() / idP) ) / qOverPsigma;        
+	}
+	return qOverPsignif; }, *systematicTree, "muon_qOverPsignif");
+
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { float reducedChi2   = mu.primaryTrackParticle()->chiSquared()/mu.primaryTrackParticle()->numberDoF();return reducedChi2; }, *systematicTree, "muon_reducedChi2");
+  
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+	uint8_t nprecisionLayers;
+
+	if( fabs(mu.eta()) > 2.0 ) {
+	  nprecisionLayers = 0;
+	  uint8_t innerSmallHits, innerLargeHits, middleSmallHits, middleLargeHits, outerSmallHits, outerLargeHits;
+	  if ( !mu.summaryValue(innerSmallHits, xAOD::MuonSummaryType::innerSmallHits) ||
+	       !mu.summaryValue(innerLargeHits, xAOD::MuonSummaryType::innerLargeHits) ||
+	       !mu.summaryValue(middleSmallHits, xAOD::MuonSummaryType::middleSmallHits) ||
+	       !mu.summaryValue(middleLargeHits, xAOD::MuonSummaryType::middleLargeHits) ||
+	       !mu.summaryValue(outerSmallHits, xAOD::MuonSummaryType::outerSmallHits) ||
+	       !mu.summaryValue(outerLargeHits, xAOD::MuonSummaryType::outerLargeHits) ){
+
+	    ATH_MSG_VERBOSE("getQuality - Muon in CSC region and MS hits information missing!!!");
+	  }
+	  else {
+	    if( innerSmallHits>1  || innerLargeHits>1  ) nprecisionLayers += 1;
+	    if( middleSmallHits>2 || middleLargeHits>2 ) nprecisionLayers += 1;
+	    if( outerSmallHits>2  || outerLargeHits>2  ) nprecisionLayers += 1;
+	  }
+	}
+	else {
+	  mu.summaryValue(nprecisionLayers, xAOD::SummaryType::numberOfPrecisionLayers);
+	}
+	return nprecisionLayers; }, *systematicTree, "muon_numPrecLayers");
+  
+
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
