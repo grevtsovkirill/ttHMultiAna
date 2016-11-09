@@ -25,7 +25,7 @@ IsAFII True
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.root
+OutputFilename output_test.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
@@ -61,7 +61,7 @@ TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_70 FixedCutBEff_77
+BTaggingWP FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 FixedCutBEff_60
 
 #Truth jet cuts
 TruthJetPt 25000.

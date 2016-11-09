@@ -157,6 +157,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //btag SF weights
   double m_bTagSF_weight;
   double m_bTagSF77_weight;
+  double m_bTagSF85_weight;
+  double m_bTagSF60_weight;
   std::vector<float> m_weight_bTagSF_70_eigen_B_up;
   std::vector<float> m_weight_bTagSF_70_eigen_B_down;
   std::vector<float> m_weight_bTagSF_70_eigen_C_up;

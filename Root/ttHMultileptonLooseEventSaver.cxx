@@ -247,6 +247,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c10_70_EventWeight");
     systematicTree->makeOutputVariable(m_bTagSF77_weight, "MV2c10_77_EventWeight");
+    systematicTree->makeOutputVariable(m_bTagSF85_weight, "MV2c10_85_EventWeight");
+    systematicTree->makeOutputVariable(m_bTagSF60_weight, "MV2c10_60_EventWeight");
     systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
 
     if ( m_doSFSystematics ) {
@@ -1007,6 +1009,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
       m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
+      m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
+      m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
       m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
 
       //do sys weights only in "nominal" tree
