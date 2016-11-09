@@ -8,8 +8,6 @@ TopExamples.grid.Add('ttH_fullSim').datasets = [
 'mc15_13TeV.343367.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad.merge.AOD.e4706_s2726_r7772_r7676',
 ]
 
-#requestNello
-
 #
 # New samples with Derv. Tag p2719
 #
