@@ -41,9 +41,7 @@ ds_names15 = get_logical_dataset_names('data15_13TeV', grl_runs15)
 
 grl16 = 'data16_13TeV.periodAllYear_DetStatus-v83-pro20-15_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml'
 grl_runs16 = get_grlruns(grl16)
-print grl_runs16
 ds_names16 = get_logical_dataset_names('data16_13TeV', grl_runs16)
-print ds_names16
 
 grl_runs = grl_runs15 + grl_runs16
 ds_names = ds_names15 + ds_names16

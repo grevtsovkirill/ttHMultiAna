@@ -3,11 +3,11 @@ import TopExamples.grid
 #import DerivationTags
 #import Data15
 import MC_ichep
-#import Data16
+import Data16
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'rwolff'
+config.gridUsername  = 'dhohn'
 config.excludedSites = ''#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
@@ -24,11 +24,9 @@ config.memory = ''
 reduced = TopExamples.grid.Samples(['reduced'])
 full    = TopExamples.grid.Samples(['full'])
 new     = TopExamples.grid.Samples(['new'])
-ttH     = TopExamples.grid.Samples(['ttH'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',ttH)
 all_samples = reduced + full + new
 
 #~ TopExamples.grid.submit(config,mc15c)
@@ -36,12 +34,11 @@ all_samples = reduced + full + new
 ####################################################################################
 #Nominal
 config.settingsFile  = 'generic_config-mc15.txt'
-config.suffix = '2016-11-05.Nominal-v2'
+config.suffix = '18.08.16.Nominal-04'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-TopExamples.grid.submit(config,ttH)
-# TopExamples.grid.submit(config,all_samples)
+TopExamples.grid.submit(config,all_samples)
 
 
 ########################################################################################
@@ -54,11 +51,11 @@ config.maxNFilesPerJob = ''
 #data15 = TopExamples.grid.Samples(['data_2015_20.7'])
 data15 = TopExamples.grid.Samples(['data15'])
 config.settingsFile = 'generic_config-data15.txt'
-# TopExamples.grid.submit(config, data15)
+TopExamples.grid.submit(config, data15)
 
 data16 = TopExamples.grid.Samples(['data16'])
 config.settingsFile = 'generic_config-data16.txt'
-# TopExamples.grid.submit(config,data16)
+TopExamples.grid.submit(config,data16)
 
 
 #################################################################################
