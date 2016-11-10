@@ -30,7 +30,8 @@ def get_logical_dataset_names(scope, grl_runs):
         #print dsid, matching_runs
         if len(matching_runs) > 0:
             dsid_set[dsid] = matching_runs[-1] # always take the latest
-
+        else:
+            print "WARNING: No DAOD_HIGG8D1 found for run", dsid
     return sorted(dsid_set.values())
 
 
