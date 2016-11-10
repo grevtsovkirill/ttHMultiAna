@@ -320,7 +320,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
       if (! muItr->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
-      if ( ( p4.DeltaR(muItr->p4()) < 0.4 ) && ( p4.DeltaR(muItr->p4()) < 0.04+10e3/muItr->pt() ) ) {
+      if ( p4.DeltaR(muItr->p4()) < std::min(0.4, 0.04+10e3/muItr->pt()) ) {
   	muItr->auxdecor<char>("ttHpassOVR") = 0;
       }
     }
