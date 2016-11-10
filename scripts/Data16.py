@@ -17,7 +17,7 @@ def get_grlruns(grl):
 
 def get_logical_dataset_names(scope, grl_runs):
     ami_list = []
-    for ptag in ['p2667','p2689','p2769']:
+    for ptag in ['p2667','p2689','p2769','p2840']:
         ami_list += TopExamples.grid.listDatasets(scope,'*.physics_Main.merge.DAOD_HIGG8D1.*_'+ptag)
     #ami_list = sorted(TopExamples.ami.askAmi('data16_13TeV*physics_Main.merge.DAOD_HIGG8D1*_p2623'))
     ami_list = [ds.encode("ascii") for ds in ami_list] # convert Uni-string to ASCII
@@ -28,7 +28,8 @@ def get_logical_dataset_names(scope, grl_runs):
     for dsid in grl_runs:
         matching_runs = sorted([run for run in ami_list if str(dsid) in run])
         #print dsid, matching_runs
-        dsid_set[dsid] = matching_runs[-1] # always take the latest
+        if len(matching_runs) > 0:
+            dsid_set[dsid] = matching_runs[-1] # always take the latest
 
     return sorted(dsid_set.values())
 

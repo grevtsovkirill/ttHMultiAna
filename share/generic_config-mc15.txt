@@ -19,7 +19,7 @@ TopParticleLevel True
 TruthElectronCollectionName None
 TruthMuonCollectionName None
 PDFInfo True
-IsAFII True
+IsAFII False
 
 #ObjectSelectionName top::ObjectLoaderStandardCuts
 ObjectSelectionName ttHMultileptonLooseObjectLoader

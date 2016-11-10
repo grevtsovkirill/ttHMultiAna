@@ -1,13 +1,10 @@
-
 import TopExamples.grid
-#import DerivationTags
-#import Data15
-import MC_ichep
+import MC_PostICHEP
 import Data16
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'dhohn'
+config.gridUsername  = 'rwolff'
 config.excludedSites = ''#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
@@ -16,39 +13,45 @@ config.destSE        = ''#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhe
 
 ###############################################################################
 #Systematics
-config.settingsFile  = 'generic_config-mc15-Sys.txt'
-config.suffix        = '22.07.16.Sys'
+config.suffix        = '2016-11-10.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
-reduced = TopExamples.grid.Samples(['reduced'])
-full    = TopExamples.grid.Samples(['full'])
-new     = TopExamples.grid.Samples(['new'])
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new)
-all_samples = reduced + full + new
+reduced_fullSim = TopExamples.grid.Samples(['reduced_fullSim'])
+reduced_fastSim = TopExamples.grid.Samples(['reduced_fastSim'])
+full_fullSim    = TopExamples.grid.Samples(['full'])
+new_fullSim     = TopExamples.grid.Samples(['new_fullSim'])
+new_fastSim     = TopExamples.grid.Samples(['new_fastSim'])
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced_fastSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new_fastSim)
+all_fullSim = reduced_fullSim + full_fullSim + new_fullSim
+all_fastSim = reduced_fastSim + new_fastSim
 
-#~ TopExamples.grid.submit(config,mc15c)
+config.settingsFile = 'generic_config-mc15-Sys.txt'
+#TopExamples.grid.submit(config,reduced_fullSim+new_fullSim)
+config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
+#TopExamples.grid.submit(config,reduced_fastSim+new_fastSim)
 
 ####################################################################################
 #Nominal
-config.settingsFile  = 'generic_config-mc15.txt'
-config.suffix = '18.08.16.Nominal-04'
+config.suffix = '2016-11-10.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-TopExamples.grid.submit(config,all_samples)
-
+config.settingsFile = 'generic_config-mc15.txt'
+TopExamples.grid.submit(config,all_fullSim)
+config.settingsFile = 'generic_config-mc15_fastSim.txt'
+TopExamples.grid.submit(config,all_fastSim)
 
 ########################################################################################
-#data
-#config.settingsFile  = 'generic_config-data15.txt'
-config.suffix = '18.08.16.Data-04'
+#Data
+config.suffix = '2016-11-10.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-#data15 = TopExamples.grid.Samples(['data_2015_20.7'])
 data15 = TopExamples.grid.Samples(['data15'])
 config.settingsFile = 'generic_config-data15.txt'
 TopExamples.grid.submit(config, data15)
