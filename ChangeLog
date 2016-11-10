@@ -1,3 +1,7 @@
+2016-11-10 Babar Ali <babar.ali@cern.ch>
+	* Enabled the Run-1 OLR. For mu-jet OLR is min DR (0.4, 0.04 + 10 GeV / pt_mu)
+	* Removed the isolation requirement on muons. Muons are with NO Iso by default.
+	
 2016-11-10 Robert Wolff <robert.wolff@cern.ch>
 	* added additional packages and updated submission scripts
 

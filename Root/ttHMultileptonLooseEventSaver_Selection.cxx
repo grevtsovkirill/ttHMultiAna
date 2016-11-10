@@ -97,9 +97,9 @@ ttHMultileptonLooseEventSaver::SelectMuons(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(5);
-    if (! muItr->auxdataConst<short>("Iso_Loose")) {
-      continue;
-    }
+    //if (! muItr->auxdataConst<short>("Iso_Loose")) {
+    //  continue;
+    //}
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(6);
     auto newMuon = new xAOD::Muon();
     newMuon->makePrivateStore(*muItr);
@@ -206,7 +206,7 @@ template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
 
 void
 ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow) {
-
+  /*
   auto newGoodEl = std::shared_ptr<xAOD::ElectronContainer>(new xAOD::ElectronContainer());
   auto newGoodElAux = new xAOD::AuxContainerBase();
   newGoodEl->setStore(newGoodElAux);
@@ -228,7 +228,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 	     "Failed to register jets after OR");
   top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux." ),
 	     "Failed to register taus after OR");
-
+  */
   for (const auto elItr : *goodEl) {
     elItr->auxdecor<char>("ttHpassOVR") = 1;
   }
@@ -243,6 +243,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
     tauItr->auxdecor<char>("ttHpassOVR") = 1;
   }
 
+  //if an electron and muon candidate are within 0.1 of each other: remove the electron 
   for (const auto elItr : *goodEl) {
     auto p4 = elItr->p4();
     for (const auto muItr : *goodMu) {
@@ -254,6 +255,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   }
   fillCutflow &&m_eleCutflow->Fill(8, CountPassOR(*goodEl));
 
+  //If two electron candidates within 0.1 of each other: remove the one with lower pt 
   for (size_t i1 = 0; i1 < goodEl->size(); ++i1) {
     auto elItr = goodEl->at(i1);
     if (! elItr->auxdataConst<char>("ttHpassOVR")) {
@@ -277,6 +279,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   // now done later
   //fillCutflow &&m_eleCutflow->Fill(9, CountPassOR(*goodEl));
 
+  //if an electron and a jet are within 0.3 of each other: remove the jet 
   for (const auto jetItr : *goodJet) {
     auto p4 = jetItr->p4();
     for (const auto elItr : *goodEl) {
@@ -291,7 +294,8 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   }
   fillCutflow &&m_jetCutflow->Fill(6, CountPassOR(*goodJet));
 
-  for (const auto jetItr : *goodJet) {
+  //if a muon and a jet are within 0.04+10[GeV]/pT(muon) of each other: remove the muon
+  /*for (const auto jetItr : *goodJet) {
     if (! jetItr->auxdataConst<char>("ttHpassOVR")) {
       continue;
     }
@@ -304,10 +308,28 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   	muItr->auxdecor<char>("ttHpassOVR") = 0;
       }
     }
+  }*/
+
+  //if a muon and a jet are within (0.4, 0.04+10[GeV]/pT(muon)) of each other: remove the muon
+  for (const auto jetItr : *goodJet) {
+    if (! jetItr->auxdataConst<char>("ttHpassOVR")) {
+      continue;
+    }
+    auto p4 = jetItr->p4();
+    for (const auto muItr : *goodMu) {
+      if (! muItr->auxdataConst<char>("ttHpassOVR")) {
+  	continue;
+      }
+      if ( ( p4.DeltaR(muItr->p4()) < 0.4 ) && ( p4.DeltaR(muItr->p4()) < 0.04+10e3/muItr->pt() ) ) {
+  	muItr->auxdecor<char>("ttHpassOVR") = 0;
+      }
+    }
   }
+
   // now done later
   //fillCutflow &&m_muCutflow->Fill(7, CountPassOR(*goodMu));
 
+  //if an electron and a tau are within 0.2 of each other: remove the tau
   for (const auto tauItr : *goodTau) {
     auto p4 = tauItr->p4();
     for (const auto elItr : *goodEl) {
@@ -319,6 +341,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 	break;
       }
     }
+    //if an muon and a tau are within 0.2 of each other: remove the tau 
     for (const auto muItr : *goodMu) {
       if (! muItr->auxdataConst<char>("ttHpassOVR")) {
 	continue;
@@ -328,6 +351,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 	break;
       }
     }
+    //if a tau and a jet are within 0.3 of each other: remove the jet 
     if (tauItr->auxdataConst<char>("ttHpassOVR")) {
       for (const auto jetItr : *goodJet) {
 	// don't need additional protection here...
@@ -337,10 +361,10 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
       }
     }
   }
-
+  /*
   fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
-
+  
   for (const auto elItr : *goodEl) {
     if (elItr->auxdataConst<char>("ttHpassOVR")) {
       newGoodEl->push_back(new xAOD::Electron(*elItr));
@@ -377,7 +401,7 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   newGoodMu.swap(goodMu);
   newGoodJet.swap(goodJet);
   newGoodTau.swap(goodTau);
-
+  */
 }
 
 void
