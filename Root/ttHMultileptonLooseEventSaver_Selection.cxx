@@ -42,6 +42,8 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(3);
     if (!elItr->auxdataConst<int>("passLHLoose")) {
+      // passLHLoose is equivalent to LooseLH + BLayer cuts
+      // the BLayer cuts are applied by AnalysisTop
       //std::cout << "Fail LH cut" << std::endl;
       continue;
     }
@@ -560,6 +562,8 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   CopyIParam(el, lep);
   lep.ID = -11*el.charge();
   lep.isLooseLH  = el.auxdataConst<int>("passLHLoose");
+  // passLHLoose is equivalent to LooseLH + BLayer cuts
+  // the BLayer cuts are applied by AnalysisTop
   lep.isMediumLH = el.auxdataConst<int>("passLHMedium");
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
   lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
