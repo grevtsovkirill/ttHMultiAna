@@ -1,3 +1,6 @@
+2016-11-16 Rhys Roberts <rhys.thomas.roberts@cern.ch>
+	* Added new PromptLepton input and BDT variables
+	
 2016-11-10 Babar Ali <babar.ali@cern.ch>
 	* Enabled the Run-1 OLR. For mu-jet OLR is min DR (0.4, 0.04 + 10 GeV / pt_mu)
 	* Removed the isolation requirement on muons. Muons are with NO Iso by default.

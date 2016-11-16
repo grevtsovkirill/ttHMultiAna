@@ -488,14 +488,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     //non-prompt bdt vars
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
 	  float m_el_nonprompt_bdt = -99.;
-	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLepton_TagWeight");
+	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(ele)) m_el_nonprompt_bdt = AccessorNonPromptBDT(ele);
-	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLepton_TagWeight");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) {
-	short m_el_nonprompt_short = -99;
-	SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_TrackJetNTrack");
-	if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_short = AccessorNonPrompt(ele);
-	return (short) m_el_nonprompt_short; }, *systematicTree, "electron_PromptLepton_TrackJetNTrack");
+	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
 
     // electron charge flip tagger tool
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeFlipTagger.calculate(&ele); }, *systematicTree, "electron_ChargeFlipTaggerBDT");
@@ -540,25 +535,27 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       // Add non-prompt electron vars
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
 
-      std::vector<std::string> short_vars = {"sv1_ntkv", "jf_ntrkv"};
+      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
       for(std::string var: short_vars) {
 	Wrap2(elevec, [=](const xAOD::Electron& ele) {
 	    short m_el_nonprompt_short = -99;
-	    SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_"+ var);
+	    SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
 	    if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_short = AccessorNonPrompt(ele);
-	    return (short) m_el_nonprompt_short; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
+	    return (short) m_el_nonprompt_short; }, *systematicTree, ("electron_" + var).c_str());
       }
 
       bool m_writeAllNonPromptInputVars = true;
 
       if(m_writeAllNonPromptInputVars) {
-	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
+	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3", 
+					       "PromptLeptonIso_DRlj", "PromptLeptonIso_LepJetPtFrac",
+					       "PromptLepton_TagWeight", "PromptLeptonNoIso_TagWeight"};
 	for(std::string var: float_vars) {
 	  Wrap2(elevec, [=](const xAOD::Electron& ele) {
 	      float m_el_nonprompt_float = -99.;
-	      SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptLepton_" + var);
+	      SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
 	      if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
-	      return (float) m_el_nonprompt_float; }, *systematicTree, ("electron_PromptLepton_" + var).c_str());
+	      return (float) m_el_nonprompt_float; }, *systematicTree, ("electron_" + var).c_str());
 	}
       }
     }
@@ -701,14 +698,9 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     //non-prompt bdt vars
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	  float m_mu_nonprompt_bdt = -99.;
-	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLepton_TagWeight");
+	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(mu)) m_mu_nonprompt_bdt = AccessorNonPromptBDT(mu);
-	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLepton_TagWeight");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) {
-	short m_mu_nonprompt_short = -99;
-	static SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_TrackJetNTrack");
-	if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_short = AccessorNonPrompt(mu);
-	return (short) m_mu_nonprompt_short; }, *systematicTree, "muon_PromptLepton_TrackJetNTrack");
+	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLeptonIso_TagWeight");
 
     //Trigger matching
 
@@ -805,25 +797,27 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
       // Add non-prompt muon vars
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "muon_jetFitterComb");
 
-      std::vector<std::string> short_vars = {"sv1_ntkv", "jf_ntrkv"};
+      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
       for(std::string &var: short_vars) {
 	Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	    short m_mu_nonprompt_short = -99;
-	    SG::AuxElement::Accessor<short> AccessorNonPrompt("PromptLepton_"+ var);
+	    SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
 	    if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_short = AccessorNonPrompt(mu);
-	    return (short) m_mu_nonprompt_short; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
+	    return (short) m_mu_nonprompt_short; }, *systematicTree, ("muon_" + var).c_str());
       }
 
       bool m_writeAllNonPromptInputVars = true;
 
       if(m_writeAllNonPromptInputVars) {
-	std::vector<std::string> float_vars = {"ip2", "ip2_cu", "ip3", "ip3_cu", "EtTopoCone20Rel"};
+	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3", "PromptLeptonIso_DRlj", 
+					       "PromptLeptonIso_LepJetPtFrac", "PromptLepton_TagWeight", 
+					       "PromptLeptonNoIso_TagWeight"};
 	for(std::string &var: float_vars) {
 	  Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	      float m_mu_nonprompt_float = -99.;
-	      SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptLepton_" + var);
+	      SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
 	      if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
-	      return (float) m_mu_nonprompt_float; }, *systematicTree, ("muon_PromptLepton_" + var).c_str());
+	      return (float) m_mu_nonprompt_float; }, *systematicTree, ("muon_" + var).c_str());
 	}
       }
     }
