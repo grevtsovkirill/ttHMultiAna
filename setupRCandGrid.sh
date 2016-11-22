@@ -8,7 +8,7 @@ voms-proxy-init -voms atlas:/atlas/phys-higgs/Role=production -out /afs/cern.ch/
 export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
 # for latest cross sections
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/tags/TopDataPreparation-00-08-34
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-34
 # for updated PRW data scale factors
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-14
 # for not crashing when submitting data on grid

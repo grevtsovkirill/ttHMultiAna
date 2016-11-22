@@ -208,7 +208,6 @@ template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
 
 void
 ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow) {
-  /*
   auto newGoodEl = std::shared_ptr<xAOD::ElectronContainer>(new xAOD::ElectronContainer());
   auto newGoodElAux = new xAOD::AuxContainerBase();
   newGoodEl->setStore(newGoodElAux);
@@ -230,7 +229,6 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
 	     "Failed to register jets after OR");
   top::check(evtStore()->tds()->record( newGoodTauAux, "ttHOR"+m_sysName+"TausAux." ),
 	     "Failed to register taus after OR");
-  */
   for (const auto elItr : *goodEl) {
     elItr->auxdecor<char>("ttHpassOVR") = 1;
   }
@@ -363,7 +361,6 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
       }
     }
   }
-  /*
   fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
   
@@ -403,7 +400,6 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
   newGoodMu.swap(goodMu);
   newGoodJet.swap(goodJet);
   newGoodTau.swap(goodTau);
-  */
 }
 
 void
