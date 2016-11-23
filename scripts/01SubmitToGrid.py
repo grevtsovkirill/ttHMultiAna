@@ -13,7 +13,7 @@ config.destSE        = ''#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhe
 
 ###############################################################################
 #Systematics
-config.suffix        = '2016-11-10.Sys'
+config.suffix        = '2016-11-23.Sys'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
@@ -37,7 +37,7 @@ config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 
 ####################################################################################
 #Nominal
-config.suffix = '2016-11-10.Nominal'
+config.suffix = '2016-11-23.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
@@ -48,7 +48,7 @@ TopExamples.grid.submit(config,all_fastSim)
 
 ########################################################################################
 #Data
-config.suffix = '2016-11-10.Data'
+config.suffix = '2016-11-23.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
