@@ -19,8 +19,7 @@ rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
 # for Charge Flip Tagger Tool
-rc checkout_pkg atlasoff/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/tags/ElectronPhotonSelectorTools-00-02-92-12
-#rc checkout_pkg atlasoff/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/tags/ElectronPhotonSelectorTools-00-02-92-13
+rc checkout_pkg atlasoff/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/tags/ElectronPhotonSelectorTools-00-02-92-14
 
 rc build
 

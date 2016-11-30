@@ -25,7 +25,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_trigDecTool("Trig::TrigDecisionTool"),
   m_purwtool("CP::PileupReweightingTool"),
   m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
-  m_electronChargeFlipTagger("AsgElectronChargeFlipTaggerTool"),
+  m_electronChargeIDSelector("ElectronChargeIDSelectorLoose"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -207,10 +207,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
 
   //Electron Charge Flip Tagger Tool
-  top::check( m_electronChargeFlipTagger.setProperty("TrainingFile", "ttHMultilepton/CFT_tight.root"), "ElectronChargeFlipTaggerTool: Failed to set training file." );
-  top::check( m_electronChargeFlipTagger.setProperty("CutOnBDT", 0), "ElectronChargeFlipTaggerTool: Failed to set cut on BDT value." );
-  top::check( m_electronChargeFlipTagger.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeFlipTaggerTool: Failed to set output level." );
-  top::check( m_electronChargeFlipTagger.initialize(), "ElectronChargeFlipTaggerTool: Failed to initialize." );
+  top::check( m_electronChargeIDSelector.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDSelector: Failed to set training file." );
+  top::check( m_electronChargeIDSelector.setProperty("CutOnBDT", -0.142189), "ElectronChargeIDSelector: Failed to set cut on BDT value." );
+  top::check( m_electronChargeIDSelector.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDSelector: Failed to set output level." );
+  top::check( m_electronChargeIDSelector.initialize(), "ElectronChargeIDSelector: Failed to initialize." );
 
   //Muon Tools
   //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
@@ -493,7 +493,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
 
     // electron charge flip tagger tool
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeFlipTagger.calculate(&ele); }, *systematicTree, "electron_ChargeFlipTaggerBDT");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDSelector.calculate(&ele); }, *systematicTree, "electron_ChargeIDSelectorBDT");
 
     for (std::string trigger_name : triggernames) {
       if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;

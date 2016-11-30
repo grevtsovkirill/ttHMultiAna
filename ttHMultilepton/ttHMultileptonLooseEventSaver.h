@@ -6,7 +6,7 @@
 
 // CP tools
 #include "AsgTools/ToolHandle.h"
-#include "ElectronPhotonSelectorTools/AsgElectronChargeFlipTaggerTool.h"
+#include "ElectronPhotonSelectorTools/AsgElectronChargeIDSelectorTool.h"
 #include "MuonSelectorTools/MuonSelectionTool.h"
 #include "JetInterface/IJetSelector.h"
 #include "PileupReweighting/PileupReweightingTool.h"
@@ -113,7 +113,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
   ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
-  AsgElectronChargeFlipTaggerTool        m_electronChargeFlipTagger;
+  AsgElectronChargeIDSelectorTool        m_electronChargeIDSelector;
   MuonSelectionTool                      muonSelection;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
