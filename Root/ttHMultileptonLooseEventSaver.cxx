@@ -25,7 +25,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_trigDecTool("Trig::TrigDecisionTool"),
   m_purwtool("CP::PileupReweightingTool"),
   m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
-  m_electronChargeIDSelector("ElectronChargeIDSelectorLoose"),
+  m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
+  m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
+  m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -206,11 +208,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   /// special case for FixedCutTight (el only)
   top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
 
-  //Electron Charge Flip Tagger Tool
-  top::check( m_electronChargeIDSelector.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDSelector: Failed to set training file." );
-  top::check( m_electronChargeIDSelector.setProperty("CutOnBDT", -0.142189), "ElectronChargeIDSelector: Failed to set cut on BDT value." );
-  top::check( m_electronChargeIDSelector.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDSelector: Failed to set output level." );
-  top::check( m_electronChargeIDSelector.initialize(), "ElectronChargeIDSelector: Failed to initialize." );
+  //Electron Charge Flip Tagger Tools
+  top::check( m_electronChargeIDLoose.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDLoose: Failed to set training file." );
+  top::check( m_electronChargeIDLoose.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDLoose: Failed to set output level." );
+  top::check( m_electronChargeIDLoose.initialize(), "ElectronChargeIDLoose: Failed to initialize." );
+  top::check( m_electronChargeIDMedium.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDMedium: Failed to set training file." );
+  top::check( m_electronChargeIDMedium.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDMedium: Failed to set output level." );
+  top::check( m_electronChargeIDMedium.initialize(), "ElectronChargeIDMedium: Failed to initialize." );
+  top::check( m_electronChargeIDTight.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDTight: Failed to set training file." );
+  top::check( m_electronChargeIDTight.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDTight: Failed to set output level." );
+  top::check( m_electronChargeIDTight.initialize(), "ElectronChargeIDTight: Failed to initialize." );
 
   //Muon Tools
   //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
@@ -231,6 +238,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   // defined in config files with TRIGDEC selectors
   // "triggers" is the name of that dummy selection
   std::vector<std::string> triggernames = config->allTriggers("triggers");
+
 
   //make a tree for each systematic
   for (auto treeName : *config->systAllTTreeNames()) {
@@ -493,7 +501,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
 
     // electron charge flip tagger tool
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDSelector.calculate(&ele); }, *systematicTree, "electron_ChargeIDSelectorBDT");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDLoose.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTLoose");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDMedium.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTMedium");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDTight.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTTight");
 
     for (std::string trigger_name : triggernames) {
       if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;

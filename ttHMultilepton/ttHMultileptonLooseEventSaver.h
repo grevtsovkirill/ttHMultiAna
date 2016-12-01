@@ -113,7 +113,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
   ToolHandle<CP::IPileupReweightingTool> m_purwtool;
   ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
-  AsgElectronChargeIDSelectorTool        m_electronChargeIDSelector;
+  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
+  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
+  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
   MuonSelectionTool                      muonSelection;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
