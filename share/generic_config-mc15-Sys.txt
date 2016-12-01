@@ -13,8 +13,8 @@ LooseMETCollectionName MET_Reference_AntiKt4EMTopo
 
 TruthCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthJets
-TopPartonHistory ttbar
-TopParticleLevel True
+#TopPartonHistory ttbar
+#TopParticleLevel True
 TruthElectronCollectionName None
 TruthMuonCollectionName None
 PDFInfo True
@@ -27,6 +27,7 @@ OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
+OutputFileSetAutoFlushZero True
 PerfStats No
 NEvents 0
 

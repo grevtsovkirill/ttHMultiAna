@@ -169,7 +169,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_truthMatchAlgo  = new ttHMultilepton::TruthMatchAlgo();
   m_truthMatchAlgo->msg().setLevel( MSG::INFO ); // DEBUG, VERBOSE, WARNING, INFO
 
-  m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
+  // m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets"); // not working with p2879
 
   if (m_isMC){
     top::check( m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool" );
@@ -1207,12 +1207,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
   }
 
+  /* not working with p2879
   //ttbar HF classification
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
   if ( top::isSimulation(event) && m_mcChannelNumber==410000){
     m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
+  */
 
   //sherpa rw
   if( top::isSimulation(event) and ( ( m_mcChannelNumber >= 363102 and m_mcChannelNumber <= 363122 ) or
