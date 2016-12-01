@@ -2,7 +2,9 @@
 #include "TopEvent/Event.h"
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
+#include "ttHMultilepton/ReadBDTG.h"
 
+#include "TROOT.h"
 void
 ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 
@@ -143,6 +145,58 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     }
     else muItr->auxdecor<double>("jetFitterComb") = -10.0;
 
+    //variables for muon_ID BDT 
+
+    //Default decorations
+    muItr->auxdecor<float> ("jet_pt")           = -999;
+    muItr->auxdecor<float> ("jet_eta")          = -999;
+    muItr->auxdecor<float> ("jet_phi")          = -999;
+    muItr->auxdecor<float> ("jet_dr")           = -999;
+    muItr->auxdecor<int> ("jet_numTrk")         = -999;
+    muItr->auxdecor<float> ("jet_sumPtTrk")     = -999;
+    muItr->auxdecor<float> ("MV2c10_weight")    = -999;
+    muItr->auxdecor<float>("jet_ptRel")         = -999;
+    muItr->auxdecor<float>("muon_BDT")		= -999;
+
+
+    xAOD::Jet* closestJet =0;
+    float smallestDr = 1e5;
+    for(auto jet: event.m_jets){
+      float muJetDr = jet->p4().DeltaR(muItr->p4());
+      if(smallestDr > muJetDr)
+      {
+         smallestDr = muJetDr;
+         closestJet = (xAOD::Jet*)jet;
+      }
+    }
+    if(smallestDr <=0.6 && closestJet)
+    {
+       muItr->auxdecor<float> ("jet_pt")  = closestJet->p4().Pt();
+       muItr->auxdecor<float> ("jet_eta") = closestJet->p4().Eta();
+       muItr->auxdecor<float> ("jet_phi") = closestJet->p4().Phi();
+       muItr->auxdecor<float> ("jet_dr")  = smallestDr;
+       auto numTrkVec = closestJet->getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);
+       auto numJetTrk =  (numTrkVec.size() ? numTrkVec[m_pv->index()] : 0);
+       muItr->auxdecor<int> ("jet_numTrk")      = numJetTrk;
+       auto sumPtTrkVec  = closestJet->getAttribute<std::vector<float> >(xAOD::JetAttribute::SumPtTrkPt500);
+       auto jetSumPtTrk =  (sumPtTrkVec.size() ? sumPtTrkVec[m_pv->index()] : 0.);
+       muItr->auxdecor<float> ("jet_sumPtTrk")    = jetSumPtTrk;
+
+       auto btagging = closestJet->btagging();
+       double rv(0);
+       muItr->auxdecor<float> ("MV2c10_weight") = btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0. ;
+
+       float theta= muItr->p4().Vect().Angle(closestJet->p4().Vect());
+       muItr->auxdecor<float>("jet_ptRel") = TMath::Sin(theta) * muItr->pt();
+
+       //MuonIDBDT Score
+       std::vector<std::string> inputVarNames = { "jetMu_jetPt", "jetMu_jetNTrk", "jetMu_SumPtTrk", "jetMu_mv2c10_weight", "jetMu_deltaR", "jetMu_ptRel*1e-3", "jetMu_jetPt/jetMu_muPt", "jetMu_muonSigd0PV", "jetMu_muonZ0SinTheta"};
+       ReadBDTG muonIdBDT(inputVarNames);
+       std::vector<double> inputValues ={muItr->auxdataConst<float>("jet_pt"),muItr->auxdataConst<int>("jet_numTrk"),muItr->auxdataConst<float>("jet_sumPtTrk"),muItr->auxdataConst<float>("MV2c10_weight"),muItr->auxdataConst<float>("jet_ptRel")*1e-3,muItr->auxdataConst<float>("jet_pt")/muItr->pt(),muItr->auxdataConst<float>("d0sig"),muItr->auxdataConst<float>("delta_z0_sintheta")};
+
+       muItr->auxdecor<float>("muon_BDT") = muonIdBDT.GetMvaValue(inputValues);
+
+    }
   }//end muons
 
   top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
