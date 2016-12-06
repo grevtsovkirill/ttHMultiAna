@@ -6,7 +6,7 @@ MuonCollectionName Muons
 JetCollectionName AntiKt4EMTopoJets
 LargeJetCollectionName None
 LargeJetSubstructure None
-TauCollectionName TauJets
+TauCollectionName None #TauJets
 PhotonCollectionName None
 METCollectionName MET_RefFinal_AntiKt4EMTopo
 LooseMETCollectionName MET_Reference_AntiKt4EMTopo
