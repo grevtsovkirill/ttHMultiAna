@@ -59,7 +59,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_truthMET_phi(-999.0),
   m_truthMET_sumet(-1.0),
   m_sherpaRW("PMGSherpa22VJetsWeightTool"),
-  m_higgs(nullptr)
+  m_higgs(nullptr),
+  m_top(nullptr),
+  m_antitop(nullptr)
 {}
 
 ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
@@ -388,6 +390,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->e()              : 0.0; }, *systematicTree, "higgs_E");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->p4().Rapidity()  : 0.0; }, *systematicTree, "higgs_rapidity");
 
+    WrapS(scalarvec, [&](const top::Event&){ return m_top ? m_top->pt()             : 0.0; }, *systematicTree, "top_pt");
+    WrapS(scalarvec, [&](const top::Event&){ return m_top ? m_top->eta()            : 0.0; }, *systematicTree, "top_eta");
+    WrapS(scalarvec, [&](const top::Event&){ return m_top ? m_top->phi()            : 0.0; }, *systematicTree, "top_phi");
+    WrapS(scalarvec, [&](const top::Event&){ return m_top ? m_top->e()              : 0.0; }, *systematicTree, "top_E");
+    WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->pt()             : 0.0; }, *systematicTree, "antitop_pt");
+    WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->eta()            : 0.0; }, *systematicTree, "antitop_eta");
+    WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->phi()            : 0.0; }, *systematicTree, "antitop_phi");
+    WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->e()              : 0.0; }, *systematicTree, "antitop_E");
+    
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 
     // HF classification ttbar
@@ -837,7 +848,7 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_phi");}, *systematicTree, "muon_jet_phi");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_dr");}, *systematicTree, "muon_jet_dr");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_ptRel");}, *systematicTree, "muon_jet_ptRel");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.auxdataConst<int> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_sumPtTrk");},*systematicTree, "muon_jet_sumPtTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("MV2c10_weight");},*systematicTree, "muon_jet_MV2c10_Weight");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT"); 
@@ -1035,10 +1046,6 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
   // 	       "Failed to set RemoveCaloMuons in nominal OR");
-  if (m_config->useTaus() && m_config->useElectrons())
-    top::check(m_ORtoolBox[1].tauEleORT.setProperty("ElectronID",
-						    "DFCommonElectronsLHLoose"),
-  	       "Failed to set loose LH for electron def for ORTool");
 
   top::check(m_ORtoolBox[1].initialize(),
 	     "Failed to initialize overlap removal tools for nominal selection");
@@ -1221,7 +1228,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //ttbar HF classification
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
   if ( top::isSimulation(event) && m_mcChannelNumber==410000){
-    m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
+    //m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
   */
@@ -1277,6 +1284,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if (event.m_truth != nullptr) {
     m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
     m_higgs     = truthSelector.GetHiggs(event.m_truth);
+    m_top       = truthSelector.GetTop(event.m_truth);
+    m_antitop   = truthSelector.GetAntiTop(event.m_truth);
   }
 
   if (event.m_truth != nullptr and !m_doSystematics) {
@@ -1401,6 +1410,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   */
   CopyLeptons(goodEl, goodMu);
+  //MakeIndices(event.m_electrons);
+  //MakeIndices(event.m_muons);
 
   // dont do the rest if we skim here anyway
   if ( m_doSystematics && m_variables->total_leptons < 2 ) return;
