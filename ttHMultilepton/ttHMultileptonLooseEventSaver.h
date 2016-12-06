@@ -230,6 +230,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   //MC
   int   m_higgsMode;
   const xAOD::TruthParticle* m_higgs;
+  const xAOD::TruthParticle* m_top;
+  const xAOD::TruthParticle* m_antitop;
   std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;
