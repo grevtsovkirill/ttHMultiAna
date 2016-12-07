@@ -25,7 +25,7 @@ new_fastSim     = TopExamples.grid.Samples(['new_fastSim'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced_fastSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full_fullSim)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2879',new_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new_fastSim)
 all_fullSim = reduced_fullSim + full_fullSim + new_fullSim
 all_fastSim = reduced_fastSim + new_fastSim
