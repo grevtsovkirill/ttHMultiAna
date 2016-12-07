@@ -851,6 +851,8 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.auxdataConst<int> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_sumPtTrk");},*systematicTree, "muon_jet_sumPtTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("MV2c10_weight");},*systematicTree, "muon_jet_MV2c10_Weight");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.auxdataConst<int> ("jet_tagWeightBin");}, *systematicTree, "muon_jet_tagWeightBin");
+
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT"); 
 
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
@@ -872,10 +874,13 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c10");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); }, *systematicTree, "m_jet_OVRStatus");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_numTrk");
+    //Continous b-tag
+    //https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingCalibrationDataInterface#Example_for_continuous_tagging
+    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin")) ?jet.auxdataConst<int>("tagWeightBin") : -2;}, *systematicTree,"m_jet_tagWeightBin"); 
 
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
-
+    
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");

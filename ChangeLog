@@ -1,4 +1,7 @@
-2016-11-1 Rohin Narayan <narayan@cern.ch>
+2016-12-06 Rohin Narayan <narayan@cern.ch>
+	* Added continuous b-tag weight bin
+
+2016-12-1 Rohin Narayan <narayan@cern.ch>
 	* Added muon BDT score and input variables
 
 2016-11-30 Robert Wolff <robert.wolff@cern.ch>

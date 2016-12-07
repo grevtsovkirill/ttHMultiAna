@@ -15,7 +15,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
 
   double vtx_z = m_pv->z();
-  
+
   for (auto elItr : event.m_electrons) {
     //delta z0
     float delta_z0 = elItr->trackParticle()->z0()
@@ -156,6 +156,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     muItr->auxdecor<float> ("jet_sumPtTrk")     = -999;
     muItr->auxdecor<float> ("MV2c10_weight")    = -999;
     muItr->auxdecor<float>("jet_ptRel")         = -999;
+    muItr->auxdecor<int> ("jet_tagWeightBin")       = -999;
     muItr->auxdecor<float>("muon_BDT")		= -999;
 
 
@@ -185,6 +186,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
        auto btagging = closestJet->btagging();
        double rv(0);
        muItr->auxdecor<float> ("MV2c10_weight") = btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0. ;
+       muItr->auxdecor<int>("jet_tagWeightBin") = ( closestJet->isAvailable<int>("tagWeightBin")) ?closestJet->auxdataConst<int>("tagWeightBin") : -2;
 
        float theta= muItr->p4().Vect().Angle(closestJet->p4().Vect());
        muItr->auxdecor<float>("jet_ptRel") = TMath::Sin(theta) * muItr->pt();
