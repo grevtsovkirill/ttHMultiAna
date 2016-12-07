@@ -68,7 +68,7 @@ TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 FixedCutBEff_60
+BTaggingWP FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 FixedCutBEff_60 Continuous
 
 #Truth jet cuts
 TruthJetPt 25000.
