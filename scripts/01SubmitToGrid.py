@@ -22,11 +22,11 @@ reduced_fastSim = TopExamples.grid.Samples(['reduced_fastSim'])
 full_fullSim    = TopExamples.grid.Samples(['full'])
 new_fullSim     = TopExamples.grid.Samples(['new_fullSim'])
 new_fastSim     = TopExamples.grid.Samples(['new_fastSim'])
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced_fullSim)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',reduced_fastSim)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2666',full_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2879',reduced_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2879',reduced_fastSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2879',full_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2879',new_fullSim)
-TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2719',new_fastSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2879',new_fastSim)
 all_fullSim = reduced_fullSim + full_fullSim + new_fullSim
 all_fastSim = reduced_fastSim + new_fastSim
 
@@ -37,7 +37,7 @@ config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 
 ####################################################################################
 #Nominal
-config.suffix = '2016-11-23.Nominal'
+config.suffix = '2016-12-06.Nominal'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
@@ -46,9 +46,10 @@ TopExamples.grid.submit(config,all_fullSim)
 config.settingsFile = 'generic_config-mc15_fastSim.txt'
 TopExamples.grid.submit(config,all_fastSim)
 
+
 ########################################################################################
 #Data
-config.suffix = '2016-11-23.Data'
+config.suffix = '2016-12-06.Data'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
