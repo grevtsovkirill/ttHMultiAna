@@ -13,6 +13,7 @@
 #include "TauAnalysisTools/TauSelectionTool.h"
 #include "AssociationUtils/ToolBox.h"
 #include "AssociationUtils/IOverlapRemovalTool.h"
+//#include "TruthTools/TruthWeightTool.h"
 
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
@@ -116,6 +117,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
   AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
   AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
+  //TruthWeightTool                        m_truthWeightTool;
   MuonSelectionTool                      muonSelection;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
@@ -244,13 +246,13 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<std::vector<int> >  m_mc_parents;
   std::vector<std::vector<int> >  m_mc_children;
 
-  std::vector<float> m_PDFinfo_x1;
-  std::vector<float> m_PDFinfo_x2;
-  std::vector<int> m_PDFinfo_id1;
-  std::vector<int> m_PDFinfo_id2;
-  std::vector<float> m_PDFinfo_scalePDF;
-  std::vector<float> m_PDFinfo_pdf1;
-  std::vector<float> m_PDFinfo_pdf2;
+  std::vector<float> m_PDFinfo_X1;
+  std::vector<float> m_PDFinfo_X2;
+  std::vector<int> m_PDFinfo_PDGID1;
+  std::vector<int> m_PDFinfo_PDGID2;
+  std::vector<float> m_PDFinfo_Q;
+  std::vector<float> m_PDFinfo_XF1;
+  std::vector<float> m_PDFinfo_XF2;
 
   std::vector<float> m_trjet_pt;
   std::vector<float> m_trjet_eta;

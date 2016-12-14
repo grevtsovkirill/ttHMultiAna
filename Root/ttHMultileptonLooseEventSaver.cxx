@@ -28,6 +28,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
   m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
   m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
+  //m_truthWeightTool("TruthWeightTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -352,13 +353,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
 
       //truthEvent information
-      systematicTree->makeOutputVariable(m_PDFinfo_x1,        "m_mcevt_pdf_x1");
-      systematicTree->makeOutputVariable(m_PDFinfo_x2,        "m_mcevt_pdf_x2");
-      systematicTree->makeOutputVariable(m_PDFinfo_id1,       "m_mcevt_pdf_id1");
-      systematicTree->makeOutputVariable(m_PDFinfo_id2,       "m_mcevt_pdf_id2");
-      systematicTree->makeOutputVariable(m_PDFinfo_scalePDF,  "m_mcevt_pdf_scale");
-      systematicTree->makeOutputVariable(m_PDFinfo_pdf1,      "m_mcevt_pdf_pdf1");
-      systematicTree->makeOutputVariable(m_PDFinfo_pdf2,      "m_mcevt_pdf_pdf2");
+      systematicTree->makeOutputVariable(m_PDFinfo_X1,        "m_mcevt_pdf_X1");
+      systematicTree->makeOutputVariable(m_PDFinfo_X2,        "m_mcevt_pdf_X2");
+      systematicTree->makeOutputVariable(m_PDFinfo_PDGID1,    "m_mcevt_pdf_PDGID1");
+      systematicTree->makeOutputVariable(m_PDFinfo_PDGID2,    "m_mcevt_pdf_PDGID2");
+      systematicTree->makeOutputVariable(m_PDFinfo_Q,         "m_mcevt_pdf_Q");
+      systematicTree->makeOutputVariable(m_PDFinfo_XF1,       "m_mcevt_pdf_XF1");
+      systematicTree->makeOutputVariable(m_PDFinfo_XF2,       "m_mcevt_pdf_XF2");
     }
 
     //event info
@@ -1232,7 +1233,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   /* not working with p2879
   //ttbar HF classification
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
-  if ( top::isSimulation(event) && m_mcChannelNumber==410000){
+  if ( top::isSimulation(event) && (m_mcChannelNumber==410000 || m_mcChannelNumber==410009 || m_mcChannelNumber==343637) ){
     //m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
@@ -1330,41 +1331,41 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if (event.m_truthEvent != nullptr and m_doSFSystematics ) {
     unsigned int i(0);
     unsigned int truthEventSize = event.m_truthEvent->size();
-    m_PDFinfo_x1.resize(truthEventSize);
-    m_PDFinfo_x2.resize(truthEventSize);
-    m_PDFinfo_id1.resize(truthEventSize);
-    m_PDFinfo_id2.resize(truthEventSize);
-    m_PDFinfo_scalePDF.resize(truthEventSize);
-    m_PDFinfo_pdf1.resize(truthEventSize);
-    m_PDFinfo_pdf2.resize(truthEventSize);
+    m_PDFinfo_X1.resize(truthEventSize);
+    m_PDFinfo_X2.resize(truthEventSize);
+    m_PDFinfo_PDGID1.resize(truthEventSize);
+    m_PDFinfo_PDGID2.resize(truthEventSize);
+    m_PDFinfo_Q.resize(truthEventSize);
+    m_PDFinfo_XF1.resize(truthEventSize);
+    m_PDFinfo_XF2.resize(truthEventSize);
     for (const auto* const tePtr : *event.m_truthEvent) {
       std::string PDFinfoVarName="X1";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
-	m_PDFinfo_x1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+	m_PDFinfo_X1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
 
       PDFinfoVarName="X2";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
-	m_PDFinfo_x2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+	m_PDFinfo_X2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
 
       PDFinfoVarName="PDGID1";
       if (event.m_truthEvent->isAvailable<int>(PDFinfoVarName))
-	m_PDFinfo_id1[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
+	m_PDFinfo_PDGID1[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
 
       PDFinfoVarName="PDGID2";
       if (event.m_truthEvent->isAvailable<int>(PDFinfoVarName))
-	m_PDFinfo_id2[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
+	m_PDFinfo_PDGID2[i] = (*tePtr).auxdataConst< int >( PDFinfoVarName );
 
-      PDFinfoVarName="SCALE";
+      PDFinfoVarName="Q";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
-	m_PDFinfo_scalePDF[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+	m_PDFinfo_Q[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
 
-      PDFinfoVarName="PDF1";
+      PDFinfoVarName="XF1";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
-	m_PDFinfo_pdf1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+	m_PDFinfo_XF1[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
 
-      PDFinfoVarName="PDF2";
+      PDFinfoVarName="XF2";
       if (event.m_truthEvent->isAvailable<float>(PDFinfoVarName))
-	m_PDFinfo_pdf2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
+	m_PDFinfo_XF2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
       ++i;
     }
   }
