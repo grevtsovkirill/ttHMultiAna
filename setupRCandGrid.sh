@@ -3,16 +3,13 @@ echo "Setting up all the things"
 
 #lsetup knows in which order to do these
 
-lsetup "rcsetup Top,2.4.23" panda rucio pyami
+lsetup "rcsetup Top,2.4.24" panda rucio pyami
 #voms-proxy-init -voms atlas:/atlas/phys-higgs/Role=production -out ${HOME}/.globus/gridproxy.cert -valid 24:0
 #export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
 # for bad electrons in HIGG8D1 with no matched clusters (e.g. run 302872)
 rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
-
-# for Charge Flip Tagger Tool
-rc checkout_pkg atlasoff/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/tags/ElectronPhotonSelectorTools-00-02-92-14
 
 rc build
 
