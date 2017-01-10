@@ -9,7 +9,7 @@ MuonCollectionName Muons
 JetCollectionName AntiKt4EMTopoJets
 LargeJetCollectionName None
 LargeJetSubstructure None
-TauCollectionName None
+TauCollectionName TauJets
 PhotonCollectionName None
 METCollectionName MET_RefFinal_AntiKt4EMTopo
 LooseMETCollectionName MET_Reference_AntiKt4EMTopo
@@ -47,6 +47,7 @@ MuonIsolation None
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
 TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
+ApplyTauMVATES True
 
 #Jet cuts
 JetPt 25000.
