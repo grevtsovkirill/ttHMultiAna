@@ -932,19 +932,6 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	  tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
 	  return decayMode;
 	}, *systematicTree, std::string(tauprefix+"PanTauDecayMode").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	  return tau.ptPanTauCellBased();
-	}, *systematicTree, std::string(tauprefix+"ptPanTau").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	  return tau.etaPanTauCellBased();
-	}, *systematicTree, std::string(tauprefix+"etaPanTau").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	  return tau.phiPanTauCellBased();
-	}, *systematicTree, std::string(tauprefix+"phiPanTau").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	  auto p4 = tau.p4(xAOD::TauJetParameters::PanTauCellBased);
-	  return p4.E();
-	}, *systematicTree, std::string(tauprefix+"EPanTau").c_str());
 
 
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
