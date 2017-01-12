@@ -39,7 +39,7 @@
 #include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/Variables.h"
 #include "ttHMultilepton/TruthMatchAlgo.h"
-// #include "ttHMultilepton/ClassifyHF.h" // not working with p2879
+#include "ttHMultilepton/ClassifyHF.h" // not working with p2879
 
 //root
 #include <TH1F.h>
@@ -53,7 +53,7 @@ using TauAnalysisTools::TauSelectionTool;
 
 class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
  friend class ttHMultilepton::Variables;
- // friend class ttHMultilepton::ClassifyHF; // not working with p2879
+ friend class ttHMultilepton::ClassifyHF; // not working with p2879
  public:
   //Default - so root can load based on a name
   ttHMultileptonLooseEventSaver();
@@ -224,7 +224,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ttHMultilepton::Variables* m_variables;
 
   //ttHF classification // not working with p2879
-  // ttHMultilepton::ClassifyHF* m_classifyttbarHF;
+  ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
   ToolHandle<PMGTools::PMGSherpa22VJetsWeightTool> m_sherpaRW;
