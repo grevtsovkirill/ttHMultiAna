@@ -39,7 +39,7 @@
 #include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/Variables.h"
 #include "ttHMultilepton/TruthMatchAlgo.h"
-#include "ttHMultilepton/ClassifyHF.h" // not working with p2879
+#include "ttHMultilepton/ClassifyHF.h"
 
 //root
 #include <TH1F.h>
@@ -223,7 +223,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   Tau m_taus[TAU_ARR_SIZE];
   ttHMultilepton::Variables* m_variables;
 
-  //ttHF classification // not working with p2879
+  //ttHF classification
   ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
