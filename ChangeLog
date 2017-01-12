@@ -1,3 +1,12 @@
+2017-01-12 Robert Wolff <robert.wolff@cern.ch>
+	* additional ttbar and HppHmm MC samples
+
+2017-01-10 David Hohn
+	* use AnalysisTop 2.4.24
+	* enable ttbar HF classification
+	* Removing PanTau p4 which is now part of MVA TES
+	* re-include Taus, enable Tau MVA TES by default
+
 2016-12-14 Robert Wolff <robert.wolff@cern.ch>
 	* Fixed and updated names of pdfinfo variables for truth mc events
 
