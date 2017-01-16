@@ -13,7 +13,6 @@
 #include "TauAnalysisTools/TauSelectionTool.h"
 #include "AssociationUtils/ToolBox.h"
 #include "AssociationUtils/IOverlapRemovalTool.h"
-//#include "TruthTools/TruthWeightTool.h"
 
 // xAOD
 #include "xAODEgamma/EgammaxAODHelpers.h"
@@ -117,7 +116,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
   AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
   AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
-  //TruthWeightTool                        m_truthWeightTool;
   MuonSelectionTool                      muonSelection;
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
@@ -195,6 +193,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   bool m_isMC;
   int m_runYear;
   SampleXsection m_sampleXsection;
+
+  std::vector<float> m_lhe3weights;
 
   // Truth matching
   ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;

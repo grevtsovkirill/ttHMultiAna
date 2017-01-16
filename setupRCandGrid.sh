@@ -15,11 +15,7 @@ sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObj
 rc checkout_pkg atlasoff/Generators/GenAnalysisTools/TruthTools/trunk
 
 # for new ttbar MC samples
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-43
-echo '# new ttbar' >> TopDataPreparation/data/XSection-MC15-13TeV.data
-echo '410525 397.105 1.1391 herwigpp' >> TopDataPreparation/data/XSection-MC15-13TeV.data
-echo '410526 249.81 3.3296 herwigpp' >> TopDataPreparation/data/XSection-MC15-13TeV.data
-echo '410527 76.929 10.812 herwigpp' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-44
 
 rc build
 

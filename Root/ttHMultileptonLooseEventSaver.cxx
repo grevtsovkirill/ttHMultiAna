@@ -28,7 +28,6 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
   m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
   m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
-  //m_truthWeightTool("TruthWeightTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -399,7 +398,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->eta()            : 0.0; }, *systematicTree, "antitop_eta");
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->phi()            : 0.0; }, *systematicTree, "antitop_phi");
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->e()              : 0.0; }, *systematicTree, "antitop_E");
-    
+
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 
     // HF classification ttbar
@@ -418,6 +417,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pu_hash, "pileupHash");
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
+
+    // LHE3 weights
+    systematicTree->makeOutputVariable(m_lhe3weights, "m_lhe3weights");
 
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
@@ -569,7 +571,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       bool m_writeAllNonPromptInputVars = true;
 
       if(m_writeAllNonPromptInputVars) {
-	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3", 
+	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3",
 					       "PromptLeptonIso_DRlj", "PromptLeptonIso_LepJetPtFrac",
 					       "PromptLepton_TagWeight", "PromptLeptonNoIso_TagWeight"};
 	for(std::string var: float_vars) {
@@ -608,7 +610,7 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     // 	 const xAOD::TrackParticle* cbtrack = mu.trackParticle( xAOD::Muon::CombinedTrackParticle );
     // 	 float qOverP = cbtrack->qOverP();
     // 	 return qOverP; }, *systematicTree, "muon_qOverP");
-    
+
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
 	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
@@ -626,13 +628,13 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
 	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
 	  }
-	  
-	  
+
+
 	  float cbPt = mu.pt();
 	  rho           = fabs( idPt - mePt ) / cbPt;
 	}
 	return rho; }, *systematicTree, "muon_rho");
-    
+
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
 	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
@@ -640,15 +642,15 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	if( idtrack && metrack ) {
 	  qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
 	}
-	return qOverPsigma; }, *systematicTree, "muon_qOverPsigma");  
-      
+	return qOverPsigma; }, *systematicTree, "muon_qOverPsigma");
+
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
 	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
 	float qOverPsignif = -9999;
 	if( idtrack && metrack ) {
 	  float mePt = -999999., idPt = -999999.;
-	  
+
 	  try{
 	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
 	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
@@ -663,13 +665,13 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	  float meP  = 1.0 / ( sin(metrack->theta()) / mePt);
 	  float idP  = 1.0 / ( sin(idtrack->theta()) / idPt);
 	  float qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
-	  qOverPsignif  = fabs( (metrack->charge() / meP) - (idtrack->charge() / idP) ) / qOverPsigma;        
+	  qOverPsignif  = fabs( (metrack->charge() / meP) - (idtrack->charge() / idP) ) / qOverPsigma;
 	}
 	return qOverPsignif; }, *systematicTree, "muon_qOverPsignif");
 
     Wrap2(muvec, [=](const xAOD::Muon& mu) { float reducedChi2   = mu.primaryTrackParticle()->chiSquared()/mu.primaryTrackParticle()->numberDoF();return reducedChi2; }, *systematicTree, "muon_reducedChi2");
-  
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { 
+
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	uint8_t nprecisionLayers;
 
 	if( fabs(mu.eta()) > 2.0 ) {
@@ -694,7 +696,7 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	  mu.summaryValue(nprecisionLayers, xAOD::SummaryType::numberOfPrecisionLayers);
 	}
 	return nprecisionLayers; }, *systematicTree, "muon_numPrecLayers");
-  
+
 
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
     //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
@@ -831,8 +833,8 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
       bool m_writeAllNonPromptInputVars = true;
 
       if(m_writeAllNonPromptInputVars) {
-	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3", "PromptLeptonIso_DRlj", 
-					       "PromptLeptonIso_LepJetPtFrac", "PromptLepton_TagWeight", 
+	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3", "PromptLeptonIso_DRlj",
+					       "PromptLeptonIso_LepJetPtFrac", "PromptLepton_TagWeight",
 					       "PromptLeptonNoIso_TagWeight"};
 	for(std::string &var: float_vars) {
 	  Wrap2(muvec, [=](const xAOD::Muon& mu) {
@@ -854,7 +856,7 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("MV2c10_weight");},*systematicTree, "muon_jet_MV2c10_Weight");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.auxdataConst<int> ("jet_tagWeightBin");}, *systematicTree, "muon_jet_tagWeightBin");
 
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT"); 
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT");
 
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
 
@@ -877,11 +879,11 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);   return (int)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_numTrk");
     //Continous b-tag
     //https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingCalibrationDataInterface#Example_for_continuous_tagging
-    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin")) ?jet.auxdataConst<int>("tagWeightBin") : -2;}, *systematicTree,"m_jet_tagWeightBin"); 
+    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin")) ?jet.auxdataConst<int>("tagWeightBin") : -2;}, *systematicTree,"m_jet_tagWeightBin");
 
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
-    
+
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
@@ -1211,6 +1213,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
+
+  // LHE3 weights
+  if ( top::isSimulation(event) ) {
+    m_lhe3weights = (*event.m_truthEvent)[0]->weights();
+  }
 
   // Truth Matching
   if ( top::isSimulation(event) ) {
