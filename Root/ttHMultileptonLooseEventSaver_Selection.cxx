@@ -657,7 +657,7 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
 
   static SG::AuxElement::Accessor<float> truthRapidity("truthRapidity");
   lep.truthRapidity = ( truthRapidity.isAvailable(el) ) ? truthRapidity(el) : -1;
-
+  
   // trigger matching, electron pt > 25 GeV
   if (m_runYear == 2015) {
     lep.isTrigMatch = ( el.pt() > 25e3 && (
@@ -673,9 +673,13 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   } else { // MC events with pileupEventWeight==0
     lep.isTrigMatch = 0;
   }
-  if (m_runYear == 2015 || m_runYear == 2016) {
+  if (m_runYear == 2015) {
+    lep.isTrigMatchDLT = ( (el.pt() > 13e3 && returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e12_lhloose_L12EM10VH", (char) 0)) || 
+			   (el.pt() > 18e3 && returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_mu14"      , (char) 0)) );
+  }
+  else if (m_runYear == 2016) {
     lep.isTrigMatchDLT = ( el.pt() > 18e3 && (
-                                              returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e17_lhvloose_nod0", (char) 0) ||
+                                              returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e17_lhvloose_nod0"   , (char) 0) ||
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
   } else {
     lep.isTrigMatchDLT = 0;
@@ -762,9 +766,13 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   } else { // MC events with pileupEventWeight==0
     lep.isTrigMatch = 0;
   }
-  if (m_runYear == 2015 || m_runYear == 2016) {
-    lep.isTrigMatchDLT = ((mu.pt() > 9e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu22_mu8noL1", (char) 0)) ||
-                          (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
+  if (m_runYear == 2015) {
+    lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu18_mu8noL1"    , (char) 0)) ||
+			   (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_mu14", (char) 0)) );
+  }
+  else if (m_runYear == 2016) {
+    lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu22_mu8noL1"         , (char) 0)) ||
+                           (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)) );
   } else {
     lep.isTrigMatchDLT = 0;
   }
