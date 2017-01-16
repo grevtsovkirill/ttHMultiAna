@@ -1,3 +1,6 @@
+2017-01-16 Kevin de Vasconcelos <kevin.devasconcelos@cern.ch>
+	* added QmisId flag in vector branches
+
 2017-01-16 Robert Wolff <robert.wolff@cern.ch>
 	* added LHE3 weights
 	* added truth matrix element photon information
@@ -69,7 +72,7 @@
 	* added bad electron handling without crashing
 
 2016-10-06 Babar Ali <babar.ali@cern.ch>
-	* Added New GRL and ilumiCalc file. 
+	* Added New GRL and ilumiCalc file.
 	* Updated The GRL and lumiCalc files in share/config files and also in Data16.py
 
 2016-09-16 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
