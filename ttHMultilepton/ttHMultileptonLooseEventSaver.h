@@ -199,6 +199,13 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   // Truth matching
   ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
 
+  // Truth Matrix element photon
+  int m_hasMEphoton;
+  float m_MEphoton_pT;
+  float m_MEphoton_eta;
+  float m_MEphoton_phi;
+  int m_MEphoton_motherID;
+
   //ttbar HF classification
   int m_HF_Classification;
 

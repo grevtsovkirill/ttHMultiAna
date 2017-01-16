@@ -419,6 +419,13 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
 
+    // Truth Matrix element photon
+    systematicTree->makeOutputVariable(m_hasMEphoton, "m_hasMEphoton");
+    systematicTree->makeOutputVariable(m_MEphoton_pT, "m_MEphoton_pT");
+    systematicTree->makeOutputVariable(m_MEphoton_eta, "m_MEphoton_eta");
+    systematicTree->makeOutputVariable(m_MEphoton_phi, "m_MEphoton_phi");
+    systematicTree->makeOutputVariable(m_MEphoton_motherID, "m_MEphoton_motherID");
+
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
@@ -1227,6 +1234,30 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
+
+  // Truth Matrix element photon
+  m_hasMEphoton = false;
+  m_MEphoton_pT = -1.;
+  m_MEphoton_eta = 0.;
+  m_MEphoton_phi = 0.;
+  m_MEphoton_motherID = 0;
+  for (const auto& particle : *(event.m_truth)) {
+    int pdgId = 22; // look at photons
+    if (fabs(particle->pdgId()) == pdgId
+        && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
+      int motherPdgId = 999;
+      if ( particle->nParents() > 0) motherPdgId = particle->parent(0)->pdgId();
+      if(abs(motherPdgId)<100 && particle->barcode() <2e5){
+        m_hasMEphoton = true;
+        if(particle->pt() > m_MEphoton_pT) {
+          m_MEphoton_pT = particle->pt();
+          m_MEphoton_eta = particle->eta();
+          m_MEphoton_phi = particle->phi();
+          m_MEphoton_motherID = motherPdgId;
+        }
+      }
+    }
+  }
 
   // Truth Matching
   if ( top::isSimulation(event) ) {
