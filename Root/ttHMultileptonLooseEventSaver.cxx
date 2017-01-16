@@ -28,6 +28,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
   m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
   m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
+  //m_truthWeightTool("TruthWeightTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -418,9 +419,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
 
-    // LHE3 weights
-    systematicTree->makeOutputVariable(m_lhe3weights, "m_lhe3weights");
-
     //met
     systematicTree->makeOutputVariable(m_met_met, "MET_RefFinal_et");
     systematicTree->makeOutputVariable(m_met_phi, "MET_RefFinal_phi");
@@ -513,6 +511,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(ele)) m_el_nonprompt_bdt = AccessorNonPromptBDT(ele);
 	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
+
+    // electron QmisID
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+    float m_el_QmisID = -99;
+    static SG::AuxElement::Accessor<char> AccessorQmisID("isQMisID");
+    if(AccessorQmisID.isAvailable(ele)) m_el_QmisID = AccessorQmisID(ele);
+    return (char) m_el_QmisID; }, *systematicTree, "electron_isQMisID");
+
+
 
     // electron charge flip tagger tool
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDLoose.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTLoose");
@@ -725,6 +732,13 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(mu)) m_mu_nonprompt_bdt = AccessorNonPromptBDT(mu);
 	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLeptonIso_TagWeight");
+
+    // muon QmisID
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+    float m_mu_QmisID = -99;
+    static SG::AuxElement::Accessor<char> AccessorQmisID("isQMisID");
+    if(AccessorQmisID.isAvailable(mu)) m_mu_QmisID = AccessorQmisID(mu);
+    return (char) m_mu_QmisID; }, *systematicTree, "muon_isQMisID");
 
     //Trigger matching
 
@@ -1214,11 +1228,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
 
-  // LHE3 weights
-  if ( top::isSimulation(event) ) {
-    m_lhe3weights = (*event.m_truthEvent)[0]->weights();
-  }
-
   // Truth Matching
   if ( top::isSimulation(event) ) {
     top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
@@ -1423,6 +1432,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   */
   CopyLeptons(goodEl, goodMu);
+  //MakeIndices(event.m_electrons);
+  //MakeIndices(event.m_muons);
 
   // dont do the rest if we skim here anyway
   if ( m_doSystematics && m_variables->total_leptons < 2 ) return;
