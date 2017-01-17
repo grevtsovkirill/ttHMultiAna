@@ -58,10 +58,10 @@ ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(6);
-    if (! elItr->auxdataConst<short>("Iso_Loose")) {
+    //if (! elItr->auxdataConst<short>("Iso_Loose")) {
       //std::cout << "Fail isolation" << std::endl;
-      continue;
-    }
+      //continue;
+    //}
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(7);
     auto newElectron = new xAOD::Electron(*elItr);
     goodElectrons->push_back(newElectron);
