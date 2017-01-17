@@ -1241,19 +1241,21 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_MEphoton_eta = 0.;
   m_MEphoton_phi = 0.;
   m_MEphoton_motherID = 0;
-  for (const auto& particle : *(event.m_truth)) {
-    int pdgId = 22; // look at photons
-    if (fabs(particle->pdgId()) == pdgId
-        && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
-      int motherPdgId = 999;
-      if ( particle->nParents() > 0) motherPdgId = particle->parent(0)->pdgId();
-      if(abs(motherPdgId)<100 && particle->barcode() <2e5){
-        m_hasMEphoton = true;
-        if(particle->pt() > m_MEphoton_pT) {
-          m_MEphoton_pT = particle->pt();
-          m_MEphoton_eta = particle->eta();
-          m_MEphoton_phi = particle->phi();
-          m_MEphoton_motherID = motherPdgId;
+  if (event.m_truth != nullptr) {
+    for (const auto& particle : *(event.m_truth)) {
+      int pdgId = 22; // look at photons
+      if (fabs(particle->pdgId()) == pdgId
+          && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
+        int motherPdgId = 999;
+        if ( particle->nParents() > 0) motherPdgId = particle->parent(0)->pdgId();
+        if(abs(motherPdgId)<100 && particle->barcode() <2e5){
+          m_hasMEphoton = true;
+          if(particle->pt() > m_MEphoton_pT) {
+            m_MEphoton_pT = particle->pt();
+            m_MEphoton_eta = particle->eta();
+            m_MEphoton_phi = particle->phi();
+            m_MEphoton_motherID = motherPdgId;
+          }
         }
       }
     }

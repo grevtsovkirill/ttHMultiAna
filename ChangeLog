@@ -1,3 +1,6 @@
+2017-01-17 Robert Wolff <robert.wolff@cern.ch>
+	* fixed ME photon for running on data
+
 2017-01-16 Kevin de Vasconcelos <kevin.devasconcelos@cern.ch>
 	* added QmisId flag in vector branches
 
