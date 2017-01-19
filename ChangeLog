@@ -1,3 +1,5 @@
+2017-01-19 Marco Milesi <marco.milesi@cern.ch>
+	* Add protection for truth particles w/o prodVertex
 2017-01-17 Robert Wolff <robert.wolff@cern.ch>
 	* fixed ME photon for running on data
 

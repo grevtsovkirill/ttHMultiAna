@@ -450,6 +450,13 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
 
       if ( pdgIdAcc.isAvailable( *primitiveTruth ) ) { pdgId_primitive = primitiveTruth->pdgId(); }
 
+      // Protection for truth particles w/o a prodVertex
+      //
+      if ( !primitiveTruth->hasProdVtx() ) {
+      	  ATH_MSG_WARNING("checkTruthQMisID() :: \t Found a truth particle w/o production vertex. Will not check whether this reco lepton is charge flip. Returning");
+      	  return StatusCode::SUCCESS;
+      }
+
       // Check if prod vtx is compatible to a secondary interaction. If that's the case, go back in the chain!
       //
       if ( primitiveTruth->prodVtx()->barcode() < -200000 ) {
