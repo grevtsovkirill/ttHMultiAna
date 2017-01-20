@@ -15,6 +15,8 @@ TopExamples.grid.Add('ttH_fullSim').datasets = [
 TopExamples.grid.Add('new_fastSim').datasets = [
 ## ttbar and single top
 'mc15_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.merge.AOD.e4324_a766_a818_r7676',    
+'mc15_13TeV.410003.aMcAtNloHerwigppEvtGen_ttbar_nonallhad.merge.AOD.e4441_a766_a821_r7676',
+'mc15_13TeV.410004.PowhegHerwigppEvtGen_UEEE5_ttbar_hdamp172p5_nonallhad.merge.AOD.e3836_a766_a821_r7676',
 'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.AOD.e4404_a766_a821_r7676',
 'mc15_13TeV.410504.PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad_bfil.merge.AOD.e5458_a766_a821_r7676',
 'mc15_13TeV.410505.PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_dil_bfil.merge.AOD.e5475_a766_a821_r7676',
@@ -60,6 +62,7 @@ TopExamples.grid.Add('new_fullSim').datasets = [
 'mc15_13TeV.343637.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_threelepton.merge.AOD.e4948_s2726_r7772_r7676',
 'mc15_13TeV.410001.PowhegPythiaEvtGen_P2012radHi_ttbar_hdamp345_down_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
 'mc15_13TeV.410002.PowhegPythiaEvtGen_P2012radLo_ttbar_hdamp172_up_nonallhad.merge.AOD.e3783_s2608_r7725_r7676',
+'mc15_13TeV.410003.aMcAtNloHerwigppEvtGen_ttbar_nonallhad.merge.AOD.e4441_s2726_r7772_r7676',
 'mc15_13TeV.410004.PowhegHerwigppEvtGen_UEEE5_ttbar_hdamp172p5_nonallhad.merge.AOD.e3836_s2726_r7772_r7676',
 'mc15_13TeV.410007.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_allhad.merge.AOD.e4135_s2608_s2183_r7725_r7676',
 'mc15_13TeV.410009.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_dil.merge.AOD.e4511_s2608_s2183_r7725_r7676',
