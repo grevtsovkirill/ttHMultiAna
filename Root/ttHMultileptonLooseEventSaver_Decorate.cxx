@@ -203,8 +203,6 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 
     }
   }//end muons
-
-  top::check( m_tauSelectionEleOLR.initializeEvent(), "Failed to initializeEvent() for tauSelectionEleOLR");
   
   for( auto tauItr : event.m_tauJets) {
     //truth
