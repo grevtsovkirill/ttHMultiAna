@@ -1270,7 +1270,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //ttbar HF classification
   std::set<unsigned int> ttHF_samples =
   {
-    343637,
     410000,
     410001,
     410002,
