@@ -223,7 +223,7 @@ TopExamples.grid.Add('reduced_fullSim').datasets = [
 'mc15_13TeV.342005.aMcAtNloHppEG_UEEE5_CTEQ6L1_CT10ME_tWH125_bbbar_yt_plus2.merge.AOD.e4394_s2608_r7772_r7676',
 
 #ttH
-'mc15_13TeV.342170.aMcAtNloHppEG_UE5_C6L1_CT10ME_ttH125_dilep.merge.AOD.e4273_s2608_r7772_r7676',
+'mc15_13TeV.342170.aMcAtNloHppEG_UE5_C6L1_CT10ME_ttH125_H2tau_dilep.merge.AOD.e4273_s2608_r7772_r7676',
 'mc15_13TeV.342171.aMcAtNloHppEG_UE5_C6L1_CT10ME_ttH125_H2tau_semilep.merge.AOD.e4273_s2608_r7772_r7676',
 'mc15_13TeV.342172.aMcAtNloHppEG_UE5_C6L1_CT10ME_ttH125_H2tau_allhad.merge.AOD.e4273_s2608_r7772_r7676',
 
@@ -510,7 +510,6 @@ TopExamples.grid.Add('full').datasets = [
 'mc15_13TeV.361441.Sherpa_CT10_Ztautau_Pt2000_E_CMS_CVetoBVeto.merge.AOD.e4133_s2608_s2183_r7772_r7676',
 'mc15_13TeV.361442.Sherpa_CT10_Ztautau_Pt2000_E_CMS_CFilterBVeto.merge.AOD.e4133_s2608_s2183_r7772_r7676',
 'mc15_13TeV.361443.Sherpa_CT10_Ztautau_Pt2000_E_CMS_BFilter.merge.AOD.e4133_s2608_s2183_r7772_r7676',
-'mc15_13TeV.361443.Sherpa_CT10_Ztautau_Pt2000_E_CMS_BFilter.merge.AOD.e4316_s2608_s2183_r7772_r7676',
 'mc15_13TeV.361468.Sherpa_CT10_Zee_Mll10to40_Pt0_70_BVeto.merge.AOD.e4198_s2608_s2183_r7772_r7676',
 'mc15_13TeV.361469.Sherpa_CT10_Zee_Mll10to40_Pt0_70_BFilter.merge.AOD.e4198_s2608_s2183_r7772_r7676',
 'mc15_13TeV.361470.Sherpa_CT10_Zee_Mll10to40_Pt70_140_BVeto.merge.AOD.e4198_s2608_s2183_r7772_r7676',
