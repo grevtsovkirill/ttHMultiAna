@@ -643,9 +643,14 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
   lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(el) ) ? promptLeptonNoIso_TagWeight(el) : -99;
 
-  lep.chargeIDBDTLoose = (float)m_electronChargeIDLoose.calculate(&el);
-  lep.chargeIDBDTMedium = (float)m_electronChargeIDMedium.calculate(&el);
-  lep.chargeIDBDTTight = (float)m_electronChargeIDTight.calculate(&el);
+  static SG::AuxElement::Accessor<float> chargeIDBDTLoose("chargeIDBDTLoose");
+  lep.chargeIDBDTLoose = ( chargeIDBDTLoose.isAvailable(el) ) ? chargeIDBDTLoose(el) : -99;
+
+  static SG::AuxElement::Accessor<float> chargeIDBDTMedium("chargeIDBDTMedium");
+  lep.chargeIDBDTMedium = ( chargeIDBDTMedium.isAvailable(el) ) ? chargeIDBDTMedium(el) : -99;
+
+  static SG::AuxElement::Accessor<float> chargeIDBDTTight("chargeIDBDTTight");
+  lep.chargeIDBDTTight = ( chargeIDBDTTight.isAvailable(el) ) ? chargeIDBDTTight(el) : -99;
 
   static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
   lep.isTruthMatched = ( isTruthMatched.isAvailable(el) ) ? isTruthMatched(el) : -1;

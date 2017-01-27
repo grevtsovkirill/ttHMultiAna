@@ -526,12 +526,24 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     if(AccessorQmisID.isAvailable(ele)) m_el_QmisID = AccessorQmisID(ele);
     return (char) m_el_QmisID; }, *systematicTree, "electron_isQMisID");
 
-
-
     // electron charge flip tagger tool
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDLoose.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTLoose");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDMedium.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTMedium");
-    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float)m_electronChargeIDTight.calculate(&ele); }, *systematicTree, "electron_ChargeIDBDTTight");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float chargeIDBDTLoose = -99.;
+          static SG::AuxElement::Accessor<float> AccessorChargeIDBDTLoose("chargeIDBDTLoose");
+          if(AccessorChargeIDBDTLoose.isAvailable(ele)) chargeIDBDTLoose = AccessorChargeIDBDTLoose(ele);
+          return (float) chargeIDBDTLoose; }, *systematicTree, "electron_ChargeIDBDTLoose");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float chargeIDBDTMedium = -99.;
+          static SG::AuxElement::Accessor<float> AccessorChargeIDBDTMedium("chargeIDBDTMedium");
+          if(AccessorChargeIDBDTMedium.isAvailable(ele)) chargeIDBDTMedium = AccessorChargeIDBDTMedium(ele);
+          return (float) chargeIDBDTMedium; }, *systematicTree, "electron_ChargeIDBDTMedium");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float chargeIDBDTTight = -99.;
+          static SG::AuxElement::Accessor<float> AccessorChargeIDBDTTight("chargeIDBDTTight");
+          if(AccessorChargeIDBDTTight.isAvailable(ele)) chargeIDBDTTight = AccessorChargeIDBDTTight(ele);
+          return (float) chargeIDBDTTight; }, *systematicTree, "electron_ChargeIDBDTTight");
 
     for (std::string trigger_name : triggernames) {
       if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;

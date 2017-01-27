@@ -90,7 +90,10 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
       else elItr->auxdecor<double>("jetFitterComb") = -10.0;
     }
     else elItr->auxdecor<double>("jetFitterComb") = -10.0;
-  
+
+    elItr->auxdecor<float>("chargeIDBDTLoose") = (float)m_electronChargeIDLoose.calculate(elItr);
+    elItr->auxdecor<float>("chargeIDBDTMedium") = (float)m_electronChargeIDMedium.calculate(elItr);
+    elItr->auxdecor<float>("chargeIDBDTTight") = (float)m_electronChargeIDTight.calculate(elItr);
   }// end elecs
 
   for (auto muItr : event.m_muons) {
