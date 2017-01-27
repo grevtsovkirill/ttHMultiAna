@@ -118,6 +118,19 @@ namespace ttHMultilepton {
     char    isISR_FSR_Ph;
     char    isBrems;
 
+    float   chargeIDBDTLoose;
+    float   chargeIDBDTMedium;
+    float   chargeIDBDTTight;
+    float   promptLeptonIso_TagWeight;
+    short   promptLeptonIso_sv1_jf_ntrkv;
+    short   promptLeptonIso_TrackJetNTrack;
+    float   promptLeptonIso_ip2;
+    float   promptLeptonIso_ip3;
+    float   promptLeptonIso_DRlj;
+    float   promptLeptonIso_LepJetPtFrac;
+    float   promptLepton_TagWeight;
+    float   promptLeptonNoIso_TagWeight;
+
     char    isTruthMatched;
     int     truthPdgId;
     int     truthStatus;

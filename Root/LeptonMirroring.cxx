@@ -62,6 +62,19 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isISR_FSR_Ph, "lep_isISR_FSR_Ph_", index);
   CreateBranch(tree, &isBrems, "lep_isBrems_", index);
 
+  CreateBranch(tree, &chargeIDBDTLoose, "lep_chargeIDBDTLoose_", index);
+  CreateBranch(tree, &chargeIDBDTMedium, "lep_chargeIDBDTMedium_", index);
+  CreateBranch(tree, &chargeIDBDTTight, "lep_chargeIDBDTTight_", index);
+  CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
+  CreateBranch(tree, &promptLeptonIso_sv1_jf_ntrkv, "lep_promptLeptonIso_sv1_jf_ntrkv_", index);
+  CreateBranch(tree, &promptLeptonIso_TrackJetNTrack, "lep_promptLeptonIso_TrackJetNTrack_", index);
+  CreateBranch(tree, &promptLeptonIso_ip2, "lep_promptLeptonIso_ip2_", index);
+  CreateBranch(tree, &promptLeptonIso_ip3, "lep_promptLeptonIso_ip3_", index);
+  CreateBranch(tree, &promptLeptonIso_DRlj, "lep_promptLeptonIso_DRlj_", index);
+  CreateBranch(tree, &promptLeptonIso_LepJetPtFrac, "lep_promptLeptonIso_LepJetPtFrac_", index);
+  CreateBranch(tree, &promptLepton_TagWeight, "lep_promptLepton_TagWeight_", index);
+  CreateBranch(tree, &promptLeptonNoIso_TagWeight, "lep_promptLeptonNoIso_TagWeight_", index);
+
   CreateBranch(tree, &isTruthMatched,"lep_isTruthMatched_", index);
   CreateBranch(tree, &truthType,     "lep_truthType_", index);
   CreateBranch(tree, &truthOrigin,   "lep_truthOrigin_", index);
