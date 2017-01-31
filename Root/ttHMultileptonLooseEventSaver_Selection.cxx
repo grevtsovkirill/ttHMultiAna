@@ -658,6 +658,31 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.truthOrigin = TruthOrigin;
   lep.truthType = TruthType;
 
+  static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
+  lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetNTrk("jet_numTrk");
+  lep.mujet_jetNTrk = (mujet_jetNTrk.isAvailable(mu)) ? mujet_jetNTrk(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetSumPtTrk("jet_sumPtTrk");
+  lep.mujet_jetSumPtTrk = (mujet_jetSumPtTrk.isAvailable(mu)) ? mujet_jetSumPtTrk(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_mv2c10("MV2c10_weight");
+  lep.mujet_mv2c10 = (mujet_mv2c10.isAvailable(mu)) ? mujet_mv2c10(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_deltaR("jet_dr");
+  lep.mujet_deltaR = (mujet_deltaR.isAvailable(mu)) ? mujet_deltaR(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_ptRel("jet_ptRel");
+  lep.mujet_ptRel = (mujet_ptRel.isAvailable(mu)) ? mujet_ptRel(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetPtOverpt("jet_pt");
+  lep.mujet_jetPtOverpt = (mujet_jetPtOverpt.isAvailable(mu)) ? mujet_jetPtOverpt(mu)/mu.pt(): -99;
+
+  static::SG::AuxElement::Accessor<float> mujet_BDT("muon_BDT");
+  lep.mujet_BDT        = (mujet_BDT.isAvailable(mu)) ? mujet_BDT(mu): -99;
+
+
   static SG::AuxElement::Accessor<int> truthPdgId("truthPdgId");
   lep.truthPdgId = ( truthPdgId.isAvailable(el) ) ? truthPdgId(el) : -1;
 

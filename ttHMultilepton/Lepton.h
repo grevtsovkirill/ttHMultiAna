@@ -130,8 +130,19 @@ namespace ttHMultilepton {
     float   promptLeptonIso_LepJetPtFrac;
     float   promptLepton_TagWeight;
     float   promptLeptonNoIso_TagWeight;
-
+    
     char    isTruthMatched;
+
+
+    float mujet_jetPt;
+    float mujet_jetNTrk;
+    float mujet_jetSumPtTrk;
+    float mujet_mv2c10;
+    float mujet_deltaR; 
+    float mujet_ptRel;
+    float mujet_jetPtOverpt;
+    float mujet_BDT;
+
     int     truthPdgId;
     int     truthStatus;
     int     truthType;

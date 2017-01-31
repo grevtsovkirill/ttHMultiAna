@@ -4,7 +4,7 @@ import Data16
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'rwolff'
+config.gridUsername  = 'narayan'
 config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
@@ -37,19 +37,19 @@ config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 
 ####################################################################################
 #Nominal
-config.suffix = '2017-01-13.Nominal_v26'
+config.suffix = '2017-01-30.Nominal_v26'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
 config.settingsFile = 'generic_config-mc15.txt'
-TopExamples.grid.submit(config,all_fullSim)
+#TopExamples.grid.submit(config,all_fullSim)
 config.settingsFile = 'generic_config-mc15_fastSim.txt'
-TopExamples.grid.submit(config,all_fastSim)
+#TopExamples.grid.submit(config,all_fastSim)
 
 
 ########################################################################################
 #Data
-config.suffix = '2017-01-13.Data_v26'
+config.suffix = '2017-01-30.Data_v26'
 config.memory = ''
 config.maxNFilesPerJob = ''
 

@@ -75,6 +75,15 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &promptLepton_TagWeight, "lep_promptLepton_TagWeight_", index);
   CreateBranch(tree, &promptLeptonNoIso_TagWeight, "lep_promptLeptonNoIso_TagWeight_", index);
 
+  CreateBranch(tree, &mujet_jetPt,"lep_jet_Pt_",index);
+  CreateBranch(tree, &mujet_jetNTrk,"lep_jet_nTrk_",index);
+  CreateBranch(tree, &mujet_jetSumPtTrk,"lep_jet_sumPtTrk_",index);
+  CreateBranch(tree, &mujet_mv2c10,"lep_jet_mv2c10_",index);
+  CreateBranch(tree, &mujet_deltaR,"lep_jet_deltaR_",index);
+  CreateBranch(tree, &mujet_ptRel,"lep_jet_ptRel_",index);
+  CreateBranch(tree, &mujet_jetPtOverpt,"lep_jet_ptOverMuPt_",index);
+  CreateBranch(tree, &mujet_BDT,"lep_jet_BDT_",index);
+
   CreateBranch(tree, &isTruthMatched,"lep_isTruthMatched_", index);
   CreateBranch(tree, &truthType,     "lep_truthType_", index);
   CreateBranch(tree, &truthOrigin,   "lep_truthOrigin_", index);

@@ -10,7 +10,6 @@
 #include <iostream>
 
 
-
 class ReadBDTG : public IClassifierReader {
 
  public:
@@ -23,7 +22,7 @@ class ReadBDTG : public IClassifierReader {
         fIsNormalised( false )
    {      
       // the training input variables
-      const char* inputVars[] = { "jetMu_jetPt", "jetMu_jetNTrk", "jetMu_SumPtTrk", "jetMu_mv2c10_weight", "jetMu_deltaR", "jetMu_ptRel*1e-3", "jetMu_jetPt/jetMu_muPt", "jetMu_muonSigd0PV", "jetMu_muonZ0SinTheta" };
+      const char* inputVars[] = { "jetMu_jetPt", "jetMu_jetNTrk", "jetMu_SumPtTrk", "mv2c10_70", "jetMu_deltaR", "jetMu_ptRel", "jetMu_jetPt/jetMu_muPt", "jetMu_muonSigd0PV", "jetMu_muonZ0SinTheta" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
