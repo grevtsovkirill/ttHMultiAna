@@ -343,10 +343,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_mc_children,    "m_truth_children");
 
       //truth jets
-      systematicTree->makeOutputVariable(m_trjet_pt,  "m_truth_jet_pt");
-      systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
-      systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
-      systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
+      //systematicTree->makeOutputVariable(m_trjet_pt,  "m_truth_jet_pt");
+      //systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
+      //systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
+      //systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
       systematicTree->makeOutputVariable(m_trjet_Wcount,   "m_truth_jet_Wcount");
       systematicTree->makeOutputVariable(m_trjet_Zcount,   "m_truth_jet_Zcount");
       systematicTree->makeOutputVariable(m_trjet_Hcount,   "m_truth_jet_Hcount");
@@ -899,6 +899,10 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_eta");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
     // not in sample xAOD
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("Jvt"); }, *systematicTree, "m_jet_jvt_uncal");

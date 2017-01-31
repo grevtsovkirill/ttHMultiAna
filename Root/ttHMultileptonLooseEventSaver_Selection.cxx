@@ -658,30 +658,6 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   lep.truthOrigin = TruthOrigin;
   lep.truthType = TruthType;
 
-  static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
-  lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
-
-  static SG::AuxElement::Accessor<float> mujet_jetNTrk("jet_numTrk");
-  lep.mujet_jetNTrk = (mujet_jetNTrk.isAvailable(mu)) ? mujet_jetNTrk(mu): -99;
-
-  static SG::AuxElement::Accessor<float> mujet_jetSumPtTrk("jet_sumPtTrk");
-  lep.mujet_jetSumPtTrk = (mujet_jetSumPtTrk.isAvailable(mu)) ? mujet_jetSumPtTrk(mu): -99;
-
-  static SG::AuxElement::Accessor<float> mujet_mv2c10("MV2c10_weight");
-  lep.mujet_mv2c10 = (mujet_mv2c10.isAvailable(mu)) ? mujet_mv2c10(mu): -99;
-
-  static SG::AuxElement::Accessor<float> mujet_deltaR("jet_dr");
-  lep.mujet_deltaR = (mujet_deltaR.isAvailable(mu)) ? mujet_deltaR(mu): -99;
-
-  static SG::AuxElement::Accessor<float> mujet_ptRel("jet_ptRel");
-  lep.mujet_ptRel = (mujet_ptRel.isAvailable(mu)) ? mujet_ptRel(mu): -99;
-
-  static SG::AuxElement::Accessor<float> mujet_jetPtOverpt("jet_pt");
-  lep.mujet_jetPtOverpt = (mujet_jetPtOverpt.isAvailable(mu)) ? mujet_jetPtOverpt(mu)/mu.pt(): -99;
-
-  static::SG::AuxElement::Accessor<float> mujet_BDT("muon_BDT");
-  lep.mujet_BDT        = (mujet_BDT.isAvailable(mu)) ? mujet_BDT(mu): -99;
-
 
   static SG::AuxElement::Accessor<int> truthPdgId("truthPdgId");
   lep.truthPdgId = ( truthPdgId.isAvailable(el) ) ? truthPdgId(el) : -1;
@@ -814,6 +790,32 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.d0 = mu.primaryTrackParticle()->d0();
   lep.z0 = mu.primaryTrackParticle()->z0();
   lep.vz = mu.primaryTrackParticle()->vz();
+
+  static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
+  lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetNTrk("jet_numTrk");
+  lep.mujet_jetNTrk = (mujet_jetNTrk.isAvailable(mu)) ? mujet_jetNTrk(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetSumPtTrk("jet_sumPtTrk");
+  lep.mujet_jetSumPtTrk = (mujet_jetSumPtTrk.isAvailable(mu)) ? mujet_jetSumPtTrk(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_mv2c10("MV2c10_weight");
+  lep.mujet_mv2c10 = (mujet_mv2c10.isAvailable(mu)) ? mujet_mv2c10(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_deltaR("jet_dr");
+  lep.mujet_deltaR = (mujet_deltaR.isAvailable(mu)) ? mujet_deltaR(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_ptRel("jet_ptRel");
+  lep.mujet_ptRel = (mujet_ptRel.isAvailable(mu)) ? mujet_ptRel(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetPtOverpt("jet_pt");
+  lep.mujet_jetPtOverpt = (mujet_jetPtOverpt.isAvailable(mu)) ? mujet_jetPtOverpt(mu)/mu.pt(): -99;
+
+  static::SG::AuxElement::Accessor<float> mujet_BDT("muon_BDT");
+  lep.mujet_BDT        = (mujet_BDT.isAvailable(mu)) ? mujet_BDT(mu): -99;
+
+
 
   // trigger matching
   if (m_runYear == 2015) {
@@ -1380,3 +1382,15 @@ ttHMultileptonLooseEventSaver::CheckIsBlinded() {
   }
   m_variables->isBlinded = isBlinded;
 }
+
+
+float ttHMultileptonLooseEventSaver::getattr_truthJet(const xAOD::Jet &jet, std::string  attr)
+{
+  if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink") && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid())
+  {
+    const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
+    return trthjet->auxdataConst<float>(attr.c_str());
+  }
+  else return -99;
+}
+ 

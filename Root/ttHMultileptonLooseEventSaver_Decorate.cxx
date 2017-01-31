@@ -197,7 +197,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
        //MuonIDBDT Score
        std::vector<std::string> inputVarNames = { "jetMu_jetPt", "jetMu_jetNTrk", "jetMu_SumPtTrk", "mv2c10_70", "jetMu_deltaR", "jetMu_ptRel", "jetMu_jetPt/jetMu_muPt", "jetMu_muonSigd0PV", "jetMu_muonZ0SinTheta" };
        ReadBDTG muonIdBDT(inputVarNames);
-       std::vector<double> inputValues ={muItr->auxdataConst<float>("jet_pt"),muItr->auxdataConst<float>("jet_numTrk"),muItr->auxdataConst<float>("jet_sumPtTrk"),(muItr->auxdataConst<float>("MV2c10_weight")> 0.8244) ? 1 :0,smallestDr,muItr->auxdataConst<float>("jet_ptRel"),muItr->auxdataConst<float>("jet_pt")/muItr->pt(),muItr->auxdataConst<float>("d0sig"),muItr->auxdataConst<float>("delta_z0_sintheta")};
+       std::vector<double> inputValues ={muItr->auxdataConst<float>("jet_pt"),muItr->auxdataConst<float>("jet_numTrk"),muItr->auxdataConst<float>("jet_sumPtTrk"),(muItr->auxdataConst<float>("MV2c10_weight")> 0.8244) ? 1.0 :0.0,smallestDr,muItr->auxdataConst<float>("jet_ptRel"),muItr->auxdataConst<float>("jet_pt")/muItr->pt(),muItr->auxdataConst<float>("d0sig"),muItr->auxdataConst<float>("delta_z0_sintheta")};
        float m_mu_nonprompt_bdt = -99.;
        static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
        if(AccessorNonPromptBDT.isAvailable((*muItr)) ) m_mu_nonprompt_bdt = AccessorNonPromptBDT( (*muItr));
@@ -254,5 +254,6 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     }
     tauItr->auxdecor<int>("truthJetFlavour") = truthJetFlavour;
   }//end taus
+  
   
 }//end decorate
