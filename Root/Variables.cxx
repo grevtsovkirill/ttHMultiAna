@@ -65,9 +65,11 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(lead_jetPt,  "lead_jetPt");
   tree->makeOutputVariable(lead_jetEta, "lead_jetEta");
   tree->makeOutputVariable(lead_jetPhi, "lead_jetPhi");
+  tree->makeOutputVariable(lead_jetE,"lead_jetE");
   tree->makeOutputVariable(sublead_jetPt,  "sublead_jetPt");
   tree->makeOutputVariable(sublead_jetEta, "sublead_jetEta");
   tree->makeOutputVariable(sublead_jetPhi, "sublead_jetPhi");
+  tree->makeOutputVariable(sublead_jetE,"sublead_jetE");
   tree->makeOutputVariable(selected_jets, "selected_jets");
   tree->makeOutputVariable(selected_jets_T, "selected_jets_T");
   // scale factors

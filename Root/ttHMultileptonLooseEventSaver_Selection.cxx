@@ -1187,6 +1187,8 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   m_variables->sublead_jetEta = 0;
   m_variables->lead_jetPhi = 0;
   m_variables->sublead_jetPhi = 0;
+  m_variables->lead_jetE = 0;
+  m_variables->sublead_jetE =0;
 
   typedef std::tuple<const TLorentzVector*, int> sortvec_t;
   std::vector<sortvec_t> sorter_jets;
@@ -1283,11 +1285,13 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     m_variables->lead_jetPt  = p4s[0]->Pt();
     m_variables->lead_jetEta = p4s[0]->Eta();
     m_variables->lead_jetPhi = p4s[0]->Phi();
+    m_variables->lead_jetE   = p4s[0]->E();
     }
   if (goodJets->size() > 1){
     m_variables->sublead_jetPt  = p4s[1]->Pt();
     m_variables->sublead_jetEta = p4s[1]->Eta();
     m_variables->sublead_jetPhi = p4s[1]->Phi();
+    m_variables->sublead_jetE	= p4s[1]->E();
   }
 
 

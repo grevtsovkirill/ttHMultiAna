@@ -51,9 +51,11 @@ namespace ttHMultilepton {
     float lead_jetPt;
     float lead_jetEta;
     float lead_jetPhi;
+    float lead_jetE;
     float sublead_jetPt;
     float sublead_jetEta;
     float sublead_jetPhi;
+    float sublead_jetE;
     float lepSFIDLoose;
     float lepSFIDTight;
     float lepSFTrigLoose[MAXSYST];
