@@ -164,7 +164,7 @@ def getDoneSamplesOnGRID():
                     status_map[status_name] = int(status_count)
                 #call anything with more than 95% a success for mc
                 finish_fraction = float(status_map['finished'])/float(sum(status_map.values()))
-                if finish_fraction > 0.95 and not job.inDS.count('data'):
+                if finish_fraction > 0.95 and not job.inDS.count('data') and not job.outDS.count('Sys'):
                     print 'Uploading job with %s finish fraction and DS %s' %( finish_fraction, job.inDS)
                     samples += [Sample(job)]
                 else:

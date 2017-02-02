@@ -1,3 +1,11 @@
+2017-02-02 Robert Wolff <robert.wolff@cern.ch>
+	* add nleptonplustau selection for 1l+1tau channel in systematic trees
+
+2017-01-31 Rohin Narayan <narayan@cern.ch>
+	* adding lead_jetE  and sublead_jetE flat branches
+	* Adding truth jets
+	* Adding updated Texas MVA
+
 2017-01-27 Robert Wolff <robert.wolff@cern.ch>
 	* add ChargeIDSelectorTool output to flat lepton branches
 	* Add PromptLepton* variables to flat lepton branches

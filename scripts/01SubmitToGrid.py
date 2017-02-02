@@ -1,21 +1,23 @@
 import TopExamples.grid
 import MC_PostICHEP
+import MC_HppHmm
 import Data16
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'narayan'
+config.gridUsername  = 'rwolff'
 config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
-config.destSE        = ''#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
+config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 #config.forceSite     = 'ANALY_CONNECT'
 
 ###############################################################################
 #Systematics
-config.suffix        = '2017-01-13.Sys_v26'
+config.suffix        = '2017-01-26.Sys_v26b'
 config.maxNFilesPerJob = '1'
 config.memory = ''
+config.otherOptions = '--forceStaged'
 
 reduced_fullSim = TopExamples.grid.Samples(['reduced_fullSim'])
 reduced_fastSim = TopExamples.grid.Samples(['reduced_fastSim'])
@@ -27,13 +29,25 @@ TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',reduced_fastSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',full_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',new_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',new_fastSim)
+hpphmm_fullSim = TopExamples.grid.Samples(['HppHmm'])
+hpphmm_fastSim = TopExamples.grid.Samples(['HppHmm_fastSim'])
+hpphmm_fullSim_split = TopExamples.grid.Samples(['HppHmm_split'])
+hpphmm_fastSim_split = TopExamples.grid.Samples(['HppHmm_fastSim_split'])
 all_fullSim = reduced_fullSim + full_fullSim + new_fullSim
 all_fastSim = reduced_fastSim + new_fastSim
-
 config.settingsFile = 'generic_config-mc15-Sys.txt'
 #TopExamples.grid.submit(config,reduced_fullSim+new_fullSim)
+#TopExamples.grid.submit(config,hpphmm_fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 #TopExamples.grid.submit(config,reduced_fastSim+new_fastSim)
+#TopExamples.grid.submit(config,hpphmm_fastSim)
+
+for systs in ['Jets1','Jets2','Other']:
+   config.suffix        = '2017-01-26.Sys_v26b-' + systs
+   config.settingsFile = 'generic_config-mc15-Sys-' + systs + '.txt'
+   TopExamples.grid.submit(config,hpphmm_fullSim_split)
+   config.settingsFile = 'generic_config-mc15-Sys-' + systs + '_fastSim.txt'
+   TopExamples.grid.submit(config,hpphmm_fastSim_split)
 
 ####################################################################################
 #Nominal
@@ -56,13 +70,13 @@ config.maxNFilesPerJob = ''
 config.settingsFile = 'generic_config-data15.txt'
 TopExamples.grid.Add('data_00284154').datasets = ['user.rwolff.00284154.physics_Main.merge.DAOD_HIGG8D1.r7562_p2521_p2950']
 data_00284154 = TopExamples.grid.Samples(['data_00284154'])
-TopExamples.grid.submit(config, data_00284154)
+#TopExamples.grid.submit(config, data_00284154)
 data15 = TopExamples.grid.Samples(['data15'])
-TopExamples.grid.submit(config, data15)
+#TopExamples.grid.submit(config, data15)
 
 data16 = TopExamples.grid.Samples(['data16'])
 config.settingsFile = 'generic_config-data16.txt'
-TopExamples.grid.submit(config,data16)
+#TopExamples.grid.submit(config,data16)
 
 
 #################################################################################

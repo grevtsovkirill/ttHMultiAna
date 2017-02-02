@@ -24,6 +24,9 @@ echo "Alright - done."
 #cd ttHMultilepton/share
 #sed 's/IsAFII False/IsAFII True/' generic_config-mc15.txt > generic_config-mc15_fastSim.txt
 #sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys_fastSim.txt
+#sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Jets1.txt > generic_config-mc15-Sys-Jets1_fastSim.txt
+#sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Jets2.txt > generic_config-mc15-Sys-Jets2_fastSim.txt
+#sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Other.txt > generic_config-mc15-Sys-Other_fastSim.txt
 #python ../scripts/01SubmitToGrid.py
 
 
