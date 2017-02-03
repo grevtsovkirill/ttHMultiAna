@@ -905,6 +905,33 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   lep.isBrems = ( isBrems.isAvailable(mu) ) ? isBrems(mu) : -1;
   //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
 
+  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
+  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
+
+  static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
+  lep.promptLeptonIso_sv1_jf_ntrkv = ( promptLeptonIso_sv1_jf_ntrkv.isAvailable(mu) ) ? promptLeptonIso_sv1_jf_ntrkv(mu) : -99;
+
+  static SG::AuxElement::Accessor<short> promptLeptonIso_TrackJetNTrack("PromptLeptonIso_TrackJetNTrack");
+  lep.promptLeptonIso_TrackJetNTrack = ( promptLeptonIso_TrackJetNTrack.isAvailable(mu) ) ? promptLeptonIso_TrackJetNTrack(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_ip2("PromptLeptonIso_ip2");
+  lep.promptLeptonIso_ip2 = ( promptLeptonIso_ip2.isAvailable(mu) ) ? promptLeptonIso_ip2(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_ip3("PromptLeptonIso_ip3");
+  lep.promptLeptonIso_ip3 = ( promptLeptonIso_ip3.isAvailable(mu) ) ? promptLeptonIso_ip3(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_DRlj("PromptLeptonIso_DRlj");
+  lep.promptLeptonIso_DRlj = ( promptLeptonIso_DRlj.isAvailable(mu) ) ? promptLeptonIso_DRlj(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_LepJetPtFrac("PromptLeptonIso_LepJetPtFrac");
+  lep.promptLeptonIso_LepJetPtFrac = ( promptLeptonIso_LepJetPtFrac.isAvailable(mu) ) ? promptLeptonIso_LepJetPtFrac(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLepton_TagWeight("PromptLepton_TagWeight");
+  lep.promptLepton_TagWeight = ( promptLepton_TagWeight.isAvailable(mu) ) ? promptLepton_TagWeight(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
+  lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(mu) ) ? promptLeptonNoIso_TagWeight(mu) : -99;
+
   // Whatever is not a prompt or a QMisID, is a fake to us!
   lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
 
