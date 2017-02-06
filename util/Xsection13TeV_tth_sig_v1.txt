@@ -14,10 +14,11 @@
  343365          0.05343               1         1.0    --     125   1      aMc@Nlo+Pythia8                         ttH125_dilep  Full  
  343366          0.22276               1         1.0    --     125   1      aMc@Nlo+Pythia8                       ttH125_semilep  Full  
  343367          0.23082               1         1.0    --     125   1      aMc@Nlo+Pythia8                        ttH125_allhad  Full  
- 343436                0               0         1.0    --     125   2      aMc@Nlo+Pythia8                        ttH125_gamgam  Full  
+ 343436          0.45837               1         1.0    --     125   2      aMc@Nlo+Pythia8                        ttH125_gamgam  Full  
 
-
-
+#ggH VBF
+ 341471           30.188               1         1.0    --     125   0      pythia8                                ggH125_ZZ4lep  Fast
+ 341488           3.8299               1         1.0    --     125   0      pythia8                                VBFH125_ZZ4lep Fast
 
 
 
