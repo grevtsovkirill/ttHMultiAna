@@ -202,7 +202,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
        static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
        if(AccessorNonPromptBDT.isAvailable((*muItr)) ) m_mu_nonprompt_bdt = AccessorNonPromptBDT( (*muItr));
 	
-       if (smallestDr <=0.4 && m_mu_nonprompt_bdt <-0.5)
+       if (smallestDr <=0.4)
        {
            muItr->auxdecor<float>("muon_BDT") = muonIdBDT.GetMvaValue(inputValues);
        }
