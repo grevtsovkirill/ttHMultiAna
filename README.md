@@ -1,73 +1,75 @@
-Setting up AnalysisTop
----------
+# Setting up AnalysisTop
+
 To set up the AnalysisTop package do::
+```bash
+export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+mkdir YourFancyDirectory
+cd YourFancyDirectory
+lsetup "rcsetup Top,2.4.25"
+```
 
-  export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
-  source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-  mkdir YourFancyDirectory
-  cd YourFancyDirectory
-  lsetup "rcsetup Top,2.4.25"
+# Getting the code
 
-Getting the code
----------
 After setting up your Kerberos ticket::
-
-  kinit $CERN_USER@CERN.CH
-
+```bash
+kinit $CERN_USER@CERN.CH
+```
 get the code, use the following command::
-
-  git clone https://:@gitlab.cern.ch:8443/rwolff/ttHMultiAna.git ttHMultilepton
-
+```bash
+git clone https://:@gitlab.cern.ch:8443/rwolff/ttHMultiAna.git ttHMultilepton
+```
 If you want a specific tag, do::
-
-  cd ttHMultilepton && git checkout <tag number> && cd ..
-
+```bash
+cd ttHMultilepton && git checkout <tag number> && cd ..
+```
 Possibly checkout additional packages mentioned in setupRCandGrid.sh.
 
 To compile the code type::
+```bash
+rc build
+```
 
-  rc build
+# Running locally
 
-Running locally
----------
 Change back to your initially created YourFancyDirectory.
 To run the framework locally over a derivation (HIGG8D1 is recommended) file::
-
-  mkdir Run
-  cd Run
-  echo $DXAOD_PATH_TO_ROOT_FILE > infile_htop.txt
-
+```bash
+mkdir Run
+cd Run
+echo $DXAOD_PATH_TO_ROOT_FILE > infile_htop.txt
+```
 The master command to run on the framework is::
-
-  top-xaod ../ttHMultilepton/share/generic_config-data15.txt infile_htop.txt
-
+```bash
+top-xaod ../ttHMultilepton/share/generic_config-data15.txt infile_htop.txt
+```
 for 2015 and::
-
-  top-xaod ../ttHMultilepton/share/generic_config-data16.txt infile_htop.txt
-
+```bash
+top-xaod ../ttHMultilepton/share/generic_config-data16.txt infile_htop.txt
+```
 for 2016 data and for MC it is::
-
-  top-xaod ../ttHMultilepton/share/generic_config-mc15.txt infile_htop.txt
-
+```bash
+top-xaod ../ttHMultilepton/share/generic_config-mc15.txt infile_htop.txt
+```
 or for ntuples including the systematic variation trees::
-
-  top-xaod ../ttHMultilepton/share/generic_config-mc15-Sys.txt infile_htop.txt
-
+```bash
+top-xaod ../ttHMultilepton/share/generic_config-mc15-Sys.txt infile_htop.txt
+```
 The configuration files for AFII (fast simulation) MC samples has to be modified by replacing "IsAFII False" by "IsAFII True".
 
-Contributing to the development
----------
+# Contributing to the development
+
 If you want to participate develope, please see a nice how-to [here](https://gitlab.cern.ch/TRExStats/TRExFitter/blob/master/CONTRIBUTING.md).
 Notes:
 - Set up your git configuration with::
-
+  ```bash
   git config --global user.name "First Last"
   git config --global user.email "first.last@cern.ch"
-
+  ```
 - feature development should generally always occur on a dedicated branch, rather than on the master branch
 - keep track of the changes using the [ATLAS ttH multilepton JIRA project](https://its.cern.ch/jira/projects/ATLASTTHML). E.g.::
-
+  ```bash
   git commit -m "Working on ATLASTTHML-81: moving to new AnalysisTop"
-
-will automatically create a comment on the corresponding JIRA ticket [ATLASTTHML-81](https://its.cern.ch/jira/browse/ATLASTTHML-81).
+  ```
+  will automatically create a comment on the corresponding JIRA ticket [ATLASTTHML-81](https://its.cern.ch/jira/browse/ATLASTTHML-81).
 
