@@ -57,7 +57,7 @@ The configuration files for AFII (fast simulation) MC samples has to be modified
 
 Contributing to the development
 ---------
-If you want to participate develope, please see a nice how-to [here|https://gitlab.cern.ch/TRExStats/TRExFitter/blob/master/CONTRIBUTING.md].
+If you want to participate develope, please see a nice how-to [here](https://gitlab.cern.ch/TRExStats/TRExFitter/blob/master/CONTRIBUTING.md).
 Notes:
 - Set up your git configuration with::
 
@@ -65,9 +65,9 @@ Notes:
   git config --global user.email "first.last@cern.ch"
 
 - feature development should generally always occur on a dedicated branch, rather than on the master branch
-- keep track of the changes using the [ATLAS ttH multilepton JIRA project|https://its.cern.ch/jira/projects/ATLASTTHML]. E.g.::
+- keep track of the changes using the [ATLAS ttH multilepton JIRA project](https://its.cern.ch/jira/projects/ATLASTTHML). E.g.::
 
   git commit -m "Working on ATLASTTHML-81: moving to new AnalysisTop"
 
-will automatically create a comment on the corresponding JIRA ticket [ATLASTTHML-81|https://its.cern.ch/jira/browse/ATLASTTHML-81].
+will automatically create a comment on the corresponding JIRA ticket [ATLASTTHML-81](https://its.cern.ch/jira/browse/ATLASTTHML-81).
 
