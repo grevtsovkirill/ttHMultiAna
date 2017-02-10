@@ -17,7 +17,7 @@ kinit $CERN_USER@CERN.CH
 ```
 get the code, use the following command:
 ```bash
-git clone https://:@gitlab.cern.ch:8443/rwolff/ttHMultiAna.git ttHMultilepton
+git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git ttHMultilepton
 ```
 If you want a specific tag, do
 ```bash
