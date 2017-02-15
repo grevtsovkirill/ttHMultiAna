@@ -1,8 +1,13 @@
+2017-02-15 Robert Wolff <robert.wolff@cern.ch>
+	* update to AnalysisTop 2.4.27
+	* add 60% and 85% b-tagging WP to 2015 data config
+	* update submission script for Sys splitting
+
 2017-02-13 Harish Potti <harish.potti@utexas.edu>
 	* add addXsec.py
 	* add README in util/
 	* update Xsections
-	
+
 2017-02-02 Robert Wolff <robert.wolff@cern.ch>
 	* add nleptonplustau selection for 1l+1tau channel in systematic trees
 
