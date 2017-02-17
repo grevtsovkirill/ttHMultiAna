@@ -1096,6 +1096,9 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
 	m_variables->Mll[idx1][idx2-1] = p4sum.M();
 	m_variables->Ptll[idx1][idx2-1] = p4sum.Pt();
 	m_variables->DRll[idx1][idx2-1] = p4s[idx1]->DeltaR(*p4s[idx2]);
+        m_variables->matchDLTll[idx1][idx2-1] = ( (int)m_leptons[idx1].isTrigMatchDLT && (int)m_leptons[idx2].isTrigMatchDLT
+          && std::max(m_leptons[idx1].Pt, m_leptons[idx2].Pt)
+          > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016)*23e3) );
 	if (m_leptons[idx1].ID == -m_leptons[idx2].ID) {
 	  if (m_variables->best_Z_Mll == 0 ||
 	      (fabs(m_variables->Mll[idx1][idx2-1]-91.1876e3) <

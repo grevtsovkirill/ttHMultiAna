@@ -1,3 +1,8 @@
+2017-02-17 Robert Wolff <robert.wolff@cern.ch>
+	* remove AntiKt4PV0TrackJets
+	* add new ilumicalc for 2016 data
+	* add DLT matching for lepton pairs with pt threshold for mumu trigger
+
 2017-02-15 Robert Wolff <robert.wolff@cern.ch>
 	* update to AnalysisTop 2.4.27
 	* add 60% and 85% b-tagging WP to 2015 data config

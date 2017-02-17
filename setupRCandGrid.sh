@@ -12,7 +12,7 @@ rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
 # for TauSelectionTool problems
-rc checkout_pkg $(rc version | grep TauTauAnalysisTools)
+rc checkout_pkg $(rc version | grep TauAnalysisTools)
 sed -i 's/m_tTOELLHDecorator(this->name()+"_/m_tTOELLHDecorator("TauAnalysisTools::/' TauAnalysisTools/Root/TauSelectionTool.cxx
 
 # for AFII samples fix

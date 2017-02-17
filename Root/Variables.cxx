@@ -25,6 +25,8 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       tree->makeOutputVariable(Ptll[idx1][idx2-1], XXmn.str().c_str());
       XXmn % "DRll" % idx1 % idx2;
       tree->makeOutputVariable(DRll[idx1][idx2-1], XXmn.str().c_str());
+      XXmn % "matchDLTll" % idx1 % idx2;
+      tree->makeOutputVariable(matchDLTll[idx1][idx2-1], XXmn.str().c_str());
       for (size_t idx3 = idx2+1; idx3 < LEPTON_ARR_SIZE; ++idx3) {
 	XXmno % "Mlll" % idx1 % idx2 % idx3;
 	tree->makeOutputVariable(Mlll[idx1][idx2-1][idx3-2], XXmno.str().c_str());
