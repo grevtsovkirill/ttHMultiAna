@@ -1117,6 +1117,12 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
 	}
       }
     }
+    if (totleptons==3 && zidx[0] >= 0) {
+      int oidx = 3 - zidx[0] - zidx[1];
+      TLorentzVector p4met;
+      p4met.SetPtEtaPhiM(m_met_met,0,m_met_phi,0);
+      m_variables->best_Z_other_MtLepMet = (p4met + *p4s[oidx]).Mt();
+    }
     if (totleptons==4 && zidx[0] >= 0) {
       std::vector<int> otherleps;
       for (int idx = 0; idx < 4; ++idx) {

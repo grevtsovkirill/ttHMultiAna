@@ -2,6 +2,7 @@
 	* remove AntiKt4PV0TrackJets
 	* add new ilumicalc for 2016 data
 	* add DLT matching for lepton pairs with pt threshold for mumu trigger
+	* add transverse mass Met+remainging lep for 3l with Z candidates
 
 2017-02-15 Robert Wolff <robert.wolff@cern.ch>
 	* update to AnalysisTop 2.4.27
