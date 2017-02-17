@@ -124,7 +124,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
-
+  
   //decorate all the things in all the sys
   SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
   SG::AuxElement::Decorator< char >* m_decor_ttHpassTauOVR;
@@ -154,6 +154,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 
   //some event weights
   double m_mcWeight;
+  std::vector<float> m_lhe3weights;
   double m_pileup_weight;
   double m_pileup_weight_UP;
   double m_pileup_weight_DOWN;
@@ -194,8 +195,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   bool m_isMC;
   int m_runYear;
   SampleXsection m_sampleXsection;
-
-  std::vector<float> m_lhe3weights;
 
   // Truth matching
   ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
