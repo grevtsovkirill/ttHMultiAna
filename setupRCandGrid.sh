@@ -11,12 +11,10 @@ lsetup "rcsetup Top,2.4.27" panda rucio pyami
 rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
-# for TauSelectionTool problems
-rc checkout_pkg $(rc version | grep TauAnalysisTools)
-sed -i 's/m_tTOELLHDecorator(this->name()+"_/m_tTOELLHDecorator("TauAnalysisTools::/' TauAnalysisTools/Root/TauSelectionTool.cxx
-
 # for AFII samples fix
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-34
+# fix for Tau problems
+sed -i '/top::check(tauSelectionTool->initialize(),/i             top::check( asg::setProperty(tauSelectionTool, "CreateControlPlots", true), "failed to set property" );' TopCPTools/Root/TopToolStore.cxx
 
 rc build
 
