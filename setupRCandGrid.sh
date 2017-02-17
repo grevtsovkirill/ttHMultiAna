@@ -11,12 +11,26 @@ lsetup "rcsetup Top,2.4.27" panda rucio pyami
 rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
-# for TauSelectionTool problems
-rc checkout_pkg $(rc version | grep TauAnalysisTools)
-sed -i 's/m_tTOELLHDecorator(this->name()+"_/m_tTOELLHDecorator("TauAnalysisTools::/' TauAnalysisTools/Root/TauSelectionTool.cxx
-
 # for AFII samples fix
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-34
+# fix for Tau problems
+sed -i '/top::check(tauSelectionTool->initialize(),/i             top::check( asg::setProperty(tauSelectionTool, "CreateControlPlots", true), "failed to set property" );' TopCPTools/Root/TopToolStore.cxx
+
+# for new diboson sherpa 2.1.1 samples
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-48
+echo '363355 15.564 0.27976 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363356 15.563 0.13961 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363357 6.7973 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363358 3.437 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363359 24.717 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363360 112.74 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363489 11.413 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363490 1.2557 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363491 4.5877 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363492 12.465 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363493 3.2274 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+echo '363494 0.60154 1.0 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
+
 
 rc build
 

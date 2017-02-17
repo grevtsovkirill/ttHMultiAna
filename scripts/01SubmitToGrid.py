@@ -23,24 +23,28 @@ reduced_fastSim = TopExamples.grid.Samples(['reduced_fastSim'])
 full_fullSim    = TopExamples.grid.Samples(['full'])
 new_fullSim     = TopExamples.grid.Samples(['new_fullSim'])
 new_fastSim     = TopExamples.grid.Samples(['new_fastSim'])
+sys_fullSim     = TopExamples.grid.Samples(['sys_fullSim'])
+sys_fastSim     = TopExamples.grid.Samples(['sys_fastSim'])
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',reduced_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',reduced_fastSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',full_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',new_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',new_fastSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',sys_fullSim)
+TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',sys_fastSim)
 all_fullSim = reduced_fullSim + full_fullSim + new_fullSim
 all_fastSim = reduced_fastSim + new_fastSim
 config.settingsFile = 'generic_config-mc15-Sys.txt'
-#TopExamples.grid.submit(config,reduced_fullSim+new_fullSim)
+#TopExamples.grid.submit(config,sys_fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
-#TopExamples.grid.submit(config,reduced_fastSim+new_fastSim)
+#TopExamples.grid.submit(config,sys_fastSim)
 
 for systs in ['Jets1','Jets2','Other']:
    config.suffix        = '2017-02-17.Sys_v27-' + systs
    config.settingsFile = 'generic_config-mc15-Sys-' + systs + '.txt'
-   #TopExamples.grid.submit(config,reduced_fullSim+new_fullSim)
+   #TopExamples.grid.submit(config,sys_fullSim)
    config.settingsFile = 'generic_config-mc15-Sys-' + systs + '_fastSim.txt'
-   #TopExamples.grid.submit(config,reduced_fastSim+new_fastSim)
+   #TopExamples.grid.submit(config,sys_fastSim)
 
 ####################################################################################
 #Nominal

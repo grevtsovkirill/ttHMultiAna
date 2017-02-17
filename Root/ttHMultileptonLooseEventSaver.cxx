@@ -28,7 +28,6 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
   m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
   m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
-  //m_truthWeightTool("TruthWeightTool"),
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
@@ -255,6 +254,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     if(!m_isMC) m_doSFSystematics = false;
 
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
+    systematicTree->makeOutputVariable(m_lhe3weights,   "mcEventWeights");
     systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
     systematicTree->makeOutputVariable(m_bTagSF_weight, "MV2c10_70_EventWeight");
     systematicTree->makeOutputVariable(m_bTagSF77_weight, "MV2c10_77_EventWeight");
@@ -1155,6 +1155,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
 
     m_mcWeight        = event.m_info->mcEventWeight();
+    // LHE3 weights
+    //m_lhe3weights = (*event.m_truthEvent)[0]->weights();
+    m_lhe3weights = event.m_info->mcEventWeights();
     if(m_sfRetriever){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
       m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
@@ -1433,6 +1436,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_PDFinfo_XF2[i] = (*tePtr).auxdataConst< float >( PDFinfoVarName );
       ++i;
     }
+
   }
 
 
