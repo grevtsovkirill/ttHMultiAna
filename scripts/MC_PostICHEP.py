@@ -934,7 +934,7 @@ for TopSample in TopExamples.grid.availableDatasets.values():
         dsid = sample.split('.')[1]
         dsid = int(dsid)
         #print tdp.hasID(dsid), tdp.getShower(dsid)
-        hasShower = tdp.getShower(dsid) in ['sherpa','pythia','pythia8','herwigpp']
+        hasShower = tdp.getShower(dsid) in ['sherpa','sherpa21','pythia','pythia8','herwigpp']
         if not tdp.hasID(dsid) or not hasShower:
             noShowerDatasets += [dsid]
 
