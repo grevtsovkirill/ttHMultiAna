@@ -943,3 +943,28 @@ if len(noShowerDatasets) > 0:
     for ds in set(noShowerDatasets):
         print ds
     raise RuntimeError("Datasets without shower.")
+
+
+xsecfile1 = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/util/Xsection13TeV_tth_bkg_v1.txt')
+xsecfile2 = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/util/Xsection13TeV_tth_sig_v1.txt')
+content = xsecfile1.readlines() + xsecfile2.readlines()
+sys_fullSim = []
+sys_fastSim = []
+for TopSample in TopExamples.grid.availableDatasets.values():
+    for sample in TopSample.datasets:
+        dsid = sample.split('.')[1]
+        fastSim = "_a766" in sample
+        line = [line for line in content if dsid in line]
+        if len(line) != 1:
+            print "WARNING: dsid " + dsid + " has " + str(len(line)) + " matches in Xsection13TeV_tth_*_v1.txt"
+        else:
+            priority = line[0].split()[6]
+            #print dsid+": "+priority+" fS:"+str(fastSim)
+            if priority == '1':
+                if fastSim:
+                    sys_fastSim.append(sample)
+                else:
+                    sys_fullSim.append(sample)
+#TopExamples.grid.Add('sys_fullSim').datasets = sys_fullSim
+#TopExamples.grid.Add('sys_fastSim').datasets = sys_fastSim
+import MC_PostICHEP_priority1
