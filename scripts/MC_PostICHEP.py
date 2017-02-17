@@ -2,16 +2,6 @@ import TopExamples.grid
 import TopExamples.analysis
 import os
 
-TopExamples.grid.Add('ttH_fullSim').datasets = [
-'mc15_13TeV.343365.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_dilep.merge.AOD.e4706_s2726_r7772_r7676',
-'mc15_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.merge.AOD.e4706_s2726_r7772_r7676',
-'mc15_13TeV.343367.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad.merge.AOD.e4706_s2726_r7772_r7676',
-]
-
-#
-# New samples with Derv. Tag p2719
-#
-
 TopExamples.grid.Add('new_fastSim').datasets = [
 ## ttbar and single top
 'mc15_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.merge.AOD.e4324_a766_a818_r7676',    
@@ -58,6 +48,20 @@ TopExamples.grid.Add('new_fullSim').datasets = [
 'mc15_13TeV.344430.Sherpa_CT10_lllvOFPlus_BFilter.merge.AOD.e5210_s2726_r7772_r7676',
 'mc15_13TeV.344431.Sherpa_CT10_lllvOFPlus_BVeto.merge.AOD.e5210_s2726_r7772_r7676',
 
+#Diboson Inclusive Sherpa 221
+'mc15_13TeV.363490.Sherpa_221_NNPDF30NNLO_llll.merge.AOD.e5332_s2726_r7772_r7676',
+'mc15_13TeV.363491.Sherpa_221_NNPDF30NNLO_lllv.merge.AOD.e5332_s2726_r7772_r7676',
+'mc15_13TeV.363492.Sherpa_221_NNPDF30NNLO_llvv.merge.AOD.e5332_s2726_r7772_r7676',
+'mc15_13TeV.363493.Sherpa_221_NNPDF30NNLO_lvvv.merge.AOD.e5332_s2726_r7772_r7676',
+'mc15_13TeV.363494.Sherpa_221_NNPDF30NNLO_vvvv.merge.AOD.e5332_s2726_r7772_r7676',
+'mc15_13TeV.363355.Sherpa_221_NNPDF30NNLO_ZqqZvv.merge.AOD.e5525_s2726_r7772_r7676',
+'mc15_13TeV.363356.Sherpa_221_NNPDF30NNLO_ZqqZll.merge.AOD.e5525_s2726_r7772_r7676',
+'mc15_13TeV.363357.Sherpa_221_NNPDF30NNLO_WqqZvv.merge.AOD.e5525_s2726_r7772_r7676',
+'mc15_13TeV.363358.Sherpa_221_NNPDF30NNLO_WqqZll.merge.AOD.e5525_s2726_r7772_r7676',
+'mc15_13TeV.363359.Sherpa_221_NNPDF30NNLO_WpqqWmlv.merge.AOD.e5583_s2726_r7772_r7676',
+'mc15_13TeV.363360.Sherpa_221_NNPDF30NNLO_WplvWmqq.merge.AOD.e5583_s2726_r7772_r7676',
+'mc15_13TeV.363489.Sherpa_221_NNPDF30NNLO_WlvZqq.merge.AOD.e5525_s2726_r7772_r7676',
+
 ## tZ
 'mc15_13TeV.410049.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_trilepton.merge.AOD.e4440_s2608_r7725_r7676',
 'mc15_13TeV.410050.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_noAllHad.merge.AOD.e4279_s2608_s2183_r7725_r7676',
@@ -92,6 +96,9 @@ TopExamples.grid.Add('new_fullSim').datasets = [
 'mc15_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.merge.AOD.e5070_s2726_r7772_r7676',
 'mc15_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.merge.AOD.e5070_s2726_r7772_r7676',
 'mc15_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.merge.AOD.e5070_s2726_r7772_r7676',
+
+#New ttgamma
+'mc15_13TeV.410082.MadGraphPythia8EvtGen_A14NNPDF23LO_ttgamma_noallhad.merge.AOD.e4404_s2726_r7772_r7676',
 
 ##Sherpa Z+Jets
 'mc15_13TeV.364100.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CVetoBVeto.merge.AOD.e5271_s2726_r7772_r7676',
@@ -180,17 +187,30 @@ TopExamples.grid.Add('new_fullSim').datasets = [
 'mc15_13TeV.364195.Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV280_500_BFilter.merge.AOD.e5340_s2726_r7772_r7676',
 'mc15_13TeV.364196.Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV500_1000.merge.AOD.e5340_s2726_r7772_r7676',
 'mc15_13TeV.364197.Sherpa_221_NNPDF30NNLO_Wtaunu_MAXHTPTV1000_E_CMS.merge.AOD.e5340_s2726_r7772_r7676',
+
+#Low Mass ZJets Sherpa 221
+'mc15_13TeV.364198.Sherpa_221_NN30NNLO_Zmm_Mll10_40_MAXHTPTV0_70_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364199.Sherpa_221_NN30NNLO_Zmm_Mll10_40_MAXHTPTV0_70_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364200.Sherpa_221_NN30NNLO_Zmm_Mll10_40_MAXHTPTV70_280_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364201.Sherpa_221_NN30NNLO_Zmm_Mll10_40_MAXHTPTV70_280_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364202.Sherpa_221_NN30NNLO_Zmm_Mll10_40_MAXHTPTV280_E_CMS_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364203.Sherpa_221_NN30NNLO_Zmm_Mll10_40_MAXHTPTV280_E_CMS_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364204.Sherpa_221_NN30NNLO_Zee_Mll10_40_MAXHTPTV0_70_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364205.Sherpa_221_NN30NNLO_Zee_Mll10_40_MAXHTPTV0_70_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364206.Sherpa_221_NN30NNLO_Zee_Mll10_40_MAXHTPTV70_280_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364207.Sherpa_221_NN30NNLO_Zee_Mll10_40_MAXHTPTV70_280_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364208.Sherpa_221_NN30NNLO_Zee_Mll10_40_MAXHTPTV280_E_CMS_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364209.Sherpa_221_NN30NNLO_Zee_Mll10_40_MAXHTPTV280_E_CMS_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364210.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV0_70_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364211.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV0_70_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364212.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV70_280_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364213.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV70_280_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364214.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV280_E_CMS_BVeto.merge.AOD.e5421_s2726_r7772_r7676',
+'mc15_13TeV.364215.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV280_E_CMS_BFilter.merge.AOD.e5421_s2726_r7772_r7676',
+ 
 ]
 
-#
-# Reduced samples with Derv. tag p2666
-#
-
 TopExamples.grid.Add('reduced_fastSim').datasets = [
-#ttH
-#'mc15_13TeV.341177.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10ME_ttH125_dil.merge.AOD.e4277_s2608_s2183_a821_r7676',
-#'mc15_13TeV.341270.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10ME_ttH125_semilep.merge.AOD.e4277_s2608_s2183_a821_r7676',
-#'mc15_13TeV.341271.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10ME_ttH125_allhad.merge.AOD.e4277_s2608_s2183_a821_r7676',
 
 #Other Higgs
 'mc15_13TeV.344133.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10nlo_hh_4w_wplep.merge.AOD.e5060_a766_a821_r7676',
@@ -325,9 +345,6 @@ TopExamples.grid.Add('reduced_fullSim').datasets = [
 'mc15_13TeV.410503.PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_dil.merge.AOD.e5475_s2726_r7772_r7676',
 ]
 
-#
-# All the samples below are FullSim. Derv. Tag p2666
-#
 TopExamples.grid.Add('full').datasets = [
 
 #V+gamma
@@ -760,9 +777,6 @@ TopExamples.grid.Add('full').datasets = [
 'mc15_13TeV.363483.Sherpa_NNPDF30NNLO_Wenu_Pt2000_E_CMS_BFilter.merge.AOD.e4715_s2726_r7725_r7676',
 ]
 
-#
-# All the samples below are FullSim. Tag p2666 
-#
 
 TopExamples.grid.Add('sherpa22').datasets = [
 #Z+jets Sherpa NNPDF30NNLO
