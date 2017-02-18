@@ -16,6 +16,11 @@ rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools
 # fix for Tau problems
 sed -i '/top::check(tauSelectionTool->initialize(),/i             top::check( asg::setProperty(tauSelectionTool, "CreateControlPlots", true), "failed to set property" );' TopCPTools/Root/TopToolStore.cxx
 
+#save sum of weights for all LHE3 variations
+rc checkout_pkg TopAnalysis
+patch -d TopAnalysis -p0 < ttHMultilepton/LHEweights.patch
+
+
 # for new diboson sherpa 2.1.1 samples
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-48
 echo '363355 15.564 0.27976 sherpa' >> TopDataPreparation/data/XSection-MC15-13TeV.data
@@ -36,6 +41,7 @@ rc build
 
 echo "Alright - done."
 
+pushd .
 cd ttHMultilepton/share
 # temporary 60% b-tagging WP not working properly with newest cdi file
 sed -i 's/ FixedCutBEff_60//g' generic_config-*.txt
@@ -52,3 +58,4 @@ sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Other.txt > generic_co
 #python ../scripts/01SubmitToGrid.py
 
 
+popd
