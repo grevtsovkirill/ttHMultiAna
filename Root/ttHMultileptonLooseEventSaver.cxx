@@ -13,9 +13,12 @@
 #include "TH1.h"
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
+#include "TError.h"
 
 //ASG OR
 #include "AssociationUtils/OverlapRemovalInit.h"
+
+#include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_outputFile(nullptr),
@@ -31,6 +34,12 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
+  //m_electronEffToolsHandles("ElectronEffToolsHandles"),
+  //m_electronSFToolsHandles("ElectronSFToolsHandles"),
+  m_electronToolsFactory(0),
+  //m_muonToolsHandles("MuonToolsHandles"),
+  m_muonToolsFactory(0),
+  m_trigGlobEffCorr(nullptr),
   m_mcWeight(1.),
   m_pileup_weight(1.),
   m_bTagSF_weight(1.),
@@ -197,6 +206,77 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   //Trigger Tool from TopToolStore
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
+
+  //////////// Trigger SF tool --NEW--
+
+  // (1) Tight-Tight
+  std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
+    // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
+    // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseBLayer", ""}, 
+    // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "Tight", "FixedCutTight"}, 
+    // dielectron trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "LooseBLayer", ""}, 
+    // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "Tight", "FixedCutTight"},  
+    // e-mu trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseBLayer", ""}
+  };
+  
+  std::map<std::string,std::string> legsPerTool;
+  std::map<std::string,std::string> tagsPerTool;
+
+  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool> m_electronEffToolsHandles, m_electronSFToolsHandles;
+  ToolHandleArray<CP::IMuonTriggerScaleFactors> m_muonToolsHandles;
+
+  int nTools = -1;
+  for(auto& kv : triggerKeys) // electron tool instances for each trigger leg
+  for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
+    {
+      auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff-"+std::to_string(++nTools));
+      t->setProperty("MapFilePath","/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/map0.txt").ignore();
+      t->setProperty("TriggerKey",(j?"":"Eff_") + kv[2]).ignore();
+      t->setProperty("IdKey",kv[3]).ignore();
+      t->setProperty("IsoKey",kv[4]).ignore();
+      t->setProperty("CorrelationModel","TOTAL").ignore();
+      t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
+      top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
+      auto& handles = j? m_electronSFToolsHandles : m_electronEffToolsHandles;
+      handles.push_back(t->getHandle());
+      // Safer to retrieve the name from the final ToolHandle, it might be prefixed (by the parent tool name) when the handle is copied
+      std::string name = handles[handles.size()-1].name();
+      legsPerTool.emplace(name, kv[0]);
+      if(kv[1]!="") tagsPerTool.emplace(name, kv[1]);
+    }
+  for(int i=0;i<2;++i) // one muon tool instance per year
+    {
+      std::string year = std::to_string(i?2016:2015);
+      auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
+      ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
+      t->setName("MuonTrigEff-"+std::to_string(++nTools));
+      t->setProperty("CalibrationRelease", "170209_Moriond").ignore();
+      t->setProperty("MuonQuality", "Loose").ignore();
+      t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
+      t->setProperty("Year", year).ignore();     
+      top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
+      m_muonToolsHandles.push_back(t->getHandle());
+    }
+  
+  // Configure the trigger SF tool.
+  m_trigGlobEffCorr = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
+  m_trigGlobEffCorr->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
+  m_trigGlobEffCorr->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
+  m_trigGlobEffCorr->setProperty("MuonTools",m_muonToolsHandles).ignore();
+  m_trigGlobEffCorr->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
+  m_trigGlobEffCorr->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
+  // m_trigGlobEffCorr->setProperty("OutputLevel", MSG::DEBUG).ignore();
+  m_trigGlobEffCorr->setProperty("TriggerCombination2015", "e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose || 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
+  m_trigGlobEffCorr->setProperty("TriggerCombination2016", "e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0 || 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
+  m_trigGlobEffCorr->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
+  top::check( m_trigGlobEffCorr->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
+  ////////////////////////// end Trigger SF tool
 
   //Isolation tools for leptons
   //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
@@ -1495,6 +1575,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CopyTaus(goodTau);
   CopyHT(goodEl, goodMu, goodJet, goodTau);
   CheckIsBlinded();
+
+  doEventTrigSFs(goodEl, goodMu, event);
   doEventSFs();
 
 
@@ -1654,6 +1736,9 @@ void ttHMultileptonLooseEventSaver::finalize() {
   m_outputFile->WriteTObject(m_jetCutflow);
   m_outputFile->WriteTObject(m_tauCutflow);
   m_outputFile->Write();
+
+  delete m_trigGlobEffCorr;
+
 }
 
 void ttHMultileptonLooseEventSaver::doEventSFs() {
@@ -1667,8 +1752,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
   m_variables->lepSFTTVA = 1;
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
-    m_variables->lepSFTrigLoose[ivar] = 1;
-    m_variables->lepSFTrigTight[ivar] = 1;
     m_variables->lepSFObjLoose[ivar] = 1;
     m_variables->lepSFObjTight[ivar] = 1;
   }
@@ -1678,14 +1761,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->tauSFLoose[ivar] = 1;
   }
 
-  // The following: index 0 = 1-eff(mc), index 1 = 1-eff(data)
-  //  double oneMinusTrigEffLoose[2]{1,1}, oneMinusTrigEffTight[2]{1,1};
-  double oneMinusTrigEffLoose[MAXSYST][2], oneMinusTrigEffTight[MAXSYST][2];
-  for (int idx1 = 0; idx1 < MAXSYST; ++idx1) {
-    for (int idx2 = 0; idx2 < 2; ++idx2) {
-      oneMinusTrigEffLoose[idx1][idx2] = oneMinusTrigEffTight[idx1][idx2] = 1.;
-    }
-  }
+  
   switch (m_variables->total_leptons) {
   case 1:
   case 2:
@@ -1701,10 +1777,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
 	auto ivar = systvar.first;
 	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
 	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
-	oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[ilep].EffTrigLoose[ivar]);
-	oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[ilep].EffTrigLoose[ivar]*m_leptons[ilep].SFTrigLoose[ivar]);
-	oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[ilep].EffTrigTight[ivar]);
-	oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[ilep].EffTrigTight[ivar]*m_leptons[ilep].SFTrigTight[ivar]);
       }
     }
     // if (m_variables->total_leptons == 1 && abs(m_leptons[0].ID) == 13) {
@@ -1722,10 +1794,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       auto ivar = systvar.first;
       m_variables->lepSFObjLoose[ivar] *= m_leptons[0].SFObjLoose[ivar];
       m_variables->lepSFObjTight[ivar] *= m_leptons[0].SFObjLoose[ivar];
-      oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
-      oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
-      oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
-      oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
     }
     for (int ilep = 1; ilep < m_variables->total_leptons; ++ilep) {
       m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose[0];
@@ -1738,10 +1806,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
 	auto ivar = systvar.first;
 	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
 	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
-	oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[ilep].EffTrigLoose[ivar]);
-	oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[ilep].EffTrigLoose[ivar]*m_leptons[ilep].SFTrigLoose[ivar]);
-	oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[ilep].EffTrigTight[ivar]);
-	oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[ilep].EffTrigTight[ivar]*m_leptons[ilep].SFTrigTight[ivar]);
       }
     }
     break;
@@ -1755,14 +1819,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->lepSFObjTight[ivar] /= m_variables->lepSFObjTight[0];
   }
 
-  m_variables->lepSFTrigLoose[0] = oneMinusTrigEffLoose[0][0] != 1 ? (1-oneMinusTrigEffLoose[0][1])/(1-oneMinusTrigEffLoose[0][0]) : 1;
-  m_variables->lepSFTrigTight[0] = oneMinusTrigEffTight[0][0] != 1 ? (1-oneMinusTrigEffTight[0][1])/(1-oneMinusTrigEffTight[0][0]) : 1;
-  for (const auto& systvar : m_lep_sf_names) {
-    auto ivar = systvar.first;
-    if (ivar == top::topSFSyst::nominal) continue;
-    m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_variables->lepSFTrigLoose[0] : 1;
-    m_variables->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_variables->lepSFTrigTight[0] : 1;
-  }
+ 
 
   //taus
   for ( int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {
@@ -1784,19 +1841,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       if( m_variables->tauSFLoose[ivar] != m_variables->tauSFLoose[ivar] ) m_variables->tauSFLoose[ivar] = 1;
     }
 
-  //naaaaan
-  for ( auto syst : m_lep_sf_names ) {
-    auto ivar = syst.first;
-    if( m_variables->lepSFTrigLoose[ivar] != m_variables->lepSFTrigLoose[ivar] ) {
-      //std::cout<<"nanananana"<<std::endl;
-      m_variables->lepSFTrigLoose[ivar] = 1;
-    }
-    if( m_variables->lepSFTrigTight[ivar] != m_variables->lepSFTrigTight[ivar] ) {
-      //std::cout<<"nanananana"<<std::endl;
-      m_variables->lepSFTrigTight[ivar] = 1;
-    }
-
-  }
+  
 }
 
 double ttHMultileptonLooseEventSaver::relativeSF(double variation, double nominal) {

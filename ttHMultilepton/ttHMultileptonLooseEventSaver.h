@@ -21,12 +21,29 @@
 #include "xAODEventInfo/EventInfo.h"
 #include "xAODJet/JetContainer.h"
 #include "xAODTau/TauJetContainer.h"
+#include "xAODRootAccess/Init.h"
+#include "xAODRootAccess/TEvent.h"
+#include "xAODRootAccess/TStore.h"
 
 //Isolation
 #include "IsolationSelection/IsolationSelectionTool.h"
 
 //Sherpa 2.2 reweight
 #include "PMGTools/PMGSherpa22VJetsWeightTool.h"
+
+// EDM include(s):
+#include "xAODEgamma/ElectronContainer.h"
+#include "xAODMuon/MuonContainer.h"
+#include "ElectronEfficiencyCorrection/IAsgElectronEfficiencyCorrectionTool.h"
+#include "PATCore/PATCoreEnums.h"
+#include "MuonEfficiencyCorrections/MuonTriggerScaleFactors.h"
+#include "AsgTools/AnaToolHandle.h"
+//#include "xAODCore/​ShallowCopy.h"
+
+// Trigger SF tool per Event:
+#include "TriggerAnalysisInterfaces/ITrigGlobalEfficiencyCorrectionTool.h"
+#include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
+
 
 // Local and Top analysis
 #include "TopAnalysis/EventSaverFlatNtuple.h"
@@ -43,6 +60,8 @@
 //root
 #include <TH1F.h>
 #include <TString.h>
+#include <random>
+#include <algorithm>
 
 using namespace xAOD;
 using namespace ttHMultilepton;
@@ -125,6 +144,18 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
   
+  //Trigger Scale Factors -- NEW -- 
+  // --> Electrons
+  //ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
+  //ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
+  std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
+  // --> Muons
+  //ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
+  std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
+  //--> The Tool
+  //asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>                  m_trigGlobEffCorr;
+  TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
+
   //decorate all the things in all the sys
   SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
   SG::AuxElement::Decorator< char >* m_decor_ttHpassTauOVR;
@@ -149,6 +180,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CopyElectron(xAOD::Electron&, ttHMultilepton::Lepton&);
   void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
   void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
+  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
 
