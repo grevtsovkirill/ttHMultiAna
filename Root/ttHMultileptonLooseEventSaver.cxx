@@ -1031,6 +1031,8 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+    
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.auxdataConst<char>("MVATESQuality"); },   *systematicTree, std::string(tauprefix+"MVATESQuality").c_str());
 
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
 
@@ -1046,6 +1048,11 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     if(!m_doSystematics) {
       //substructure
 
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("ptTauEtaCalib"); },    *systematicTree, std::string(tauprefix+"ptTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("etaTauEtaCalib"); },   *systematicTree, std::string(tauprefix+"etaTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("phiTauEtaCalib"); },   *systematicTree, std::string(tauprefix+"phiTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("mTauEtaCalib"); },     *systematicTree, std::string(tauprefix+"mTauEtaCalib").c_str());
+      
 
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  int decayMode = 0;
@@ -1673,7 +1680,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
 
   m_treeManagers[event.m_ttreeIndex]->fill();
-
+  
 }
 
 void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent) {
@@ -1731,6 +1738,9 @@ void ttHMultileptonLooseEventSaver::finalize() {
       Count->SetBinContent(2,totalEventsWeightedUnskimmed);
     }
   }
+
+
+  
   m_outputFile->WriteTObject(m_eleCutflow);
   m_outputFile->WriteTObject(m_muCutflow);
   m_outputFile->WriteTObject(m_jetCutflow);
