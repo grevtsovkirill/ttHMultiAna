@@ -121,7 +121,7 @@ struct function_traits<ReturnType(ClassType::*)(Args...) const>
 template<typename VEC, typename FCN, typename TM> void Wrap2(VEC& vec, FCN lambda, TM& systematicTree, const char* branch) {
   // cast away the crud from around the lambda
   //vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::pointer>(lambda), systematicTree, branch));
-  vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::function>(lambda), systematicTree, branch));
+  //vec.push_back(new VectorWrapper(static_cast<typename function_traits<FCN>::function>(lambda), systematicTree, branch));
 }
 
 template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambda, TM& systematicTree, const char* branch) {
@@ -981,7 +981,7 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_eta");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_phi");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
     // not in sample xAOD
