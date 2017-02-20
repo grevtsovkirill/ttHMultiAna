@@ -1,5 +1,6 @@
 2017-02-20 Tamara Vazquez Schroeder <tamara.vazquez.schroeder@cern.ch>
 	* Implement TrigGlobalEfficiencyCorrectionTool for 2LSS, 3L and 4L (SLT||DLT), nominal only
+	* Clean-up Decoration of old PromptLeptonIso
 
 2017-02-17 Robert Wolff <robert.wolff@cern.ch>
 	* remove AntiKt4PV0TrackJets
