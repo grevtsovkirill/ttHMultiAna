@@ -1560,6 +1560,7 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     std::tie(p4, lidx) = sorter_jets[idx1];
     p4s.push_back(p4);
   }
+  m_variables->nTruthJets = this->getNTruthJets(goodJets);
 
   if (goodJets->size() > 0){
     m_variables->lead_jetPt  = p4s[0]->Pt();
@@ -1573,8 +1574,6 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     m_variables->sublead_jetPhi = p4s[1]->Phi();
     m_variables->sublead_jetE	= p4s[1]->E();
   }
-
-
 }
 
 void
@@ -1670,11 +1669,26 @@ ttHMultileptonLooseEventSaver::CheckIsBlinded() {
 
 float ttHMultileptonLooseEventSaver::getattr_truthJet(const xAOD::Jet &jet, std::string  attr)
 {
+  float attr_value = -99;
   if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink") && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid())
   {
     const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
-    return trthjet->auxdataConst<float>(attr.c_str());
+    if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<float>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
   }
-  else return -99;
+  return attr_value;
 }
- 
+
+int ttHMultileptonLooseEventSaver::getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl)
+{
+  int nTruth = 0;
+  for(auto jet: *jetColl) 
+  {
+    if (jet->isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink") && jet->auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid())
+    {
+      const xAOD::Jet* trthjet = *(jet->auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink"));
+      if(trthjet->pt() >10000) nTruth++;
+    }
+  }
+  return nTruth;
+}
+    

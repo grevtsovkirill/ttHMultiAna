@@ -462,8 +462,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  }, *systematicTree, "SherpaNJetWeight");
     WrapS(scalarvec, [&](const top::Event& event)
 	  {
-	    return event.m_info->isAvailable<int>("TTHML_NTruthJet") ? event.m_info->auxdataConst<int>("TTHML_NTruthJet") : 0.0;
-	  }, *systematicTree, "nTruthJets");
+	    return event.m_info->isAvailable<int>("TTHML_NTruthJetSherpa") ? event.m_info->auxdataConst<int>("TTHML_NTruthJetSherpa") : 0.0;
+	  }, *systematicTree, "nTruthJets_SherpaRwght");
 
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
@@ -983,6 +983,9 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_phi");
     Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"m");},*systematicTree,"m_truth_jet_m");
+
+
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
     // not in sample xAOD
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("Jvt"); }, *systematicTree, "m_jet_jvt_uncal");
@@ -1400,10 +1403,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 				     ( m_mcChannelNumber >= 363361 and m_mcChannelNumber <= 363483 )
 				     )
       ) {
-    uint nTruthJets      = m_sherpaRW->getSherpa22VJets_NJet("AntiKt4TruthJets");
-    double sherpa_weight = m_sherpaRW->getSherpa22VJets_NJetCorrection(nTruthJets);
+    uint nTruthJetsSherpa      = m_sherpaRW->getSherpa22VJets_NJet("AntiKt4TruthJets");
+    double sherpa_weight = m_sherpaRW->getSherpa22VJets_NJetCorrection(nTruthJetsSherpa);
 
-    event.m_info->auxdecor<int>   ("TTHML_NTruthJet")    = nTruthJets;
+    event.m_info->auxdecor<int>   ("TTHML_NTruthJetSherpa")    = nTruthJetsSherpa;
     event.m_info->auxdecor<double>("TTHML_SherpaNJetRW") = sherpa_weight;
   }
 

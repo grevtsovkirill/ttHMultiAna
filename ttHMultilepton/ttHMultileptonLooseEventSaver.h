@@ -111,6 +111,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
   std::string betterBtagNamedSyst (const std::string WP);
   float getattr_truthJet(const xAOD::Jet &,std::string attr);
+  int getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl);
 
  private:
   ///The file where everything goes
