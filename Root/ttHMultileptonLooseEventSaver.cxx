@@ -47,6 +47,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
+  m_isAFII(0),
   m_mu(0),
   m_mu_unc(0),
   m_mu_ac(0),
@@ -488,6 +489,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
+    systematicTree->makeOutputVariable(m_isAFII, "mc_isAFII");
     WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getXsection(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_xSection");
     WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getRawXsection(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_rawXSection");
     WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getKfactor(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_kFactor");
@@ -1240,9 +1242,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
   m_mcChannelNumber = 0;
+  m_isAFII = 0;
 
   if (top::isSimulation(event)){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
+    m_isAFII = m_config->isAFII();
 
     m_mcWeight        = event.m_info->mcEventWeight();
     // LHE3 weights

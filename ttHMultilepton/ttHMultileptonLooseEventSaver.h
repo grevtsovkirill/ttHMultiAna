@@ -217,6 +217,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   unsigned long long m_eventNumber;
   uint32_t m_runNumber;
   unsigned int m_mcChannelNumber;
+  char m_isAFII;
   float m_mu;
   float m_mu_unc;
   float m_mu_ac;
