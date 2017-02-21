@@ -16,7 +16,7 @@ config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #Th
 
 ###############################################################################
 #Systematics
-config.suffix        = '2017-02-17.Sys_v27'
+config.suffix        = '2017-02-21.Sys_v27'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 config.otherOptions = '--forceStaged'
@@ -43,7 +43,7 @@ config.settingsFile = configDir + 'generic_config-mc15-Sys_fastSim.txt'
 #TopExamples.grid.submit(config,sys_fastSim)
 
 for systs in ['Jets1','Jets2','Other']:
-   config.suffix        = '2017-02-17.Sys_v27-' + systs
+   config.suffix        = '2017-02-21.Sys_v27-' + systs
    config.settingsFile = configDir + 'generic_config-mc15-Sys-' + systs + '.txt'
    #TopExamples.grid.submit(config,sys_fullSim)
    config.settingsFile = configDir + 'generic_config-mc15-Sys-' + systs + '_fastSim.txt'
@@ -51,7 +51,7 @@ for systs in ['Jets1','Jets2','Other']:
 
 ####################################################################################
 #Nominal
-config.suffix = '2017-02-17.Sys_v26'
+config.suffix = '2017-02-21.Nominal_v27'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
@@ -63,7 +63,7 @@ config.settingsFile = configDir + 'generic_config-mc15_fastSim.txt'
 
 ########################################################################################
 #Data
-config.suffix = '2017-02-17.Data_v27'
+config.suffix = '2017-02-21.Data_v27'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
