@@ -981,11 +981,13 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_phi");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"m");},*systematicTree,"m_truth_jet_m");
+    if(!m_doSystematics) {
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_phi");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"m");},*systematicTree,"m_truth_jet_m");
+    }
 
 
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");

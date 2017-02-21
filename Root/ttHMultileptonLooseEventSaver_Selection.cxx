@@ -1692,4 +1692,4 @@ int ttHMultileptonLooseEventSaver::getNTruthJets(std::shared_ptr<xAOD::JetContai
   }
   return nTruth;
 }
-    
+

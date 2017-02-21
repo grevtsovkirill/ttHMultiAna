@@ -5,6 +5,7 @@
 	* add automatic priority 1 samples from x-section files for Sys jobs
 	* move (other) signal samples from bkg x-sec file to sig x-sec file
 	* fix correct diboson samples in MC_PostICHEP.py
+	* remove m_truth_jets for Sys ntuples
 
 2017-02-20 Harish Potti <harish.potti@cern.ch>
 	* Add Xsec for Sherpa 2.2.1 Diboson and low mass Z+Jets
