@@ -7,6 +7,7 @@
 	* fix correct diboson samples in MC_PostICHEP.py
 	* remove m_truth_jets for Sys ntuples
 	* remove V+jets Sherpa CT10 samples from MC_PostICHEP.py
+	* add tagged version ttHMultiAna-02-04-27
 
 2017-02-20 Harish Potti <harish.potti@cern.ch>
 	* Add Xsec for Sherpa 2.2.1 Diboson and low mass Z+Jets
