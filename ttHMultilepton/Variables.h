@@ -28,6 +28,7 @@ namespace ttHMultilepton {
     float best_Z_Mll, best_Z_other_Mll, best_Z_other_MtLepMet;
     int nJets_OR_T;
     int nTruthJets;
+    int nTruthJets_OR;
     int nJets_OR;
     int nJets_OR_T_MV2c20_60;
     int nJets_OR_T_MV2c20_70;

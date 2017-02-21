@@ -1443,6 +1443,8 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
   // don't actually copy anything ATM, just give yields of jets & btags
   m_variables->nJets_OR = goodJets->size();
   m_variables->nJets_OR_T = CountPassOR(*goodJets, true);
+  m_variables->nTruthJets_OR = this->getNTruthJets(goodJets);
+
 
   m_variables->nJets_OR_MV2c20_85   = 0;
   m_variables->nJets_OR_MV2c20_70   = 0;
@@ -1560,7 +1562,6 @@ ttHMultileptonLooseEventSaver::CopyJets(std::shared_ptr<xAOD::JetContainer>& goo
     std::tie(p4, lidx) = sorter_jets[idx1];
     p4s.push_back(p4);
   }
-  m_variables->nTruthJets = this->getNTruthJets(goodJets);
 
   if (goodJets->size() > 0){
     m_variables->lead_jetPt  = p4s[0]->Pt();

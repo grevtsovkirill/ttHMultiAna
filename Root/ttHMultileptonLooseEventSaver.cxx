@@ -1570,6 +1570,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
 
+  //Fill nTruthJets
+  m_variables->nTruthJets =  this->getNTruthJets(goodJet);
+
   OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   /*
   top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
