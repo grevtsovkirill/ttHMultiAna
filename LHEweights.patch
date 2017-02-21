@@ -1,0 +1,44 @@
+Index: util/top-xaod.cxx
+===================================================================
+--- util/top-xaod.cxx	(revision 797800)
++++ util/top-xaod.cxx	(working copy)
+@@ -347,6 +347,7 @@
+ 
+ 	top::check(xaodEvent.readFrom(inputFile.get()), "xAOD::TEvent readFrom failed");
+ 
++	
+ 	//Get some of event weights before derivation
+ 	double initialSumOfWeightsInThisFile = 0;
+         ULong64_t initialEvents = 0;
+@@ -643,7 +644,30 @@
+     // each file's processing instead ... but why would you do that?!
+     sumWeights->Fill();
+     outputFile->cd();
+-
++    
++    outputFile->cd("loose");
++    std::map<std::string,float> lhe_weights_map;
++	
++    const xAOD::CutBookkeeperContainer* cutBookKeepers_lhe;
++    top::check( xaodEvent.retrieveMetaInput(cutBookKeepers_lhe,"CutBookkeepers"),
++		"failed to get LHE3SumOfWeights");
++    
++    for( auto cbk : *cutBookKeepers_lhe) {
++      if(cbk->name().find("LHE3Weight")!=std::string::npos) {
++	lhe_weights_map.insert(std::pair<std::string,float>(cbk->name(),cbk->sumOfEventWeights()));
++      }
++    }
++    
++    TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", lhe_weights_map.size(), -0.5, lhe_weights_map.size() - 0.5);
++    
++    int i = 1;
++    for( auto weight_bin : lhe_weights_map) {
++      count_histo_lhe_weights->GetXaxis()->SetBinLabel(i,weight_bin.first.c_str());
++      count_histo_lhe_weights->SetBinContent(i,weight_bin.second);
++      ++i;
++    }
++    outputFile->cd();
++	
+     // Save sum of weights of PDF variations
+     // Only do this if the metadata is not available
+     if (totalEventsInFiles != totalEvents && topConfig->doLHAPDF() && !pdfMetadataExists) {

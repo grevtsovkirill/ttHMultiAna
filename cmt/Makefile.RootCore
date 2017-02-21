@@ -19,7 +19,7 @@ PACKAGE_CXXFLAGS     = -std=c++11
 PACKAGE_OBJFLAGS     = 
 
 # additional linker flags to pass (for compiling the library):
-PACKAGE_LDFLAGS      =
+PACKAGE_LDFLAGS      = -lTrigGlobalEfficiencyCorrection
 
 # additional linker flags to pass (for compiling binaries):
 PACKAGE_BINFLAGS     = 
@@ -28,7 +28,7 @@ PACKAGE_BINFLAGS     =
 PACKAGE_LIBFLAGS     = 
 
 # the list of packages we depend on:
-PACKAGE_DEP          = TopObjectSelectionTools TopEventSelectionTools TopEvent TopConfiguration TopDataPreparation TopAnalysis TopCorrections TrigDecisionTool MuonSelectorTools xAODEgamma xAODTracking xAODEventInfo xAODTruth IsolationSelection PileupReweighting AsgTools AssociationUtils PMGTools
+PACKAGE_DEP          = TopObjectSelectionTools TopEventSelectionTools TopEvent TopConfiguration TopDataPreparation TopAnalysis TopCorrections TrigDecisionTool MuonSelectorTools xAODEgamma xAODTracking xAODEventInfo xAODTruth IsolationSelection PileupReweighting AsgTools AssociationUtils PMGTools TriggerAnalysisInterfaces TrigGlobalEfficiencyCorrection
 
 # the list of packages we use if present, but that we can work without :
 PACKAGE_TRYDEP       = 

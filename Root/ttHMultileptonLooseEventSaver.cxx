@@ -13,9 +13,12 @@
 #include "TH1.h"
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
+#include "TError.h"
 
 //ASG OR
 #include "AssociationUtils/OverlapRemovalInit.h"
+
+#include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_outputFile(nullptr),
@@ -31,6 +34,12 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
+  //m_electronEffToolsHandles("ElectronEffToolsHandles"),
+  //m_electronSFToolsHandles("ElectronSFToolsHandles"),
+  m_electronToolsFactory(0),
+  //m_muonToolsHandles("MuonToolsHandles"),
+  m_muonToolsFactory(0),
+  m_trigGlobEffCorr(nullptr),
   m_mcWeight(1.),
   m_pileup_weight(1.),
   m_bTagSF_weight(1.),
@@ -38,6 +47,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_eventNumber(0),
   m_runNumber(0),
   m_mcChannelNumber(0),
+  m_isAFII(0),
   m_mu(0),
   m_mu_unc(0),
   m_mu_ac(0),
@@ -197,6 +207,77 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   //Trigger Tool from TopToolStore
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
+
+  //////////// Trigger SF tool --NEW--
+
+  // (1) Tight-Tight
+  std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
+    // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
+    // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseBLayer", ""}, 
+    // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "Tight", "FixedCutTight"}, 
+    // dielectron trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "LooseBLayer", ""}, 
+    // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "Tight", "FixedCutTight"},  
+    // e-mu trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseBLayer", ""}
+  };
+  
+  std::map<std::string,std::string> legsPerTool;
+  std::map<std::string,std::string> tagsPerTool;
+
+  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool> m_electronEffToolsHandles, m_electronSFToolsHandles;
+  ToolHandleArray<CP::IMuonTriggerScaleFactors> m_muonToolsHandles;
+
+  int nTools = -1;
+  for(auto& kv : triggerKeys) // electron tool instances for each trigger leg
+  for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
+    {
+      auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff-"+std::to_string(++nTools));
+      t->setProperty("MapFilePath","/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/map0.txt").ignore();
+      t->setProperty("TriggerKey",(j?"":"Eff_") + kv[2]).ignore();
+      t->setProperty("IdKey",kv[3]).ignore();
+      t->setProperty("IsoKey",kv[4]).ignore();
+      t->setProperty("CorrelationModel","TOTAL").ignore();
+      t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
+      top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
+      auto& handles = j? m_electronSFToolsHandles : m_electronEffToolsHandles;
+      handles.push_back(t->getHandle());
+      // Safer to retrieve the name from the final ToolHandle, it might be prefixed (by the parent tool name) when the handle is copied
+      std::string name = handles[handles.size()-1].name();
+      legsPerTool.emplace(name, kv[0]);
+      if(kv[1]!="") tagsPerTool.emplace(name, kv[1]);
+    }
+  for(int i=0;i<2;++i) // one muon tool instance per year
+    {
+      std::string year = std::to_string(i?2016:2015);
+      auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
+      ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
+      t->setName("MuonTrigEff-"+std::to_string(++nTools));
+      t->setProperty("CalibrationRelease", "170209_Moriond").ignore();
+      t->setProperty("MuonQuality", "Loose").ignore();
+      t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
+      t->setProperty("Year", year).ignore();     
+      top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
+      m_muonToolsHandles.push_back(t->getHandle());
+    }
+  
+  // Configure the trigger SF tool.
+  m_trigGlobEffCorr = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
+  m_trigGlobEffCorr->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
+  m_trigGlobEffCorr->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
+  m_trigGlobEffCorr->setProperty("MuonTools",m_muonToolsHandles).ignore();
+  m_trigGlobEffCorr->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
+  m_trigGlobEffCorr->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
+  // m_trigGlobEffCorr->setProperty("OutputLevel", MSG::DEBUG).ignore();
+  m_trigGlobEffCorr->setProperty("TriggerCombination2015", "e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose || 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
+  m_trigGlobEffCorr->setProperty("TriggerCombination2016", "e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0 || 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
+  m_trigGlobEffCorr->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
+  top::check( m_trigGlobEffCorr->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
+  ////////////////////////// end Trigger SF tool
 
   //Isolation tools for leptons
   //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
@@ -382,8 +463,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  }, *systematicTree, "SherpaNJetWeight");
     WrapS(scalarvec, [&](const top::Event& event)
 	  {
-	    return event.m_info->isAvailable<int>("TTHML_NTruthJet") ? event.m_info->auxdataConst<int>("TTHML_NTruthJet") : 0.0;
-	  }, *systematicTree, "nTruthJets");
+	    return event.m_info->isAvailable<int>("TTHML_NTruthJetSherpa") ? event.m_info->auxdataConst<int>("TTHML_NTruthJetSherpa") : 0.0;
+	  }, *systematicTree, "nTruthJets_SherpaRwght");
 
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
@@ -408,6 +489,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
+    systematicTree->makeOutputVariable(m_isAFII, "mc_isAFII");
     WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getXsection(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_xSection");
     WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getRawXsection(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_rawXSection");
     WrapS(scalarvec, [&](const top::Event& event){ return top::isSimulation(event) ? m_sampleXsection.getKfactor(event.m_info->mcChannelNumber()) : -1.0; }, *systematicTree, "mc_kFactor");
@@ -899,15 +981,21 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_eta");
-    Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
+    if(!m_doSystematics) {
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_phi");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"m");},*systematicTree,"m_truth_jet_m");
+    }
+
+
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF"); return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
     // not in sample xAOD
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("Jvt"); }, *systematicTree, "m_jet_jvt_uncal");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.jetP4("JetEMScaleMomentum").eta(); }, *systematicTree, "m_jet_etaEM");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { float this_jvt = -999.; if(jet.isAvailable<float>("AnalysisTop_JVT")) this_jvt = jet.auxdataConst<float>("AnalysisTop_JVT"); return this_jvt;}, *systematicTree, "m_jet_jvt");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { int this_jvt = -1; if(jet.isAvailable<char>("passJVT")) this_jvt = jet.auxdataConst<char>("passJVT"); return this_jvt;}, *systematicTree, "m_jet_passjvt");
     //Jet cleaning flag
     Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); }, *systematicTree, "m_jet_flavor_weight_MV1");
@@ -951,6 +1039,8 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+    
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.auxdataConst<char>("MVATESQuality"); },   *systematicTree, std::string(tauprefix+"MVATESQuality").c_str());
 
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
 
@@ -966,6 +1056,11 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     if(!m_doSystematics) {
       //substructure
 
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("ptTauEtaCalib"); },    *systematicTree, std::string(tauprefix+"ptTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("etaTauEtaCalib"); },   *systematicTree, std::string(tauprefix+"etaTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("phiTauEtaCalib"); },   *systematicTree, std::string(tauprefix+"phiTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("mTauEtaCalib"); },     *systematicTree, std::string(tauprefix+"mTauEtaCalib").c_str());
+      
 
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  int decayMode = 0;
@@ -1150,9 +1245,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mcWeight = 1.;
   m_pileup_weight = 1.;
   m_mcChannelNumber = 0;
+  m_isAFII = 0;
 
   if (top::isSimulation(event)){
     m_mcChannelNumber = event.m_info->mcChannelNumber();
+    m_isAFII = m_config->isAFII();
 
     m_mcWeight        = event.m_info->mcEventWeight();
     // LHE3 weights
@@ -1313,10 +1410,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 				     ( m_mcChannelNumber >= 363361 and m_mcChannelNumber <= 363483 )
 				     )
       ) {
-    uint nTruthJets      = m_sherpaRW->getSherpa22VJets_NJet("AntiKt4TruthJets");
-    double sherpa_weight = m_sherpaRW->getSherpa22VJets_NJetCorrection(nTruthJets);
+    uint nTruthJetsSherpa      = m_sherpaRW->getSherpa22VJets_NJet("AntiKt4TruthJets");
+    double sherpa_weight = m_sherpaRW->getSherpa22VJets_NJetCorrection(nTruthJetsSherpa);
 
-    event.m_info->auxdecor<int>   ("TTHML_NTruthJet")    = nTruthJets;
+    event.m_info->auxdecor<int>   ("TTHML_NTruthJetSherpa")    = nTruthJetsSherpa;
     event.m_info->auxdecor<double>("TTHML_SherpaNJetRW") = sherpa_weight;
   }
 
@@ -1476,6 +1573,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
 
+  //Fill nTruthJets
+  m_variables->nTruthJets =  this->getNTruthJets(goodJet);
+
   OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
   /*
   top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
@@ -1495,6 +1595,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   CopyTaus(goodTau);
   CopyHT(goodEl, goodMu, goodJet, goodTau);
   CheckIsBlinded();
+
+  doEventTrigSFs(goodEl, goodMu, event);
   doEventSFs();
 
 
@@ -1591,7 +1693,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
 
   m_treeManagers[event.m_ttreeIndex]->fill();
-
+  
 }
 
 void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent) {
@@ -1649,11 +1751,17 @@ void ttHMultileptonLooseEventSaver::finalize() {
       Count->SetBinContent(2,totalEventsWeightedUnskimmed);
     }
   }
+
+
+  
   m_outputFile->WriteTObject(m_eleCutflow);
   m_outputFile->WriteTObject(m_muCutflow);
   m_outputFile->WriteTObject(m_jetCutflow);
   m_outputFile->WriteTObject(m_tauCutflow);
   m_outputFile->Write();
+
+  delete m_trigGlobEffCorr;
+
 }
 
 void ttHMultileptonLooseEventSaver::doEventSFs() {
@@ -1667,8 +1775,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
   m_variables->lepSFTTVA = 1;
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
-    m_variables->lepSFTrigLoose[ivar] = 1;
-    m_variables->lepSFTrigTight[ivar] = 1;
     m_variables->lepSFObjLoose[ivar] = 1;
     m_variables->lepSFObjTight[ivar] = 1;
   }
@@ -1678,14 +1784,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->tauSFLoose[ivar] = 1;
   }
 
-  // The following: index 0 = 1-eff(mc), index 1 = 1-eff(data)
-  //  double oneMinusTrigEffLoose[2]{1,1}, oneMinusTrigEffTight[2]{1,1};
-  double oneMinusTrigEffLoose[MAXSYST][2], oneMinusTrigEffTight[MAXSYST][2];
-  for (int idx1 = 0; idx1 < MAXSYST; ++idx1) {
-    for (int idx2 = 0; idx2 < 2; ++idx2) {
-      oneMinusTrigEffLoose[idx1][idx2] = oneMinusTrigEffTight[idx1][idx2] = 1.;
-    }
-  }
+  
   switch (m_variables->total_leptons) {
   case 1:
   case 2:
@@ -1701,10 +1800,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
 	auto ivar = systvar.first;
 	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
 	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
-	oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[ilep].EffTrigLoose[ivar]);
-	oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[ilep].EffTrigLoose[ivar]*m_leptons[ilep].SFTrigLoose[ivar]);
-	oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[ilep].EffTrigTight[ivar]);
-	oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[ilep].EffTrigTight[ivar]*m_leptons[ilep].SFTrigTight[ivar]);
       }
     }
     // if (m_variables->total_leptons == 1 && abs(m_leptons[0].ID) == 13) {
@@ -1722,10 +1817,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       auto ivar = systvar.first;
       m_variables->lepSFObjLoose[ivar] *= m_leptons[0].SFObjLoose[ivar];
       m_variables->lepSFObjTight[ivar] *= m_leptons[0].SFObjLoose[ivar];
-      oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
-      oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
-      oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
-      oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
     }
     for (int ilep = 1; ilep < m_variables->total_leptons; ++ilep) {
       m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose[0];
@@ -1738,10 +1829,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
 	auto ivar = systvar.first;
 	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
 	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
-	oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[ilep].EffTrigLoose[ivar]);
-	oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[ilep].EffTrigLoose[ivar]*m_leptons[ilep].SFTrigLoose[ivar]);
-	oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[ilep].EffTrigTight[ivar]);
-	oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[ilep].EffTrigTight[ivar]*m_leptons[ilep].SFTrigTight[ivar]);
       }
     }
     break;
@@ -1755,14 +1842,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->lepSFObjTight[ivar] /= m_variables->lepSFObjTight[0];
   }
 
-  m_variables->lepSFTrigLoose[0] = oneMinusTrigEffLoose[0][0] != 1 ? (1-oneMinusTrigEffLoose[0][1])/(1-oneMinusTrigEffLoose[0][0]) : 1;
-  m_variables->lepSFTrigTight[0] = oneMinusTrigEffTight[0][0] != 1 ? (1-oneMinusTrigEffTight[0][1])/(1-oneMinusTrigEffTight[0][0]) : 1;
-  for (const auto& systvar : m_lep_sf_names) {
-    auto ivar = systvar.first;
-    if (ivar == top::topSFSyst::nominal) continue;
-    m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_variables->lepSFTrigLoose[0] : 1;
-    m_variables->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_variables->lepSFTrigTight[0] : 1;
-  }
+ 
 
   //taus
   for ( int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {
@@ -1784,19 +1864,7 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
       if( m_variables->tauSFLoose[ivar] != m_variables->tauSFLoose[ivar] ) m_variables->tauSFLoose[ivar] = 1;
     }
 
-  //naaaaan
-  for ( auto syst : m_lep_sf_names ) {
-    auto ivar = syst.first;
-    if( m_variables->lepSFTrigLoose[ivar] != m_variables->lepSFTrigLoose[ivar] ) {
-      //std::cout<<"nanananana"<<std::endl;
-      m_variables->lepSFTrigLoose[ivar] = 1;
-    }
-    if( m_variables->lepSFTrigTight[ivar] != m_variables->lepSFTrigTight[ivar] ) {
-      //std::cout<<"nanananana"<<std::endl;
-      m_variables->lepSFTrigTight[ivar] = 1;
-    }
-
-  }
+  
 }
 
 double ttHMultileptonLooseEventSaver::relativeSF(double variation, double nominal) {

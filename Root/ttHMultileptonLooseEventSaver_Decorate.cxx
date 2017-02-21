@@ -8,12 +8,6 @@
 void
 ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 
-  // Retrieve track jet container from evtStore - needed due to baseline track jet overlap removal.
-  const xAOD::JetContainer* tJets = 0;
-  bool no_tjet = false;
-  if(m_config->useTrackJets() == false) no_tjet = true;
-  else top::check(evtStore()->retrieve(tJets, m_config->sgKeyTrackJets(event.m_hashValue)), "Failed to retrieve track jets");
-
   double vtx_z = m_pv->z();
 
   for (auto elItr : event.m_electrons) {
@@ -55,42 +49,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
       }
     }
 
-    // Track jets
-    if(!no_tjet) {
-      xAOD::Jet* jet = 0;
-      std::pair<double, const xAOD::Jet*> match(10.0, jet);
-      for(auto tjItr : *tJets) {
-	double dr = tjItr->p4().DeltaR(elItr->p4());
-	if(match.second) {
-	  if(dr < match.first) {
-	    match.first  = dr;
-	    match.second = tjItr;
-	  }
-	}
-	else {
-	  match.first  = dr;
-	  match.second = tjItr;    
-	}
-      }
-      if(match.second && match.first < 0.5 &&
-	 match.second->isAvailable<std::vector<ElementLink<DataVector<xAOD::IParticle> > > >("constituentLinks")) {
-	xAOD::JetConstituentVector parts = match.second->getConstituents();
-	if(parts.size() <= 1) elItr->auxdecor<double>("jetFitterComb") = -10.0;
-	else {
-	  if(match.second->isAvailable<ElementLink<DataVector<xAOD::BTagging_v1> > >("btaggingLink")) {
-	    const xAOD::BTagging *btag = match.second->btagging();
-	    if(btag) {
-	      elItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
-	    }
-	    else elItr->auxdecor<double>("jetFitterComb") = -10.0;
-	  }
-	  else elItr->auxdecor<double>("jetFitterComb") = -10.0;
-	}
-      }
-      else elItr->auxdecor<double>("jetFitterComb") = -10.0;
-    }
-    else elItr->auxdecor<double>("jetFitterComb") = -10.0;
-
+    
     elItr->auxdecor<float>("chargeIDBDTLoose") = (float)m_electronChargeIDLoose.calculate(elItr);
     elItr->auxdecor<float>("chargeIDBDTMedium") = (float)m_electronChargeIDMedium.calculate(elItr);
     elItr->auxdecor<float>("chargeIDBDTTight") = (float)m_electronChargeIDTight.calculate(elItr);
@@ -112,42 +71,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
       muItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
     }
 
-    // Track jets
-    if(!no_tjet) {
-      xAOD::Jet* jet = 0;
-      std::pair<double, const xAOD::Jet*> match(10.0, jet);
-      for(auto tjItr : *tJets) {
-	double dr = tjItr->p4().DeltaR(muItr->p4());
-	if(match.second) {
-	  if(dr < match.first) {
-	    match.first  = dr;
-	    match.second = tjItr;
-	  }
-	}
-	else {
-	  match.first  = dr;
-	  match.second = tjItr;    
-	}
-      }
-      if(match.second && match.first < 0.5 &&
-	 match.second->isAvailable<std::vector<ElementLink<DataVector<xAOD::IParticle> > > >("constituentLinks")) {
-	xAOD::JetConstituentVector parts = match.second->getConstituents();
-	if(parts.size() <= 1) muItr->auxdecor<double>("jetFitterComb") = -10.0;
-	else {
-	  if(match.second->isAvailable<ElementLink<DataVector<xAOD::BTagging_v1> > >("btaggingLink")) {
-	    const xAOD::BTagging *btag = match.second->btagging();
-	    if(btag) {
-	      muItr->auxdecor<double>("jetFitterComb") = btag->JetFitterCombNN_loglikelihoodratio();
-	    }
-	    else muItr->auxdecor<double>("jetFitterComb") = -10.0;
-	  }
-	  else muItr->auxdecor<double>("jetFitterComb") = -10.0;
-	}
-      }
-      else muItr->auxdecor<double>("jetFitterComb") = -10.0;
-    }
-    else muItr->auxdecor<double>("jetFitterComb") = -10.0;
-
+    
     //variables for muon_ID BDT 
 
     //Default decorations
@@ -161,18 +85,34 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     muItr->auxdecor<float>("jet_ptRel")         = -99;
     muItr->auxdecor<float> ("jet_tagWeightBin") = -99;
     muItr->auxdecor<float>("muon_BDT")		= -99;
-
-
+ 
     xAOD::Jet* closestJet =0;
     float smallestDr = 1e5;
-    for(auto jet: event.m_jets){
-      float muJetDr = jet->p4().DeltaR(muItr->p4());
-      if(smallestDr > muJetDr)
-      {
-         smallestDr = muJetDr;
-         closestJet = (xAOD::Jet*)jet;
-      }
+    for (const auto jetItr : event.m_jets) 
+    {
+        if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
+          continue;
+        }
+        if (jetItr->pt() < 25e3) {
+          continue;
+        }
+        if (fabs(jetItr->eta()) > 2.5) {
+          continue;
+        }
+        if (jetItr->pt() < 60e3
+          && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4
+          && jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59) {
+          continue;
+        }
+        float muJetDr = jetItr->p4().DeltaR(muItr->p4());
+        if(smallestDr > muJetDr)
+        {
+           smallestDr = muJetDr;
+           closestJet = (xAOD::Jet*)jetItr;
+        }
     }
+
+
     if(closestJet)
     {
        muItr->auxdecor<float> ("jet_pt")  = closestJet->p4().Pt();
@@ -195,13 +135,30 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
        muItr->auxdecor<float>("jet_ptRel") = TMath::Sin(theta) * muItr->pt();
 
        //MuonIDBDT Score
-       std::vector<std::string> inputVarNames = { "jetMu_jetPt", "jetMu_jetNTrk", "jetMu_SumPtTrk", "mv2c10_70", "jetMu_deltaR", "jetMu_ptRel", "jetMu_jetPt/jetMu_muPt", "jetMu_muonSigd0PV", "jetMu_muonZ0SinTheta" };
+       std::vector<std::string> inputVarNames = {
+	        "jetMu_jetPt",
+		"jetMu_jetNTrk",
+		"jetMu_SumPtTrk", 
+		"mv2c10_70", 
+		"jetMu_deltaR", 
+		"jetMu_ptRel", 
+		"jetMu_jetPt/jetMu_muPt", 
+		"jetMu_muonSigd0PV", 
+		"jetMu_muonZ0SinTheta" };
+
        ReadBDTG muonIdBDT(inputVarNames);
-       std::vector<double> inputValues ={muItr->auxdataConst<float>("jet_pt"),muItr->auxdataConst<float>("jet_numTrk"),muItr->auxdataConst<float>("jet_sumPtTrk"),(muItr->auxdataConst<float>("MV2c10_weight")> 0.8244) ? 1.0 :0.0,smallestDr,muItr->auxdataConst<float>("jet_ptRel"),muItr->auxdataConst<float>("jet_pt")/muItr->pt(),muItr->auxdataConst<float>("d0sig"),muItr->auxdataConst<float>("delta_z0_sintheta")};
-       float m_mu_nonprompt_bdt = -99.;
-       static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
-       if(AccessorNonPromptBDT.isAvailable((*muItr)) ) m_mu_nonprompt_bdt = AccessorNonPromptBDT( (*muItr));
-	
+
+       std::vector<double> inputValues ={
+	       muItr->auxdataConst<float>("jet_pt"),
+	       muItr->auxdataConst<float>("jet_numTrk"),
+	       muItr->auxdataConst<float>("jet_sumPtTrk"),
+	       (muItr->auxdataConst<float>("MV2c10_weight")> 0.8244) ? 1.0 :0.0,
+	       muItr->auxdataConst<float>("jet_dr"),
+	       smallestDr,muItr->auxdataConst<float>("jet_ptRel"),
+	       muItr->auxdataConst<float>("jet_pt")/muItr->pt(),
+	       muItr->auxdataConst<float>("d0sig"),
+	       muItr->auxdataConst<float>("delta_z0_sintheta")};
+
        if (smallestDr <=0.4)
        {
            muItr->auxdecor<float>("muon_BDT") = muonIdBDT.GetMvaValue(inputValues);

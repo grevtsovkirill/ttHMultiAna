@@ -1,6 +1,9 @@
 import TopExamples.grid
 import MC_PostICHEP
 import Data16
+import os
+
+configDir = os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/share/'
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
@@ -13,7 +16,7 @@ config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #Th
 
 ###############################################################################
 #Systematics
-config.suffix        = '2017-02-17.Sys_v27'
+config.suffix        = '2017-02-21.Sys_v27'
 config.maxNFilesPerJob = '1'
 config.memory = ''
 config.otherOptions = '--forceStaged'
@@ -34,37 +37,37 @@ TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',sys_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',sys_fastSim)
 all_fullSim = reduced_fullSim + full_fullSim + new_fullSim
 all_fastSim = reduced_fastSim + new_fastSim
-config.settingsFile = 'generic_config-mc15-Sys.txt'
+config.settingsFile = configDir + 'generic_config-mc15-Sys.txt'
 #TopExamples.grid.submit(config,sys_fullSim)
-config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
+config.settingsFile = configDir + 'generic_config-mc15-Sys_fastSim.txt'
 #TopExamples.grid.submit(config,sys_fastSim)
 
 for systs in ['Jets1','Jets2','Other']:
-   config.suffix        = '2017-02-17.Sys_v27-' + systs
-   config.settingsFile = 'generic_config-mc15-Sys-' + systs + '.txt'
+   config.suffix        = '2017-02-21.Sys_v27-' + systs
+   config.settingsFile = configDir + 'generic_config-mc15-Sys-' + systs + '.txt'
    #TopExamples.grid.submit(config,sys_fullSim)
-   config.settingsFile = 'generic_config-mc15-Sys-' + systs + '_fastSim.txt'
+   config.settingsFile = configDir + 'generic_config-mc15-Sys-' + systs + '_fastSim.txt'
    #TopExamples.grid.submit(config,sys_fastSim)
 
 ####################################################################################
 #Nominal
-config.suffix = '2017-02-17.Sys_v26'
+config.suffix = '2017-02-21.Nominal_v27'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-config.settingsFile = 'generic_config-mc15.txt'
+config.settingsFile = configDir + 'generic_config-mc15.txt'
 #TopExamples.grid.submit(config,all_fullSim)
-config.settingsFile = 'generic_config-mc15_fastSim.txt'
+config.settingsFile = configDir + 'generic_config-mc15_fastSim.txt'
 #TopExamples.grid.submit(config,all_fastSim)
 
 
 ########################################################################################
 #Data
-config.suffix = '2017-02-17.Data_v27'
+config.suffix = '2017-02-21.Data_v27'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
-config.settingsFile = 'generic_config-data15.txt'
+config.settingsFile = configDir + 'generic_config-data15.txt'
 TopExamples.grid.Add('data_00284154').datasets = ['user.rwolff.00284154.physics_Main.merge.DAOD_HIGG8D1.r7562_p2521_p2950']
 data_00284154 = TopExamples.grid.Samples(['data_00284154'])
 #TopExamples.grid.submit(config, data_00284154)
@@ -72,7 +75,7 @@ data15 = TopExamples.grid.Samples(['data15'])
 #TopExamples.grid.submit(config, data15)
 
 data16 = TopExamples.grid.Samples(['data16'])
-config.settingsFile = 'generic_config-data16.txt'
+config.settingsFile = configDir + 'generic_config-data16.txt'
 #TopExamples.grid.submit(config,data16)
 
 
