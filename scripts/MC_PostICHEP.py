@@ -303,12 +303,12 @@ TopExamples.grid.Add('reduced_fullSim').datasets = [
 'mc15_13TeV.361088.Sherpa_CT10_lvvv.merge.AOD.e4483_s2726_r7772_r7676',
 'mc15_13TeV.361089.Sherpa_CT10_vvvv.merge.AOD.e4483_s2726_r7772_r7676',
 'mc15_13TeV.361090.Sherpa_CT10_llll_M4l100.merge.AOD.e4555_s2726_r7772_r7676',
-'mc15_13TeV.361091.Sherpa_CT10_WplvWmqq_SHv21_improved.merge.AOD.e4607_s2726_r7725_r7676',
-'mc15_13TeV.361092.Sherpa_CT10_WpqqWmlv_SHv21_improved.merge.AOD.e4607_s2726_r7725_r7676',
-'mc15_13TeV.361093.Sherpa_CT10_WlvZqq_SHv21_improved.merge.AOD.e4607_s2726_r7725_r7676',
-'mc15_13TeV.361094.Sherpa_CT10_WqqZll_SHv21_improved.merge.AOD.e4607_s2726_r7725_r7676',
+'mc15_13TeV.361091.Sherpa_CT10_WplvWmqq_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
+'mc15_13TeV.361092.Sherpa_CT10_WpqqWmlv_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
+'mc15_13TeV.361093.Sherpa_CT10_WlvZqq_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
+'mc15_13TeV.361094.Sherpa_CT10_WqqZll_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
 'mc15_13TeV.361095.Sherpa_CT10_WqqZvv_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
-'mc15_13TeV.361096.Sherpa_CT10_ZqqZll_SHv21_improved.merge.AOD.e4607_s2726_r7725_r7676',
+'mc15_13TeV.361096.Sherpa_CT10_ZqqZll_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
 'mc15_13TeV.361097.Sherpa_CT10_ZqqZvv_SHv21_improved.merge.AOD.e4607_s2726_r7772_r7676',
 
 #ttV
@@ -944,27 +944,28 @@ if len(noShowerDatasets) > 0:
         print ds
     raise RuntimeError("Datasets without shower.")
 
-
+# for sys_ datasets collections use only (all) signal and all priority-1 background samples
 xsecfile1 = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/util/Xsection13TeV_tth_bkg_v1.txt')
 xsecfile2 = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/util/Xsection13TeV_tth_sig_v1.txt')
-content = xsecfile1.readlines() + xsecfile2.readlines()
+contentBkg = xsecfile1.readlines()
+contentSig = xsecfile2.readlines()
 sys_fullSim = []
 sys_fastSim = []
 for TopSample in TopExamples.grid.availableDatasets.values():
     for sample in TopSample.datasets:
         dsid = sample.split('.')[1]
         fastSim = "_a766" in sample
-        line = [line for line in content if dsid in line]
+        lineBkg = [line for line in contentBkg if dsid in line]
+        lineSig = [line for line in contentSig if dsid in line]
+        line = lineBkg + lineSig
         if len(line) != 1:
             print "WARNING: dsid " + dsid + " has " + str(len(line)) + " matches in Xsection13TeV_tth_*_v1.txt"
         else:
             priority = line[0].split()[6]
-            #print dsid+": "+priority+" fS:"+str(fastSim)
-            if priority == '1':
+            if priority == '1' or len(lineSig) == 1:
                 if fastSim:
                     sys_fastSim.append(sample)
                 else:
                     sys_fullSim.append(sample)
-#TopExamples.grid.Add('sys_fullSim').datasets = sys_fullSim
-#TopExamples.grid.Add('sys_fastSim').datasets = sys_fastSim
-import MC_PostICHEP_priority1
+TopExamples.grid.Add('sys_fullSim').datasets = sys_fullSim
+TopExamples.grid.Add('sys_fastSim').datasets = sys_fastSim
