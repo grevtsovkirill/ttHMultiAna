@@ -8,6 +8,8 @@
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 #include "TH1F.h"
 
+#define doBDTOLR 1
+
 
 template<typename T, typename U> T returnDecoIfAvailable(const U& obj, const std::string& deconame, T defaultval) {
   //return defaultval;
@@ -310,21 +312,34 @@ ttHMultileptonLooseEventSaver::OverlapRemoval(std::shared_ptr<xAOD::ElectronCont
     }
   }*/
 
-  //if a muon and a jet are within (0.4, 0.04+10[GeV]/pT(muon)) of each other: remove the muon
-  for (const auto jetItr : *goodJet) {
-    if (! jetItr->auxdataConst<char>("ttHpassOVR")) {
-      continue;
-    }
-    auto p4 = jetItr->p4();
+  if (doBDTOLR) {
     for (const auto muItr : *goodMu) {
       if (! muItr->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
-      if ( p4.DeltaR(muItr->p4()) < std::min(0.4, 0.04+10e3/muItr->pt()) ) {
+      if ( muItr->auxdataConst<float>("muj_BDT_4var") < 0.17 ) {
   	muItr->auxdecor<char>("ttHpassOVR") = 0;
       }
     }
+  } else {
+    //if a muon and a jet are within (0.4, 0.04+10[GeV]/pT(muon)) of each other: remove the muon
+    for (const auto jetItr : *goodJet) {
+      if (! jetItr->auxdataConst<char>("ttHpassOVR")) {
+	continue;
+      }
+      auto p4 = jetItr->p4();
+      for (const auto muItr : *goodMu) {
+	if (! muItr->auxdataConst<char>("ttHpassOVR")) {
+	  continue;
+	}
+	if ( p4.DeltaR(muItr->p4()) < std::min(0.4, 0.04+10e3/muItr->pt()) ) {
+	  muItr->auxdecor<char>("ttHpassOVR") = 0;
+	}
+      }
+    }
   }
+
+
 
   // now done later
   //fillCutflow &&m_muCutflow->Fill(7, CountPassOR(*goodMu));
@@ -794,7 +809,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
   lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
 
-  static SG::AuxElement::Accessor<float> mujet_jetNTrk("jet_numTrk");
+  static SG::AuxElement::Accessor<int> mujet_jetNTrk("jet_numTrk");
   lep.mujet_jetNTrk = (mujet_jetNTrk.isAvailable(mu)) ? mujet_jetNTrk(mu): -99;
 
   static SG::AuxElement::Accessor<float> mujet_jetSumPtTrk("jet_sumPtTrk");
@@ -812,8 +827,10 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   static SG::AuxElement::Accessor<float> mujet_jetPtOverpt("jet_pt");
   lep.mujet_jetPtOverpt = (mujet_jetPtOverpt.isAvailable(mu)) ? mujet_jetPtOverpt(mu)/mu.pt(): -99;
 
-  static::SG::AuxElement::Accessor<float> mujet_BDT("muon_BDT");
-  lep.mujet_BDT        = (mujet_BDT.isAvailable(mu)) ? mujet_BDT(mu): -99;
+  static::SG::AuxElement::Accessor<float> mujet_BDT_9var("muj_BDT_9var");
+  lep.mujet_BDT_9var        = (mujet_BDT_9var.isAvailable(mu)) ? mujet_BDT_9var(mu): 1;
+  static::SG::AuxElement::Accessor<float> mujet_BDT_4var("muj_BDT_4var");
+  lep.mujet_BDT_4var        = (mujet_BDT_4var.isAvailable(mu)) ? mujet_BDT_4var(mu): 1;
 
 
 

@@ -63,6 +63,11 @@
 #include <random>
 #include <algorithm>
 
+namespace TMVA {
+  class Reader;
+}
+class ReadBDTG;
+
 using namespace xAOD;
 using namespace ttHMultilepton;
 using CP::IsolationSelectionTool;
@@ -347,6 +352,11 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
 	};
 
   TH1F * h_decayMode;
+
+  // TMVA Readers for mu-j OLR
+  TMVA::Reader *m_mujbdt_4var;
+  ReadBDTG *m_mujbdt_9var;
+  void InitializeMuJetBDTReaders();
 
   #ifndef __CINT__
   std::vector<ScalarWrapperCollection> vec_scalar_wrappers;

@@ -71,7 +71,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_sherpaRW("PMGSherpa22VJetsWeightTool"),
   m_higgs(nullptr),
   m_top(nullptr),
-  m_antitop(nullptr)
+  m_antitop(nullptr),
+  m_mujbdt_4var(nullptr),
+  m_mujbdt_9var(nullptr)
 {}
 
 ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
@@ -315,6 +317,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
   top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
 
+  // initialize mu-j OLR BDT
+  InitializeMuJetBDTReaders();
 
   //define triggers
   //Items and their PS
@@ -966,12 +970,13 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_phi");}, *systematicTree, "muon_jet_phi");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_dr");}, *systematicTree, "muon_jet_dr");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_ptRel");}, *systematicTree, "muon_jet_ptRel");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.auxdataConst<int> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_sumPtTrk");},*systematicTree, "muon_jet_sumPtTrk");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("MV2c10_weight");},*systematicTree, "muon_jet_MV2c10_Weight");
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_tagWeightBin");}, *systematicTree, "muon_jet_tagWeightBin");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.auxdataConst<int> ("jet_tagWeightBin");}, *systematicTree, "muon_jet_tagWeightBin");
 
-    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muj_BDT_9var");},*systematicTree, "muon_jet_BDT_9var");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muj_BDT_4var");},*systematicTree, "muon_jet_BDT_4var");
 
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
 

@@ -141,7 +141,8 @@ namespace ttHMultilepton {
     float mujet_deltaR; 
     float mujet_ptRel;
     float mujet_jetPtOverpt;
-    float mujet_BDT;
+    float mujet_BDT_9var;
+    float mujet_BDT_4var;
 
     int     truthPdgId;
     int     truthStatus;
