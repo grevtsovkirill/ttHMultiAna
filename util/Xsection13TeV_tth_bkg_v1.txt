@@ -24,6 +24,7 @@
  410120          24.1063          1.1949         1.0    --    -999   2               Powheg   ttbar_hdamp172p5_nonallhad_bfilter  Full  
  410121           4.4954          1.1949         1.0    --    -999   2               Powheg         ttbar_hdamp172p5_dil_bfilter  Full  
  410159          369.742          1.2236         1.0    --    -999   2               Powheg                      ttbar_nonallhad  Full  
+ 410160          309.604          1.2248         1.0    --    -999   2      aMcAtNloPythia8                         ttbar_allhad  Full  
  410187           158.94          1.1484         1.0    --    -999   2               Sherpa         ttbar_SingleLeptonP_MEPS_NLO  Full  
  410188           158.82          1.1484         1.0    --    -999   2               Sherpa         ttbar_SingleLeptonM_MEPS_NLO  Full  
  410189           76.333          1.1484         1.0    --    -999   2               Sherpa              ttbar_dilepton_MEPS_NLO  Full  
@@ -712,4 +713,5 @@
  364195          9.67021          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV280_500_BFilter  Full  
  364196           15.046          0.9702         1.0    --    -999   1            Sherpa221              Wtaunu_MAXHTPTV500_1000  Full  
  364197           1.2339          0.9702         1.0    --    -999   1            Sherpa221            Wtaunu_MAXHTPTV1000_E_CMS  Full  
+
 
