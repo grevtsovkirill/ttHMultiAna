@@ -1,3 +1,7 @@
+2017-02-23 Robert Wolff <robert.wolff@cern.ch>
+	* add Multilepton Filter Classification (for dilep filtered ttbar)
+	* add HF Classification from Top (0=light, 4=c, 5=b)
+
 2017-02-21 Robert Wolff <robert.wolff@cern.ch>
 	* Add mc_isAFII (for fast simulation samples true)
 	* add latest TDP to setupRC script

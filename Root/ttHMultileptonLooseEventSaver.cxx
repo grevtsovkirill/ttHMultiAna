@@ -57,6 +57,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pv(nullptr),
   m_runYear(0),
   m_HF_Classification(0.),
+  m_HF_ClassificationTop(0.),
   m_met_met(0.),
   m_met_phi(0.),
   m_met_sumet(0.),
@@ -485,6 +486,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     // ttbar HF classification
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
+    systematicTree->makeOutputVariable(m_HF_ClassificationTop, "HF_ClassificationTop");
 
     // ttbar MLF classification
     systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
@@ -1405,6 +1407,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if ( top::isSimulation(event) && ttHF_samples.count(m_mcChannelNumber) ){
     m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
+  }
+  if(event.m_info->isAvailable<int>("TopHeavyFlavorFilterFlag")) {
+    m_HF_ClassificationTop = event.m_info->auxdata<int>("TopHeavyFlavorFilterFlag");
   }
 
   //ttbar MLF classification
