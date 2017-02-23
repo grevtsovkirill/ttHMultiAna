@@ -503,6 +503,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     // Truth Matrix element photon
     systematicTree->makeOutputVariable(m_hasMEphoton, "m_hasMEphoton");
+    systematicTree->makeOutputVariable(m_hasMEphoton_DRgt02_nonhad, "m_hasMEphoton_DRgt02_nonhad");
     systematicTree->makeOutputVariable(m_MEphoton_pT, "m_MEphoton_pT");
     systematicTree->makeOutputVariable(m_MEphoton_eta, "m_MEphoton_eta");
     systematicTree->makeOutputVariable(m_MEphoton_phi, "m_MEphoton_phi");
@@ -1354,6 +1355,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   // Truth Matrix element photon
   m_hasMEphoton = false;
+  m_hasMEphoton_DRgt02_nonhad = false;
   m_MEphoton_pT = -1.;
   m_MEphoton_eta = 0.;
   m_MEphoton_phi = 0.;
@@ -1364,9 +1366,18 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       if (fabs(particle->pdgId()) == pdgId
           && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
         int motherPdgId = 999;
-        if ( particle->nParents() > 0) motherPdgId = particle->parent(0)->pdgId();
-        if(abs(motherPdgId)<100 && particle->barcode() <2e5){
+        if (particle->nParents() > 0) motherPdgId = particle->parent(0)->pdgId();
+        if (abs(motherPdgId) < 100 && particle->barcode() < 2e5) {
           m_hasMEphoton = true;
+          if (particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18)) {
+            double drMin = 99;
+            for (const auto& particle2 : *(event.m_truth)) {
+              if (abs(particle2->pdgId()) == 11 || abs(particle2->pdgId()) == 13) {
+                drMin = std::min(drMin, particle->p4().DeltaR(particle2->p4()));
+              }
+            }
+            if (drMin > 0.2) m_hasMEphoton_DRgt02_nonhad = true;
+          }
           if(particle->pt() > m_MEphoton_pT) {
             m_MEphoton_pT = particle->pt();
             m_MEphoton_eta = particle->eta();
