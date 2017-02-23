@@ -483,8 +483,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 
-    // HF classification ttbar
+    // ttbar HF classification
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
+
+    // ttbar MLF classification
+    systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
 
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
@@ -1403,6 +1406,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
+
+  //ttbar MLF classification
+  if ( top::isSimulation(event) )
+    m_MLF_Classification = truthSelector.CountTopWLep(event.m_truth);
 
   //sherpa rw
   if( top::isSimulation(event) and ( ( m_mcChannelNumber >= 363102 and m_mcChannelNumber <= 363122 ) or

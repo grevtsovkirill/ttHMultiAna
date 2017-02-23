@@ -367,6 +367,38 @@ const xAOD::TruthParticle* ttH::TruthSelector::GetTop(const xAOD::TruthParticleC
 }
 
 //=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetTopW(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetTop(cont));
+  for (auto child : children) {
+    if (IsGoodW(child.pdgId, child.bc_children) && child.pdgId>0) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetTopWLep(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetTopW(cont));
+  for (auto child : children) {
+    if (child.pdgId == -PDG_ELECTRON || child.pdgId == -PDG_MUON || child.pdgId == -PDG_TAU) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+//=========================================================================
 const xAOD::TruthParticle* ttH::TruthSelector::GetAntiTop(const xAOD::TruthParticleContainer* cont)
 {
     m_truths    = cont;
@@ -384,6 +416,38 @@ const xAOD::TruthParticle* ttH::TruthSelector::GetAntiTop(const xAOD::TruthParti
     }
     
     return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetAntiTopW(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetAntiTop(cont));
+  for (auto child : children) {
+    if (IsGoodW(child.pdgId, child.bc_children) && child.pdgId<0) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetAntiTopWLep(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetAntiTopW(cont));
+  for (auto child : children) {
+    if (child.pdgId == PDG_ELECTRON || child.pdgId == PDG_MUON || child.pdgId == PDG_TAU) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
 }
 
 //=========================================================================
@@ -594,4 +658,9 @@ unsigned int ttH::TruthSelector::CountJets(const xAOD::JetContainer* truthJets, 
   }
 
   return jet_n;
+}
+
+unsigned int ttH::TruthSelector::CountTopWLep(const xAOD::TruthParticleContainer* truthParticles)
+{
+  return (GetTopWLep(truthParticles) != nullptr) + (GetAntiTopWLep(truthParticles) != nullptr);
 }
