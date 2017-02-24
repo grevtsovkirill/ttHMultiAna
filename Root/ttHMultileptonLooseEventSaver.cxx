@@ -1372,7 +1372,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
           if (particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18)) {
             double drMin = 99;
             for (const auto& particle2 : *(event.m_truth)) {
-              if (abs(particle2->pdgId()) == 11 || abs(particle2->pdgId()) == 13) {
+              if (abs(particle2->pdgId()) == 11 || abs(particle2->pdgId()) == 13  || abs(particle2->pdgId()) == 15) {
                 drMin = std::min(drMin, particle->p4().DeltaR(particle2->p4()));
               }
             }
