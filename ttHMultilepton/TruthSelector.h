@@ -71,7 +71,9 @@ namespace ttH
     unsigned int CountJets(const xAOD::JetContainer* truthJets,
 			   const xAOD::TruthParticleContainer* truthParticles);
 
-    unsigned int CountTopWLep(const xAOD::TruthParticleContainer* truthCont);
+    unsigned int CountTopWLeptons(const xAOD::TruthParticleContainer* truthCont);
+
+    unsigned int CountLightLeptons(const xAOD::TruthParticleContainer* truthParticles, float ptMin = 10e3, float etaMax = 10);
     
   private:
     

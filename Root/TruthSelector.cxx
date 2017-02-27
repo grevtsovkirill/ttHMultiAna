@@ -597,6 +597,9 @@ std::vector<ttH::TruthPart> ttH::TruthSelector::GetParents(const xAOD::TruthPart
 //=========================================================================
 std::vector<ttH::TruthPart> ttH::TruthSelector::GetChildren(const xAOD::TruthParticle &truth)
 {
+  std::vector<ttH::TruthPart> out;
+  if (&truth == nullptr) return out;
+
   std::set<int> bc_set;
 
   for(size_t i = 0; i < truth.nChildren(); ++i) {
@@ -607,8 +610,6 @@ std::vector<ttH::TruthPart> ttH::TruthSelector::GetChildren(const xAOD::TruthPar
     }
   }
 
-  std::vector<ttH::TruthPart> out;
- 
   for(const xAOD::TruthParticle *ptr: *m_truths) {
     if(!ptr) {
       continue;
@@ -639,7 +640,6 @@ void ttH::TruthSelector::PruneSelectedParticles()
   }
 }
 
-
 //=========================================================================
 unsigned int ttH::TruthSelector::CountJets(const xAOD::JetContainer* truthJets, const xAOD::TruthParticleContainer* truthParticles)
 {
@@ -660,7 +660,18 @@ unsigned int ttH::TruthSelector::CountJets(const xAOD::JetContainer* truthJets, 
   return jet_n;
 }
 
-unsigned int ttH::TruthSelector::CountTopWLep(const xAOD::TruthParticleContainer* truthParticles)
+//=========================================================================
+unsigned int ttH::TruthSelector::CountTopWLeptons(const xAOD::TruthParticleContainer* truthParticles)
 {
   return (GetTopWLep(truthParticles) != nullptr) + (GetAntiTopWLep(truthParticles) != nullptr);
+}
+
+//=========================================================================
+unsigned int ttH::TruthSelector::CountLightLeptons(const xAOD::TruthParticleContainer* truthParticles, float ptMin, float etaMax)
+{
+  unsigned int nLightLeptons = 0;
+  for (auto part : *truthParticles)
+    if ((part->pdgId() == PDG_ELECTRON || part->pdgId() == PDG_MUON) && part->pt() > ptMin && part->eta() < etaMax)
+      nLightLeptons++;
+  return nLightLeptons;
 }

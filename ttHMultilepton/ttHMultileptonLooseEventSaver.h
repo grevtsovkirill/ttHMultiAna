@@ -240,14 +240,13 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   float m_MEphoton_phi;
   int m_MEphoton_motherID;
 
-  //ttbar HF classification
+  // ttbar HF, DLF, MLF classification
   int m_HF_Classification;
   int m_HF_ClassificationTop;
-
-  //ttbar MLF classification
+  int m_DLF_Classification;
   int m_MLF_Classification;
 
-  //met
+  // met
   float m_met_met;
   float m_met_phi;
   float m_met_sumet;
@@ -268,7 +267,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   Tau m_taus[TAU_ARR_SIZE];
   ttHMultilepton::Variables* m_variables;
 
-  //ttHF classification
+  // ttbar HF classification
   ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
