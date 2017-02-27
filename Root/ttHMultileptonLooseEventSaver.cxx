@@ -1775,7 +1775,7 @@ void ttHMultileptonLooseEventSaver::finalize() {
   m_outputFile->WriteTObject(m_tauCutflow);
   m_outputFile->Write();
 
-  delete m_trigGlobEffCorr;
+  //delete m_trigGlobEffCorr;
 
 }
 
