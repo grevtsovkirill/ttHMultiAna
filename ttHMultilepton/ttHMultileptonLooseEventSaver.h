@@ -244,7 +244,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   int m_HF_Classification;
   int m_HF_ClassificationTop;
   int m_DLF_Classification;
-  int m_MLF_Classification;
+  //int m_MLF_Classification;
 
   // met
   float m_met_met;
