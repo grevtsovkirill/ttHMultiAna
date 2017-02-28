@@ -1366,18 +1366,23 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       if (fabs(particle->pdgId()) == pdgId
           && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
         int motherPdgId = 999;
-        if (particle->nParents() > 0) motherPdgId = particle->parent(0)->pdgId();
+        const xAOD::TruthParticle* mother = nullptr;
+        if (particle->nParents() > 0) {
+          motherPdgId = particle->parent(0)->pdgId();
+          mother = particle->parent(0);  // i am interested in DR only of the mother
+        }
         if (abs(motherPdgId) < 100 && particle->barcode() < 2e5) {
           m_hasMEphoton = true;
-          if (particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18)) {
-            double drMin = 99;
-            for (const auto& particle2 : *(event.m_truth)) {
-              if (abs(particle2->pdgId()) == 11 || abs(particle2->pdgId()) == 13) {
-                drMin = std::min(drMin, particle->p4().DeltaR(particle2->p4()));
-              }
-            }
-            if (drMin > 0.2) m_hasMEphoton_DRgt02_nonhad = true;
-          }
+          // std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
+          double drMin = particle->p4().DeltaR(mother->p4()); // always look at DR
+          if (drMin > 0.2 && particle->pt() > 15000. && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18) && m_mcChannelNumber == 410082)
+            m_hasMEphoton_DRgt02_nonhad = true;  // this is tty - top left cell of the tty table, > 15 GeV
+          else if (drMin > 0.2 && particle->pt() > 15000. && (abs(motherPdgId) >= 11 && abs(motherPdgId) <= 18) && m_mcChannelNumber != 410082)
+            m_hasMEphoton_DRgt02_nonhad = true;  // this is ttbar - top right cell of the ttbar table 
+          else if (drMin < 0.2  && particle->pt() > 15000. && m_mcChannelNumber != 410082)
+            m_hasMEphoton_DRgt02_nonhad = true;  // this is ttbar, dr < 0.2 row from the ttbar table 
+          else if (particle->pt() < 15000. && m_mcChannelNumber != 410082)
+            m_hasMEphoton_DRgt02_nonhad = true;  // this is ttbar, ME photon pT < 15000 regardless the DR
           if(particle->pt() > m_MEphoton_pT) {
             m_MEphoton_pT = particle->pt();
             m_MEphoton_eta = particle->eta();
@@ -1388,6 +1393,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       }
     }
   }
+  if (!m_hasMEphoton)
+    m_hasMEphoton_DRgt02_nonhad = true;
 
   // Truth Matching
   if ( top::isSimulation(event) ) {
