@@ -20,6 +20,9 @@ sed -i '/top::check(tauSelectionTool->initialize(),/i             top::check( as
 rc checkout_pkg TopAnalysis
 patch -d TopAnalysis -p0 < ttHMultilepton/LHEweights.patch
 
+#missing Tau Track links
+rc checkout_pkg TopCorrections
+patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
 
 # for new diboson sherpa 2.1.1 samples
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-49
