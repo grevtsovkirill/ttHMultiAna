@@ -234,11 +234,20 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
 
   // Truth Matrix element photon
-  int m_hasMEphoton;
-  float m_MEphoton_pT;
+  char m_hasMEphoton;
+  char m_hasMEphoton_DRgt02_nonhad;
+  char m_MEphoton_OLtty_keepEvent;
+  char m_MEphoton_OLtty_cat1;
+  char m_MEphoton_OLtty_cat2;
+  char m_MEphoton_OLtty_cat3;
+  char m_MEphoton_OLtty_cat4;
+  float m_MEphoton_pt;
   float m_MEphoton_eta;
   float m_MEphoton_phi;
-  int m_MEphoton_motherID;
+  int m_MEphoton_mother_pdgId;
+  float m_MEphoton_mother_pt;
+  float m_MEphoton_mother_eta;
+  float m_MEphoton_mother_phi;
 
   // ttbar HF, DLF, MLF classification
   int m_HF_Classification;
