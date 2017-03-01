@@ -1,4 +1,5 @@
 2017-02-23 Robert Wolff <robert.wolff@cern.ch>
+	* add preliminary ttbar-ttbar+gamma OLR ATLASTTHML-86
 	* add Dilepton Filter Classification (for dilep filtered ttbar)
 	* add HF Classification from Top (0=light, 4=c, 5=b)
 
