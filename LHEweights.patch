@@ -34,7 +34,7 @@ Index: util/top-xaod.cxx
 +    int i = 1;
 +    for( auto weight_bin : lhe_weights_map) {
 +      count_histo_lhe_weights->GetXaxis()->SetBinLabel(i,weight_bin.first.c_str());
-+      count_histo_lhe_weights->SetBinContent(i,weight_bin.second);
++      count_histo_lhe_weights->Fill(i,weight_bin.second);
 +      ++i;
 +    }
 +    outputFile->cd();
