@@ -57,6 +57,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pv(nullptr),
   m_runYear(0),
   m_HF_Classification(0.),
+  m_HF_ClassificationTop(0.),
+  m_DLF_Classification(0.),
+  //m_MLF_Classification(0.),
   m_met_met(0.),
   m_met_phi(0.),
   m_met_sumet(0.),
@@ -483,8 +486,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 
-    // HF classification ttbar
+    // ttbar HF, DLF, MLF classification
     systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
+    systematicTree->makeOutputVariable(m_HF_ClassificationTop, "HF_ClassificationTop");
+    systematicTree->makeOutputVariable(m_DLF_Classification, "DLF_Classification");
+    //systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
 
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
@@ -1447,6 +1453,15 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_HF_Classification=m_classifyttbarHF->ClassifyEvent(event);
     //std::cout << "HF classification is: " << m_HF_Classification  << std::endl;
   }
+  if(event.m_info->isAvailable<int>("TopHeavyFlavorFilterFlag")) {
+    m_HF_ClassificationTop = event.m_info->auxdata<int>("TopHeavyFlavorFilterFlag");
+  }
+
+  //ttbar DLF, MLF classification
+  if (top::isSimulation(event)) {
+    m_DLF_Classification = truthSelector.CountTopWLeptons(event.m_truth);
+    //m_MLF_Classification = truthSelector.CountLightLeptons(event.m_truth, 10e3, 2.6);
+  }
 
   //sherpa rw
   if( top::isSimulation(event) and ( ( m_mcChannelNumber >= 363102 and m_mcChannelNumber <= 363122 ) or
@@ -1804,7 +1819,7 @@ void ttHMultileptonLooseEventSaver::finalize() {
   m_outputFile->WriteTObject(m_tauCutflow);
   m_outputFile->Write();
 
-  delete m_trigGlobEffCorr;
+  //delete m_trigGlobEffCorr;
 
 }
 

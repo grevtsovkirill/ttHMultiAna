@@ -62,10 +62,18 @@ namespace ttH
     decaymode GetHiggsDecayMode          (const xAOD::TruthParticleContainer* truthCont);
     const xAOD::TruthParticle* GetHiggs  (const xAOD::TruthParticleContainer* truthCont);
     const xAOD::TruthParticle* GetTop    (const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetTopW   (const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetTopWLep(const xAOD::TruthParticleContainer* truthCont);
     const xAOD::TruthParticle* GetAntiTop(const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetAntiTopW(const xAOD::TruthParticleContainer* truthCont);
+    const xAOD::TruthParticle* GetAntiTopWLep(const xAOD::TruthParticleContainer* truthCont);
 
     unsigned int CountJets(const xAOD::JetContainer* truthJets,
 			   const xAOD::TruthParticleContainer* truthParticles);
+
+    unsigned int CountTopWLeptons(const xAOD::TruthParticleContainer* truthCont);
+
+    unsigned int CountLightLeptons(const xAOD::TruthParticleContainer* truthParticles, float ptMin = 10e3, float etaMax = 10);
     
   private:
     
