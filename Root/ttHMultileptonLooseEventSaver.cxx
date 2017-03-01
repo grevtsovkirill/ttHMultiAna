@@ -1382,12 +1382,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       if (fabs(particle->pdgId()) == pdgId
           && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
         int motherPdgId = 999;
+        float motherPt = -1;
         const xAOD::TruthParticle* mother = nullptr;
         if (particle->nParents() > 0) {
-          motherPdgId = particle->parent(0)->pdgId();
           mother = particle->parent(0);  // i am interested in DR only of the mother
+          motherPdgId = mother->pdgId();
+          motherPt = mother->pt();
         }
-        if (abs(motherPdgId) < 100 && particle->barcode() < 2e5) {
+        if (abs(motherPdgId) < 100 && particle->barcode() < 2e5 && particle->pt() > 0 && motherPt > 0) {
           m_hasMEphoton = true;
           // std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
           double dr = particle->p4().DeltaR(mother->p4()); // always look at DR
@@ -1411,7 +1413,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
             m_MEphoton_eta = particle->eta();
             m_MEphoton_phi = particle->phi();
             m_MEphoton_mother_pdgId = motherPdgId;
-            m_MEphoton_mother_pt = mother->pt();
+            m_MEphoton_mother_pt = motherPt;
             m_MEphoton_mother_eta = mother->eta();
             m_MEphoton_mother_phi = mother->phi();
           }
