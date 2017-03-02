@@ -21,7 +21,7 @@ rc checkout_pkg TopAnalysis
 patch -d TopAnalysis -p0 < ttHMultilepton/LHEweights.patch
 
 #missing Tau Track links
-rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/trunk
+rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-45
 rc checkout_pkg TopCorrections
 patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
 
