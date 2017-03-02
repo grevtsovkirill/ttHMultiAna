@@ -13,8 +13,6 @@ sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObj
 
 # for AFII samples fix
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-34
-# fix for Tau problems
-sed -i '/top::check(tauSelectionTool->initialize(),/i             top::check( asg::setProperty(tauSelectionTool, "CreateControlPlots", true), "failed to set property" );' TopCPTools/Root/TopToolStore.cxx
 
 #save sum of weights for all LHE3 variations
 rc checkout_pkg TopAnalysis
