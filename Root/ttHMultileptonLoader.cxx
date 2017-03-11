@@ -34,10 +34,10 @@ top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& name, 
     return new CountHisto(name,outputFile,wk);
   else if (line.find("DUPLICATEVETO") == 0)
     return new DuplicateSelector();
-  else if (line.find("NLEPTON") == 0)
-    return new NLeptonSelector(param);
   else if (line.find("NLEPTONPLUSTAU") == 0)
     return new NLeptonPlusTauSelector(param);
+  else if (line.find("NLEPTON") == 0)
+    return new NLeptonSelector(param);
   //else if (line.find("OTHER_TOOL") == 0)
   //  return new OtherToolThatYouInvented();
   
