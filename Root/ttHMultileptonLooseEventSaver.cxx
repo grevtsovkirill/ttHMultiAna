@@ -1647,9 +1647,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //MakeIndices(event.m_electrons);
   //MakeIndices(event.m_muons);
 
-  // dont do the rest if we skim here anyway
-  if ( m_doSystematics && m_variables->total_leptons < 2 ) return;
-
   CopyJets(goodJet);
   CopyTaus(goodTau);
   CopyHT(goodEl, goodMu, goodJet, goodTau);
