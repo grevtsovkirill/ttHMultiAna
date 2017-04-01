@@ -198,6 +198,11 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     if(m_tauSelectionEleOLR.accept(*tauItr)) passEleOLR = 1;
     tauItr->auxdecor<int>("passEleOLR") = passEleOLR;
 
+    //EleBDT
+    int passEleBDT(0);
+    if(m_tauSelectionEleBDT.accept(*tauItr)) passEleBDT = 1;
+    tauItr->auxdecor<int>("passEleBDT") = passEleBDT;
+    
     //truth jet flavour
     int truthJetFlavour(-1);
     if(tauItr->isAvailable<ElementLink<xAOD::JetContainer> >("truthJetLink")) {

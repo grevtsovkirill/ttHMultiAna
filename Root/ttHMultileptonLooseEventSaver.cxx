@@ -34,6 +34,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
+  m_tauSelectionEleBDT("TauSelectionEleBDT"),
   //m_electronEffToolsHandles("ElectronEffToolsHandles"),
   //m_electronSFToolsHandles("ElectronSFToolsHandles"),
   m_electronToolsFactory(0),
@@ -318,6 +319,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
   top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
 
+  top::check( m_tauSelectionEleBDT.setProperty("ConfigPath", "ttHMultilepton/EleBDT_tau_selection.conf" ), "TauSelectionEleBDT:Failed to set ConfigPath");
+  top::check( m_tauSelectionEleBDT.initialize(), "Failed to initialise TauSelectionTool for EleBDT" );
 
   //define triggers
   //Items and their PS
@@ -1062,6 +1065,10 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
+
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.auxdata<int>("passEleBDT");
+      }, *systematicTree, std::string(tauprefix+"passEleBDT").c_str());
 
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("IsHadronic");
