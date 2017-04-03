@@ -1099,12 +1099,24 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
         m_variables->matchDLTll[idx1][idx2-1] = ( (int)m_leptons[idx1].isTrigMatchDLT && (int)m_leptons[idx2].isTrigMatchDLT
           && std::max(m_leptons[idx1].Pt, m_leptons[idx2].Pt)
           > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016)*23e3) );
+	// min Mll variables
+	if (m_leptons[idx1].ID * m_leptons[idx2].ID < 0) {
+	  if (m_variables->minOSMll == 0 || 
+	      m_variables->Mll[idx1][idx2-1] < m_variables->minOSMll) {
+	    m_variables->minOSMll = m_variables->Mll[idx1][idx2-1];
+	  }
+	}
 	if (m_leptons[idx1].ID == -m_leptons[idx2].ID) {
 	  if (m_variables->best_Z_Mll == 0 ||
 	      (fabs(m_variables->Mll[idx1][idx2-1]-91.1876e3) <
 	       fabs(m_variables->best_Z_Mll-91.1876e3))) {
 	    m_variables->best_Z_Mll=m_variables->Mll[idx1][idx2-1];
 	    zidx[0] = idx1; zidx[1] = idx2;
+	  }
+	  // min Mll variables
+	  if (m_variables->minOSSFMll == 0 || 
+	      m_variables->Mll[idx1][idx2-1] < m_variables->minOSSFMll) {
+	    m_variables->minOSSFMll = m_variables->Mll[idx1][idx2-1];
 	  }
 	}
 	for (int idx3 = idx2+1; idx3 < capped_totleptons; ++idx3) {
