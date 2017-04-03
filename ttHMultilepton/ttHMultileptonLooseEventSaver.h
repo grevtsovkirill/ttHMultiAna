@@ -112,6 +112,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::string betterBtagNamedSyst (const std::string WP);
   float getattr_truthJet(const xAOD::Jet &,std::string attr);
   int getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl);
+  int getNInnerPix(const xAOD::Electron& el);
+  int getNInnerPix(const xAOD::Muon& mu);
 
  private:
   ///The file where everything goes
