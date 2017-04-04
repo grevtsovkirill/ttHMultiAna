@@ -40,6 +40,8 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(best_Z_Mll, "best_Z_Mll");
   tree->makeOutputVariable(best_Z_other_MtLepMet, "best_Z_other_MtLepMet");
   tree->makeOutputVariable(best_Z_other_Mll, "best_Z_other_Mll");
+  tree->makeOutputVariable(minOSSFMll, "minOSSFMll");
+  tree->makeOutputVariable(minOSMll, "minOSMll");
   //tree->makeOutputVariable(Ptll01, "Ptll01");
   //tree->makeOutputVariable(DRll01, "DRll01");
   tree->makeOutputVariable(nJets_OR_T, "nJets_OR_T");
