@@ -955,6 +955,11 @@ xsecfile1 = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/util/Xsection13T
 xsecfile2 = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/util/Xsection13TeV_tth_sig_v1.txt')
 contentBkg = xsecfile1.readlines()
 contentSig = xsecfile2.readlines()
+if os.path.isfile(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/scripts/files_done.txt'):
+    donefile = open(os.getenv('ROOTCOREBIN') + '/../ttHMultilepton/scripts/files_done.txt')
+    contentDone = donefile.readlines()
+else:
+    contentDone = ''
 sys_fullSim = []
 sys_fastSim = []
 for TopSample in TopExamples.grid.availableDatasets.values():
@@ -963,15 +968,17 @@ for TopSample in TopExamples.grid.availableDatasets.values():
         fastSim = "_a766" in sample
         lineBkg = [line for line in contentBkg if dsid in line]
         lineSig = [line for line in contentSig if dsid in line]
+        lineDone = [line for line in contentDone if dsid in line]
         line = lineBkg + lineSig
         if len(line) != 1:
             print "WARNING: dsid " + dsid + " has " + str(len(line)) + " matches in Xsection13TeV_tth_*_v1.txt"
+            priority = '1'
         else:
             priority = line[0].split()[6]
-            if priority == '1' or len(lineSig) == 1:
-                if fastSim:
-                    sys_fastSim.append(sample)
-                else:
-                    sys_fullSim.append(sample)
+        if (priority == '1' or len(lineSig) == 1) and len(lineDone) == 0:
+            if fastSim:
+                sys_fastSim.append(sample)
+            else:
+                sys_fullSim.append(sample)
 TopExamples.grid.Add('sys_fullSim').datasets = sys_fullSim
 TopExamples.grid.Add('sys_fastSim').datasets = sys_fastSim
