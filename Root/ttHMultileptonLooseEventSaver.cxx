@@ -652,6 +652,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  return (int) is_matched;
 	}, *systematicTree, branch_name.c_str() );
     }
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	return getNInnerPix(ele);
+      }, *systematicTree, "electron_nInnerPix");
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {

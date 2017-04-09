@@ -15,6 +15,37 @@ template<typename T, typename U> T returnDecoIfAvailable(const U& obj, const std
   return result;
 }
 
+int ttHMultileptonLooseEventSaver::getNInnerPix(const xAOD::Electron& el) {
+  uint8_t val8;
+  int expInPix = el.trackParticleSummaryValue(val8, xAOD::expectInnermostPixelLayerHit)
+    ? val8 : -999;
+  int expNextInPix = el.trackParticleSummaryValue(val8, xAOD::expectNextToInnermostPixelLayerHit)
+    ? val8 : -999;
+  if (1 == expInPix) {
+    return (el.trackParticleSummaryValue(val8, xAOD::numberOfInnermostPixelLayerHits)
+	    ? val8 : -999);
+  }
+  else if (1 == expNextInPix) {
+    return (el.trackParticleSummaryValue(val8, xAOD::numberOfNextToInnermostPixelLayerHits)
+	    ? val8 : -999);
+  }
+  return -999;
+}
+
+int ttHMultileptonLooseEventSaver::getNInnerPix(const xAOD::Muon& mu) {
+  uint8_t val8;
+  const auto& link = mu.inDetTrackParticleLink();
+  if (!link.isValid()) return -999;
+  int expInPix = (*link)->summaryValue(val8, xAOD::expectInnermostPixelLayerHit) ? val8 : -999;
+  int expNextInPix = (*link)->summaryValue(val8, xAOD::expectNextToInnermostPixelLayerHit) ? val8 : -999;
+  if (1 == expInPix) {
+    return ((*link)->summaryValue(val8, xAOD::numberOfInnermostPixelLayerHits) ? val8 : -999);
+  }
+  else if (1 == expNextInPix) {
+    return ((*link)->summaryValue(val8, xAOD::numberOfNextToInnermostPixelLayerHits) ? val8 : -999);
+  }
+  return -999;
+}
 
 std::shared_ptr<xAOD::ElectronContainer>
 ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
@@ -752,6 +783,8 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
 
+  lep.nInnerPix = getNInnerPix(el);
+
   // scale factors
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
@@ -984,6 +1017,8 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); lep.topoEtcone20 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
+
+  lep.nInnerPix = getNInnerPix(mu);
 
   // scale factors
   for (const auto& systvar : m_lep_sf_names) {
