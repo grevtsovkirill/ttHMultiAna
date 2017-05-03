@@ -228,6 +228,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   int m_pvNumber;
   int m_puNumber;
   float m_vertex_density;
+  float m_beam_posz;
+  float m_beam_sigmaz;
   const xAOD::Vertex* m_pv;
   //use with care, don't mix MC and data in same job
   bool m_isMC;
