@@ -54,6 +54,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pu_hash(0),
   m_pvNumber(0),
   m_puNumber(0),
+  m_vertex_density(0.),
   m_pv(nullptr),
   m_runYear(0),
   m_HF_Classification(0.),
@@ -558,6 +559,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pu_hash, "pileupHash");
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
+    systematicTree->makeOutputVariable(m_vertex_density, "m_vertex_density");
 
     // Truth Matrix element photon
     systematicTree->makeOutputVariable(m_hasMEphoton, "m_hasMEphoton");
@@ -1675,10 +1677,19 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
   }
 
+  // Add vertex density 
+  m_vertex_density = -99.;
+  if(m_pv) {
+    float mu            = m_eventInfo->averageInteractionsPerCrossing();
+    float beamPosSigmaZ = m_eventInfo->beamPosSigmaZ();
+    float beamPosZ      = m_eventInfo->beamPosZ();
+    float primaryVtxZ   = m_pv->z();
+    m_vertex_density    = mu * TMath::Gaus(primaryVtxZ, beamPosZ, beamPosSigmaZ, true);
+  }
+
   if(!m_doSystematics){
     vec_vtx_wrappers[event.m_ttreeIndex].push_all(*m_vertices);
   }
-
 
   m_variables->Clear();
   Decorate(event);

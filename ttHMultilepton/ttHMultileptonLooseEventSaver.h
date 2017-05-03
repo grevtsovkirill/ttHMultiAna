@@ -227,6 +227,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ULong64_t m_pu_hash;
   int m_pvNumber;
   int m_puNumber;
+  float m_vertex_density;
   const xAOD::Vertex* m_pv;
   //use with care, don't mix MC and data in same job
   bool m_isMC;
