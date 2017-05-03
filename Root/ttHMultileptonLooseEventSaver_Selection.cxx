@@ -15,6 +15,37 @@ template<typename T, typename U> T returnDecoIfAvailable(const U& obj, const std
   return result;
 }
 
+int ttHMultileptonLooseEventSaver::getNInnerPix(const xAOD::Electron& el) {
+  uint8_t val8;
+  int expInPix = el.trackParticleSummaryValue(val8, xAOD::expectInnermostPixelLayerHit)
+    ? val8 : -999;
+  int expNextInPix = el.trackParticleSummaryValue(val8, xAOD::expectNextToInnermostPixelLayerHit)
+    ? val8 : -999;
+  if (1 == expInPix) {
+    return (el.trackParticleSummaryValue(val8, xAOD::numberOfInnermostPixelLayerHits)
+	    ? val8 : -999);
+  }
+  else if (1 == expNextInPix) {
+    return (el.trackParticleSummaryValue(val8, xAOD::numberOfNextToInnermostPixelLayerHits)
+	    ? val8 : -999);
+  }
+  return -999;
+}
+
+int ttHMultileptonLooseEventSaver::getNInnerPix(const xAOD::Muon& mu) {
+  uint8_t val8;
+  const auto& link = mu.inDetTrackParticleLink();
+  if (!link.isValid()) return -999;
+  int expInPix = (*link)->summaryValue(val8, xAOD::expectInnermostPixelLayerHit) ? val8 : -999;
+  int expNextInPix = (*link)->summaryValue(val8, xAOD::expectNextToInnermostPixelLayerHit) ? val8 : -999;
+  if (1 == expInPix) {
+    return ((*link)->summaryValue(val8, xAOD::numberOfInnermostPixelLayerHits) ? val8 : -999);
+  }
+  else if (1 == expNextInPix) {
+    return ((*link)->summaryValue(val8, xAOD::numberOfNextToInnermostPixelLayerHits) ? val8 : -999);
+  }
+  return -999;
+}
 
 std::shared_ptr<xAOD::ElectronContainer>
 ttHMultileptonLooseEventSaver::SelectElectrons(const top::Event& event) {
@@ -752,6 +783,8 @@ CopyElectron(xAOD::Electron& el, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; el.isolationValue(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
 
+  lep.nInnerPix = getNInnerPix(el);
+
   // scale factors
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
@@ -985,6 +1018,8 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
 
+  lep.nInnerPix = getNInnerPix(mu);
+
   // scale factors
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
@@ -1099,12 +1134,24 @@ ttHMultileptonLooseEventSaver::CopyLeptons(std::shared_ptr<xAOD::ElectronContain
         m_variables->matchDLTll[idx1][idx2-1] = ( (int)m_leptons[idx1].isTrigMatchDLT && (int)m_leptons[idx2].isTrigMatchDLT
           && std::max(m_leptons[idx1].Pt, m_leptons[idx2].Pt)
           > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016)*23e3) );
+	// min Mll variables
+	if (m_leptons[idx1].ID * m_leptons[idx2].ID < 0) {
+	  if (m_variables->minOSMll == 0 || 
+	      m_variables->Mll[idx1][idx2-1] < m_variables->minOSMll) {
+	    m_variables->minOSMll = m_variables->Mll[idx1][idx2-1];
+	  }
+	}
 	if (m_leptons[idx1].ID == -m_leptons[idx2].ID) {
 	  if (m_variables->best_Z_Mll == 0 ||
 	      (fabs(m_variables->Mll[idx1][idx2-1]-91.1876e3) <
 	       fabs(m_variables->best_Z_Mll-91.1876e3))) {
 	    m_variables->best_Z_Mll=m_variables->Mll[idx1][idx2-1];
 	    zidx[0] = idx1; zidx[1] = idx2;
+	  }
+	  // min Mll variables
+	  if (m_variables->minOSSFMll == 0 || 
+	      m_variables->Mll[idx1][idx2-1] < m_variables->minOSSFMll) {
+	    m_variables->minOSSFMll = m_variables->Mll[idx1][idx2-1];
 	  }
 	}
 	for (int idx3 = idx2+1; idx3 < capped_totleptons; ++idx3) {
@@ -1227,38 +1274,30 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
   case 2:
     {
       //if(nAbove18GeV<2) return;
+      int nTrig = -1;
+      for (const auto& systvar : m_lep_trigger_sf_names) {
+	++nTrig;
+	
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1; dec_loose(*e) = 0;}//TightTight
+	double sf_tt = 1.;
+	auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
+	if(cc_tt==CP::CorrectionCode::Ok)
+	  {
+	    m_variables->lepSFTrigTight[nTrig] = sf_tt;
+	    //std::cout << "2LSSTightTight:TriggerScaleFactor is for sys " << systvar.second << " : " << sf_tt << std::endl;
+	  }
+       
       
-      for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1; dec_loose(*e) = 0;}//TightTight
-      double sf_tt = 1.;
-      auto cc_tt = m_trigGlobEffCorr->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
-      if(cc_tt==CP::CorrectionCode::Ok)
-	{
-	  m_variables->lepSFTrigTight[0] = sf_tt;
-	  //std::cout << "2LSSTightTight:TriggerScaleFactor is: " << sf_tt << std::endl;
-	}
-      // else
-      // 	{
-      // 	  std::cout << "doEventTrigSFs::Scale factor evaluation failed" << std::endl;
-      // 	  for(auto e : myTriggeringElectrons) Info("    ", "electron, pT = %f", e->pt());
-      // 	  for(auto m : myTriggeringMuons) Info("    ", "muon, pT = %f", m->pt());
-      // 	  //++errors;
-      // 	}
-      
-      for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
-      double sf_ll = 1.;
-      auto cc_ll = m_trigGlobEffCorr->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ll);
-      if(cc_ll==CP::CorrectionCode::Ok)
-	{
-	  m_variables->lepSFTrigLoose[0] = sf_ll;
-	  //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
-	}
-      // else
-      // 	{
-      // 	  std::cout << "doEventTrigSFs::Scale factor evaluation failed" << std::endl;
-      // 	  for(auto e : myTriggeringElectrons) Info("    ", "electron, pT = %f", e->pt());
-      // 	  for(auto m : myTriggeringMuons) Info("    ", "muon, pT = %f", m->pt());
-      // 	  //++errors;
-      // 	}
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
+	double sf_ll = 1.;
+	auto cc_ll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ll);
+	if(cc_ll==CP::CorrectionCode::Ok)
+	  {
+	    m_variables->lepSFTrigLoose[nTrig] = sf_ll;
+	    //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
+	  }
+	
+      }
       
     }
     break;
@@ -1278,6 +1317,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
       m_variables->lepSFTrigTight[0] = oneMinusTrigEffTight[0][0] != 1 ? (1-oneMinusTrigEffTight[0][1])/(1-oneMinusTrigEffTight[0][0]) : 1;
       for (const auto& systvar : m_lep_sf_names) {
 	auto ivar = systvar.first;
+	//std::cout << "In systematic number " << ivar << " and systematic: " << systvar.second <<  std::endl;
 	if (ivar == top::topSFSyst::nominal) continue;
 	m_variables->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_variables->lepSFTrigLoose[0] : 1;
 	m_variables->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_variables->lepSFTrigTight[0] : 1;
@@ -1286,55 +1326,45 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
     break;
   case 3:
     {
-      for(auto e : myTriggeringElectrons) {
-	if (e->charge() == -m_variables->total_charge){ 
-	  dec_loose(*e) = 1;
-	  dec_tight(*e) = 0;
-	}
-	else {
-	  dec_loose(*e) = 0;	  
-	  dec_tight(*e) = 1;
-	}
-      }//TightTight
-      
-      double sf_ltt = 1.;
-      auto cc_ltt = m_trigGlobEffCorr->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ltt);
-      if(cc_ltt==CP::CorrectionCode::Ok)
-	{
-	  m_variables->lepSFTrigTight[0] = sf_ltt;
-	  //std::cout << "3LTight:TriggerScaleFactor is: " << sf_ltt << std::endl;
-	}
-      // else
-      // 	{
-      // 	  std::cout << "doEventTrigSFs::Scale factor evaluation failed 3L " << std::endl;
-      // 	  for(auto e : myTriggeringElectrons) Info("    ", "electron, pT = %f", e->pt());
-      // 	  for(auto m : myTriggeringMuons) Info("    ", "muon, pT = %f", m->pt());
-      // 	  //++errors;
-      // 	}
-      
-      for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
-      double sf_lll = 1.;
-      auto cc_lll = m_trigGlobEffCorr->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lll);
-      if(cc_lll==CP::CorrectionCode::Ok)
-	{
-	  m_variables->lepSFTrigLoose[0] = sf_lll;
-	  //std::cout << "3LLoose:TriggerScaleFactor is: " << sf_lll << std::endl;
-	}
-      // else
-      // 	{
-      // 	  std::cout << "doEventTrigSFs::Scale factor evaluation failed 3L" << std::endl;
-      // 	  for(auto e : myTriggeringElectrons) Info("    ", "electron, pT = %f", e->pt());
-      // 	  for(auto m : myTriggeringMuons) Info("    ", "muon, pT = %f", m->pt());
-      // 	  //++errors;
-      // 	}
+      int nTrig = -1;
+      for (const auto& systvar : m_lep_trigger_sf_names) {
+	++nTrig;
+	
+	for(auto e : myTriggeringElectrons) {
+	  if (e->charge() == -m_variables->total_charge){ 
+	    dec_loose(*e) = 1;
+	    dec_tight(*e) = 0;
+	  }
+	  else {
+	    dec_loose(*e) = 0;	  
+	    dec_tight(*e) = 1;
+	  }
+	}//TightTight
+	
+	double sf_ltt = 1.;
+	auto cc_ltt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ltt);
+	if(cc_ltt==CP::CorrectionCode::Ok)
+	  {
+	    m_variables->lepSFTrigTight[nTrig] = sf_ltt;
+	    //std::cout << "3LTight:TriggerScaleFactor is: " << sf_ltt << std::endl;
+	  }
+	
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
+	double sf_lll = 1.;
+	auto cc_lll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lll);
+	if(cc_lll==CP::CorrectionCode::Ok)
+	  {
+	    m_variables->lepSFTrigLoose[nTrig] = sf_lll;
+	    //std::cout << "3LLoose:TriggerScaleFactor is: " << sf_lll << std::endl;
+	  }
+      }
     }
-
     /* // OLD trigger SF computation for SLT
-    for (const auto& systvar : m_lep_sf_names) {
-      auto ivar = systvar.first;
-      oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
-      oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
-      oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
+	 for (const auto& systvar : m_lep_sf_names) {
+	 auto ivar = systvar.first;
+	 oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
+	 oneMinusTrigEffLoose[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
+	 oneMinusTrigEffTight[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
       oneMinusTrigEffTight[ivar][1] *= (1-m_leptons[0].EffTrigLoose[ivar]*m_leptons[0].SFTrigLoose[ivar]);
     }
     for (int ilep = 1; ilep < m_variables->total_leptons; ++ilep) {
@@ -1359,38 +1389,28 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
     break;
   case 4:
     {
-      for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight
-      double sf_tttt = 1.;
-      auto cc_tttt = m_trigGlobEffCorr->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tttt);
-      if(cc_tttt==CP::CorrectionCode::Ok)
-	{
-	  m_variables->lepSFTrigTight[0] = sf_tttt;
-	  //std::cout << "4L:TriggerScaleFactor is: " << sf_tttt << std::endl;
-	}
-      // else
-      // 	{
-      // 	  std::cout << "doEventTrigSFs::Scale factor evaluation failed 4L" << std::endl;
-      // 	  for(auto e : myTriggeringElectrons) Info("    ", "electron, pT = %f", e->pt());
-      // 	  for(auto m : myTriggeringMuons) Info("    ", "muon, pT = %f", m->pt());
-      // 	  //++errors;
-      // 	}
-      
-      for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
-      double sf_llll = 1.;
-      auto cc_llll = m_trigGlobEffCorr->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llll);
-      if(cc_llll==CP::CorrectionCode::Ok)
-	{
-	  m_variables->lepSFTrigLoose[0] = sf_llll;
-	  //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_llll << std::endl;
-	}
-      // else
-      // 	{
-      // 	  std::cout << "doEventTrigSFs::Scale factor evaluation failed 4L" << std::endl;
-      // 	  for(auto e : myTriggeringElectrons) Info("    ", "electron, pT = %f", e->pt());
-      // 	  for(auto m : myTriggeringMuons) Info("    ", "muon, pT = %f", m->pt());
-      // 	  //++errors;
-      // 	}
-      
+      int nTrig = -1;
+      for (const auto& systvar : m_lep_trigger_sf_names) {
+	++nTrig;
+	
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight
+	double sf_tttt = 1.;
+	auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tttt);
+	if(cc_tttt==CP::CorrectionCode::Ok)
+	  {
+	    m_variables->lepSFTrigTight[nTrig] = sf_tttt;
+	    //std::cout << "4L:TriggerScaleFactor is: " << sf_tttt << std::endl;
+	  }
+	
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
+	double sf_llll = 1.;
+	auto cc_llll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llll);
+	if(cc_llll==CP::CorrectionCode::Ok)
+	  {
+	    m_variables->lepSFTrigLoose[nTrig] = sf_llll;
+	    //std::cout << "4LLooseLoose:TriggerScaleFactor is: " << sf_llll << std::endl;
+	  }	
+      }
     }
     break;
   default:

@@ -112,6 +112,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::string betterBtagNamedSyst (const std::string WP);
   float getattr_truthJet(const xAOD::Jet &,std::string attr);
   int getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl);
+  int getNInnerPix(const xAOD::Electron& el);
+  int getNInnerPix(const xAOD::Muon& mu);
 
  private:
   ///The file where everything goes
@@ -148,15 +150,16 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   
   //Trigger Scale Factors -- NEW -- 
   // --> Electrons
-  //ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
-  //ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
+  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
+  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
   std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
   // --> Muons
-  //ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
+  ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
   std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
   //--> The Tool
   //asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>                  m_trigGlobEffCorr;
-  TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
+  //TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
+  std::vector<TrigGlobalEfficiencyCorrectionTool*>                 m_trigGlobEffCorr;
 
   //decorate all the things in all the sys
   SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
@@ -225,6 +228,9 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   ULong64_t m_pu_hash;
   int m_pvNumber;
   int m_puNumber;
+  float m_vertex_density;
+  float m_beam_posz;
+  float m_beam_sigmaz;
   const xAOD::Vertex* m_pv;
   //use with care, don't mix MC and data in same job
   bool m_isMC;
@@ -314,11 +320,35 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<float> m_trjet_e;
   std::vector<int>   m_trjet_Wcount, m_trjet_Zcount, m_trjet_Hcount, m_trjet_Tcount;
 
+  CP::SystematicSet dummy_nom;
+  CP::SystematicSet dummy_elup;
+  CP::SystematicSet dummy_eldo;
+  CP::SystematicSet dummy_muup;
+  CP::SystematicSet dummy_mudo;
+  CP::SystematicSet dummy_eleffup;
+  CP::SystematicSet dummy_eleffdo;
+
+  // for names of lepton trigger SFs for multi-trigger tool
+  //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
+  std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{ 
+    { dummy_nom, "nominal" },
+    { dummy_elup, "EL_SF_Trigger_UP" },
+    { dummy_eldo, "EL_SF_Trigger_DOWN" },
+    { dummy_muup, "MU_SF_Trigger_STAT_UP" },
+    { dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
+    { dummy_eleffup, "EL_EFF_Trigger_UP" },
+    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
+  };
+
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{
     { top::topSFSyst::nominal, "nominal" },
     { top::topSFSyst::EL_SF_Trigger_UP, "EL_SF_Trigger_UP" },
     { top::topSFSyst::EL_SF_Trigger_DOWN, "EL_SF_Trigger_DOWN" },
+    { top::topSFSyst::MU_SF_Trigger_STAT_UP, "MU_SF_Trigger_STAT_UP" },
+    { top::topSFSyst::MU_SF_Trigger_STAT_DOWN, "MU_SF_Trigger_STAT_DOWN" }, // do not change the order up to this point to match m_lep_trigger_sf_names
+    { top::topSFSyst::MU_SF_Trigger_SYST_UP, "MU_SF_Trigger_SYST_UP" },
+    { top::topSFSyst::MU_SF_Trigger_SYST_DOWN, "MU_SF_Trigger_SYST_DOWN" },
     { top::topSFSyst::EL_SF_Reco_UP, "EL_SF_Reco_UP" },
     { top::topSFSyst::EL_SF_Reco_DOWN, "EL_SF_Reco_DOWN" },
     { top::topSFSyst::EL_SF_ID_UP, "EL_SF_ID_UP" },
@@ -327,10 +357,6 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
     { top::topSFSyst::EL_SF_Isol_DOWN, "EL_SF_Isol_DOWN" },
     { top::topSFSyst::MU_SF_Trigger_UP, "MU_SF_Trigger_UP" },
     { top::topSFSyst::MU_SF_Trigger_DOWN, "MU_SF_Trigger_DOWN" },
-    { top::topSFSyst::MU_SF_Trigger_STAT_UP, "MU_SF_Trigger_STAT_UP" },
-    { top::topSFSyst::MU_SF_Trigger_STAT_DOWN, "MU_SF_Trigger_STAT_DOWN" },
-    { top::topSFSyst::MU_SF_Trigger_SYST_UP, "MU_SF_Trigger_SYST_UP" },
-    { top::topSFSyst::MU_SF_Trigger_SYST_DOWN, "MU_SF_Trigger_SYST_DOWN" },
     { top::topSFSyst::MU_SF_ID_STAT_UP, "MU_SF_ID_STAT_UP" },
     { top::topSFSyst::MU_SF_ID_STAT_DOWN, "MU_SF_ID_STAT_DOWN" },
     { top::topSFSyst::MU_SF_ID_SYST_UP, "MU_SF_ID_SYST_UP" },

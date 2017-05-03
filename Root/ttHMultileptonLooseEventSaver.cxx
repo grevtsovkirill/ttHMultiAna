@@ -40,7 +40,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_electronToolsFactory(0),
   //m_muonToolsHandles("MuonToolsHandles"),
   m_muonToolsFactory(0),
-  m_trigGlobEffCorr(nullptr),
+  //m_trigGlobEffCorr(0),
   m_mcWeight(1.),
   m_pileup_weight(1.),
   m_bTagSF_weight(1.),
@@ -55,6 +55,9 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_pu_hash(0),
   m_pvNumber(0),
   m_puNumber(0),
+  m_vertex_density(-999.),
+  m_beam_posz(-999),
+  m_beam_sigmaz(-999),  
   m_pv(nullptr),
   m_runYear(0),
   m_HF_Classification(0.),
@@ -75,7 +78,14 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_sherpaRW("PMGSherpa22VJetsWeightTool"),
   m_higgs(nullptr),
   m_top(nullptr),
-  m_antitop(nullptr)
+  m_antitop(nullptr),
+  dummy_nom("dummy"),
+  dummy_elup("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
+  dummy_eldo("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1down"),
+  dummy_muup("MUON_EFF_TrigStatUncertainty__1up"),
+  dummy_mudo("MUON_EFF_TrigStatUncertainty__1down"),
+  dummy_eleffup("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
+  dummy_eleffdo("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1down")
 {}
 
 ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
@@ -214,7 +224,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
   //////////// Trigger SF tool --NEW--
 
-  // (1) Tight-Tight
   std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
     // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
@@ -229,61 +238,107 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
     {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseBLayer", ""}
   };
+
+  int nTrig = -1;
+
+  m_trigGlobEffCorr.resize(m_lep_trigger_sf_names.size());
+
+  for (unsigned int t=0; t<m_trigGlobEffCorr.size(); ++t)
+    m_trigGlobEffCorr[t]=nullptr;
   
-  std::map<std::string,std::string> legsPerTool;
-  std::map<std::string,std::string> tagsPerTool;
 
-  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool> m_electronEffToolsHandles, m_electronSFToolsHandles;
-  ToolHandleArray<CP::IMuonTriggerScaleFactors> m_muonToolsHandles;
+  for (const auto& systvar : m_lep_trigger_sf_names) {
+    std::cout << "INFO INFO: Doing: " << systvar.second << std::endl;
+    auto ivar = systvar.first;
+    ++nTrig;
+    std::map<std::string,std::string> legsPerTool;
+    std::map<std::string,std::string> tagsPerTool;
+    
+    //ToolHandleArray<IAsgElectronEfficiencyCorrectionTool> m_electronEffToolsHandles, m_electronSFToolsHandles;
+    //ToolHandleArray<CP::IMuonTriggerScaleFactors> m_muonToolsHandles;
+    
+    int nTools = -1;
+    m_electronEffToolsHandles.clear();
+    m_electronSFToolsHandles.clear();
+    m_muonToolsHandles.clear();
+    
+    for(auto& kv : triggerKeys) // electron tool instances for each trigger leg
+      for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
+	{
+	  auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff-"+std::to_string(++nTools)+systvar.second);
+	  t->setProperty("MapFilePath","/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/map0.txt").ignore();
+	  t->setProperty("TriggerKey",(j?"":"Eff_") + kv[2]).ignore();
+	  t->setProperty("IdKey",kv[3]).ignore();
+	  t->setProperty("IsoKey",kv[4]).ignore();
+	  t->setProperty("CorrelationModel","TOTAL").ignore();
+	  t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
+	  top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
+	  // if (systvar.second=="EL_SF_Trigger_UP") {
+	  //   if(t->getHandle()->applySystematicVariation(systvar.first)  != CP::SystematicCode::Ok) 
+	  //     std::cout << "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to set Uncertainty!" << std::endl; 
+	  // }
+	  auto& handles = j? m_electronSFToolsHandles : m_electronEffToolsHandles;
+	  handles.push_back(t->getHandle());
+	  // Safer to retrieve the name from the final ToolHandle, it might be prefixed (by the parent tool name) when the handle is copied
+	  std::string name = handles[handles.size()-1].name();
+	  legsPerTool.emplace(name, kv[0]);
+	  if(kv[1]!="") tagsPerTool.emplace(name, kv[1]);
+	}
 
-  int nTools = -1;
-  for(auto& kv : triggerKeys) // electron tool instances for each trigger leg
-  for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
-    {
-      auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff-"+std::to_string(++nTools));
-      t->setProperty("MapFilePath","/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/map0.txt").ignore();
-      t->setProperty("TriggerKey",(j?"":"Eff_") + kv[2]).ignore();
-      t->setProperty("IdKey",kv[3]).ignore();
-      t->setProperty("IsoKey",kv[4]).ignore();
-      t->setProperty("CorrelationModel","TOTAL").ignore();
-      t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
-      top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
-      auto& handles = j? m_electronSFToolsHandles : m_electronEffToolsHandles;
-      handles.push_back(t->getHandle());
-      // Safer to retrieve the name from the final ToolHandle, it might be prefixed (by the parent tool name) when the handle is copied
-      std::string name = handles[handles.size()-1].name();
-      legsPerTool.emplace(name, kv[0]);
-      if(kv[1]!="") tagsPerTool.emplace(name, kv[1]);
+    if (systvar.second=="EL_SF_Trigger_UP" || systvar.second=="EL_SF_Trigger_DOWN") {
+      for(auto& ettool : m_electronSFToolsHandles){
+	if(ettool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
+	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
+      }
     }
-  for(int i=0;i<2;++i) // one muon tool instance per year
-    {
-      std::string year = std::to_string(i?2016:2015);
-      auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
-      ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
-      t->setName("MuonTrigEff-"+std::to_string(++nTools));
-      t->setProperty("CalibrationRelease", "170209_Moriond").ignore();
-      t->setProperty("MuonQuality", "Loose").ignore();
-      t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
-      t->setProperty("Year", year).ignore();     
-      top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
-      m_muonToolsHandles.push_back(t->getHandle());
+    else if (systvar.second=="EL_EFF_Trigger_UP" || systvar.second=="EL_EFF_Trigger_DOWN") {
+      for(auto& ettool : m_electronEffToolsHandles){
+	if(ettool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
+	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
+      }
     }
-  
-  // Configure the trigger SF tool.
-  m_trigGlobEffCorr = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
-  m_trigGlobEffCorr->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
-  m_trigGlobEffCorr->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
-  m_trigGlobEffCorr->setProperty("MuonTools",m_muonToolsHandles).ignore();
-  m_trigGlobEffCorr->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
-  m_trigGlobEffCorr->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
-  // m_trigGlobEffCorr->setProperty("OutputLevel", MSG::DEBUG).ignore();
-  m_trigGlobEffCorr->setProperty("TriggerCombination2015", "e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose || 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
-  m_trigGlobEffCorr->setProperty("TriggerCombination2016", "e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0 || 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
-  m_trigGlobEffCorr->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
-  top::check( m_trigGlobEffCorr->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
-  ////////////////////////// end Trigger SF tool
 
+    for(int i=0;i<2;++i) // one muon tool instance per year
+      {
+	std::string year = std::to_string(i?2016:2015);
+	auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
+	ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
+	t->setName("MuonTrigEff-"+std::to_string(++nTools)+systvar.second);
+	t->setProperty("CalibrationRelease", "170209_Moriond").ignore();
+	t->setProperty("MuonQuality", "Loose").ignore();
+	t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
+	t->setProperty("Year", year).ignore();     
+	top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
+	m_muonToolsHandles.push_back(t->getHandle());
+      }
+
+    if (systvar.second=="MU_SF_Trigger_STAT_UP" || systvar.second=="MU_SF_Trigger_STAT_DOWN") {
+      for(auto& mutool : m_muonToolsHandles){
+	if(mutool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
+	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
+      }
+    }
+    
+    // Configure the trigger SF tool: Nominal
+    std::string trigglobname = "TrigGlobalEfficiencyCorrectionTool"+systvar.second;
+    //m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
+    m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool(trigglobname);
+    m_trigGlobEffCorr[nTrig]->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("MuonTools",m_muonToolsHandles).ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", "e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose || 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", "e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0 || 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
+    top::check( m_trigGlobEffCorr[nTrig]->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
+    ////////////////////////// end Trigger SF tool
+  }
+ 
+
+  ////////////////////////////
   //Isolation tools for leptons
+  ////////////////////////////
   //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
   //    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
   top::check( iso_1.initialize(),"IsolationTool fails to initialize");
@@ -509,6 +564,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     systematicTree->makeOutputVariable(m_pu_hash, "pileupHash");
     systematicTree->makeOutputVariable(m_pvNumber, "m_vxp_n");
     systematicTree->makeOutputVariable(m_puNumber, "m_vxpu_n");
+    
+    // Add extra variables for pileup studies
+    systematicTree->makeOutputVariable(m_vertex_density, "m_vx_density");
+    systematicTree->makeOutputVariable(m_beam_posz,      "m_beam_posz");
+    systematicTree->makeOutputVariable(m_beam_sigmaz,    "m_beam_sigmaz");
 
     // Truth Matrix element photon
     systematicTree->makeOutputVariable(m_hasMEphoton, "m_hasMEphoton");
@@ -655,6 +715,9 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  return (int) is_matched;
 	}, *systematicTree, branch_name.c_str() );
     }
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	return getNInnerPix(ele);
+      }, *systematicTree, "electron_nInnerPix");
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
@@ -1627,10 +1690,20 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
   }
 
+  // Add beam positions and vertex density
+  m_beam_posz   = m_eventInfo->beamPosZ();
+  m_beam_sigmaz = m_eventInfo->beamPosSigmaZ();
+  
+  if(m_pv) {
+    // Use uncorrected for now, can recompute later with saved beam parameters
+    float mu          = m_eventInfo->averageInteractionsPerCrossing();   
+    float primaryVtxZ = m_pv->z();
+    m_vertex_density  = mu * TMath::Gaus(primaryVtxZ, m_beam_posz, m_beam_sigmaz, true);
+  }
+
   if(!m_doSystematics){
     vec_vtx_wrappers[event.m_ttreeIndex].push_all(*m_vertices);
   }
-
 
   m_variables->Clear();
   Decorate(event);
