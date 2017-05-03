@@ -1137,6 +1137,14 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	return tau.auxdata<int>("IsHadronic");
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
 
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<float>("MV2c10");
+      }, *systematicTree, std::string(tauprefix+"MV2c10").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<int>("tagWeightBin");
+      }, *systematicTree, std::string(tauprefix+"tagWeightBin").c_str());
+
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       //substructure
@@ -1707,11 +1715,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   m_variables->Clear();
   Decorate(event);
+  DecorateTaus(event);
   auto goodEl = SelectElectrons(event);
   auto goodMu = SelectMuons(event);
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
 
+  
   //Fill nTruthJets
   m_variables->nTruthJets =  this->getNTruthJets(goodJet);
 

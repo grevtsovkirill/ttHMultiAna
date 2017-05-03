@@ -115,6 +115,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   int getNInnerPix(const xAOD::Electron& el);
   int getNInnerPix(const xAOD::Muon& mu);
 
+  void DecorateTaus(const top::Event& event);
+
  private:
   ///The file where everything goes
   TFile* m_outputFile;
