@@ -1149,6 +1149,10 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	return tau.auxdata<char>("passJVT");
       }, *systematicTree, std::string(tauprefix+"passJVT").c_str());
 
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<char>("fromPV");
+      }, *systematicTree, std::string(tauprefix+"fromPV").c_str());
+
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       //substructure
