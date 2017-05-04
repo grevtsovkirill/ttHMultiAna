@@ -257,12 +257,15 @@ ttHMultileptonLooseEventSaver::DecorateTaus(const top::Event& event) {
     if( match.first < 0.3 ) {
       const xAOD::Jet& jet = *match.second;
       
-      auto btagging = jet.btagging(); double rv(0);
+      auto btagging = jet.btagging(); double rv(-2);
       if(btagging) btagging->MVx_discriminant("MV2c10", rv);
       tau->auxdecor<float>("MV2c10") = rv;
 
-      tau->auxdecor<int>("MV2c10Bin") =
+      tau->auxdecor<int>("tagWeightBin") =
 	jet.isAvailable<int>("tagWeightBin") ? jet.auxdataConst<int>("tagWeightBin") : -2;
+
+      tau->auxdecor<char>("passJVT") =	
+	jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
     }
   }
 }
