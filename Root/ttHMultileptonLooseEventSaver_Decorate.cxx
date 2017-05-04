@@ -254,7 +254,7 @@ ttHMultileptonLooseEventSaver::DecorateTaus(const top::Event& event) {
 
   for( const xAOD::TauJet* tau : event.m_tauJets) {
     auto match = FindMinDR(tau, event.m_jets);
-    if( match.first < 0.3 ) {
+    if( match.second and match.first < 0.3 ) {
       const xAOD::Jet& jet = *match.second;
       
       auto btagging = jet.btagging(); double rv(-2);
