@@ -14,11 +14,7 @@ sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObj
 #new tau ele bdt
 rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-51
 
-#save sum of weights for all LHE3 variations
-rc checkout_pkg TopAnalysis
-patch -d TopAnalysis -p0 < ttHMultilepton/LHEweights.patch
-
-
+# rc build is shortcut for rc find_packages && rc compile
 rc build
 
 echo "Alright - done."
