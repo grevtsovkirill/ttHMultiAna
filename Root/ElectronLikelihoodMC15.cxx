@@ -2,14 +2,12 @@
 
 namespace ttHMultilepton {
 
-  ElectronLikelihoodMC15::ElectronLikelihoodMC15(const bool isPrimaryxAOD,
-						 const double ptcut,
+  ElectronLikelihoodMC15::ElectronLikelihoodMC15(const double ptcut,
 						 const bool vetoCrack,
 						 const std::string& operatingPoint,
 						 const std::string& operatingPointLoose,
-						 top::IsolationBase* isolation) :
-    top::ElectronLikelihoodMC15(isPrimaryxAOD,
-				ptcut,
+						 top::StandardIsolation* isolation) :
+    top::ElectronLikelihoodMC15(ptcut,
 				vetoCrack,
 				operatingPoint,
 				operatingPointLoose,

@@ -11,12 +11,11 @@ namespace ttHMultilepton {
   class ElectronLikelihoodMC15 : public top::ElectronLikelihoodMC15 {
 public:
 
-    ElectronLikelihoodMC15(const bool isPrimaryxAOD,
-			   const double ptcut,
+    ElectronLikelihoodMC15(const double ptcut,
 			   const bool vetoCrack,
 			   const std::string& operatingPoint,
 			   const std::string& operatingPointLoose,
-			   top::IsolationBase* isolation);
+			   top::StandardIsolation* isolation);
     
     bool passTTVACuts(const xAOD::Electron& el) const override;
 

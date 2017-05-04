@@ -3,7 +3,7 @@ echo "Setting up all the things"
 
 #lsetup knows in which order to do these
 
-lsetup "rcsetup Top,2.4.29" panda rucio pyami
+lsetup "rcsetup Top,2.4.30" panda rucio pyami
 #voms-proxy-init -voms atlas:/atlas/phys-higgs/Role=production -out ${HOME}/.globus/gridproxy.cert -valid 24:0
 #export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
@@ -12,7 +12,7 @@ rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
 #new tau ele bdt
-rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-49
+rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-51
 
 #save sum of weights for all LHE3 variations
 rc checkout_pkg TopAnalysis
