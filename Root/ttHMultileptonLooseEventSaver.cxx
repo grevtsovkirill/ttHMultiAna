@@ -1907,7 +1907,6 @@ void ttHMultileptonLooseEventSaver::finalize() {
       //fill Count_LHE
       sumWeightsReader.SetEntry(-1); // restart
       while(sumWeightsReader.Next()) {
-	std::cout<<totalEventsWeighted_lhe->size()<<std::endl;
 	for(unsigned int i=0; i<names_lhe->size(); ++i) {
 	  int ibin = i+1;
 	  count_histo_lhe_weights->GetXaxis()->SetBinLabel(ibin,names_lhe->at(i).c_str());
