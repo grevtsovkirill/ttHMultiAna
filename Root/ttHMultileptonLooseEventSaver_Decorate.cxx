@@ -5,6 +5,34 @@
 #include "ttHMultilepton/ReadBDTG.h"
 
 #include "TROOT.h"
+
+
+// looking for a match for T in a container of Us
+template<class ObjectT, class ContainerU> std::pair<double, const typename ContainerU::base_value_type* > FindMinDR(const ObjectT &obj, const ContainerU &cont) 
+{
+  typedef typename ContainerU::base_value_type ObjectU;
+  std::pair<double, const ObjectU* > match(0.0, nullptr );
+
+  for(const ObjectU* ptr: cont) {
+    const double dr = obj->p4().DeltaR(ptr->p4());
+      
+    if(match.second) {
+      if(dr < match.first) {
+	match.first  = dr;
+	match.second = ptr;
+      }
+    }
+    else {
+      match.first  = dr;
+      match.second = ptr;     
+    }
+  }
+    
+  return match;
+}
+
+
+
 void
 ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 
@@ -198,6 +226,11 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     if(m_tauSelectionEleOLR.accept(*tauItr)) passEleOLR = 1;
     tauItr->auxdecor<int>("passEleOLR") = passEleOLR;
 
+    //EleBDT
+    int passEleBDT(0);
+    if(m_tauSelectionEleBDT.accept(*tauItr)) passEleBDT = 1;
+    tauItr->auxdecor<int>("passEleBDT") = passEleBDT;
+    
     //truth jet flavour
     int truthJetFlavour(-1);
     if(tauItr->isAvailable<ElementLink<xAOD::JetContainer> >("truthJetLink")) {
@@ -214,3 +247,28 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
   
   
 }//end decorate
+
+
+void
+ttHMultileptonLooseEventSaver::DecorateTaus(const top::Event& event) {
+
+  for( const xAOD::TauJet* tau : event.m_tauJets) {
+    auto match = FindMinDR(tau, event.m_jets);
+    if( match.second and match.first < 0.3 ) {
+      const xAOD::Jet& jet = *match.second;
+      
+      auto btagging = jet.btagging(); double rv(-2);
+      if(btagging) btagging->MVx_discriminant("MV2c10", rv);
+      tau->auxdecor<float>("MV2c10") = rv;
+
+      tau->auxdecor<int>("tagWeightBin") =
+	jet.isAvailable<int>("tagWeightBin") ? jet.auxdataConst<int>("tagWeightBin") : -2;
+
+      tau->auxdecor<char>("passJVT") =	
+	jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
+
+      tau->auxdecor<char>("fromPV") =
+	(tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
+    }
+  }
+}

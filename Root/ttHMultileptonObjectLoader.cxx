@@ -49,7 +49,7 @@ top::TopObjectSelection* ttHMultileptonObjectLoader::init(std::shared_ptr<top::T
   }
 
   objectSelection -> muonSelection(new top::MuonMC15(topConfig->muonPtcut(), new top::StandardIsolation()));
-  objectSelection -> jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), topConfig->jetJVTcut())); // new jet vertex tagger cut
+  objectSelection -> jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut() ) ); // new jet vertex tagger cut
   
   objectSelection->tauSelection(new top::TauMC15());
   

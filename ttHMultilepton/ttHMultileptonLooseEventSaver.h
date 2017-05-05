@@ -115,6 +115,8 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   int getNInnerPix(const xAOD::Electron& el);
   int getNInnerPix(const xAOD::Muon& mu);
 
+  void DecorateTaus(const top::Event& event);
+
  private:
   ///The file where everything goes
   TFile* m_outputFile;
@@ -143,6 +145,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   IsolationSelectionTool                 iso_1;
   ttH::TruthSelector                     truthSelector;
   TauSelectionTool                       m_tauSelectionEleOLR;
+  TauSelectionTool                       m_tauSelectionEleBDT;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];

@@ -34,6 +34,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   muonSelection("MuonSelection"),
   iso_1( "iso_1" ),
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
+  m_tauSelectionEleBDT("TauSelectionEleBDT"),
   //m_electronEffToolsHandles("ElectronEffToolsHandles"),
   //m_electronSFToolsHandles("ElectronSFToolsHandles"),
   m_electronToolsFactory(0),
@@ -373,6 +374,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
   top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
 
+  top::check( m_tauSelectionEleBDT.setProperty("ConfigPath", "ttHMultilepton/EleBDT_tau_selection.conf" ), "TauSelectionEleBDT:Failed to set ConfigPath");
+  top::check( m_tauSelectionEleBDT.initialize(), "Failed to initialise TauSelectionTool for EleBDT" );
 
   //define triggers
   //Items and their PS
@@ -1126,9 +1129,29 @@ Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(
 	return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
 
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	return tau.auxdata<int>("passEleBDT");
+      }, *systematicTree, std::string(tauprefix+"passEleBDT").c_str());
+
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("IsHadronic");
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<float>("MV2c10");
+      }, *systematicTree, std::string(tauprefix+"MV2c10").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<int>("tagWeightBin");
+      }, *systematicTree, std::string(tauprefix+"tagWeightBin").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<char>("passJVT");
+      }, *systematicTree, std::string(tauprefix+"passJVT").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<char>("fromPV");
+      }, *systematicTree, std::string(tauprefix+"fromPV").c_str());
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
@@ -1700,11 +1723,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   m_variables->Clear();
   Decorate(event);
+  DecorateTaus(event);
   auto goodEl = SelectElectrons(event);
   auto goodMu = SelectMuons(event);
   auto goodJet = SelectJets(event);
   auto goodTau = SelectTaus(event);
 
+  
   //Fill nTruthJets
   m_variables->nTruthJets =  this->getNTruthJets(goodJet);
 
@@ -1870,6 +1895,31 @@ void ttHMultileptonLooseEventSaver::finalize() {
     TTreeReaderValue<Float_t> totalEventsWeighted(sumWeightsReader, "totalEventsWeighted");
     double totalEventsUnskimmed         = 0;
     double totalEventsWeightedUnskimmed = 0;
+
+    if(m_config->doMCGeneratorWeights()) {
+      TTreeReaderValue<std::vector<float> > totalEventsWeighted_lhe(sumWeightsReader,
+								    "totalEventsWeighted_mc_generator_weights");
+      TTreeReaderValue<std::vector<std::string> > names_lhe(sumWeightsReader,
+							    "names_mc_generator_weights");
+
+      //create Count_LHE
+      sumWeightsReader.Next(); //get first entry, so names_lhe is filled
+      m_outputFile->cd("loose");
+      TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", names_lhe->size(), -0.5, names_lhe->size() - 0.5);
+      m_outputFile->cd();
+
+      //fill Count_LHE
+      sumWeightsReader.SetEntry(-1); // restart
+      while(sumWeightsReader.Next()) {
+	for(unsigned int i=0; i<names_lhe->size(); ++i) {
+	  int ibin = i+1;
+	  count_histo_lhe_weights->GetXaxis()->SetBinLabel(ibin,names_lhe->at(i).c_str());
+	  count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
+	}
+      }
+      sumWeightsReader.SetEntry(-1); //restart again
+    }//end if generatorweights
+    
     while(sumWeightsReader.Next()) {
       totalEventsUnskimmed         += *totalEvents;
       totalEventsWeightedUnskimmed += *totalEventsWeighted;
@@ -1878,8 +1928,8 @@ void ttHMultileptonLooseEventSaver::finalize() {
     if(totalEventsUnskimmed != totalEventsSkimmed) {
       Count->SetBinContent(1,totalEventsUnskimmed);
       Count->SetBinContent(2,totalEventsWeightedUnskimmed);
-    }
-  }
+    }    
+  }//end if MC
 
 
   

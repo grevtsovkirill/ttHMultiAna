@@ -20,6 +20,8 @@ TruthMuonCollectionName None
 PDFInfo True
 IsAFII False
 
+MCGeneratorWeights True
+
 #ObjectSelectionName top::ObjectLoaderStandardCuts
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple

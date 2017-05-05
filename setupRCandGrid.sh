@@ -3,7 +3,7 @@ echo "Setting up all the things"
 
 #lsetup knows in which order to do these
 
-lsetup "rcsetup Top,2.4.27" panda rucio pyami
+lsetup "rcsetup Top,2.4.30" panda rucio pyami
 #voms-proxy-init -voms atlas:/atlas/phys-higgs/Role=production -out ${HOME}/.globus/gridproxy.cert -valid 24:0
 #export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
@@ -11,19 +11,10 @@ lsetup "rcsetup Top,2.4.27" panda rucio pyami
 rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
-# for AFII samples fix
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-34
-# fix for Tau problems
-sed -i '/top::check(tauSelectionTool->initialize(),/i             top::check( asg::setProperty(tauSelectionTool, "CreateControlPlots", true), "failed to set property" );' TopCPTools/Root/TopToolStore.cxx
+#new tau ele bdt
+rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-51
 
-#save sum of weights for all LHE3 variations
-rc checkout_pkg TopAnalysis
-patch -d TopAnalysis -p0 < ttHMultilepton/LHEweights.patch
-
-
-# for new diboson sherpa 2.1.1 samples
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-49
-
+# rc build is shortcut for rc find_packages && rc compile
 rc build
 
 echo "Alright - done."
