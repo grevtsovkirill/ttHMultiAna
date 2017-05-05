@@ -1533,6 +1533,14 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     410188,
     410189,
     410500,
+    410501,
+    410503,
+    410512,
+    410225,
+    410226,
+    410250,
+    410251,
+    410252,
   };
   //std::cout << "m_mcChannelNumber: " << m_mcChannelNumber << std::endl;
   if ( top::isSimulation(event) && ttHF_samples.count(m_mcChannelNumber) ){
