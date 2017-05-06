@@ -14,6 +14,9 @@ sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObj
 #new tau ele bdt
 rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-51
 
+#for latest April 25th b-tagging SFs recommendations
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-56
+
 # rc build is shortcut for rc find_packages && rc compile
 rc build
 
