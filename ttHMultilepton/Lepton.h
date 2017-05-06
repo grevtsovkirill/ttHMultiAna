@@ -168,6 +168,8 @@ namespace ttHMultilepton {
     float   EffTrigLoose[MAXSYST];
     float   EffTrigTight[MAXSYST];
 
+    int nInnerPix;
+
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 
     bool operator==(const Lepton &other) {

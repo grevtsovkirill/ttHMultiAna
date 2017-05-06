@@ -40,6 +40,8 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(best_Z_Mll, "best_Z_Mll");
   tree->makeOutputVariable(best_Z_other_MtLepMet, "best_Z_other_MtLepMet");
   tree->makeOutputVariable(best_Z_other_Mll, "best_Z_other_Mll");
+  tree->makeOutputVariable(minOSSFMll, "minOSSFMll");
+  tree->makeOutputVariable(minOSMll, "minOSMll");
   //tree->makeOutputVariable(Ptll01, "Ptll01");
   //tree->makeOutputVariable(DRll01, "DRll01");
   tree->makeOutputVariable(nJets_OR_T, "nJets_OR_T");
@@ -84,12 +86,44 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   //  tree->makeOutputVariable(lepSFTrigTight, "lepSFTrigTight");
 
   //nominal weights
-  tree->makeOutputVariable(lepSFTrigLoose[top::topSFSyst::nominal], "lepSFTrigLoose");
-  tree->makeOutputVariable(lepSFTrigTight[top::topSFSyst::nominal], "lepSFTrigTight");
+  tree->makeOutputVariable(lepSFTrigLoose[0], "lepSFTrigLoose");
+  tree->makeOutputVariable(lepSFTrigTight[0], "lepSFTrigTight");
+  tree->makeOutputVariable(lepSFTrigTightLoose[0], "lepSFTrigTightLoose");
+  tree->makeOutputVariable(lepSFTrigLooseTight[0], "lepSFTrigLooseTight");
+  tree->makeOutputVariable(lepEffTrigLoose[0], "lepEffTrigLoose");
+  tree->makeOutputVariable(lepEffTrigTight[0], "lepEffTrigTight");
+  tree->makeOutputVariable(lepEffTrigTightLoose[0], "lepEffTrigTightLoose");
+  tree->makeOutputVariable(lepEffTrigLooseTight[0], "lepEffTrigLooseTight");
+  tree->makeOutputVariable(lepDataEffTrigLoose[0], "lepDataEffTrigLoose");
+  tree->makeOutputVariable(lepDataEffTrigTight[0], "lepDataEffTrigTight");
+  tree->makeOutputVariable(lepDataEffTrigTightLoose[0], "lepDataEffTrigTightLoose");
+  tree->makeOutputVariable(lepDataEffTrigLooseTight[0], "lepDataEffTrigLooseTight");
   tree->makeOutputVariable(lepSFObjLoose [top::topSFSyst::nominal], "lepSFObjLoose");
   tree->makeOutputVariable(lepSFObjTight [top::topSFSyst::nominal], "lepSFObjTight");
   tree->makeOutputVariable(tauSFTight    [top::topSFSyst::nominal], "tauSFTight");
   tree->makeOutputVariable(tauSFLoose    [top::topSFSyst::nominal], "tauSFLoose");
+
+  //additional loop for trig SFs uncertainties with multiTrigger tool
+  if(doSFSystematics) {
+    int nTrig = -1;
+    for (const auto systvar : ntupler->m_lep_trigger_sf_names) {
+      ++nTrig;
+      if( systvar.second == "nominal" ) continue; //nominal is done outside loop
+      std::string thisname = "_" + systvar.second;
+      tree->makeOutputVariable(lepSFTrigLoose[nTrig], "lepSFTrigLoose" + thisname);
+      tree->makeOutputVariable(lepSFTrigTight[nTrig], "lepSFTrigTight" + thisname);
+      tree->makeOutputVariable(lepSFTrigTightLoose[nTrig], "lepSFTrigTightLoose" + thisname);
+      tree->makeOutputVariable(lepSFTrigLooseTight[nTrig], "lepSFTrigLooseTight" + thisname);
+      tree->makeOutputVariable(lepEffTrigLoose[nTrig], "lepEffTrigLoose" + thisname);
+      tree->makeOutputVariable(lepEffTrigTight[nTrig], "lepEffTrigTight" + thisname);
+      tree->makeOutputVariable(lepEffTrigTightLoose[nTrig], "lepEffTrigTightLoose" + thisname);
+      tree->makeOutputVariable(lepEffTrigLooseTight[nTrig], "lepEffTrigLooseTight" + thisname);
+      tree->makeOutputVariable(lepDataEffTrigLoose[nTrig], "lepDataEffTrigLoose" + thisname);
+      tree->makeOutputVariable(lepDataEffTrigTight[nTrig], "lepDataEffTrigTight" + thisname);
+      tree->makeOutputVariable(lepDataEffTrigTightLoose[nTrig], "lepDataEffTrigTightLoose" + thisname);
+      tree->makeOutputVariable(lepDataEffTrigLooseTight[nTrig], "lepDataEffTrigLooseTight" + thisname);
+    }
+  }
 
   if(doSFSystematics) {
     for (const auto systvar : ntupler->m_lep_sf_names) {
@@ -112,10 +146,10 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       } else {
 	doobj = true;
       }
-      if (dotrig) {
-	tree->makeOutputVariable(lepSFTrigLoose[systvar.first], "lepSFTrigLoose" + thisname);
-	tree->makeOutputVariable(lepSFTrigTight[systvar.first], "lepSFTrigTight" + thisname);
-      }
+      // if (dotrig && onelep_type>0) { //done above
+      // 	tree->makeOutputVariable(lepSFTrigLoose[systvar.first], "lepSFTrigLoose" + thisname);
+      // 	tree->makeOutputVariable(lepSFTrigTight[systvar.first], "lepSFTrigTight" + thisname);
+      // }
       if (doobj) {
 	tree->makeOutputVariable(lepSFObjLoose[systvar.first], "lepSFObjLoose" + thisname);
 	tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);

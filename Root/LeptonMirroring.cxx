@@ -113,5 +113,5 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &SFTTVA[0],      "lep_SFTTVA_", index);
   CreateBranch(tree, &SFObjLoose[0],  "lep_SFObjLoose_", index);
   CreateBranch(tree, &SFObjTight[0],  "lep_SFObjTight_", index);
-
+  CreateBranch(tree, &nInnerPix, "lep_nInnerPix_", index);
 }
