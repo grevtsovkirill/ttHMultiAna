@@ -64,7 +64,7 @@ MuonIsolationLoose FixedCutTightTrackOnly
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-TauJetConfigFile ttHMultilepton/tight_tau_selection.conf
+TauJetConfigFile ttHMultilepton/medium_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
 ApplyTauMVATES True
 

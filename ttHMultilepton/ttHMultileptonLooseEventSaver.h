@@ -380,11 +380,17 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
       { top::topSFSyst::nominal, "nominal" },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN, "TAU_SF_ELEOLR_TOTAL_DOWN"},
-      { top::topSFSyst::TAU_SF_JETID_TOTAL_UP,	  "TAU_SF_JETID_TOTAL_UP"   },
+      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_UP,   "TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_UP"  },
+      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_DOWN, "TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_DOWN"},
+      { top::topSFSyst::TAU_SF_JETID_TOTAL_UP,    "TAU_SF_JETID_TOTAL_UP"   },
       { top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN,  "TAU_SF_JETID_TOTAL_DOWN" },
-      { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,	  "TAU_SF_RECO_TOTAL_UP"    },
+      { top::topSFSyst::TAU_SF_JETID_HIGHPT_UP,   "TAU_SF_JETID_HIGHPT_UP"  },
+      { top::topSFSyst::TAU_SF_JETID_HIGHPT_DOWN, "TAU_SF_JETID_HIGHPT_DOWN"},
+      { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,     "TAU_SF_RECO_TOTAL_UP"    },
       { top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN,   "TAU_SF_RECO_TOTAL_DOWN"  },
-	};
+      { top::topSFSyst::TAU_SF_RECO_HIGHPT_UP,    "TAU_SF_RECO_HIGHPT_UP"   },
+      { top::topSFSyst::TAU_SF_RECO_HIGHPT_DOWN,  "TAU_SF_RECO_HIGHPT_DOWN" },
+        };
 
   TH1F * h_decayMode;
 

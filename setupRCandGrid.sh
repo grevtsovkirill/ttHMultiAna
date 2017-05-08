@@ -17,6 +17,9 @@ rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysis
 #for latest April 25th b-tagging SFs recommendations
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-56
 
+rc checkout_pkg TopCorrections
+patch -d TopCorrections -p0 < ttHMultilepton/newTauEffNPs.patch
+
 # rc build is shortcut for rc find_packages && rc compile
 rc build
 
