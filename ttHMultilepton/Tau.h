@@ -20,6 +20,8 @@ namespace ttHMultilepton {
     int JetBDTSigTight;
     int numTrack;
     int isHadronic;
+    int tagWeightBin;
+    char fromPV;
     float SFTight[MAXSYST];
     float SFLoose[MAXSYST];
     
