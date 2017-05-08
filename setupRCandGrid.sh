@@ -17,6 +17,10 @@ rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysis
 #for latest April 25th b-tagging SFs recommendations
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-56
 
+#for PromptLeptonIso SFs
+rc checkout_pkg atlasoff/PhysicsAnalysis/MuonID/MuonIDAnalysis/MuonEfficiencyCorrections/tags/MuonEfficiencyCorrections-04-00-13
+patch -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
+
 # rc build is shortcut for rc find_packages && rc compile
 rc build
 
