@@ -8,7 +8,7 @@ lsetup "rcsetup Top,2.4.30" panda rucio pyami
 #export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
 # for bad electrons in HIGG8D1 with no matched clusters (e.g. run 302872)
-rc checkout_pkg $(rc version | grep TopObjectSelectionTools)
+rc checkout_pkg TopObjectSelectionTools
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
 #new tau ele bdt
@@ -19,7 +19,7 @@ rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools
 
 
 #for PromptLeptonIso SFs
-rc checkout_pkg atlasoff/PhysicsAnalysis/MuonID/MuonIDAnalysis/MuonEfficiencyCorrections/tags/MuonEfficiencyCorrections-04-00-13
+rc checkout_pkg MuonEfficiencyCorrections
 patch -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
 
 #for EleBDT SFs
