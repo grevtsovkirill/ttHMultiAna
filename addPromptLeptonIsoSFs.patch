@@ -11,12 +11,14 @@
                  m_effDec(0),
 --- TopCPTools/Root/TopEgammaCPTools.cxx    (revision 804391)
 +++ TopCPTools/Root/TopEgammaCPTools.cxx    (working copy)
-@@ -419,6 +419,8 @@
+@@ -419,6 +419,10 @@
    } else if (type == "isolation") {
      file_path = "isolation/efficiencySF.Isolation."
        + ID + "_d0z0_v11" + new_iso + ".root";
-+    if (isolation == "PromptLepton") // should be only ture in case of using ttH-ML private root file
-+       return PathResolverFindCalibFile("ttHMultilepton/efficiencySF.Isolation.TightLLH_d0z0_v11_isolPromptLepton.root"); // will be replaced bt PromptLepton SFs
++    if (isolation == "PromptLepton") // should be only true in case of using ttH-ML private root file
++      return PathResolverFindCalibFile("ttHMultilepton/efficiencySF.Isolation.TightLLH_d0z0_v11_isolPromptLepton.root");
++    else if (isolation == "PromptLeptonCFT")
++      return PathResolverFindCalibFile("ttHMultilepton/efficiencySF.Isolation.TightLLH_d0z0_v11_isolPromptLeptonCFT.root");
    } else if (type == "triggerSF") {
      file_path = "trigger/efficiencySF." + ridiculous_trigger_string
        + "." + ID + "_d0z0_v11" + new_iso + ".root";
