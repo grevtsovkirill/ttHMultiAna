@@ -19,6 +19,7 @@ rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools
 
 rc checkout_pkg TopCorrections
 patch -d TopCorrections -p0 < ttHMultilepton/newTauEffNPs.patch
+patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
 
 # rc build is shortcut for rc find_packages && rc compile
 rc build
