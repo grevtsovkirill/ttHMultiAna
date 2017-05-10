@@ -1,4 +1,9 @@
+2017-05-06 Robert Wolff <robert.wolff@cern.ch>
+	* pseudo-continuous b-tagging calibration SFs
+
 2017-04-03 Peter Onyisi <ponyisi@cern.ch>
+	* Add innerPix variable for leptons (though value is limited as long as we
+	  have BL hit requirement for electrons)
 	* Add min OS Mll variables for 4l
 
 2017-02-23 Robert Wolff <robert.wolff@cern.ch>

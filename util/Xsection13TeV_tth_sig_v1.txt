@@ -7,6 +7,8 @@
  341270          0.22276               1         1.0    --     125   2     aMC@NLO+Herwig++                         ttH->ljets+H  Full  
  341177          0.05343               1         1.0    --     125   2     aMC@NLO+Herwig++                            ttH->ll+H  Full  
 
+ 342561      0.000060137               1         1.0    --     125   2     aMC@NLO+Herwig++                              ttH->4l  Full  
+
  342170           0.0536          0.0632         1.0    --     125   2     aMC@NLO+Herwig++                      ttH->ll+Htautau  Full  
  342171           0.2234          0.0632         1.0    --     125   2     aMC@NLO+Herwig++                   ttH->ljets+Htautau  Full  
  342172           0.2315          0.0632         1.0    --     125   2     aMC@NLO+Herwig++                  ttH->allhad+Htautau  Full  

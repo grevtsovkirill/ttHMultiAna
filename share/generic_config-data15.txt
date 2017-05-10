@@ -51,7 +51,7 @@ ApplyTauMVATES True
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
+BTaggingWP FixedCutBEff_60 FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
 
 #Other cuts, overlaps, bkgs..
 FakesControlRegionDoLooseMC False

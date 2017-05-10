@@ -21,6 +21,8 @@ TruthMuonCollectionName None
 PDFInfo True
 IsAFII False
 
+MCGeneratorWeights True
+
 #ObjectSelectionName top::ObjectLoaderStandardCuts
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
@@ -62,7 +64,7 @@ ApplyTauMVATES True
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
+BTaggingWP FixedCutBEff_60 FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
 
 #Truth jet cuts
 TruthJetPt 25000.

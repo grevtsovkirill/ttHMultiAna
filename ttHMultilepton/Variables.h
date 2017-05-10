@@ -64,6 +64,16 @@ namespace ttHMultilepton {
     float lepSFIDTight;
     float lepSFTrigLoose[MAXSYST];
     float lepSFTrigTight[MAXSYST];
+    float lepSFTrigTightLoose[MAXSYST];
+    float lepSFTrigLooseTight[MAXSYST];
+    float lepEffTrigLoose[MAXSYST];
+    float lepEffTrigTight[MAXSYST];
+    float lepEffTrigTightLoose[MAXSYST];
+    float lepEffTrigLooseTight[MAXSYST];
+    float lepDataEffTrigLoose[MAXSYST];
+    float lepDataEffTrigTight[MAXSYST];
+    float lepDataEffTrigTightLoose[MAXSYST];
+    float lepDataEffTrigLooseTight[MAXSYST];
     float lepSFIsoLoose;
     float lepSFIsoTight;
     float lepSFReco;

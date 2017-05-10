@@ -15,8 +15,8 @@
  410012           25.778          1.0193         1.0    --    -999   1               Powheg                   tchan_lept_antitop  Full  
  410013           34.009           1.054         1.0    --    -999   1               Powheg                     Wt_inclusive_top  Full  
  410014           33.989           1.054         1.0    --    -999   1               Powheg                 Wt_inclusive_antitop  Full  
- 410015           3.5835           1.054         1.0    --    -999   2               Powheg                      Wt_dilepton_top  Full  
- 410016           3.5814           1.054         1.0    --    -999   2               Powheg                  Wt_dilepton_antitop  Full  
+ 410015           3.5835           1.054         1.0    --    -999   1               Powheg                      Wt_dilepton_top  Full  
+ 410016           3.5814           1.054         1.0    --    -999   1               Powheg                  Wt_dilepton_antitop  Full  
  410025           2.0517           1.005         1.0    --    -999   1               Powheg          SingleTopSchan_noAllHad_top  Full  
  410026           1.2615           1.022         1.0    --    -999   1               Powheg      SingleTopSchan_noAllHad_antitop  Full  
  410062           32.384           1.054         1.0    --    -999   2               Powheg                  Wt_DS_inclusive_top  Full  
@@ -30,8 +30,8 @@
  410189           76.333          1.1484         1.0    --    -999   2               Sherpa              ttbar_dilepton_MEPS_NLO  Full  
  410500          397.243         1.13896         1.0    --    -999   2               Powheg           ttbar_hdamp172p5_nonallhad  Full  
  410501           397.11           1.139         1.0    --    -999   1              Pythia8          ttbar_hdamp258p75_nonallhad  Full  
- 410502           249.81          1.5216         1.0    --    -999   1              Pythia8             ttbar_hdamp258p75_allhad  Full  
- 410503            76.93          1.1392         1.0    --    -999   2              Pythia8                ttbar_hdamp258p75_dil  Full  
+ 410502           249.81          1.5216         1.0    --    -999   2              Pythia8             ttbar_hdamp258p75_allhad  Full  
+ 410503            76.93          1.1392         1.0    --    -999   1              Pythia8                ttbar_hdamp258p75_dil  Full  
  410504             22.9          1.1391         1.0    --    -999   2              Pythia8     ttbar_hdamp258p75_nonallhad_bfil  Fast  
  410505              4.3          1.1392         1.0    --    -999   2              Pythia8           ttbar_hdamp258p75_dil_bfil  Fast  
  410525          397.105          1.1391         1.0    --    -999   2               Herwig             tt_hdamp258p75_nonallhad  Fast  
@@ -46,7 +46,7 @@
  361066           2.5656            0.91         1.0    --    -999   1               Sherpa                           lllvSFPlus  Full  
  361067           5.0169            0.91         1.0    --    -999   1               Sherpa                           lllvOFPlus  Full  
  361068           14.022            0.91         1.0    --    -999   1               Sherpa                                 llvv  Full  
- 361069          0.02575            0.91         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW4  Full  
+ 361069          0.02575            0.91         1.0    --    -999   2               Sherpa                        llvvjj_ss_EW4  Full  
  361070         0.043375            0.91         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW6  Full  
  361071         0.042017            0.91         1.0    --    -999   1               Sherpa                           lllvjj_EW6  Full  
  361072         0.031496            0.91         1.0    --    -999   1               Sherpa                           lllljj_EW6  Full  
@@ -65,8 +65,8 @@
  361085           7.4151            0.91         1.0    --    -999   2               Sherpa                             WZ->qqvv  Full  
  361086           2.3647            0.91         1.0    --    -999   2               Sherpa                             ZZ->qqll  Full  
  361087           4.6336            0.91         1.0    --    -999   2               Sherpa                             ZZ->qqvv  Full  
- 361088           3.4001            0.91         1.0    --    -999   2               Sherpa                                 lvvv  Full  
- 361089           0.6003            0.91         1.0    --    -999   2               Sherpa                                 vvvv  Full  
+ 361088           3.4001            0.91         1.0    --    -999   1               Sherpa                                 lvvv  Full  
+ 361089           0.6003            0.91         1.0    --    -999   1               Sherpa                                 vvvv  Full  
  361090           1.5948            0.91         1.0    --    -999   2               Sherpa                          llll_M4l100  Full  
  361091           24.885            0.91         1.0    --    -999   1               Sherpa              WplvWmqq_SHv21_improved  Full  
  361092           24.857            0.91         1.0    --    -999   1               Sherpa              WpqqWmlv_SHv21_improved  Full  
@@ -109,9 +109,9 @@
  410114         0.017361            1.51         1.0    --    -999   2     MadGraph+Pythia8                           ttmumu_Np1  Full  
  410115        0.0098874            1.51         1.0    --    -999   2     MadGraph+Pythia8                         tttautau_Np0  Full  
  410116          0.01779            1.51         1.0    --    -999   2     MadGraph+Pythia8                         tttautau_Np1  Full  
- 410142          0.11309            1.09         1.0    --    -999   2               Sherpa                                 ttll   AF2  
- 410143           0.6881             1.1         1.0    --    -999   2               Sherpa                              ttZnnqq   AF2  
- 410144           0.6008            1.04         1.0    --    -999   2               Sherpa                                  ttW   AF2  
+ 410142          0.11309            1.09         1.0    --    -999   1               Sherpa                                 ttll   AF2  
+ 410143           0.6881             1.1         1.0    --    -999   1               Sherpa                              ttZnnqq   AF2  
+ 410144           0.6008            1.04         1.0    --    -999   1               Sherpa                                  ttW   AF2  
 
 # NLO+ttV
  410155           0.5483             1.1         1.0    --    -999   1      aMc@Nlo+Pythia8                                  ttW  Full  
@@ -142,7 +142,7 @@
  342005         0.029546               1         1.0    --    -999   2      Madgraph+Herwig                tWH125_bbbar_yt_plus2  Full  
   
 # tZ
- 410049        0.0090636               1         1.0    --    -999   2      Madgraph+Pythia               tZ_4fl_tchan_trilepton  Full  
+ 410049        0.0090636               1         1.0    --    -999   1      Madgraph+Pythia               tZ_4fl_tchan_trilepton  Full  
  410050          0.24013               1         1.0    --    -999   1      Madgraph+Pythia                tZ_4fl_tchan_noAllHad  Full  
 
 #VH
@@ -547,34 +547,34 @@
  302459       8.8774e-06             1.0         1.0    --    -999   2              Pythia8                              DCH1300  AFII  
 
 #ll+gamma
- 301535           52.706               1         1.0    --    -999   2               Sherpa                       eegammaPt10_35  Full  
- 301536           52.708               1         1.0    --    -999   2               Sherpa                     mumugammaPt10_35  Full  
- 301887           200.75               1         1.0    --    -999   2               Sherpa                      enugammaPt10_35  Full  
- 301888           200.91               1         1.0    --    -999   2               Sherpa                     munugammaPt10_35  Full  
- 301889           200.78               1         1.0    --    -999   2               Sherpa                    taunugammaPt10_35  Full  
- 301890           15.348               1         1.0    --    -999   2               Sherpa                      enugammaPt35_70  Full  
- 301891           1.5282               1         1.0    --    -999   2               Sherpa                     enugammaPt70_140  Full  
- 301892          0.24155               1         1.0    --    -999   2               Sherpa                        enugammaPt140  Full  
- 301893           15.272               1         1.0    --    -999   2               Sherpa                     munugammaPt35_70  Full  
- 301894           1.5235               1         1.0    --    -999   2               Sherpa                    munugammaPt70_140  Full  
- 301895          0.24183               1         1.0    --    -999   2               Sherpa                       munugammaPt140  Full  
- 301896           15.297               1         1.0    --    -999   2               Sherpa                    taunugammaPt35_70  Full  
- 301897            1.529               1         1.0    --    -999   2               Sherpa                   taunugammaPt70_140  Full  
- 301898           0.2426               1         1.0    --    -999   2               Sherpa                      taunugammaPt140  Full  
- 301899            5.242               1         1.0    --    -999   2               Sherpa                       eegammaPt35_70  Full  
- 301900          0.38455               1         1.0    --    -999   2               Sherpa                      eegammaPt70_140  Full  
- 301901         0.047209               1         1.0    --    -999   2               Sherpa                         eegammaPt140  Full  
- 301902           5.2455               1         1.0    --    -999   2               Sherpa                     mumugammaPt35_70  Full  
- 301903          0.38548               1         1.0    --    -999   2               Sherpa                    mumugammaPt70_140  Full  
- 301904          0.04724               1         1.0    --    -999   2               Sherpa                       mumugammaPt140  Full  
- 301905            5.249               1         1.0    --    -999   2               Sherpa                   tautaugammaPt35_70  Full  
- 301906          0.38482               1         1.0    --    -999   2               Sherpa                  tautaugammaPt70_140  Full  
- 301907         0.047025               1         1.0    --    -999   2               Sherpa                     tautaugammaPt140  Full  
- 301908           4.0365               1         1.0    --    -999   2               Sherpa                     nunugammaPt35_70  Full  
- 301909          0.97151               1         1.0    --    -999   2               Sherpa                    nunugammaPt70_140  Full  
- 301910          0.17115               1         1.0    --    -999   2               Sherpa                       nunugammaPt140  Full  
- 343243           52.691               1         1.0    --    -999   2               Sherpa                   tautaugammaPt10_35  Full  
- 304776           52.708               1         1.0    --    -999   2               Sherpa                   tautaugammaPt10_35  Full  
+ 301535           52.706               1         1.0    --    -999   1               Sherpa                       eegammaPt10_35  Full  
+ 301536           52.708               1         1.0    --    -999   1               Sherpa                     mumugammaPt10_35  Full  
+ 301887           200.75               1         1.0    --    -999   1               Sherpa                      enugammaPt10_35  Full  
+ 301888           200.91               1         1.0    --    -999   1               Sherpa                     munugammaPt10_35  Full  
+ 301889           200.78               1         1.0    --    -999   1               Sherpa                    taunugammaPt10_35  Full  
+ 301890           15.348               1         1.0    --    -999   1               Sherpa                      enugammaPt35_70  Full  
+ 301891           1.5282               1         1.0    --    -999   1               Sherpa                     enugammaPt70_140  Full  
+ 301892          0.24155               1         1.0    --    -999   1               Sherpa                        enugammaPt140  Full  
+ 301893           15.272               1         1.0    --    -999   1               Sherpa                     munugammaPt35_70  Full  
+ 301894           1.5235               1         1.0    --    -999   1               Sherpa                    munugammaPt70_140  Full  
+ 301895          0.24183               1         1.0    --    -999   1               Sherpa                       munugammaPt140  Full  
+ 301896           15.297               1         1.0    --    -999   1               Sherpa                    taunugammaPt35_70  Full  
+ 301897            1.529               1         1.0    --    -999   1               Sherpa                   taunugammaPt70_140  Full  
+ 301898           0.2426               1         1.0    --    -999   1               Sherpa                      taunugammaPt140  Full  
+ 301899            5.242               1         1.0    --    -999   1               Sherpa                       eegammaPt35_70  Full  
+ 301900          0.38455               1         1.0    --    -999   1               Sherpa                      eegammaPt70_140  Full  
+ 301901         0.047209               1         1.0    --    -999   1               Sherpa                         eegammaPt140  Full  
+ 301902           5.2455               1         1.0    --    -999   1               Sherpa                     mumugammaPt35_70  Full  
+ 301903          0.38548               1         1.0    --    -999   1               Sherpa                    mumugammaPt70_140  Full  
+ 301904          0.04724               1         1.0    --    -999   1               Sherpa                       mumugammaPt140  Full  
+ 301905            5.249               1         1.0    --    -999   1               Sherpa                   tautaugammaPt35_70  Full  
+ 301906          0.38482               1         1.0    --    -999   1               Sherpa                  tautaugammaPt70_140  Full  
+ 301907         0.047025               1         1.0    --    -999   1               Sherpa                     tautaugammaPt140  Full  
+ 301908           4.0365               1         1.0    --    -999   1               Sherpa                     nunugammaPt35_70  Full  
+ 301909          0.97151               1         1.0    --    -999   1               Sherpa                    nunugammaPt70_140  Full  
+ 301910          0.17115               1         1.0    --    -999   1               Sherpa                       nunugammaPt140  Full  
+ 343243           52.691               1         1.0    --    -999   1               Sherpa                   tautaugammaPt10_35  Full  
+ 304776           52.708               1         1.0    --    -999   1               Sherpa                   tautaugammaPt10_35  Full  
 
 #3 tops SM
  304014        0.0016398               1         1.0    --    -999   1              pythia8                              3top_SM  Fast  

@@ -7,6 +7,7 @@
 #include "ttHMultilepton/DuplicateSelector.h"
 #include "ttHMultilepton/NLeptonSelector.h"
 #include "ttHMultilepton/NLeptonPlusTauSelector.h"
+#include "ttHMultilepton/RemoveOSDilepNoTauSelector.h"
 
 /*** This is where the magic happens.  When top-xaod comes across a cut in the configuration file it tries to load it.
  * So if it comes across the word "EVEN" it'll make and return a new EvenNumberSelector object (which
@@ -38,6 +39,8 @@ top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& name, 
     return new NLeptonPlusTauSelector(param);
   else if (line.find("NLEPTON") == 0)
     return new NLeptonSelector(param);
+  else if (line.find("REMOVEOSDILEPNOTAU") == 0)
+    return new RemoveOSDilepNoTauSelector();
   //else if (line.find("OTHER_TOOL") == 0)
   //  return new OtherToolThatYouInvented();
   

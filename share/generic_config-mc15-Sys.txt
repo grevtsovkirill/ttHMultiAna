@@ -20,6 +20,8 @@ TruthMuonCollectionName None
 PDFInfo True
 IsAFII False
 
+MCGeneratorWeights True
+
 #ObjectSelectionName top::ObjectLoaderStandardCuts
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 #OutputFormat top::EventSaverFlatNtuple
@@ -62,14 +64,14 @@ MuonIsolationLoose FixedCutTightTrackOnly
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-TauJetConfigFile ttHMultilepton/tight_tau_selection.conf
+TauJetConfigFile ttHMultilepton/medium_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
 ApplyTauMVATES True
 
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
+BTaggingWP FixedCutBEff_60 FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
 
 #Truth jet cuts
 TruthJetPt 25000.
@@ -92,9 +94,8 @@ INITIAL
 COUNTHISTO
 PRIVTX
 NLEPTONPLUSTAU 10000 >= 2
+REMOVEOSDILEPNOTAU
 JETCLEAN LooseBad
-#TRIGDEC HLT_mu26_imedium
-#TRIGMATCH HLT_mu26_imedium
 TTHMULTILEP
 DUPLICATEVETO
 SAVE
