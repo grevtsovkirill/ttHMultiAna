@@ -836,7 +836,7 @@ CopyMuon(xAOD::Muon& mu, ttHMultilepton::Lepton& lep) {
   static SG::AuxElement::Accessor<float> mujet_mv2c10("MV2c10_weight");
   lep.mujet_mv2c10 = (mujet_mv2c10.isAvailable(mu)) ? mujet_mv2c10(mu): -99;
 
-  static SG::AuxElement::Accessor<float> mujet_deltaR("jet_dr");
+  static SG::AuxElement::Accessor<float> mujet_deltaR("dRJet"); //changed for PromptLeptonIso calibration
   lep.mujet_deltaR = (mujet_deltaR.isAvailable(mu)) ? mujet_deltaR(mu): -99;
 
   static SG::AuxElement::Accessor<float> mujet_ptRel("jet_ptRel");
