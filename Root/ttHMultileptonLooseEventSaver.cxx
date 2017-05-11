@@ -2052,17 +2052,10 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     doEventSFs_Helper(0, true);
     doEventSFs_Helper(1, true);
   } else if (m_variables->total_leptons == 3) {
-    if (m_variables->nTaus_OR_Pt25 == 0) {
-      // for 3l0tau tight = loose*tight*tight
-      doEventSFs_Helper(0, true);
-      doEventSFs_Helper(1, false);
-      doEventSFs_Helper(2, false);
-    } else {
-      // for 3l1tau tight = loose*loose*loose
-      doEventSFs_Helper(0, true);
-      doEventSFs_Helper(1, true);
-      doEventSFs_Helper(2, true);
-    }
+    // for 3l0tau and 3l1tau tight = loose*tight*tight
+    doEventSFs_Helper(0, true);
+    doEventSFs_Helper(1, false);
+    doEventSFs_Helper(2, false);
   } else if (m_variables->total_leptons == 4) {
     // for 4l tight = loose*loose*tight*tight
     doEventSFs_Helper(0, true);
