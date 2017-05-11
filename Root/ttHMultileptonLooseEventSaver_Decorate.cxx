@@ -106,7 +106,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     muItr->auxdecor<float> ("jet_pt")           = -99;
     muItr->auxdecor<float> ("jet_eta")          = -99;
     muItr->auxdecor<float> ("jet_phi")          = -99;
-    muItr->auxdecor<float> ("jet_dr")           = -99;
+    muItr->auxdecor<float> ("dRJet")            = -1.0; //name changed for promptLeptonIso calibration
     muItr->auxdecor<float> ("jet_numTrk")       = -99;
     muItr->auxdecor<float> ("jet_sumPtTrk")     = -99;
     muItr->auxdecor<float> ("MV2c10_weight")    = -99;
@@ -146,7 +146,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
        muItr->auxdecor<float> ("jet_pt")  = closestJet->p4().Pt();
        muItr->auxdecor<float> ("jet_eta") = closestJet->p4().Eta();
        muItr->auxdecor<float> ("jet_phi") = closestJet->p4().Phi();
-       muItr->auxdecor<float> ("jet_dr")  = smallestDr;
+       muItr->auxdecor<float> ("dRJet")  = smallestDr;
        auto numTrkVec = closestJet->getAttribute<std::vector<int>   >(xAOD::JetAttribute::NumTrkPt500);
        auto numJetTrk =  (numTrkVec.size() ? numTrkVec[m_pv->index()] : 0);
        muItr->auxdecor<float> ("jet_numTrk")      = numJetTrk;
@@ -181,7 +181,7 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
 	       muItr->auxdataConst<float>("jet_numTrk"),
 	       muItr->auxdataConst<float>("jet_sumPtTrk"),
 	       (muItr->auxdataConst<float>("MV2c10_weight")> 0.8244) ? 1.0 :0.0,
-	       muItr->auxdataConst<float>("jet_dr"),
+	       muItr->auxdataConst<float>("dRJet"), //jet_dr -> dRJet
 	       smallestDr,muItr->auxdataConst<float>("jet_ptRel"),
 	       muItr->auxdataConst<float>("jet_pt")/muItr->pt(),
 	       muItr->auxdataConst<float>("d0sig"),

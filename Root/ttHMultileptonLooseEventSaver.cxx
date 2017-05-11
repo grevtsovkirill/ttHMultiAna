@@ -1072,7 +1072,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_pt");}, *systematicTree, "muon_jet_pt");
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_eta");}, *systematicTree, "muon_jet_eta");
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_phi");}, *systematicTree, "muon_jet_phi");
-      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_dr");}, *systematicTree, "muon_jet_dr");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("dRJet");}, *systematicTree, "muon_jet_dr");
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_ptRel");}, *systematicTree, "muon_jet_ptRel");
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_sumPtTrk");},*systematicTree, "muon_jet_sumPtTrk");

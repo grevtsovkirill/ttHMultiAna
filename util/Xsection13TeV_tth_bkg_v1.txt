@@ -46,7 +46,7 @@
  361066           2.5656            0.91         1.0    --    -999   1               Sherpa                           lllvSFPlus  Full  
  361067           5.0169            0.91         1.0    --    -999   1               Sherpa                           lllvOFPlus  Full  
  361068           14.022            0.91         1.0    --    -999   1               Sherpa                                 llvv  Full  
- 361069          0.02575            0.91         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW4  Full  
+ 361069          0.02575            0.91         1.0    --    -999   2               Sherpa                        llvvjj_ss_EW4  Full  
  361070         0.043375            0.91         1.0    --    -999   1               Sherpa                        llvvjj_ss_EW6  Full  
  361071         0.042017            0.91         1.0    --    -999   1               Sherpa                           lllvjj_EW6  Full  
  361072         0.031496            0.91         1.0    --    -999   1               Sherpa                           lllljj_EW6  Full  
