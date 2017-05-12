@@ -1858,6 +1858,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       return; // remove all 2l opposite sign 0 tau events
   }
 
+  // for skimming of events for promptLepton isolation WP:
+  // 1l and 2l for PromptLeptonCFT, 3l and 4l for PromptLepton
+  if (m_config->electronIsolation() == "promptLeptonCFT" && skim_nLeptons >= 3)
+    return; // remove all 3l and 4l events
+  if (m_config->electronIsolation() == "promptLepton" && skim_nLeptons <= 2)
+    return; // remove all 1l and 2l events
+
   //save ALL jets
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
