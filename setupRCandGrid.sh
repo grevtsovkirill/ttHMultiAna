@@ -25,6 +25,7 @@ patch -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
 #for EleBDT SFs
 rc checkout_pkg TopCorrections
 patch -d TopCorrections -p0 < ttHMultilepton/newTauEffNPs.patch
+patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
 
 
 # rc build is shortcut for rc find_packages && rc compile

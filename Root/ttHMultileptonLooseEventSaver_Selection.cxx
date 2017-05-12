@@ -1418,12 +1418,12 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
       TLorentzVector p4OS;
       bool is_trilep_q1 = m_variables->trilep_type && abs(m_variables->total_charge) == 1;
       if (is_trilep_q1) {
-	for (const auto elItr : *goodEl) {
+	for (const auto elItr : myTriggeringElectrons) {
 	  if (elItr->charge() == -m_variables->total_charge) {
 	    p4OS = elItr->p4(); break;
 	  }
 	}
-	for (const auto muItr : *goodMu) {
+	for (const auto muItr : myTriggeringMuons) {
 	  if (muItr->charge() == -m_variables->total_charge) {
 	    p4OS = muItr->p4(); break;
 	  }
@@ -1431,11 +1431,11 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
       }
       
       size_t idx = 0;
-      for (const auto elItr : *goodEl) {
+      for (const auto elItr : myTriggeringElectrons) {
 	sorter.push_back(std::make_tuple(&(elItr->p4()), idx++, ttHMultilepton::ELECTRON));
       }
       idx = 0;
-      for (const auto muItr : *goodMu) {
+      for (const auto muItr : myTriggeringMuons) {
 	sorter.push_back(sorttype_t(&(muItr->p4()), idx++, ttHMultilepton::MUON));
       }
       if (is_trilep_q1) {
@@ -1587,11 +1587,42 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
     break;
   case 4:
     {
+      // Do a sorting for objects
+      // (pt, idx, leptype)
+      typedef std::tuple<const TLorentzVector*, int, ttHMultilepton::LepType> sorttype_t;
+      std::vector<sorttype_t> sorter;
+            
+      size_t idx = 0;
+      for (const auto elItr : myTriggeringElectrons) {
+	sorter.push_back(std::make_tuple(&(elItr->p4()), idx++, ttHMultilepton::ELECTRON));
+      }
+      idx = 0;
+      for (const auto muItr : myTriggeringMuons) {
+	sorter.push_back(sorttype_t(&(muItr->p4()), idx++, ttHMultilepton::MUON));
+      }
+      // sort by decreasing pt
+      std::sort(sorter.begin(), sorter.end(),
+		[](sorttype_t a, sorttype_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
+    
+      
       int nTrig = -1;
       for (const auto& systvar : m_lep_trigger_sf_names) {
 	++nTrig;
-	
-	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight
+
+	short capped_totleptons = std::min(m_variables->total_leptons, LEPTON_ARR_SIZE);
+	for (short idx = 0; idx < capped_totleptons; ++idx) {
+	  const TLorentzVector* p4;
+	  int lidx;
+	  ttHMultilepton::LepType typ;
+	  std::tie(p4, lidx, typ) = sorter[idx];
+	  if (typ == ttHMultilepton::ELECTRON){
+	    if (idx==0) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
+	    else if (idx==1) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
+	    else if (idx==2) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tight(*(myTriggeringElectrons)[lidx]) = 1;}
+	    else if (idx==3) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tight(*(myTriggeringElectrons)[lidx]) = 1;}
+	  }
+	}//TightTight
+
 	double sf_tttt = 1.;
 	auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tttt);
 	if(cc_tttt==CP::CorrectionCode::Ok)
