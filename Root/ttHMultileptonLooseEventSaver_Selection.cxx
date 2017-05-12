@@ -1621,11 +1621,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	    else if (idx==2) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tight(*(myTriggeringElectrons)[lidx]) = 1;}
 	    else if (idx==3) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tight(*(myTriggeringElectrons)[lidx]) = 1;}
 	  }
-	}
-	
-	//TightTight
+	}//TightTight
 
-    	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight
 	double sf_tttt = 1.;
 	auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tttt);
 	if(cc_tttt==CP::CorrectionCode::Ok)
