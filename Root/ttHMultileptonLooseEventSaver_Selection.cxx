@@ -1278,7 +1278,13 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
       for (const auto& systvar : m_lep_trigger_sf_names) {
 	++nTrig;
 	
-	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1; dec_loose(*e) = 0;}//TightTight SF
+	if (abs(m_variables->total_charge) == 0 && m_variables->nTaus_OR_Pt25>0){
+	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight SF 2LOS
+	}
+	else {
+	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1; dec_loose(*e) = 0;}//TightTight SF 2LSS
+	}
+
 	double sf_tt = 1.;
 	auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
 	if(cc_tt==CP::CorrectionCode::Ok)
