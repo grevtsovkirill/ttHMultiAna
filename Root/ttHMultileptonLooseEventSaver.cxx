@@ -1401,13 +1401,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_lhe3weights = event.m_info->mcEventWeights();
     if(m_sfRetriever){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
-      m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
-      m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
-      m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
-      m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
-      m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
-      m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
       m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
+      //btag moved to own function
 
       //do sys weights only in "nominal" tree
       if( m_doSFSystematics ){
@@ -1418,45 +1413,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_pileup_weight_UP    = relativeSF(m_pileup_weight_UP,   m_pileup_weight);
 	m_pileup_weight_DOWN  = relativeSF(m_pileup_weight_DOWN, m_pileup_weight);
 
-	//btag
-	m_sfRetriever->btagSF_eigen_vars(event,
-					 top::topSFSyst::BTAG_SF_EIGEN_B,
-					 m_weight_bTagSF_eigen_B_up,
-					 m_weight_bTagSF_eigen_B_down, m_bTagSF_default);
-	m_sfRetriever->btagSF_eigen_vars(event,
-					 top::topSFSyst::BTAG_SF_EIGEN_C,
-					 m_weight_bTagSF_eigen_C_up,
-					 m_weight_bTagSF_eigen_C_down, m_bTagSF_default);
-	m_sfRetriever->btagSF_eigen_vars(event,
-					 top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
-					 m_weight_bTagSF_eigen_Light_up,
-					 m_weight_bTagSF_eigen_Light_down, m_bTagSF_default);
-
-	for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	  m_weight_bTagSF_eigen_Others_up[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_UP, m_bTagSF_default, false, name );
-	  m_weight_bTagSF_eigen_Others_down[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_DOWN, m_bTagSF_default, false, name );
-	}
-
-
-
-	//normalise
-	for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
-	  m_weight_bTagSF_eigen_B_up.at(i)   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_B_down.at(i) /= m_bTagSF_weight;
-	}
-	for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(m_bTagSF_default); ++i) {
-	  m_weight_bTagSF_eigen_C_up.at(i)   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_C_down.at(i) /= m_bTagSF_weight;
-	}
-	for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(m_bTagSF_default); ++i) {
-	  m_weight_bTagSF_eigen_Light_up.at(i)   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_Light_down.at(i) /= m_bTagSF_weight;
-	}
-	for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	  m_weight_bTagSF_eigen_Others_up[name]   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_Others_down[name] /= m_bTagSF_weight;
-	}
-
+	//btag SFs moved
+	
 	// JVT SF
 	m_JVT_weight_UP = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_UP);
 	m_JVT_weight_DOWN = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_DOWN);
@@ -1797,6 +1755,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //MakeIndices(event.m_electrons);
   //MakeIndices(event.m_muons);
 
+  
+  setBtagSFs(event);
+  
   CopyJets(goodJet);
   CopyTaus(goodTau);
   CopyHT(goodEl, goodMu, goodJet, goodTau);
@@ -2137,4 +2098,58 @@ std::string ttHMultileptonLooseEventSaver::betterBtagNamedSyst (const std::strin
     out.replace(out.find(str),str.length(),"_");
   }
   return out;
+}
+
+void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
+  //do sys weights only in "nominal" tree
+  if(     top::isSimulation(event) and m_sfRetriever ){
+
+    m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
+    m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
+    m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
+    m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
+    m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
+    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
+    //btag
+    if(m_doSFSystematics) {
+      m_sfRetriever->btagSF_eigen_vars(event,
+				       top::topSFSyst::BTAG_SF_EIGEN_B,
+				       m_weight_bTagSF_eigen_B_up,
+				       m_weight_bTagSF_eigen_B_down, m_bTagSF_default);
+      m_sfRetriever->btagSF_eigen_vars(event,
+				       top::topSFSyst::BTAG_SF_EIGEN_C,
+				       m_weight_bTagSF_eigen_C_up,
+				       m_weight_bTagSF_eigen_C_down, m_bTagSF_default);
+      m_sfRetriever->btagSF_eigen_vars(event,
+				       top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
+				       m_weight_bTagSF_eigen_Light_up,
+				       m_weight_bTagSF_eigen_Light_down, m_bTagSF_default);
+
+      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
+	m_weight_bTagSF_eigen_Others_up[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_UP, m_bTagSF_default, false, name );
+	m_weight_bTagSF_eigen_Others_down[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_DOWN, m_bTagSF_default, false, name );
+      }
+
+
+
+      //normalise
+      for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
+	m_weight_bTagSF_eigen_B_up.at(i)   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_B_down.at(i) /= m_bTagSF_weight;
+      }
+      for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(m_bTagSF_default); ++i) {
+	m_weight_bTagSF_eigen_C_up.at(i)   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_C_down.at(i) /= m_bTagSF_weight;
+      }
+      for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(m_bTagSF_default); ++i) {
+	m_weight_bTagSF_eigen_Light_up.at(i)   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_Light_down.at(i) /= m_bTagSF_weight;
+      }
+      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
+	m_weight_bTagSF_eigen_Others_up[name]   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_Others_down[name] /= m_bTagSF_weight;
+      }
+
+    }//endif sys
+  }//endif nom
 }
