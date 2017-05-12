@@ -1755,8 +1755,28 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //MakeIndices(event.m_electrons);
   //MakeIndices(event.m_muons);
 
+  //i dont care about your const, so so naughty
+  top::Event& nc_event = const_cast<top::Event&>(event);
+  xAOD::JetContainer orig_jets = event.m_jets;
+  xAOD::JetContainer tmp_jets(SG::VIEW_ELEMENTS);
+  xAOD::JetContainer tmp_jets_T(SG::VIEW_ELEMENTS);
+  
+  for(auto jetItr : *goodJet ) {
+    if(jetItr->auxdataConst<char>("ttHpassOVR"))
+      tmp_jets.push_back(jetItr);
+    if(jetItr->auxdataConst<char>("ttHpassOVR") and jetItr->auxdataConst<char>("ttHpassTauOVR") )
+      tmp_jets_T.push_back(jetItr);
+  }
+  tmp_jets.sort(top::descendingPtSorter);
+  tmp_jets_T.sort(top::descendingPtSorter);
+
+  if(m_variables->total_leptons == 1 or (m_variables->total_leptons == 2 and m_variables->total_charge == 0 ) or m_variables->total_leptons == 4)
+    nc_event.m_jets = tmp_jets;
+  else
+    nc_event.m_jets = tmp_jets_T;
   
   setBtagSFs(event);
+  nc_event.m_jets = tmp_jets;
   
   CopyJets(goodJet);
   CopyTaus(goodTau);
