@@ -1278,7 +1278,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
       for (const auto& systvar : m_lep_trigger_sf_names) {
 	++nTrig;
 	
-	if (abs(m_variables->total_charge) == 0){
+	if (abs(m_variables->total_charge) == 0 && m_variables->nTaus_OR_Pt25>0){
 	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight SF 2LOS
 	}
 	else {
