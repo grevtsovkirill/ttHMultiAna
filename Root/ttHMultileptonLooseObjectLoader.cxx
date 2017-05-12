@@ -55,7 +55,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
   //auto muonIsolation = new top::StandardIsolation(topConfig->muonIsolation(), topConfig->muonIsolationLoose()  );
   auto muonSelection = new top::MuonMC15(topConfig->muonPtcut(), nullptr); 
   objectSelection->muonSelection( muonSelection );
-  objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), /*jvtmin*/ 0.64 ));
+  objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut() ));
 
   if(topConfig->useTaus()){
     objectSelection->tauSelection( new top::TauMC15() );
