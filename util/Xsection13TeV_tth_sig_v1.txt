@@ -3,9 +3,9 @@
 #DatasetID : Xsection(pb) : K-factor : Filtering Efficiency : Uncertainty :   Mass : Sample Priority :  Generator : ProcessInfo :Simulation ##
 ##############################################################################################################################################
 
- 341271          0.23082               1         1.0    --     125   2     aMC@NLO+Herwig++                        ttH->allhad+H  Full  
- 341270          0.22276               1         1.0    --     125   2     aMC@NLO+Herwig++                         ttH->ljets+H  Full  
  341177          0.05343               1         1.0    --     125   2     aMC@NLO+Herwig++                            ttH->ll+H  Full  
+ 341270          0.22276               1         1.0    --     125   2     aMC@NLO+Herwig++                         ttH->ljets+H  Full  
+ 341271          0.23082               1         1.0    --     125   2     aMC@NLO+Herwig++                        ttH->allhad+H  Full  
 
  342561      0.000060137               1         1.0    --     125   2     aMC@NLO+Herwig++                              ttH->4l  Full  
 
