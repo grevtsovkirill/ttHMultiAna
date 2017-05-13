@@ -1860,11 +1860,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       return; // remove all 2l opposite sign 0 tau events
   }
 
-  // for skimming of events for promptLepton isolation WP:
+  // for skimming of events for promptLepton isolation WP (only MC):
   // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
-  if (m_config->electronIsolation() == "promptLeptonCFT" && skim_nLeptons != 2)
+  if (config->isMC() && m_config->electronIsolation() == "promptLeptonCFT" && skim_nLeptons != 2)
     return; // remove all 1l, 3l and 4l events
-  if (m_config->electronIsolation() == "promptLepton" && skim_nLeptons == 2)
+  if (config->isMC() && m_config->electronIsolation() == "promptLepton" && skim_nLeptons == 2)
     return; // remove all 2l events
 
   //save ALL jets
