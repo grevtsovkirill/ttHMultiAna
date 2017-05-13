@@ -21,42 +21,38 @@ config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #Th
 #config.forceSite     = 'ANALY_CONNECT'
 
 ###############################################################################
-#Systematics
-config.suffix        = '2017-05-06.Sys_v28'
-config.maxNFilesPerJob = '1'
-config.memory = ''
-config.otherOptions = '--forceStaged'
-
+#Samples
 All_fullSim    = TopExamples.grid.Samples(['All_fullSim'])
 All_fastSim    = TopExamples.grid.Samples(['All_fastSim'])
 ttbar_fullSim  = TopExamples.grid.Samples(['ttbar_fullSim'])
 ttbar_fastSim  = TopExamples.grid.Samples(['ttbar_fastSim'])
 VJets_fullSim  = TopExamples.grid.Samples(['VJets_fullSim'])
-#sys_fullSim    = TopExamples.grid.Samples(['sys_fullSim'])
-#sys_fastSim    = TopExamples.grid.Samples(['sys_fastSim'])
 
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949', All_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949', All_fastSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p3075', ttbar_fullSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p3075', ttbar_fastSim)
 TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949', VJets_fullSim)
-#TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',sys_fullSim)
-#TopExamples.grid.convertAODtoTOPQ('DAOD_HIGG8D1','p2949',sys_fastSim)
 
 fullSim = All_fullSim + ttbar_fullSim + VJets_fullSim
 fastSim = All_fastSim + ttbar_fastSim
 
+#Systematics
+config.maxNFilesPerJob = '1'
+config.memory = ''
+config.otherOptions = '--forceStaged'
+
+config.suffix       = '2017-05-13.Sys_v28_1l3l4l'
 config.settingsFile = 'generic_config-mc15-Sys.txt'
 #TopExamples.grid.submit(config,sys_fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 #TopExamples.grid.submit(config,sys_fastSim)
 
-for systs in ['Jets1','Jets2','Other']:
-   config.suffix       = '2017-05-06.Sys_v28-' + systs
-   config.settingsFile = 'generic_config-mc15-Sys-' + systs + '.txt'
-   #TopExamples.grid.submit(config,sys_fullSim)
-   config.settingsFile = 'generic_config-mc15-Sys-' + systs + '_fastSim.txt'
-   #TopExamples.grid.submit(config,sys_fastSim)
+config.suffix       = '2017-05-13.Sys_v28_2l'
+config.settingsFile = 'generic_config-mc15-Sys_CFT.txt'
+#TopExamples.grid.submit(config,sys_fullSim)
+config.settingsFile = 'generic_config-mc15-Sys_fastSim_CFT.txt'
+#TopExamples.grid.submit(config,sys_fastSim)
 
 ####################################################################################
 #Nominal

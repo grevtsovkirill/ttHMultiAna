@@ -594,16 +594,16 @@
  343637          18.2976          1.1949         1.0    --    -999   2         PowhegPythia         ttbar_hdamp172p5_threelepton  Full  
 
 # Sherpa 2.1 diboson HF filters. b-filter
- 344422         0.056385            0.91         1.0    --    -999   2             Sherpa21                         llll_BFilter  Full  
- 344423         0.833454            0.91         1.0    --    -999   2             Sherpa21                           llll_BVeto  Full  
- 344424         0.023276            0.91         1.0    --    -999   2             Sherpa21                  lllvSFMinus_BFilter  Full  
- 344425          0.43897            0.91         1.0    --    -999   2             Sherpa21                    lllvSFMinus_BVeto  Full  
- 344426         0.046242            0.91         1.0    --    -999   2             Sherpa21                  lllvOFMinus_BFilter  Full  
- 344427         0.870711            0.91         1.0    --    -999   2             Sherpa21                    lllvOFMinus_BVeto  Full  
- 344428         0.035488            0.91         1.0    --    -999   2             Sherpa21                   lllvSFPlus_BFilter  Full  
- 344429         0.638374            0.91         1.0    --    -999   2             Sherpa21                     lllvSFPlus_BVeto  Full  
- 344430         0.072535            0.91         1.0    --    -999   2             Sherpa21                     lllvOFPlus_BVeto  Full  
- 344431           1.3133            0.91         1.0    --    -999   2             Sherpa21                   lllvOFPlus_BFilter  Full  
+ 344422         0.056385            0.91         1.0    --    -999   1             Sherpa21                         llll_BFilter  Full  
+ 344423         0.833454            0.91         1.0    --    -999   1             Sherpa21                           llll_BVeto  Full  
+ 344424         0.023276            0.91         1.0    --    -999   1             Sherpa21                  lllvSFMinus_BFilter  Full  
+ 344425          0.43897            0.91         1.0    --    -999   1             Sherpa21                    lllvSFMinus_BVeto  Full  
+ 344426         0.046242            0.91         1.0    --    -999   1             Sherpa21                  lllvOFMinus_BFilter  Full  
+ 344427         0.870711            0.91         1.0    --    -999   1             Sherpa21                    lllvOFMinus_BVeto  Full  
+ 344428         0.035488            0.91         1.0    --    -999   1             Sherpa21                   lllvSFPlus_BFilter  Full  
+ 344429         0.638374            0.91         1.0    --    -999   1             Sherpa21                     lllvSFPlus_BVeto  Full  
+ 344430         0.072535            0.91         1.0    --    -999   1             Sherpa21                     lllvOFPlus_BVeto  Full  
+ 344431           1.3133            0.91         1.0    --    -999   1             Sherpa21                   lllvOFPlus_BFilter  Full  
 
 # Sherpa v2.2.1 Z+Jets
  364100          1630.22          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV0_70_CVetoBVeto  Full  

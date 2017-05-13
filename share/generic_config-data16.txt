@@ -31,16 +31,18 @@ Systematics Nominal
 
 #Electron cuts
 ElectronID LooseAndBLayerLH
-ElectronIDLoose LooseAndBLayerLH
-ElectronPt 5000.
-ElectronIsolation None
+ElectronIDLoose TightLH
+ElectronPt 5000
+ElectronIsolation Loose
+ElectronIsolationLoose PromptLepton
 
 #Muon cuts
 MuonQuality Loose
 MuonQualityLoose Loose
-MuonPt 5000.
 MuonEta 2.7
-MuonIsolation None
+MuonPt 5000
+MuonIsolation Loose
+MuonIsolationLoose PromptLepton
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf

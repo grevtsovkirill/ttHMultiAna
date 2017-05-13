@@ -49,17 +49,17 @@ OutputFileSetAutoFlushZero True
 #Electron cuts
 ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
-ElectronPt 10000.
+ElectronPt 5000
 ElectronIsolation Loose
-ElectronIsolationLoose FixedCutTight
+ElectronIsolationLoose PromptLepton
 
 #Muon cuts
 MuonQuality Loose
 MuonQualityLoose Loose
-MuonEta 2.5
-MuonPt 10000.
+MuonEta 2.7
+MuonPt 5000
 MuonIsolation Loose
-MuonIsolationLoose FixedCutTightTrackOnly
+MuonIsolationLoose PromptLepton
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
