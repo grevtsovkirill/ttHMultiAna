@@ -1839,6 +1839,13 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       return; // remove all 2l opposite sign 0 tau events
   }
 
+  // for skimming of events for promptLepton isolation WP:
+  // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
+  if (m_config->electronIsolation() == "promptLeptonCFT" && skim_nLeptons != 2)
+    return; // remove all 1l, 3l and 4l events
+  if (m_config->electronIsolation() == "promptLepton" && skim_nLeptons == 2)
+    return; // remove all 2l events
+
   //save ALL jets
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
@@ -1994,6 +2001,20 @@ void ttHMultileptonLooseEventSaver::finalize() {
 
 }
 
+void ttHMultileptonLooseEventSaver::doEventSFs_Helper(int ilep, bool tightIsLoose) {
+  m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose[0];
+  m_variables->lepSFIDTight *= (tightIsLoose ? m_leptons[ilep].SFIDLoose[0] : m_leptons[ilep].SFIDTight[0]);
+  m_variables->lepSFIsoLoose *= m_leptons[ilep].SFIsoLoose[0];
+  m_variables->lepSFIsoTight *= (tightIsLoose ? m_leptons[ilep].SFIsoLoose[0] : m_leptons[ilep].SFIsoTight[0]);
+  m_variables->lepSFReco *= m_leptons[ilep].SFReco[0];
+  m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA[0];
+  for (const auto& systvar : m_lep_sf_names) {
+    auto ivar = systvar.first;
+    m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
+    m_variables->lepSFObjTight[ivar] *= (tightIsLoose ? m_leptons[ilep].SFObjLoose[ivar] : m_leptons[ilep].SFObjTight[ivar]);
+  }
+}
+
 void ttHMultileptonLooseEventSaver::doEventSFs() {
   // logic: for 3l Tight = Loose * Tight * Tight
   // otherwise = Product of corresponding SF
@@ -2014,57 +2035,27 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->tauSFLoose[ivar] = 1;
   }
 
-  
-  switch (m_variables->total_leptons) {
-  case 1:
-  case 2:
-  case 4:
+  if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 != 0) {
+    // for 2los1tau tight = loose*loose
+    doEventSFs_Helper(0, true);
+    doEventSFs_Helper(1, true);
+  } else if (m_variables->total_leptons == 3) {
+    // for 3l0tau and 3l1tau tight = loose*tight*tight
+    doEventSFs_Helper(0, true);
+    doEventSFs_Helper(1, false);
+    doEventSFs_Helper(2, false);
+  } else if (m_variables->total_leptons == 4) {
+    // for 4l tight = loose*loose*tight*tight
+    doEventSFs_Helper(0, true);
+    doEventSFs_Helper(1, true);
+    doEventSFs_Helper(2, false);
+    doEventSFs_Helper(3, false);
+  } else {
     for (int ilep = 0; ilep < m_variables->total_leptons; ++ilep) {
-      m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose[0];
-      m_variables->lepSFIDTight *= m_leptons[ilep].SFIDTight[0];
-      m_variables->lepSFIsoLoose *= m_leptons[ilep].SFIsoLoose[0];
-      m_variables->lepSFIsoTight *= m_leptons[ilep].SFIsoTight[0];
-      m_variables->lepSFReco *= m_leptons[ilep].SFReco[0];
-      m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA[0];
-      for (const auto& systvar : m_lep_sf_names) {
-	auto ivar = systvar.first;
-	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
-	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
-      }
+      doEventSFs_Helper(ilep, false);
     }
-    // if (m_variables->total_leptons == 1 && abs(m_leptons[0].ID) == 13) {
-    //   std::cout << m_leptons[0].EffTrigTight << " " << m_leptons[0].SFTrigTight << " " << oneMinusTrigEffTight[0] << " " << oneMinusTrigEffTight[1] << std::endl;
-    // }
-    break;
-  case 3:
-    m_variables->lepSFIDLoose *= m_leptons[0].SFIDLoose[0];
-    m_variables->lepSFIDTight *= m_leptons[0].SFIDLoose[0];
-    m_variables->lepSFIsoLoose *= m_leptons[0].SFIsoLoose[0];
-    m_variables->lepSFIsoTight *= m_leptons[0].SFIsoLoose[0];
-    m_variables->lepSFReco *= m_leptons[0].SFReco[0];
-    m_variables->lepSFTTVA *= m_leptons[0].SFTTVA[0];
-    for (const auto& systvar : m_lep_sf_names) {
-      auto ivar = systvar.first;
-      m_variables->lepSFObjLoose[ivar] *= m_leptons[0].SFObjLoose[ivar];
-      m_variables->lepSFObjTight[ivar] *= m_leptons[0].SFObjLoose[ivar];
-    }
-    for (int ilep = 1; ilep < m_variables->total_leptons; ++ilep) {
-      m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose[0];
-      m_variables->lepSFIDTight *= m_leptons[ilep].SFIDTight[0];
-      m_variables->lepSFIsoLoose *= m_leptons[ilep].SFIsoLoose[0];
-      m_variables->lepSFIsoTight *= m_leptons[ilep].SFIsoTight[0];
-      m_variables->lepSFReco *= m_leptons[ilep].SFReco[0];
-      m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA[0];
-      for (const auto& systvar : m_lep_sf_names) {
-	auto ivar = systvar.first;
-	m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
-	m_variables->lepSFObjTight[ivar] *= m_leptons[ilep].SFObjTight[ivar];
-      }
-    }
-    break;
-  default:
-    return;
   }
+
   for (const auto& systvar : m_lep_sf_names) {
     const auto ivar = systvar.first;
     if (ivar == top::topSFSyst::nominal) continue;
@@ -2072,7 +2063,6 @@ void ttHMultileptonLooseEventSaver::doEventSFs() {
     m_variables->lepSFObjTight[ivar] /= m_variables->lepSFObjTight[0];
   }
 
- 
 
   //taus
   for ( int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {

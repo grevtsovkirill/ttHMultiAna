@@ -188,6 +188,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
   void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
   void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
+  void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
   void setBtagSFs(const top::Event& event);
