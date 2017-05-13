@@ -35,16 +35,14 @@ echo "Alright - done."
 
 pushd .
 cd ttHMultilepton/share
-# for Sys splitting
-sed 's/Systematics All/Systematics JET_21NP_JET_EffectiveNP_1__1down,JET_21NP_JET_EffectiveNP_1__1up,JET_21NP_JET_EffectiveNP_2__1down,JET_21NP_JET_EffectiveNP_2__1up,JET_21NP_JET_EffectiveNP_3__1down,JET_21NP_JET_EffectiveNP_3__1up,JET_21NP_JET_EffectiveNP_4__1down,JET_21NP_JET_EffectiveNP_4__1up,JET_21NP_JET_EffectiveNP_5__1down,JET_21NP_JET_EffectiveNP_5__1up,JET_21NP_JET_EffectiveNP_6__1down,JET_21NP_JET_EffectiveNP_6__1up,JET_21NP_JET_EffectiveNP_7__1down,JET_21NP_JET_EffectiveNP_7__1up,JET_21NP_JET_EffectiveNP_8restTerm__1down,JET_21NP_JET_EffectiveNP_8restTerm__1up,JET_21NP_JET_PunchThrough_MC15__1down,JET_21NP_JET_PunchThrough_MC15__1up,JET_21NP_JET_SingleParticle_HighPt__1down,JET_21NP_JET_SingleParticle_HighPt__1up/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys-Jets1.txt
-sed 's/Systematics All/Systematics JET_21NP_JET_BJES_Response__1down,JET_21NP_JET_BJES_Response__1up,JET_21NP_JET_EtaIntercalibration_Modelling__1down,JET_21NP_JET_EtaIntercalibration_Modelling__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1down,JET_21NP_JET_EtaIntercalibration_NonClosure__1up,JET_21NP_JET_EtaIntercalibration_TotalStat__1down,JET_21NP_JET_EtaIntercalibration_TotalStat__1up,JET_21NP_JET_Flavor_Composition__1down,JET_21NP_JET_Flavor_Composition__1up,JET_21NP_JET_Flavor_Response__1down,JET_21NP_JET_Flavor_Response__1up,JET_21NP_JET_Pileup_OffsetMu__1down,JET_21NP_JET_Pileup_OffsetMu__1up,JET_21NP_JET_Pileup_OffsetNPV__1down,JET_21NP_JET_Pileup_OffsetNPV__1up,JET_21NP_JET_Pileup_PtTerm__1down,JET_21NP_JET_Pileup_PtTerm__1up,JET_21NP_JET_Pileup_RhoTopology__1down,JET_21NP_JET_Pileup_RhoTopology__1up,JET_JER_SINGLE_NP__1up/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys-Jets2.txt
-sed 's/Systematics All/Systematics AllMuons,AllElectrons,AllTaus,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys-Other.txt
 # for fastSim samples
 sed 's/IsAFII False/IsAFII True/' generic_config-mc15.txt > generic_config-mc15_fastSim.txt
 sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys_fastSim.txt
-sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Jets1.txt > generic_config-mc15-Sys-Jets1_fastSim.txt
-sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Jets2.txt > generic_config-mc15-Sys-Jets2_fastSim.txt
-sed 's/IsAFII False/IsAFII True/' generic_config-mc15-Sys-Other.txt > generic_config-mc15-Sys-Other_fastSim.txt
+# for promptLepton SFs with CFT for electrons
+sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15.txt > generic_config-mc15_CFT.txt
+sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15_fastSim.txt > generic_config-mc15_CFT_fastSim.txt
+sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys_CFT.txt
+sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15-Sys_fastSim.txt > generic_config-mc15-Sys_CFT_fastSim.txt
 #python ttHMultilepton/scripts/01SubmitToGrid.py
 
 
