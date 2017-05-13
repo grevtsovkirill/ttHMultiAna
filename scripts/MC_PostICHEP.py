@@ -37,7 +37,7 @@ TopExamples.grid.Add('new_fastSim').datasets = [
 
 TopExamples.grid.Add('new_fullSim').datasets = [
 
-#Diboson PowhegPythia8
+#ggH+VBFH 4l
 'mc15_13TeV.341471.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_ggH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
 'mc15_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.merge.AOD.e3951_s2608_s2183_r7772_r7676',
 
