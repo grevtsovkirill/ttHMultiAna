@@ -1862,9 +1862,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   // for skimming of events for promptLepton isolation WP (only MC):
   // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
-  if (config->isMC() && m_config->electronIsolation() == "promptLeptonCFT" && skim_nLeptons != 2)
+  if (config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && skim_nLeptons != 2)
     return; // remove all 1l, 3l and 4l events
-  if (config->isMC() && m_config->electronIsolation() == "promptLepton" && skim_nLeptons == 2)
+  if (config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && skim_nLeptons == 2)
     return; // remove all 2l events
 
   //save ALL jets
