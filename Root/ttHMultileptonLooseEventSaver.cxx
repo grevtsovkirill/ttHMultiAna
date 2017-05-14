@@ -1855,16 +1855,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(m_doSystematics) {
     //only selected jets
     for(auto alljet : event.m_jets) {
-      //alljet->auxdecor<char>("ttHpassOVR") = 0;
-      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-      (*m_decor_ttHpassOVR)(*alljet) = 0;
-      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}
       }
     }
@@ -1875,16 +1869,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   else {
     //all jets
     for(auto alljet : *calibratedJets) {
-      //alljet->auxdecor<char>("ttHpassOVR") = 0;
-      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-      (*m_decor_ttHpassOVR)(*alljet) = 0;
-      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}
       }
     }
