@@ -1841,11 +1841,11 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       return; // remove all 2l opposite sign 0 tau events
   }
 
-  // for skimming of events for promptLepton isolation WP:
+  // for skimming of events for promptLepton isolation WP (only MC):
   // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
-  if (m_config->electronIsolation() == "promptLeptonCFT" && skim_nLeptons != 2)
+  if (config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && skim_nLeptons != 2)
     return; // remove all 1l, 3l and 4l events
-  if (m_config->electronIsolation() == "promptLepton" && skim_nLeptons == 2)
+  if (config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && skim_nLeptons == 2)
     return; // remove all 2l events
 
   //save ALL jets
@@ -1855,16 +1855,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(m_doSystematics) {
     //only selected jets
     for(auto alljet : event.m_jets) {
-      //alljet->auxdecor<char>("ttHpassOVR") = 0;
-      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-      (*m_decor_ttHpassOVR)(*alljet) = 0;
-      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}
       }
     }
@@ -1875,16 +1869,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   else {
     //all jets
     for(auto alljet : *calibratedJets) {
-      //alljet->auxdecor<char>("ttHpassOVR") = 0;
-      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-      (*m_decor_ttHpassOVR)(*alljet) = 0;
-      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}
       }
     }
