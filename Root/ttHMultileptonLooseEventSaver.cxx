@@ -755,6 +755,12 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
 	  return (int) m_el_true_type; },   *systematicTree, "electron_truthType");
 
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  int m_el_true_type = -99;
+	  static SG::AuxElement::Accessor<int> typeel("firstEgMotherPdgId");
+	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
+	  return (int) m_el_true_type; },   *systematicTree, "electron_firstEgMotherPdgId");
+
       // Add non-prompt electron vars
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
 
