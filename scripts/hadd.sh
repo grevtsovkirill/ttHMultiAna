@@ -15,7 +15,12 @@ function cleanExit {
 outDS=$1
 eosPath=$2
 DSID=$3
-fileName=${DSID}.root
+if echo $outDS | grep -q '_a766'
+then
+  fileName=${DSID}_AFII.root
+else
+  fileName=${DSID}.root
+fi
 inDS=$4
 
 echo "Job Info"
