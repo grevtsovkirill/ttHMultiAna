@@ -14,7 +14,7 @@ for configFile in configFiles:
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
 config.gridUsername  = 'rwolff'
-config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
+config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT,ANALY_LANCS_SL6'#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
 config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
@@ -40,18 +40,12 @@ fastSim = All_fastSim + ttbar_fastSim
 #Systematics
 config.maxNFilesPerJob = '1'
 config.memory = ''
-config.otherOptions = '--forceStaged'
+#config.otherOptions = '--forceStaged'
 
-config.suffix       = '2017-05-13.Sys_v28_1l3l4l'
-config.settingsFile = 'generic_config-mc15-Sys.txt'
+config.suffix       = '2017-05-13.Sys_v28_2los1tau_1l2tau'
+config.settingsFile = 'generic_config-mc15-Sys_2los1tau_1l2tau.txt'
 #TopExamples.grid.submit(config,fullSim)
-config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
-#TopExamples.grid.submit(config,fastSim)
-
-config.suffix       = '2017-05-13.Sys_v28_2l'
-config.settingsFile = 'generic_config-mc15-Sys_CFT.txt'
-#TopExamples.grid.submit(config,fullSim)
-config.settingsFile = 'generic_config-mc15-Sys_CFT_fastSim.txt'
+config.settingsFile = 'generic_config-mc15-Sys_2los1tau_1l2tau_fastSim.txt'
 #TopExamples.grid.submit(config,fastSim)
 
 ####################################################################################

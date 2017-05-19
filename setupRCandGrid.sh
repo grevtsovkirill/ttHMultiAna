@@ -43,6 +43,10 @@ sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCF
 sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15_fastSim.txt > generic_config-mc15_CFT_fastSim.txt
 sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys_CFT.txt
 sed 's/ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLeptonCFT/' generic_config-mc15-Sys_fastSim.txt > generic_config-mc15-Sys_CFT_fastSim.txt
+# for 2los1tau + 1l2tau submission only
+sed 's/NLEPTONPLUSTAU 10000 >= 2/NLEPTONPLUSTAU 10000 >= 3/' generic_config-mc15-Sys.txt > generic_config-mc15-Sys_2los1tau_1l2tau.txt
+sed 's/NLEPTONPLUSTAU 10000 >= 2/NLEPTONPLUSTAU 10000 >= 3/' generic_config-mc15-Sys_fastSim.txt > generic_config-mc15-Sys_2los1tau_1l2tau_fastSim.txt
+
 #python ttHMultilepton/scripts/01SubmitToGrid.py
 
 

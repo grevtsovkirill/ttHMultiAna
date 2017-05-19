@@ -1841,18 +1841,26 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   // for systematic skimming after overlap removal
   if (m_doSystematics) {
-    if (skim_nLeptons+skim_nTaus < 2)
+    if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 < 2)
       return; // remove all events with less than 2 leptons (including taus)
-    if (skim_nLeptons == 2 && skim_totalCharge == 0 && skim_nTaus == 0)
+    if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 == 0)
       return; // remove all 2l opposite sign 0 tau events
+
+    // for skimming of events for only 1l2tau and 2los1tau TODO: only temporary!
+    if (m_variables->nTaus_OR_Pt25 == 0)
+      return; // remove all 0tau events
+    if (m_variables->total_leptons > 2)
+      return; // remove all 3l and 4l events
+    if (m_variables->total_leptons == 2 && m_variables->total_charge != 0)
+      return; // remove all 2lss events
   }
 
   // for skimming of events for promptLepton isolation WP (only MC):
   // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
-  if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && skim_nLeptons != 2)
-    return; // remove all 1l, 3l and 4l events
-  if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && skim_nLeptons == 2)
-    return; // remove all 2l events
+  //if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && m_variables->total_leptons != 2)
+  //  return; // remove all 1l, 3l and 4l events
+  //if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && m_variables->total_leptons == 2)
+  //  return; // remove all 2l events
 
   //save ALL jets
   xAOD::JetContainer* calibratedJets(nullptr);
