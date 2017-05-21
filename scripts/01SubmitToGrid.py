@@ -1,5 +1,5 @@
 import TopExamples.grid
-import MC_EPS
+import MC_EPS_taus_forDavid
 import Data16
 import os
 import shutil
@@ -13,7 +13,7 @@ for configFile in configFiles:
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'rwolff'
+config.gridUsername  = 'dhohn'
 config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT,ANALY_LANCS_SL6'#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
