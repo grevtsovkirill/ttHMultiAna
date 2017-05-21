@@ -41,16 +41,6 @@ TopExamples.grid.Add('All_fullSim').datasets = [
 'mc15_13TeV.342283.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_inc.merge.AOD.e4246_s2608_s2183_r7772_r7676',
 'mc15_13TeV.342284.Pythia8EvtGen_A14NNPDF23LO_WH125_inc.merge.AOD.e4246_s2608_s2183_r7772_r7676',
 'mc15_13TeV.342285.Pythia8EvtGen_A14NNPDF23LO_ZH125_inc.merge.AOD.e4246_s2608_s2183_r7772_r7676',
-'mc15_13TeV.344133.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10nlo_hh_4w_wplep.merge.AOD.e5060_a766_a821_r7676',
-'mc15_13TeV.344134.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10nlo_hh_4w_wmlep.merge.AOD.e5060_a766_a821_r7676',
-
-#BSM HppHmm
-'mc15_13TeV.344364.CalcHepPythia8_A14_CTEQ6L1_HppHmm_500GeV_4W.merge.AOD.e5207_a766_a821_r7676',
-'mc15_13TeV.344365.CalcHepPythia8_A14_CTEQ6L1_HppHmm_600GeV_4W.merge.AOD.e5207_a766_a821_r7676',
-'mc15_13TeV.344366.CalcHepPythia8_A14_CTEQ6L1_HppHmm_700GeV_4W.merge.AOD.e5207_a766_a821_r7676',
-'mc15_13TeV.344367.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_200GeV.merge.AOD.e5207_a766_a821_r7676',
-'mc15_13TeV.344368.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_300GeV.merge.AOD.e5207_a766_a821_r7676',
-'mc15_13TeV.344369.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_400GeV.merge.AOD.e5207_a766_a821_r7676',
 
 #ttV NLO
 'mc15_13TeV.410155.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW.merge.AOD.e5070_s2726_r7772_r7676',
@@ -59,11 +49,6 @@ TopExamples.grid.Add('All_fullSim').datasets = [
 'mc15_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.merge.AOD.e5070_s2726_r7772_r7676',
 'mc15_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.merge.AOD.e5070_s2726_r7772_r7676',
 'mc15_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.merge.AOD.e5070_s2726_r7772_r7676',
-
-#ttV (alternative)
-'mc15_13TeV.410142.Sherpa_NNPDF30NNLO_ttll_mll5.merge.AOD.e4686_a766_a818_r7676',
-'mc15_13TeV.410143.Sherpa_NNPDF30NNLO_ttZnnqq.merge.AOD.e4686_a766_a818_r7676',
-'mc15_13TeV.410144.Sherpa_NNPDF30NNLO_ttW.merge.AOD.e4686_a766_a818_r7676',
 
 #tZ
 #>= 3L
@@ -153,6 +138,23 @@ TopExamples.grid.Add('ttbar_fullSim').datasets = [
 TopExamples.grid.Add('All_fastSim').datasets = [
 #3tops
 'mc15_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.merge.AOD.e4324_a766_a818_r7676',
+
+#Other Higgs ggH, VBFH, WH, ZH, HH
+'mc15_13TeV.344133.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10nlo_hh_4w_wplep.merge.AOD.e5060_a766_a821_r7676',
+'mc15_13TeV.344134.aMcAtNloHerwigppEvtGen_UEEE5_CTEQ6L1_CT10nlo_hh_4w_wmlep.merge.AOD.e5060_a766_a821_r7676',
+
+#BSM HppHmm
+'mc15_13TeV.344364.CalcHepPythia8_A14_CTEQ6L1_HppHmm_500GeV_4W.merge.AOD.e5207_a766_a821_r7676',
+'mc15_13TeV.344365.CalcHepPythia8_A14_CTEQ6L1_HppHmm_600GeV_4W.merge.AOD.e5207_a766_a821_r7676',
+'mc15_13TeV.344366.CalcHepPythia8_A14_CTEQ6L1_HppHmm_700GeV_4W.merge.AOD.e5207_a766_a821_r7676',
+'mc15_13TeV.344367.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_200GeV.merge.AOD.e5207_a766_a821_r7676',
+'mc15_13TeV.344368.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_300GeV.merge.AOD.e5207_a766_a821_r7676',
+'mc15_13TeV.344369.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_400GeV.merge.AOD.e5207_a766_a821_r7676',
+
+#ttV (alternative)
+'mc15_13TeV.410142.Sherpa_NNPDF30NNLO_ttll_mll5.merge.AOD.e4686_a766_a818_r7676',
+'mc15_13TeV.410143.Sherpa_NNPDF30NNLO_ttZnnqq.merge.AOD.e4686_a766_a818_r7676',
+'mc15_13TeV.410144.Sherpa_NNPDF30NNLO_ttW.merge.AOD.e4686_a766_a818_r7676',
 ]
 
 TopExamples.grid.Add('ttbar_fastSim').datasets = [
