@@ -42,11 +42,11 @@ config.maxNFilesPerJob = '1'
 config.memory = ''
 #config.otherOptions = '--forceStaged'
 
-config.suffix       = '2017-05-13.Sys_v28_2los1tau_1l2tau'
+config.suffix       = '2017-05-13.Sys_v28_taus'
 config.settingsFile = 'generic_config-mc15-Sys_2los1tau_1l2tau.txt'
-#TopExamples.grid.submit(config,fullSim)
+TopExamples.grid.submit(config,fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_2los1tau_1l2tau_fastSim.txt'
-#TopExamples.grid.submit(config,fastSim)
+TopExamples.grid.submit(config,fastSim)
 
 ####################################################################################
 #Nominal

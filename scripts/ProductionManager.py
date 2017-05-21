@@ -286,7 +286,7 @@ if __name__ == '__main__':
     #productionName = '18.08.16.Data-04'
     #productionName = '2017-05-13.Sys_v28_1l3l4l'
     #productionName = '2017-05-13.Sys_v28_2l'
-    productionName = '2017-05-13.Sys_v28_2los1tau_1l2tau'
+    productionName = '2017-05-13.Sys_v28_taus'
     #productionName = '17.07.16.Sys.x'
 
     
