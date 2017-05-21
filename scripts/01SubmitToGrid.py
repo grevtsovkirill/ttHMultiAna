@@ -40,7 +40,6 @@ fastSim = All_fastSim + ttbar_fastSim
 #Systematics
 config.maxNFilesPerJob = '1'
 config.memory = ''
-config.otherOptions = '--forceStaged'
 
 config.suffix       = '2017-05-13.Sys_v28_1l3l4l'
 config.settingsFile = 'generic_config-mc15-Sys.txt'
@@ -71,6 +70,7 @@ config.settingsFile = 'generic_config-mc15_fastSim.txt'
 config.suffix = '2017-05-06.Data_v27'
 config.memory = ''
 config.maxNFilesPerJob = ''
+config.otherOptions = '--forceStaged'
 
 config.settingsFile = 'generic_config-data15.txt'
 TopExamples.grid.Add('data_00284154').datasets = ['user.rwolff.00284154.physics_Main.merge.DAOD_HIGG8D1.r7562_p2521_p2950']
