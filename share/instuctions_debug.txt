@@ -1,0 +1,36 @@
+export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+
+mkdir YourFancyDirectory
+cd YourFancyDirectory
+
+kinit $CERN_USER@CERN.CH
+git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git ttHMultilepton
+cd ttHMultilepton && git checkout ttHMultiAna-02-04-30-04-debugstream && cd ..
+
+lsetup "rcsetup Top,2.4.30"
+
+rc checkout_pkg TopObjectSelectionTools
+sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
+
+rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-51
+
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-56
+
+rc checkout_pkg MuonEfficiencyCorrections
+patch -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
+
+rc checkout_pkg TopCorrections
+patch -d TopCorrections -p0 < ttHMultilepton/newTauEffNPs.patch
+patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
+
+rc build
+
+
+
+# After all DAODs are downloaded make two input files (or several input files) with the exact paths
+# for 2015 and for 2016 data and run with
+
+top-xaod ttHMultilepton/share/generic_config-data15_debug.txt infile_data15_debug.txt
+top-xaod ttHMultilepton/share/generic_config-data16_debug.txt infile_data16_debug.txt
+

@@ -1,0 +1,85 @@
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
+
+GRLDir ttHMultilepton
+GRLFile data16_13TeV.periodAllYear_DetStatus-v88-pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml
+
+EventInfoName EventInfo
+ElectronCollectionName Electrons
+MuonCollectionName Muons
+JetCollectionName AntiKt4EMTopoJets
+LargeJetCollectionName None
+LargeJetSubstructure None
+TauCollectionName None
+#TauCollectionName TauJets
+PhotonCollectionName None
+METCollectionName MET_RefFinal_AntiKt4EMTopo
+LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+JetUncertainties_NPModel 21NP
+
+ObjectSelectionName ttHMultileptonLooseObjectLoader
+OutputFormat ttHMultileptonLooseEventSaver
+OutputFilename output_data16_debug.root
+OutputEvents SelectedEvents
+PerfStats No
+NEvents 0
+
+PRWConfigFiles ttHMultilepton/merged_prw_mc15c.root
+PRWLumiCalcFiles ttHMultilepton/ilumicalc_histograms_None_297730-311481_OflLumi-13TeV-008.root
+PRWDefaultChannel 363372
+
+
+Systematics Nominal
+
+#Electron cuts
+ElectronID LooseAndBLayerLH
+ElectronIDLoose TightLH
+ElectronPt 5000
+ElectronIsolation Loose
+ElectronIsolationLoose PromptLepton
+
+#Muon cuts
+MuonQuality Loose
+MuonQualityLoose Loose
+MuonEta 2.7
+MuonPt 5000
+MuonIsolation Loose
+MuonIsolationLoose PromptLepton
+
+#Tau cuts
+#have been moved to ttHMultilepton/data/loose_tau_selection.conf
+#for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
+#TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
+TauJetConfigFile ttHMultilepton/medium_tau_selection.conf
+TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
+ApplyTauMVATES True
+
+#Jet cuts
+JetPt 25000.
+JetEta 2.5
+BTaggingWP FixedCutBEff_60 FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
+
+#Other cuts, overlaps, bkgs..
+FakesControlRegionDoLooseMC False
+ApplyElectronInJetSubtraction False
+OverlapRemovalLeptonDef Tight
+
+
+# Don't be clever
+SELECTION triggers
+GRL
+GOODCALO
+PRIVTX
+TRIGDEC HLT_e5_lhloose HLT_e5_loose HLT_e12_lhloose HLT_e12_loose HLT_e17_lhloose HLT_e17_loose HLT_e24_lhmedium_L1EM18VH HLT_e24_lhmedium_L1EM20VH HLT_e24_lhmedium_iloose_L1EM18VH HLT_e24_lhmedium_nod0_L1EM20VH HLT_e24_lhtight_iloose HLT_e24_lhtight_iloose_L1EM20VH HLT_e24_lhtight_ivarloose HLT_e24_lhtight_nod0_ivarloose HLT_e24_tight_iloose HLT_e24_tight_iloose_L1EM20VH HLT_e26_lhtight_iloose HLT_e26_lhtight_nod0_ivarloose HLT_e26_tight_iloose HLT_e60_lhmedium HLT_e60_lhmedium_nod0 HLT_e60_medium HLT_e120_lhloose HLT_e140_lhloose HLT_e140_lhloose_nod0 HLT_e140_loose HLT_e300_etcut HLT_mu10 HLT_mu14 HLT_mu18 HLT_mu20_iloose_L1MU15 HLT_mu24 HLT_mu24_iloose HLT_mu24_imedium HLT_mu24_ivarloose HLT_mu24_ivarmedium HLT_mu26_imedium HLT_mu26_ivarmedium HLT_mu40 HLT_mu50 HLT_2e12_lhloose_L12EM10VH HLT_2e12_lhvloose_nod0_L12EM10VH HLT_2e12_loose_L12EM10VH HLT_2e15_lhvloose_nod0_L12EM13VH HLT_2e17_lhvloose_nod0 HLT_e17_lhloose_2e9_lhloose HLT_2mu10 HLT_2mu14 HLT_mu18_mu8noL1 HLT_mu20_mu8noL1 HLT_mu22_mu8noL1 HLT_e7_lhmedium_mu24 HLT_e7_lhmedium_nod0_mu24 HLT_e7_medium_mu24 HLT_e17_lhloose_mu14 HLT_e17_loose_mu14 HLT_e17_lhloose_nod0_mu14 HLT_e24_medium_L1EM20VHI_mu8noL1 HLT_e24_lhmedium_nod0_L1EM20VHI_mu8noL1 HLT_e26_lhmedium_nod0_L1EM22VHI_mu8noL1 HLT_e17_lhmedium_tau25_medium1_tracktwo HLT_e17_lhmedium_nod0_tau25_medium1_tracktwo HLT_e17_lhmedium_nod0_ivarloose_tau25_medium1_tracktwo HLT_mu14_tau25_medium1_tracktwo HLT_mu14_ivarloose_tau25_medium1_tracktwo
+
+SELECTION loose
+INITIAL
+GRL
+GOODCALO
+PRIVTX
+COUNTHISTO
+JETCLEAN LooseBad
+#TRIGDEC HLT_mu26_imedium
+#TRIGMATCH HLT_mu26_imedium
+TTHMULTILEP
+DUPLICATEVETO
+SAVE
