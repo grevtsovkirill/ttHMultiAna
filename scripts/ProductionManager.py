@@ -41,9 +41,10 @@ class Sample:
             self.size     = int(size)
             self.outDS    = str(outDS)
             self.inDS     = str(job.inDS)
-
+            self.AFII     = self.outDS.count('_a766') > 0
+            
     def __eq__(self, other):
-        return self.dsid == other.dsid
+        return (self.dsid == other.dsid) and (self.AFII == other.AFII )
         
     def __str__(self):
         return "DSID: %s"  % self.dsid
@@ -111,7 +112,11 @@ def getSamplesOnEOS(eosMGM,eosPath):
         filename = f.split('/')[-1]
         dsid = filename.split('.')[0]
         sample = Sample()
-        sample.dsid = dsid
+        sample.dsid = dsid.split('_')[0]
+        if len(dsid.split('_'))>1:
+            sample.AFII = True
+        else:
+            sample.AFII = False
         samples += [sample]
     return samples
 
@@ -122,6 +127,26 @@ def getDSSize(DSName):
     for f in client.list_files('user.'+gridNickName,DSName):
         totalSize += int(f['bytes'])
     return totalSize
+
+#============================================================================
+def getDoneSamplesOnGRIDOtherUser():
+    samples = []
+    #https://github.com/dguest/pandamonium
+    cmd = "pandamon user.%s*%s | awk '$1 ~ /done/ {print $4}'" %(gridNickName,productionName)
+    print 'getting done GRID jobs with:'
+    print cmd
+    for line in subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True).communicate()[0].splitlines():
+        #all the following to mimick the Sample constructor
+        #https://stackoverflow.com/questions/19476816/creating-an-empty-object-in-python
+        job = type('', (), {})()
+        #strip trailing /
+        if line[-1] in "/":
+            line = line[:-1]
+        job.outDS = line+'_output.root,dummy'
+        job.inDS = ''
+        samples += [Sample(job)]
+
+    return samples
 
 #============================================================================
 def getDoneSamplesOnGRID():
@@ -211,10 +236,17 @@ def createJobScript(outDir,sample,eosMGM,eosPath):
     file.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh        \n')
     #file.write('setupATLAS                                                                         \n')
     file.write('RUCIO_ACCOUNT=dhohn                                                                \n')
+<<<<<<< HEAD
     file.write('lsetup "rcsetup Top,2.4.16" rucio -f                                               \n')
     file.write('pwd                                                                                \n')
     file.write('which root                                                                         \n')
     txt  = 'source /afs/cern.ch/user/d/dhohn/Run2pro/ttHMultilepton/scripts/%s \\\n' % runScript
+=======
+    file.write('lsetup "rcsetup Top,2.4.30" rucio -f                                               \n')
+    file.write('pwd                                                                                \n')
+    file.write('which root                                                                         \n')
+    txt  = 'source /afs/cern.ch/user/d/dhohn/Run2/ttHMultilepton/scripts/%s \\\n' % runScript
+>>>>>>> 2fcc45f... also upload other peoples jobs
     txt += '%s \\\n' % sample.outDS
     txt += '%s \\\n' % copyPath
     txt += '%s \\\n' % sample.dsid
@@ -282,8 +314,12 @@ if __name__ == '__main__':
     productionName = '18.08.16.Nominal-02'
     #productionName = '17.07.16.Sys.x'
 
-    
-    doneSamplesOnGRID = getDoneSamplesOnGRID()
+    userenv = 'RUCIO_ACCOUNT' if 'RUCIO_ACCOUNT' in os.environ else 'USER'
+    if gridNickName != os.environ[userenv]:
+        doneSamplesOnGRID = getDoneSamplesOnGRIDOtherUser()
+        print doneSamplesOnGRID
+    else:
+        doneSamplesOnGRID = getDoneSamplesOnGRID()
     
     #samples that are done on GRID but not yet on EOS
     samplesCopyEOS = list(set(doneSamplesOnGRID) - set(samplesOnEOS))
