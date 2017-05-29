@@ -43,15 +43,15 @@ config.memory = ''
 
 config.suffix       = '2017-05-13.Sys_v28_1l3l4l'
 config.settingsFile = 'generic_config-mc15-Sys.txt'
-#TopExamples.grid.submit(config,sys_fullSim)
+#TopExamples.grid.submit(config,fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
-#TopExamples.grid.submit(config,sys_fastSim)
+#TopExamples.grid.submit(config,fastSim)
 
 config.suffix       = '2017-05-13.Sys_v28_2l'
 config.settingsFile = 'generic_config-mc15-Sys_CFT.txt'
-#TopExamples.grid.submit(config,sys_fullSim)
-config.settingsFile = 'generic_config-mc15-Sys_fastSim_CFT.txt'
-#TopExamples.grid.submit(config,sys_fastSim)
+#TopExamples.grid.submit(config,fullSim)
+config.settingsFile = 'generic_config-mc15-Sys_CFT_fastSim.txt'
+#TopExamples.grid.submit(config,fastSim)
 
 ####################################################################################
 #Nominal

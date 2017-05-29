@@ -191,6 +191,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
+  void setBtagSFs(const top::Event& event);
 
   //some event weights
   double m_mcWeight;

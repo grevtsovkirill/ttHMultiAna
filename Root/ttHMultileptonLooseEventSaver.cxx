@@ -1407,13 +1407,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     m_lhe3weights = event.m_info->mcEventWeights();
     if(m_sfRetriever){
       m_pileup_weight = m_sfRetriever->pileupSF(event);
-      m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
-      m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
-      m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
-      m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
-      m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
-      m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
       m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
+      //btag moved to own function
 
       //do sys weights only in "nominal" tree
       if( m_doSFSystematics ){
@@ -1424,45 +1419,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 	m_pileup_weight_UP    = relativeSF(m_pileup_weight_UP,   m_pileup_weight);
 	m_pileup_weight_DOWN  = relativeSF(m_pileup_weight_DOWN, m_pileup_weight);
 
-	//btag
-	m_sfRetriever->btagSF_eigen_vars(event,
-					 top::topSFSyst::BTAG_SF_EIGEN_B,
-					 m_weight_bTagSF_eigen_B_up,
-					 m_weight_bTagSF_eigen_B_down, m_bTagSF_default);
-	m_sfRetriever->btagSF_eigen_vars(event,
-					 top::topSFSyst::BTAG_SF_EIGEN_C,
-					 m_weight_bTagSF_eigen_C_up,
-					 m_weight_bTagSF_eigen_C_down, m_bTagSF_default);
-	m_sfRetriever->btagSF_eigen_vars(event,
-					 top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
-					 m_weight_bTagSF_eigen_Light_up,
-					 m_weight_bTagSF_eigen_Light_down, m_bTagSF_default);
-
-	for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	  m_weight_bTagSF_eigen_Others_up[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_UP, m_bTagSF_default, false, name );
-	  m_weight_bTagSF_eigen_Others_down[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_DOWN, m_bTagSF_default, false, name );
-	}
-
-
-
-	//normalise
-	for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
-	  m_weight_bTagSF_eigen_B_up.at(i)   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_B_down.at(i) /= m_bTagSF_weight;
-	}
-	for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(m_bTagSF_default); ++i) {
-	  m_weight_bTagSF_eigen_C_up.at(i)   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_C_down.at(i) /= m_bTagSF_weight;
-	}
-	for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(m_bTagSF_default); ++i) {
-	  m_weight_bTagSF_eigen_Light_up.at(i)   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_Light_down.at(i) /= m_bTagSF_weight;
-	}
-	for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	  m_weight_bTagSF_eigen_Others_up[name]   /= m_bTagSF_weight;
-	  m_weight_bTagSF_eigen_Others_down[name] /= m_bTagSF_weight;
-	}
-
+	//btag SFs moved
+	
 	// JVT SF
 	m_JVT_weight_UP = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_UP);
 	m_JVT_weight_DOWN = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_DOWN);
@@ -1805,6 +1763,29 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //MakeIndices(event.m_electrons);
   //MakeIndices(event.m_muons);
 
+  //i dont care about your const, so so naughty
+  top::Event& nc_event = const_cast<top::Event&>(event);
+  xAOD::JetContainer orig_jets = event.m_jets;
+  xAOD::JetContainer tmp_jets(SG::VIEW_ELEMENTS);
+  xAOD::JetContainer tmp_jets_T(SG::VIEW_ELEMENTS);
+  
+  for(auto jetItr : *goodJet ) {
+    if(jetItr->auxdataConst<char>("ttHpassOVR"))
+      tmp_jets.push_back(jetItr);
+    if(jetItr->auxdataConst<char>("ttHpassOVR") and jetItr->auxdataConst<char>("ttHpassTauOVR") )
+      tmp_jets_T.push_back(jetItr);
+  }
+  tmp_jets.sort(top::descendingPtSorter);
+  tmp_jets_T.sort(top::descendingPtSorter);
+
+  if(m_variables->total_leptons == 1 or (m_variables->total_leptons == 2 and m_variables->total_charge == 0 ) or m_variables->total_leptons == 4)
+    nc_event.m_jets = tmp_jets;
+  else
+    nc_event.m_jets = tmp_jets_T;
+  
+  setBtagSFs(event);
+  nc_event.m_jets = tmp_jets;
+  
   CopyJets(goodJet);
   CopyTaus(goodTau);
   CopyHT(goodEl, goodMu, goodJet, goodTau);
@@ -1880,16 +1861,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   if(m_doSystematics) {
     //only selected jets
     for(auto alljet : event.m_jets) {
-      //alljet->auxdecor<char>("ttHpassOVR") = 0;
-      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-      (*m_decor_ttHpassOVR)(*alljet) = 0;
-      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}
       }
     }
@@ -1900,16 +1875,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   else {
     //all jets
     for(auto alljet : *calibratedJets) {
-      //alljet->auxdecor<char>("ttHpassOVR") = 0;
-      //alljet->auxdecor<char>("ttHpassTauOVR") = 0;
-      (*m_decor_ttHpassOVR)(*alljet) = 0;
-      (*m_decor_ttHpassTauOVR)(*alljet) = 0;
       for(auto goodjet : *goodJet ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	  //alljet->auxdecor<char>("ttHpassOVR") = goodjet->auxdecor<char>("ttHpassOVR");
-	  //alljet->auxdecor<char>("ttHpassTauOVR") = goodjet->auxdecor<char>("ttHpassTauOVR");
 	}
       }
     }
@@ -2135,4 +2104,58 @@ std::string ttHMultileptonLooseEventSaver::betterBtagNamedSyst (const std::strin
     out.replace(out.find(str),str.length(),"_");
   }
   return out;
+}
+
+void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
+  //do sys weights only in "nominal" tree
+  if(     top::isSimulation(event) and m_sfRetriever ){
+
+    m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
+    m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
+    m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
+    m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
+    m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
+    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
+    //btag
+    if(m_doSFSystematics) {
+      m_sfRetriever->btagSF_eigen_vars(event,
+				       top::topSFSyst::BTAG_SF_EIGEN_B,
+				       m_weight_bTagSF_eigen_B_up,
+				       m_weight_bTagSF_eigen_B_down, m_bTagSF_default);
+      m_sfRetriever->btagSF_eigen_vars(event,
+				       top::topSFSyst::BTAG_SF_EIGEN_C,
+				       m_weight_bTagSF_eigen_C_up,
+				       m_weight_bTagSF_eigen_C_down, m_bTagSF_default);
+      m_sfRetriever->btagSF_eigen_vars(event,
+				       top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
+				       m_weight_bTagSF_eigen_Light_up,
+				       m_weight_bTagSF_eigen_Light_down, m_bTagSF_default);
+
+      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
+	m_weight_bTagSF_eigen_Others_up[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_UP, m_bTagSF_default, false, name );
+	m_weight_bTagSF_eigen_Others_down[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_DOWN, m_bTagSF_default, false, name );
+      }
+
+
+
+      //normalise
+      for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
+	m_weight_bTagSF_eigen_B_up.at(i)   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_B_down.at(i) /= m_bTagSF_weight;
+      }
+      for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(m_bTagSF_default); ++i) {
+	m_weight_bTagSF_eigen_C_up.at(i)   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_C_down.at(i) /= m_bTagSF_weight;
+      }
+      for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(m_bTagSF_default); ++i) {
+	m_weight_bTagSF_eigen_Light_up.at(i)   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_Light_down.at(i) /= m_bTagSF_weight;
+      }
+      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
+	m_weight_bTagSF_eigen_Others_up[name]   /= m_bTagSF_weight;
+	m_weight_bTagSF_eigen_Others_down[name] /= m_bTagSF_weight;
+      }
+
+    }//endif sys
+  }//endif nom
 }
