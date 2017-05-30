@@ -216,6 +216,8 @@ def getDoneSamplesOnGRID():
 def createJobScript(outDir,sample,eosMGM,eosPath):
 
     jobScript = '%s_%s' % (productionName, sample.dsid)
+    if sample.outDS.find('_a766') > 0:
+        jobScript += '_AFII'
     jobScript += '.sh'
 
     copyPath = eosMGM+eosPath
@@ -236,17 +238,10 @@ def createJobScript(outDir,sample,eosMGM,eosPath):
     file.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh        \n')
     #file.write('setupATLAS                                                                         \n')
     file.write('RUCIO_ACCOUNT=dhohn                                                                \n')
-<<<<<<< HEAD
-    file.write('lsetup "rcsetup Top,2.4.16" rucio -f                                               \n')
-    file.write('pwd                                                                                \n')
-    file.write('which root                                                                         \n')
-    txt  = 'source /afs/cern.ch/user/d/dhohn/Run2pro/ttHMultilepton/scripts/%s \\\n' % runScript
-=======
     file.write('lsetup "rcsetup Top,2.4.30" rucio -f                                               \n')
     file.write('pwd                                                                                \n')
     file.write('which root                                                                         \n')
     txt  = 'source /afs/cern.ch/user/d/dhohn/Run2/ttHMultilepton/scripts/%s \\\n' % runScript
->>>>>>> 2fcc45f... also upload other peoples jobs
     txt += '%s \\\n' % sample.outDS
     txt += '%s \\\n' % copyPath
     txt += '%s \\\n' % sample.dsid
@@ -306,12 +301,16 @@ if __name__ == '__main__':
 
     eosMGM = 'root://eospublic.cern.ch/'
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v20/04/Data'
-    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v20/02/Nominal'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_1l3l4l'
+    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_2l'
+    eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_1l2t_2los1t'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
-    gridNickName = 'dhohn'
+    gridNickName = 'rwolff'
     #productionName = '18.08.16.Data-04'
-    productionName = '18.08.16.Nominal-02'
+    #productionName = '2017-05-13.Sys_v28_1l3l4l'
+    #productionName = '2017-05-13.Sys_v28_2l'
+    productionName = '2017-05-13.Sys_v28_2los1tau_1l2tau'
     #productionName = '17.07.16.Sys.x'
 
     userenv = 'RUCIO_ACCOUNT' if 'RUCIO_ACCOUNT' in os.environ else 'USER'
