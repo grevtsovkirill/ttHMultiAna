@@ -1,14 +1,3 @@
---- MuonEfficiencyCorrections/Root/MuonEfficiencyScaleFactors.cxx    (revision 804390)
-+++ MuonEfficiencyCorrections/Root/MuonEfficiencyScaleFactors.cxx    (working copy)
-@@ -37,7 +37,7 @@
-                 m_sf_replica_decoration_name(),
-                 m_eff_replica_decoration_name(),
-                 m_mc_eff_replica_decoration_name(),
--                m_calibration_version("170303_Moriond"),
-+                m_calibration_version("170410_Moriond"),
-                 m_effType(),
-                 m_lowpt_threshold(15.e3),
-                 m_effDec(0),
 --- TopCPTools/Root/TopEgammaCPTools.cxx    (revision 804391)
 +++ TopCPTools/Root/TopEgammaCPTools.cxx    (working copy)
 @@ -419,6 +419,10 @@

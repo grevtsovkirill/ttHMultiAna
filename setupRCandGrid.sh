@@ -3,7 +3,7 @@ echo "Setting up all the things"
 
 #lsetup knows in which order to do these
 
-lsetup "rcsetup Top,2.4.30" panda rucio pyami
+lsetup "rcsetup Top,2.4.32" panda rucio pyami
 #voms-proxy-init -voms atlas:/atlas/phys-higgs/Role=production -out ${HOME}/.globus/gridproxy.cert -valid 24:0
 #export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
@@ -12,14 +12,10 @@ rc checkout_pkg TopObjectSelectionTools
 sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
 
 #new tau ele bdt
-rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-51
+#rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-54
 
-#for latest April 25th b-tagging SFs recommendations
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-56
-
-
-#for PromptLeptonIso SFs
-rc checkout_pkg MuonEfficiencyCorrections
+#for latest April 25th b-tagging SFs recommendations and PromptLeptonIso SFs
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-60
 patch -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
 
 #for EleBDT SFs
