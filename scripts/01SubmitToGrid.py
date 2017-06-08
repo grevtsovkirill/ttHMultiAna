@@ -41,13 +41,13 @@ fastSim = All_fastSim + ttbar_fastSim
 config.maxNFilesPerJob = '1'
 config.memory = ''
 
-config.suffix       = '2017-05-13.Sys_v28_1l3l4l'
+config.suffix       = '2017-06-09.Sys_v29_noCFT'
 config.settingsFile = 'generic_config-mc15-Sys.txt'
 #TopExamples.grid.submit(config,fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 #TopExamples.grid.submit(config,fastSim)
 
-config.suffix       = '2017-05-13.Sys_v28_2l'
+config.suffix       = '2017-06-09.Sys_v29_CFT'
 config.settingsFile = 'generic_config-mc15-Sys_CFT.txt'
 #TopExamples.grid.submit(config,fullSim)
 config.settingsFile = 'generic_config-mc15-Sys_CFT_fastSim.txt'
@@ -55,7 +55,7 @@ config.settingsFile = 'generic_config-mc15-Sys_CFT_fastSim.txt'
 
 ####################################################################################
 #Nominal
-config.suffix = '2017-05-06.Nominal_v28'
+config.suffix = '2017-06-09.Nominal_v29_noCFT'
 config.memory = ''
 config.maxNFilesPerJob = ''
 
@@ -67,7 +67,7 @@ config.settingsFile = 'generic_config-mc15_fastSim.txt'
 
 ########################################################################################
 #Data
-config.suffix = '2017-05-06.Data_v27'
+config.suffix = '2017-06-09.Data_v29'
 config.memory = ''
 config.maxNFilesPerJob = ''
 config.otherOptions = '--forceStaged'
