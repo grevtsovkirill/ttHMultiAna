@@ -1802,8 +1802,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   doEventTrigSFs(goodEl, goodMu, event);
   doEventSFs();
 
-  // for systematic skimming after overlap removal
-  int skim_nLeptons = 0, skim_nTaus = 0, skim_totalCharge = 0;
   //blame David and the other vector people for this...
   for(auto allel : event.m_electrons) {
     (*m_decor_ttHpassOVR)(*allel) = 0;
@@ -1811,10 +1809,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     for(auto goodel : *goodEl ) {
       if( goodel->p4() == allel->p4() ) {
 	(*m_decor_ttHpassOVR)(*allel) = (*m_decor_ttHpassOVR)(*goodel);
-        if ((*m_decor_ttHpassOVR)(*goodel)) {
-          skim_nLeptons++;
-          skim_totalCharge += goodel->charge();
-        }
 	//allel->auxdecor<char>("ttHpassOVR")    = goodel->auxdecor<char>("ttHpassOVR");
       }
     }
@@ -1826,10 +1820,6 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     for(auto goodmu : *goodMu ) {
       if( goodmu->p4() == allmu->p4() ) {
 	(*m_decor_ttHpassOVR)(*allmu) = (*m_decor_ttHpassOVR)(*goodmu);
-        if ((*m_decor_ttHpassOVR)(*goodmu)) {
-          skim_nLeptons++;
-          skim_totalCharge += goodmu->charge();
-        }
 	//allmu->auxdecor<char>("ttHpassOVR")    = goodmu->auxdecor<char>("ttHpassOVR");
       }
     }
@@ -1841,26 +1831,24 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     for(auto goodtau : *goodTau ) {
       if( goodtau->p4() == alltau->p4() )
 	(*m_decor_ttHpassTauOVR)(*alltau) = (*m_decor_ttHpassTauOVR)(*goodtau);
-        if ((*m_decor_ttHpassTauOVR)(*goodtau))
-          skim_nTaus++;
       //alltau->auxdecor<char>("ttHpassTauOVR") = goodtau->auxdecor<char>("ttHpassTauOVR");
     }
   }
 
   // for systematic skimming after overlap removal
   if (m_doSystematics) {
-    if (skim_nLeptons+skim_nTaus < 2)
+    if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 < 2)
       return; // remove all events with less than 2 leptons (including taus)
-    if (skim_nLeptons == 2 && skim_totalCharge == 0 && skim_nTaus == 0)
+    if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 == 0)
       return; // remove all 2l opposite sign 0 tau events
   }
 
   // for skimming of events for promptLepton isolation WP (only MC):
   // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
-  if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && skim_nLeptons != 2)
-    return; // remove all 1l, 3l and 4l events
-  if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && skim_nLeptons == 2)
-    return; // remove all 2l events
+  //if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && m_variables->total_leptons != 2)
+  //  return; // remove all 1l, 3l and 4l events
+  //if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && m_variables->total_leptons == 2)
+  //  return; // remove all 2l events
 
   //save ALL jets
   xAOD::JetContainer* calibratedJets(nullptr);
