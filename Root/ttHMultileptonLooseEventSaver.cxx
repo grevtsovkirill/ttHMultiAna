@@ -386,7 +386,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //Items and their PS
   // defined in config files with TRIGDEC selectors
   // "triggers" is the name of that dummy selection
-  std::vector<std::string> triggernames = config->allTriggers("triggers");
+  std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
 
 
   //make a tree for each systematic
