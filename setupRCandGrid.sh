@@ -18,9 +18,8 @@ sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObj
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-60
 patch -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
 
-#for EleBDT SFs
+#for missing tau track links
 rc checkout_pkg TopCorrections
-patch -d TopCorrections -p0 < ttHMultilepton/newTauEffNPs.patch
 patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
 
 
