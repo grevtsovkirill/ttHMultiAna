@@ -29,4 +29,8 @@ void ttHMultilepton::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, 
   CreateBranch(tree, &passEleOLR,      "tau_passEleOLR_",       index);
   CreateBranch(tree, &passEleBDT,      "tau_passEleBDT_",       index);
   CreateBranch(tree, &passMuonOLR,     "tau_passMuonOLR_",      index);
+
+  CreateBranch(tree, &truthOrigin,     "tau_truthOrigin_",      index);
+  CreateBranch(tree, &truthType,       "tau_truthType_",        index);
+  CreateBranch(tree, &truthJetFlavour, "tau_truthJetFlavour_",  index);
 }

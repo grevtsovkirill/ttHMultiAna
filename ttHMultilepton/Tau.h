@@ -26,6 +26,7 @@ namespace ttHMultilepton {
     float SFLoose[MAXSYST];
 
     int passEleOLR, passEleBDT, passMuonOLR;
+    int truthOrigin, truthType, truthJetFlavour;
 
     bool operator==(const Tau &other) {
       // compare eta, phi, bleurgh

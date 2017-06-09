@@ -1857,6 +1857,9 @@ ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& 
   MLTau.passEleOLR      = xTau.auxdata<int>("passEleOLR");
   MLTau.passEleBDT      = xTau.auxdata<int>("passEleBDT");
   MLTau.passMuonOLR     = xTau.auxdata<int>("passMuonOLR");
+  MLTau.truthOrigin     = xTau.auxdata<int>("tauTruthOrigin");
+  MLTau.truthType       = xTau.auxdata<int>("tauTruthType");
+  MLTau.truthJetFlavour = xTau.auxdata<int>("truthJetFlavour");
 
   for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
