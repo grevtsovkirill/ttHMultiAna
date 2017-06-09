@@ -44,7 +44,6 @@ JetJERSmearingModel Simple
 DynamicKeys DoSystematics
 # enables skimming and slimming
 DoSystematics True
-OutputFileSetAutoFlushZero True
 
 #Electron cuts
 ElectronID LooseAndBLayerLH
