@@ -24,7 +24,9 @@ namespace ttHMultilepton {
     char fromPV;
     float SFTight[MAXSYST];
     float SFLoose[MAXSYST];
-    
+
+    int passEleOLR, passEleBDT, passMuonOLR;
+    int truthOrigin, truthType, truthJetFlavour;
 
     bool operator==(const Tau &other) {
       // compare eta, phi, bleurgh
