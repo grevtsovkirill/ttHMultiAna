@@ -295,8 +295,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	  std::vector<std::string> inputFiles;
 	  inputFiles.push_back(filepath);
 	  t->setProperty("CorrectionFileNameList",inputFiles).ignore();
-	  t->setProperty("IdKey",kv[3]).ignore();
-	  t->setProperty("IsoKey",kv[4]).ignore();
+	  //t->setProperty("IdKey",kv[3]).ignore();
+	  //t->setProperty("IsoKey",kv[4]).ignore();
 	  t->setProperty("CorrelationModel","TOTAL").ignore();
 	  t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
 	  top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
