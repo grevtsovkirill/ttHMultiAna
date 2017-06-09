@@ -72,16 +72,15 @@ config.memory = ''
 config.maxNFilesPerJob = ''
 config.otherOptions = '--forceStaged'
 
-config.settingsFile = 'generic_config-data15.txt'
+config.settingsFile = 'generic_config-data.txt'
+
 TopExamples.grid.Add('data_00284154').datasets = ['user.rwolff.00284154.physics_Main.merge.DAOD_HIGG8D1.r7562_p2521_p2950']
 data_00284154 = TopExamples.grid.Samples(['data_00284154'])
-#TopExamples.grid.submit(config, data_00284154)
 data15 = TopExamples.grid.Samples(['data15'])
-#TopExamples.grid.submit(config, data15)
-
 data16 = TopExamples.grid.Samples(['data16'])
-config.settingsFile = 'generic_config-data16.txt'
-#TopExamples.grid.submit(config,data16)
+
+data = data_00284154 + data15 + data16
+#TopExamples.grid.submit(config,data)
 
 
 #################################################################################
