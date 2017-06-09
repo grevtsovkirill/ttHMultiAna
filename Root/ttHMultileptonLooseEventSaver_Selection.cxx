@@ -212,7 +212,7 @@ ttHMultileptonLooseEventSaver::SelectTaus(const top::Event& event) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(6);
-    if ( !( tauItr->auxdata<int>("passEleOLR") and tauItr->auxdata<int>("passEleBDT")) ) {
+    if ( !( tauItr->auxdata<int>("passEleBDT") ) ) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(7);
@@ -1854,6 +1854,12 @@ ttHMultileptonLooseEventSaver::CopyTau(xAOD::TauJet& xTau, ttHMultilepton::Tau& 
   MLTau.isHadronic      = xTau.auxdata<int>("IsHadronic");
   MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
   MLTau.fromPV          = xTau.auxdata<char>("fromPV");
+  MLTau.passEleOLR      = xTau.auxdata<int>("passEleOLR");
+  MLTau.passEleBDT      = xTau.auxdata<int>("passEleBDT");
+  MLTau.passMuonOLR     = xTau.auxdata<int>("passMuonOLR");
+  MLTau.truthOrigin     = xTau.auxdata<int>("tauTruthOrigin");
+  MLTau.truthType       = xTau.auxdata<int>("tauTruthType");
+  MLTau.truthJetFlavour = xTau.auxdata<int>("truthJetFlavour");
 
   for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;

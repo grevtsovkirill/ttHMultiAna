@@ -230,6 +230,11 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     int passEleBDT(0);
     if(m_tauSelectionEleBDT.accept(*tauItr)) passEleBDT = 1;
     tauItr->auxdecor<int>("passEleBDT") = passEleBDT;
+
+    //MuonOLR
+    int passMuonOLR(0);
+    if(m_tauSelectionMuonOLR.accept(*tauItr)) passMuonOLR = 1;
+    tauItr->auxdecor<int>("passMuonOLR") = passMuonOLR;
     
     //truth jet flavour
     int truthJetFlavour(-1);

@@ -1,24 +1,20 @@
---- MuonEfficiencyCorrections/Root/MuonEfficiencyScaleFactors.cxx    (revision 804390)
-+++ MuonEfficiencyCorrections/Root/MuonEfficiencyScaleFactors.cxx    (working copy)
-@@ -37,7 +37,7 @@
-                 m_sf_replica_decoration_name(),
-                 m_eff_replica_decoration_name(),
-                 m_mc_eff_replica_decoration_name(),
--                m_calibration_version("170303_Moriond"),
-+                m_calibration_version("170410_Moriond"),
-                 m_effType(),
-                 m_lowpt_threshold(15.e3),
-                 m_effDec(0),
---- TopCPTools/Root/TopEgammaCPTools.cxx    (revision 804391)
-+++ TopCPTools/Root/TopEgammaCPTools.cxx    (working copy)
-@@ -419,6 +419,10 @@
+Index: Root/TopEgammaCPTools.cxx
+===================================================================
+--- Root/TopEgammaCPTools.cxx	(Revision 806266)
++++ Root/TopEgammaCPTools.cxx	(Arbeitskopie)
+@@ -419,10 +419,15 @@
    } else if (type == "isolation") {
      file_path = "isolation/efficiencySF.Isolation."
        + ID + "_d0z0_v11" + new_iso + ".root";
-+    if (isolation == "PromptLepton") // should be only true in case of using ttH-ML private root file
-+      return PathResolverFindCalibFile("ttHMultilepton/efficiencySF.Isolation.TightLLH_d0z0_v11_isolPromptLepton.root");
-+    else if (isolation == "PromptLeptonCFT")
-+      return PathResolverFindCalibFile("ttHMultilepton/efficiencySF.Isolation.TightLLH_d0z0_v11_isolPromptLeptonCFT.root");
++    if (isolation == "PromptLepton" || isolation == "PromptLeptonCFT") { // should be only true in case of using ttH-ML private root file
++      return PathResolverFindCalibFile("ttHMultilepton/efficiencySF.Isolation.TightLLH_d0z0_v11_isol" + isolation + ".root");
++    }
    } else if (type == "triggerSF") {
++    if (isolation == "PromptLepton" || isolation == "PromptLeptonCFT") new_iso = "";
      file_path = "trigger/efficiencySF." + ridiculous_trigger_string
        + "." + ID + "_d0z0_v11" + new_iso + ".root";
+   } else if (type == "triggerEff") {
++    if (isolation == "PromptLepton" || isolation == "PromptLeptonCFT") new_iso = "";
+     file_path = "trigger/efficiency." + ridiculous_trigger_string
+       + "." + ID + "_d0z0_v11" + new_iso + ".root";
+   } else if (type == "ChargeID") {
