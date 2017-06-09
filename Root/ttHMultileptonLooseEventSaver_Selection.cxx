@@ -1233,7 +1233,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
     }
   }
 
-  SG::AuxElement::Decorator<char> dec_tight("Signal"); // to tag electrons passing tight PID
+  SG::AuxElement::Decorator<char> dec_tight("Signal"); // to tag electrons passing tight PID and PLI
+  SG::AuxElement::Decorator<char> dec_tightCFT("SignalCFT"); // to tag electrons passing tight PID and PLI+CFT
   SG::AuxElement::Decorator<char> dec_loose("Baseline"); // to tag electrons passing loose PID
  
   //std::cout << "doEventTrigSFs::Starting event loop" << std::endl;
@@ -1279,10 +1280,10 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	++nTrig;
 	
 	if (abs(m_variables->total_charge) == 0 && m_variables->nTaus_OR_Pt25>0){
-	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;}//TightTight SF 2LOS
+	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_tightCFT(*e) = 0; dec_loose(*e) = 1;}//TightTight SF 2LOS
 	}
 	else {
-	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1; dec_loose(*e) = 0;}//TightTight SF 2LSS
+	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_tightCFT(*e) = 1; dec_loose(*e) = 0;}//TightTight SF 2LSS
 	}
 
 	double sf_tt = 1.;
@@ -1303,7 +1304,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	    // std::cout << "2LSSTightTight:TriggerEff Data is for sys " << systvar.second << " : " << dummy << std::endl;
 	  }
       
-	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose SF
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_tightCFT(*e) = 0; dec_loose(*e) = 1;} //LooseLoose SF
 	double sf_ll = 1.;
 	auto cc_ll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ll);
 	if(cc_ll==CP::CorrectionCode::Ok)
@@ -1327,13 +1328,14 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	  float pt = 0.001f*e->pt();
 	  //std::cout << nCount << " electron pT " << pt << std::endl;
 	  leadElectronPt = std::max(pt,leadElectronPt);
+	  dec_tight(*e) = 0;
 	  if (myTriggeringMuons.size()==0){
-	    if (nCount==0) { dec_tight(*e) = 1; dec_loose(*e) = 0; }
-	    else if (nCount==1) { dec_tight(*e) = 0; dec_loose(*e) = 1; }
+	    if (nCount==0) { dec_tightCFT(*e) = 1; dec_loose(*e) = 0; }
+	    else if (nCount==1) { dec_tightCFT(*e) = 0; dec_loose(*e) = 1; }
 	  }
 	  else {
-	    if (leadElectronPt > leadMuonPt) { dec_tight(*e) = 1; dec_loose(*e) = 0; }
-	    else { dec_tight(*e) = 0; dec_loose(*e) = 1; }
+	    if (leadElectronPt > leadMuonPt) { dec_tightCFT(*e) = 1; dec_loose(*e) = 0; }
+	    else { dec_tightCFT(*e) = 0; dec_loose(*e) = 1; }
 	  }
 	} //TightLoose SF
 	double sf_tl = 1.;
@@ -1359,13 +1361,14 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	  float pt = 0.001f*e->pt();
 	  //std::cout << nCount << " electron pT " << pt << std::endl;
 	  leadElectronPt = std::max(pt,leadElectronPt);
+	  dec_tight(*e) = 0;
 	  if (myTriggeringMuons.size()==0){
-	    if (nCount==0) { dec_tight(*e) = 0; dec_loose(*e) = 1; }
-	    else if (nCount==1) { dec_tight(*e) = 1; dec_loose(*e) = 0; }
+	    if (nCount==0) { dec_tightCFT(*e) = 0; dec_loose(*e) = 1; }
+	    else if (nCount==1) { dec_tightCFT(*e) = 1; dec_loose(*e) = 0; }
 	  }
 	  else {
-	    if (leadElectronPt > leadMuonPt) { dec_tight(*e) = 0; dec_loose(*e) = 1; }
-	    else { dec_tight(*e) = 1; dec_loose(*e) = 0; }
+	    if (leadElectronPt > leadMuonPt) { dec_tightCFT(*e) = 0; dec_loose(*e) = 1; }
+	    else { dec_tightCFT(*e) = 1; dec_loose(*e) = 0; }
 	  }
 	} //LooseTight SF
 	double sf_lt = 1.;
@@ -1459,13 +1462,14 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	++nTrig;
 	
 	for(auto e : myTriggeringElectrons) {
+	  dec_tight(*e) = 0;
 	  if (e->charge() == -m_variables->total_charge){ 
 	    dec_loose(*e) = 1;
-	    dec_tight(*e) = 0;
+	    dec_tightCFT(*e) = 0;
 	  }
 	  else {
 	    dec_loose(*e) = 0;	  
-	    dec_tight(*e) = 1;
+	    dec_tightCFT(*e) = 1;
 	  }
 	}//TightTight
 	
@@ -1486,7 +1490,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	    //std::cout << "3LTightTight:TriggerEff is for sys " << systvar.second << " : " << eff_ltt << std::endl;
 	  }
       
-	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose SF
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_tightCFT(*e) = 0; dec_loose(*e) = 1;} //LooseLoose SF
 	double sf_lll = 1.;
 	auto cc_lll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lll);
 	if(cc_lll==CP::CorrectionCode::Ok)
@@ -1509,10 +1513,11 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	  int lidx;
 	  ttHMultilepton::LepType typ;
 	  std::tie(p4, lidx, typ) = sorter[idx];
+	  dec_tight(*(myTriggeringElectrons)[lidx]) = 0;
 	  if (typ == ttHMultilepton::ELECTRON){
-	    if (idx==0) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
-	    else if (idx==1) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tight(*(myTriggeringElectrons)[lidx]) = 1;}
-	    else if (idx==2) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
+	    if (idx==0) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 0;}
+	    else if (idx==1) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 1;}
+	    else if (idx==2) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 0;}
 	  }
 	} //TightLoose SF
 
@@ -1538,10 +1543,11 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	  int lidx;
 	  ttHMultilepton::LepType typ;
 	  std::tie(p4, lidx, typ) = sorter[idx];
+	  dec_tight(*(myTriggeringElectrons)[lidx]) = 0;
 	  if (typ == ttHMultilepton::ELECTRON){
-	    if (idx==0) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
-	    else if (idx==1) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
-	    else if (idx==2) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tight(*(myTriggeringElectrons)[lidx]) = 1;}
+	    if (idx==0) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 0;}
+	    else if (idx==1) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 0;}
+	    else if (idx==2) {dec_loose(*(myTriggeringElectrons)[lidx]) = 0; dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 1;}
 	  }
 	} //LooseTight SF
 
@@ -1621,6 +1627,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	  int lidx;
 	  ttHMultilepton::LepType typ;
 	  std::tie(p4, lidx, typ) = sorter[idx];
+	  dec_tightCFT(*(myTriggeringElectrons)[lidx]) = 0;
 	  if (typ == ttHMultilepton::ELECTRON){
 	    if (idx==0) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
 	    else if (idx==1) {dec_loose(*(myTriggeringElectrons)[lidx]) = 1; dec_tight(*(myTriggeringElectrons)[lidx]) = 0;}
@@ -1637,7 +1644,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	    //std::cout << "4L:TriggerScaleFactor is: " << sf_tttt << std::endl;
 	  }
 	
-	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
+	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_tightCFT(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
 	double sf_llll = 1.;
 	auto cc_llll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llll);
 	if(cc_llll==CP::CorrectionCode::Ok)
