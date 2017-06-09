@@ -22,6 +22,9 @@ patch -d TopCPTools -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
 rc checkout_pkg TopCorrections
 patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
 
+#for new k-factors for ttgamma and ttW ANALYSISTO-326
+rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-64
+
 # for retrieve b-tag SF input systematic names (required for EV decomposition)
 #rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopConfiguration/tags/TopConfiguration-00-04-47
 #rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCorrection/tags/TopCorrection-00-01-15
