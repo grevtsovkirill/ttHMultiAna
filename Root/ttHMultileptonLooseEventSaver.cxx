@@ -1835,12 +1835,15 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
   }
 
-  // for systematic skimming after overlap removal
-  if (m_doSystematics) {
+  // for skimming of Sys, Data and Nominal after overlap removal
+  if (m_doSystematics) { // Sys
     if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 < 2)
       return; // remove all events with less than 2 leptons (including taus)
     if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 == 0)
       return; // remove all 2l opposite sign 0 tau events
+  } else { // Data and Nominal
+    if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 == 0)
+      return; // remove all events with neither leptons nor taus
   }
 
   // for skimming of events for promptLepton isolation WP (only MC):
