@@ -151,6 +151,14 @@ TopExamples.grid.Add('All_fastSim').datasets = [
 'mc15_13TeV.344368.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_300GeV.merge.AOD.e5207_a766_a821_r7676',
 'mc15_13TeV.344369.CalcHepPythia8_A14_CTEQ6L1_HppmmHmp_400GeV.merge.AOD.e5207_a766_a821_r7676',
 
+#ttV (nominal)
+'mc15_13TeV.410155.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW.merge.AOD.e5070_a766_a821_r7676',
+'mc15_13TeV.410156.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu.merge.AOD.e5070_a766_a821_r7676',
+'mc15_13TeV.410157.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq.merge.AOD.e5070_a766_a821_r7676',
+'mc15_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.merge.AOD.e5070_a766_a821_r7676',
+'mc15_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.merge.AOD.e5070_a766_a821_r7676',
+'mc15_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.merge.AOD.e5070_a766_a821_r7676',
+
 #ttV (alternative)
 'mc15_13TeV.410142.Sherpa_NNPDF30NNLO_ttll_mll5.merge.AOD.e4686_a766_a818_r7676',
 'mc15_13TeV.410143.Sherpa_NNPDF30NNLO_ttZnnqq.merge.AOD.e4686_a766_a818_r7676',
