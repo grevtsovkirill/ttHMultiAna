@@ -30,12 +30,12 @@
  410189           76.333          1.1484         1.0    --    -999   2               Sherpa              ttbar_dilepton_MEPS_NLO  Full  
  410500          397.243         1.13896         1.0    --    -999   2               Powheg           ttbar_hdamp172p5_nonallhad  Full  
  410501           397.11           1.139         1.0    --    -999   1              Pythia8          ttbar_hdamp258p75_nonallhad  Full  
- 410502           249.81          1.5216         1.0    --    -999   2              Pythia8             ttbar_hdamp258p75_allhad  Full  
+ 410502           249.81           1.139         1.0    --    -999   2              Pythia8             ttbar_hdamp258p75_allhad  Full  
  410503            76.93          1.1392         1.0    --    -999   1              Pythia8                ttbar_hdamp258p75_dil  Full  
  410504             22.9          1.1391         1.0    --    -999   2              Pythia8     ttbar_hdamp258p75_nonallhad_bfil  Fast  
  410505              4.3          1.1392         1.0    --    -999   2              Pythia8           ttbar_hdamp258p75_dil_bfil  Fast  
  410525          397.105          1.1391         1.0    --    -999   2               Herwig             tt_hdamp258p75_nonallhad  Fast  
- 410526           249.81          1.5216         1.0    --    -999   2               Herwig                tt_hdamp258p75_allhad  Fast  
+ 410526           249.81           1.139         1.0    --    -999   2               Herwig                tt_hdamp258p75_allhad  Fast  
  410527            76.93          1.1393         1.0    --    -999   2               Herwig                 tt_hdamp258p75_dilep  Fast  
  410528            28.09          1.1392         1.0    --    -999   2               Herwig        tt_hdamp258p75_nonallhad_bfil  Fast  
 
@@ -102,7 +102,7 @@
  410075          0.17427            1.47         1.0    --    -999   2     MadGraph+Pythia8                          ttZnnqq_Np2  Full  
  410080        0.0091622          1.0042         1.0    --    -999   1     MadGraph+Pythia8                               4topSM  Full  
  410081        0.0080975          1.2231         1.0    --    -999   1     MadGraph+Pythia8                              ttbarWW  Full  
- 410082            2.982            1.47         1.0    --    -999   1     MadGraph+Pythia8                     ttgamma_noallhad  Full  
+ 410082            2.982             1.9         1.0    --    -999   1     MadGraph+Pythia8                     ttgamma_noallhad  Full  
  410111        0.0096235            1.51         1.0    --    -999   2     MadGraph+Pythia8                             ttee_Np0  Full  
  410112         0.017344            1.51         1.0    --    -999   2     MadGraph+Pythia8                             ttee_Np1  Full  
  410113        0.0096462            1.51         1.0    --    -999   2     MadGraph+Pythia8                           ttmumu_Np0  Full  
@@ -111,7 +111,7 @@
  410116          0.01779            1.51         1.0    --    -999   2     MadGraph+Pythia8                         tttautau_Np1  Full  
  410142          0.11309            1.09         1.0    --    -999   1               Sherpa                                 ttll   AF2  
  410143           0.6881             1.1         1.0    --    -999   1               Sherpa                              ttZnnqq   AF2  
- 410144           0.6008            1.04         1.0    --    -999   1               Sherpa                                  ttW   AF2  
+ 410144          0.57729            1.04         1.0    --    -999   1               Sherpa                                  ttW   AF2  
 
 # NLO+ttV
  410155           0.5483             1.1         1.0    --    -999   1      aMc@Nlo+Pythia8                                  ttW  Full  
@@ -146,8 +146,8 @@
  410050          0.24013               1         1.0    --    -999   1      Madgraph+Pythia                tZ_4fl_tchan_noAllHad  Full  
 
 #VH
- 342284           1.1021               1         1.0    --    -999   1       Pythia8+EvtGen                               WH_inc  Full  
- 342285          0.60072               1         1.0    --    -999   1       Pythia8+EvtGen                               ZH_inc  Full  
+ 342284           1.1021          1.2522         1.0    --    -999   1       Pythia8+EvtGen                               WH_inc  Full  
+ 342285          0.60072          1.4476         1.0    --    -999   1       Pythia8+EvtGen                               ZH_inc  Full  
 
 #tWZ
  410214                0               0         1.0    --    -999   2       Pythia8+EvtGen                                tWZDS  Full  
@@ -594,16 +594,16 @@
  343637          18.2976          1.1949         1.0    --    -999   2         PowhegPythia         ttbar_hdamp172p5_threelepton  Full  
 
 # Sherpa 2.1 diboson HF filters. b-filter
- 344422         0.056385            0.91         1.0    --    -999   1             Sherpa21                         llll_BFilter  Full  
- 344423         0.833454            0.91         1.0    --    -999   1             Sherpa21                           llll_BVeto  Full  
- 344424         0.023276            0.91         1.0    --    -999   1             Sherpa21                  lllvSFMinus_BFilter  Full  
- 344425          0.43897            0.91         1.0    --    -999   1             Sherpa21                    lllvSFMinus_BVeto  Full  
- 344426         0.046242            0.91         1.0    --    -999   1             Sherpa21                  lllvOFMinus_BFilter  Full  
- 344427         0.870711            0.91         1.0    --    -999   1             Sherpa21                    lllvOFMinus_BVeto  Full  
- 344428         0.035488            0.91         1.0    --    -999   1             Sherpa21                   lllvSFPlus_BFilter  Full  
- 344429         0.638374            0.91         1.0    --    -999   1             Sherpa21                     lllvSFPlus_BVeto  Full  
- 344430         0.072535            0.91         1.0    --    -999   1             Sherpa21                     lllvOFPlus_BVeto  Full  
- 344431           1.3133            0.91         1.0    --    -999   1             Sherpa21                   lllvOFPlus_BFilter  Full  
+ 344422         0.056385            1.13         1.0    --    -999   1             Sherpa21                         llll_BFilter  Full  
+ 344423         0.833454            1.13         1.0    --    -999   1             Sherpa21                           llll_BVeto  Full  
+ 344424         0.023276            1.33         1.0    --    -999   1             Sherpa21                  lllvSFMinus_BFilter  Full  
+ 344425          0.43897            1.33         1.0    --    -999   1             Sherpa21                    lllvSFMinus_BVeto  Full  
+ 344426         0.046242            1.33         1.0    --    -999   1             Sherpa21                  lllvOFMinus_BFilter  Full  
+ 344427         0.870711            1.33         1.0    --    -999   1             Sherpa21                    lllvOFMinus_BVeto  Full  
+ 344428         0.035488            1.31         1.0    --    -999   1             Sherpa21                   lllvSFPlus_BFilter  Full  
+ 344429         0.638374            1.31         1.0    --    -999   1             Sherpa21                     lllvSFPlus_BVeto  Full  
+ 344430         0.072535            1.31         1.0    --    -999   1             Sherpa21                     lllvOFPlus_BVeto  Full  
+ 344431           1.3133            1.31         1.0    --    -999   1             Sherpa21                   lllvOFPlus_BFilter  Full  
 
 # Sherpa v2.2.1 Z+Jets
  364100          1630.22          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV0_70_CVetoBVeto  Full  
@@ -713,5 +713,6 @@
  364195          9.67021          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV280_500_BFilter  Full  
  364196           15.046          0.9702         1.0    --    -999   1            Sherpa221              Wtaunu_MAXHTPTV500_1000  Full  
  364197           1.2339          0.9702         1.0    --    -999   1            Sherpa221            Wtaunu_MAXHTPTV1000_E_CMS  Full  
+
 
 
