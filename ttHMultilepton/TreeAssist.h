@@ -26,9 +26,10 @@ class VectorWrapper {
       U tmpvar(0);
       try {
 	tmpvar = (fcn(*instance));
-      } catch (...) {
+      } catch (const std::exception& e) {
 	if (!errored) {
-	  std::cout << "\n **** WARNING!!! Function to extract variable to be stored in " << brname << " threw exception, zero will be stored.  This is your only warning!\n\n";
+	  std::cout << "\n **** WARNING!!! Function to extract variable to be stored in " << brname << " threw exception, zero will be stored.  This is your only warning!\n";
+	  std::cout <<e.what() << std::endl;
 	  errored = true;
 	}
       }

@@ -225,42 +225,47 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
 
   //////////// Trigger SF tool --NEW--
-  /* // working with map0.txt
+ 
+  // working with map0.txt
+  /*
   std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
     // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
+    //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "SignalCFT", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
     // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
     {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseBLayer", ""}, 
     // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "Tight", "FixedCutTight"}, 
+    //{"e17_lhvloose_nod0", "SignalCFT", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "Tight", "FixedCutTight"}, 
     // dielectron trigger, only for untagged electrons, configured wrt loose WP:
     {"e17_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "LooseBLayer", ""}, 
     // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "Tight", "FixedCutTight"},  
+    //{"e17_lhloose_nod0", "SignalCFT", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "Tight", "FixedCutTight"},  
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
     {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseBLayer", ""}
   };
-  */
-
+ */
+  
   std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
     // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "_isolFixedCutTight"}, 
-    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_isolLoose"},
-    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "SignalCFT", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_CFT_isolLoose"}, 
+    //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_isolLoose"},
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_CFT_isolLoose"}, 
     // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
     {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseAndBLayerLLH", ""}, 
     // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_isolLoose"}, 
-    {"e17_lhvloose_nod0", "SignalCFT", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"}, 
+    //{"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_isolLoose"}, 
+    {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"}, 
     // dielectron trigger, only for untagged electrons, configured wrt loose WP:
     {"e17_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "LooseAndBLayerLLH", ""}, 
     // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_isolLoose"},
-    {"e17_lhloose_nod0", "SignalCFT", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"},  
+    //{"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_isolLoose"},
+    {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"},  
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
     {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseAndBLayerLLH", ""}
   };
-
+  
   int nTrig = -1;
 
   m_trigGlobEffCorr.resize(m_lep_trigger_sf_names.size());
@@ -358,7 +363,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", "e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose || 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", "e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0 || 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,SignalCFT,Baseline").ignore();
+    //m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,SignalCFT,Baseline").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
     top::check( m_trigGlobEffCorr[nTrig]->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
     ////////////////////////// end Trigger SF tool
   }
