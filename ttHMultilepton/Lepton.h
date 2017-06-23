@@ -115,6 +115,8 @@ namespace ttHMultilepton {
     char    isFakeLep;
     char    isQMisID;
     char    isConvPh;
+    char    isExtConvPh;
+    char    isIntConvPh;
     char    isISR_FSR_Ph;
     char    isBrems;
 

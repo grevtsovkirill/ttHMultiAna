@@ -61,6 +61,8 @@ namespace ttHMultilepton {
   SG::AuxElement::Accessor< char >*        m_isQMisIDAcc;         //!
   SG::AuxElement::Accessor< char >*        m_isISR_FSR_PhAcc;     //!
   SG::AuxElement::Accessor< char >*        m_isConvPhAcc;         //!
+  SG::AuxElement::Decorator< char >*        m_isExtConvPhDecor;         //!
+  SG::AuxElement::Decorator< char >*        m_isIntConvPhDecor;         //!
   SG::AuxElement::Accessor< char >*        m_isBremsAcc;          //!
   typedef ElementLink< xAOD::TruthParticleContainer > TruthLink_t;
   SG::AuxElement::Accessor< TruthLink_t >* m_truthPLAcc;          //!

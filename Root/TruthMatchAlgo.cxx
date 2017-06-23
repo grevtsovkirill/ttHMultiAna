@@ -27,6 +27,8 @@ TruthMatchAlgo :: TruthMatchAlgo() :
   m_truthRapidityDecor           = new SG::AuxElement::Decorator< float >("truthRapidity");
   m_isQMisIDDecor                = new SG::AuxElement::Decorator< char >("isQMisID");
   m_isConvPhDecor                = new SG::AuxElement::Decorator< char >("isConvPh");
+  m_isExtConvPhDecor             = new SG::AuxElement::Decorator< char >("isExtConvPh");
+  m_isIntConvPhDecor             = new SG::AuxElement::Decorator< char >("isIntConvPh");
   m_isISR_FSR_PhDecor            = new SG::AuxElement::Decorator< char >("isISR_FSR_Ph");
   m_isBremsDecor                 = new SG::AuxElement::Decorator< char >("isBrems");
   m_ancestorTruthTypeDecor       = new SG::AuxElement::Decorator< int >("ancestorTruthType");
@@ -538,6 +540,8 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   (*m_isQMisIDDecor)( *lep )     = 0;
   (*m_isISR_FSR_PhDecor)( *lep ) = 0;
   (*m_isConvPhDecor)( *lep )     = 0;
+  (*m_isExtConvPhDecor)( *lep)   = 0;
+  (*m_isIntConvPhDecor)( *lep)   = 0;
 
   if ( primitiveTruth->isLepton() && !primitiveTruth->isPhoton() ) {
 
@@ -547,6 +551,13 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
 
   } else if ( primitiveTruth->isPhoton() ) {
     (*m_isConvPhDecor)( *lep ) = 1;
+    
+    if (truthMatch->barcode()<200000){
+      (*m_isIntConvPhDecor)( *lep ) = 1;
+    }
+    else{
+      (*m_isExtConvPhDecor)( *lep ) = 1;
+    }
   }
 
   ATH_MSG_DEBUG( "checkTruthQMisID() :: \n\nPrimitive TRUTH: \n" <<
