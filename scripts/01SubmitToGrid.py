@@ -13,7 +13,7 @@ for configFile in configFiles:
 
 config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
-config.gridUsername  = 'rwolff'
+config.gridUsername  = 'awebb'
 config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
 config.noSubmit      = False
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'

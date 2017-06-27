@@ -39,6 +39,8 @@ TruthMatchAlgo :: TruthMatchAlgo() :
   m_isTruthMatchedAcc        = new SG::AuxElement::Accessor< char >("isTruthMatched");
   m_isQMisIDAcc              = new SG::AuxElement::Accessor< char >("isQMisID");
   m_isConvPhAcc              = new SG::AuxElement::Accessor< char >("isConvPh");
+  m_isIntConvPhAcc           = new SG::AuxElement::Accessor< char >("isIntConvPh");
+  m_isExtConvPhAcc           = new SG::AuxElement::Accessor< char >("isExtConvPh");
   m_isISR_FSR_PhAcc          = new SG::AuxElement::Accessor< char >("isISR_FSR_Ph");
   m_isBremsAcc               = new SG::AuxElement::Accessor< char >("isBrems");
   m_truthPLAcc               = new SG::AuxElement::Accessor< TruthLink_t >("truthParticleLink");
@@ -375,6 +377,8 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
   (*m_isQMisIDDecor)( *lep )             = -1;
   (*m_isISR_FSR_PhDecor)( *lep )         = -1;
   (*m_isConvPhDecor)( *lep )             = -1;
+  (*m_isExtConvPhDecor)( *lep )          = -1;
+  (*m_isIntConvPhDecor)( *lep )          = -1;
   (*m_isBremsDecor)( *lep )              = -1;
   (*m_ancestorTruthTypeDecor)( *lep )    = 0;
   (*m_ancestorTruthPdgIdDecor)( *lep )   = 0;
@@ -571,6 +575,7 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
 		 "isBkgLep? " << isBkgLep << "\n" <<
 		 "isBrems? " << (*m_isBremsAcc)( *lep ) << "\n" <<
 		 "isConvPh? " << (*m_isConvPhAcc)( *lep ) << "\n" <<
+		 "isExtConvPh? " << (*m_isExtConvPhAcc)( *lep ) << "\n" <<
 		 "is from ISR/FSR? " << (*m_isISR_FSR_PhDecor)( *lep ) << "\n" <<
 		 "-----------\nRECO: \n" <<
 		 "norm charge: " << reco_norm_charge << " \n" <<
