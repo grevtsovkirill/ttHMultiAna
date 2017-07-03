@@ -50,6 +50,14 @@ TopExamples.grid.Add('All_fullSim').datasets = [
 'mc15_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.merge.AOD.e5070_s2726_r7772_r7676',
 'mc15_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.merge.AOD.e5070_s2726_r7772_r7676',
 
+#ttll + Wb low mass
+'mc15_13TeV.410276.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee_mll_1_5.merge.AOD.e6087_s2726_r7772_r7676',
+'mc15_13TeV.410277.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu_mll_1_5.merge.AOD.e6087_s2726_r7772_r7676',
+'mc15_13TeV.410278.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau_mll_1_5.merge.AOD.e6087_s2726_r7772_r7676',
+'mc15_13TeV.410397.MadGraphPythia8EvtGen_ttbar_wbee_MEN30LO_A14N23LO.merge.AOD.e6086_s2726_r7772_r7676',
+'mc15_13TeV.410398.MadGraphPythia8EvtGen_ttbar_wbmumu_MEN30LO_A14N23LO.merge.AOD.e6086_s2726_r7772_r7676',
+'mc15_13TeV.410399.MadGraphPythia8EvtGen_ttbar_wbtautau_MEN30LO_A14N23LO.merge.AOD.e6086_s2726_r7772_r7676',
+
 #tZ
 #>= 3L
 'mc15_13TeV.410049.MadGraphPythiaEvtGen_P2012_tZ_4fl_tchan_trilepton.merge.AOD.e4440_s2608_r7725_r7676',
