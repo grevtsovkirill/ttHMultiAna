@@ -30,14 +30,20 @@
  410189           76.333          1.1484         1.0    --    -999   2               Sherpa              ttbar_dilepton_MEPS_NLO  Full  
  410500          397.243         1.13896         1.0    --    -999   2               Powheg           ttbar_hdamp172p5_nonallhad  Full  
  410501           397.11           1.139         1.0    --    -999   1              Pythia8          ttbar_hdamp258p75_nonallhad  Full  
- 410502           249.81          1.5216         1.0    --    -999   2              Pythia8             ttbar_hdamp258p75_allhad  Full  
+ 410502           249.81           1.139         1.0    --    -999   2              Pythia8             ttbar_hdamp258p75_allhad  Full  
  410503            76.93          1.1392         1.0    --    -999   1              Pythia8                ttbar_hdamp258p75_dil  Full  
  410504             22.9          1.1391         1.0    --    -999   2              Pythia8     ttbar_hdamp258p75_nonallhad_bfil  Fast  
  410505              4.3          1.1392         1.0    --    -999   2              Pythia8           ttbar_hdamp258p75_dil_bfil  Fast  
  410525          397.105          1.1391         1.0    --    -999   2               Herwig             tt_hdamp258p75_nonallhad  Fast  
- 410526           249.81          1.5216         1.0    --    -999   2               Herwig                tt_hdamp258p75_allhad  Fast  
+ 410526           249.81           1.139         1.0    --    -999   2               Herwig                tt_hdamp258p75_allhad  Fast  
  410527            76.93          1.1393         1.0    --    -999   2               Herwig                 tt_hdamp258p75_dilep  Fast  
  410528            28.09          1.1392         1.0    --    -999   2               Herwig        tt_hdamp258p75_nonallhad_bfil  Fast  
+ 410276           0.0184             1.0         1.0    --    -999   1              Pythia8                             ttee_mll  Full
+ 410277           0.0184             1.0         1.0    --    -999   1              Pythia8                           ttmumu_mll  Full
+ 410278          0.00197             1.0         1.0    --    -999   1              Pythia8                         tttautau_mll  Full
+ 410397           0.1874             1.0         1.0    --    -999   1              Pythia8                           ttbar_wbee  Full
+ 410398           0.1873             1.0         1.0    --    -999   1              Pythia8                         ttbar_wbmumu  Full
+ 410399          0.01885             1.0         1.0    --    -999   1              Pythia8                       ttbar_wbtautau  Full
 
 #Dibosons
  361063           12.805            0.91         1.0    --    -999   1               Sherpa                                 llll  Full  
@@ -102,7 +108,7 @@
  410075          0.17427            1.47         1.0    --    -999   2     MadGraph+Pythia8                          ttZnnqq_Np2  Full  
  410080        0.0091622          1.0042         1.0    --    -999   1     MadGraph+Pythia8                               4topSM  Full  
  410081        0.0080975          1.2231         1.0    --    -999   1     MadGraph+Pythia8                              ttbarWW  Full  
- 410082            2.982            1.47         1.0    --    -999   1     MadGraph+Pythia8                     ttgamma_noallhad  Full  
+ 410082            2.982             1.9         1.0    --    -999   1     MadGraph+Pythia8                     ttgamma_noallhad  Full  
  410111        0.0096235            1.51         1.0    --    -999   2     MadGraph+Pythia8                             ttee_Np0  Full  
  410112         0.017344            1.51         1.0    --    -999   2     MadGraph+Pythia8                             ttee_Np1  Full  
  410113        0.0096462            1.51         1.0    --    -999   2     MadGraph+Pythia8                           ttmumu_Np0  Full  
@@ -111,7 +117,7 @@
  410116          0.01779            1.51         1.0    --    -999   2     MadGraph+Pythia8                         tttautau_Np1  Full  
  410142          0.11309            1.09         1.0    --    -999   1               Sherpa                                 ttll   AF2  
  410143           0.6881             1.1         1.0    --    -999   1               Sherpa                              ttZnnqq   AF2  
- 410144           0.6008            1.04         1.0    --    -999   1               Sherpa                                  ttW   AF2  
+ 410144          0.57729            1.04         1.0    --    -999   1               Sherpa                                  ttW   AF2  
 
 # NLO+ttV
  410155           0.5483             1.1         1.0    --    -999   1      aMc@Nlo+Pythia8                                  ttW  Full  
@@ -146,8 +152,8 @@
  410050          0.24013               1         1.0    --    -999   1      Madgraph+Pythia                tZ_4fl_tchan_noAllHad  Full  
 
 #VH
- 342284           1.1021               1         1.0    --    -999   1       Pythia8+EvtGen                               WH_inc  Full  
- 342285          0.60072               1         1.0    --    -999   1       Pythia8+EvtGen                               ZH_inc  Full  
+ 342284           1.1021          1.2522         1.0    --    -999   1       Pythia8+EvtGen                               WH_inc  Full  
+ 342285          0.60072          1.4476         1.0    --    -999   1       Pythia8+EvtGen                               ZH_inc  Full  
 
 #tWZ
  410214                0               0         1.0    --    -999   2       Pythia8+EvtGen                                tWZDS  Full  
@@ -163,6 +169,173 @@
  361625                1      1.7059e-05         1.0    --    -999   1               Sherpa                             ZZZ_6l0v  Full  
  361626                1      9.9467e-05         1.0    --    -999   1               Sherpa                             ZZZ_4l2v  Full  
  361627                1     0.000199561         1.0    --    -999   1               Sherpa                             ZZZ_2l4v  Full  
+
+#3 tops SM
+ 304014        0.0016398               1         1.0    --    -999   1              pythia8                              3top_SM  Fast  
+
+## some other tH samples - values to be confirmed by experts!!!
+ 343266       0.00166896               1         1.0    --    -999   2      MadGraphPythia8                       tHjb125_gamgam  Full  
+ 343267       0.00012335               1         1.0    --    -999   1      MadGraphPythia8                       tHjb125_gamgam  Full  
+ 343268       0.00061218               1         1.0    --    -999   2      MadGraphPythia8                       tHjb125_gamgam  Full  
+ 343269         0.422364               1         1.0    --    -999   2      MadGraphPythia8                        tHjb125_bbbar  Full  
+ 343270         0.031216               1         1.0    --    -999   1      MadGraphPythia8                        tHjb125_bbbar  Full  
+ 343271          0.15492               1         1.0    --    -999   2      MadGraphPythia8                        tHjb125_bbbar  Full  
+ 343272         0.222967               1         1.0    --    -999   2      MadGraphPythia8                          tHjb125_lep  Full  
+ 343273         0.016479               1         1.0    --    -999   1      MadGraphPythia8                          tHjb125_lep  Full  
+ 343274         0.081785               1         1.0    --    -999   2      MadGraphPythia8                          tHjb125_lep  Full  
+
+# trilepton-filtered sample - see ANALYSISTO-136
+ 343637          18.2976          1.1949         1.0    --    -999   2         PowhegPythia         ttbar_hdamp172p5_threelepton  Full  
+
+# Sherpa 2.1 diboson HF filters. b-filter
+ 344422         0.056385            1.13         1.0    --    -999   1             Sherpa21                         llll_BFilter  Full  
+ 344423         0.833454            1.13         1.0    --    -999   1             Sherpa21                           llll_BVeto  Full  
+ 344424         0.023276            1.33         1.0    --    -999   1             Sherpa21                  lllvSFMinus_BFilter  Full  
+ 344425          0.43897            1.33         1.0    --    -999   1             Sherpa21                    lllvSFMinus_BVeto  Full  
+ 344426         0.046242            1.33         1.0    --    -999   1             Sherpa21                  lllvOFMinus_BFilter  Full  
+ 344427         0.870711            1.33         1.0    --    -999   1             Sherpa21                    lllvOFMinus_BVeto  Full  
+ 344428         0.035488            1.31         1.0    --    -999   1             Sherpa21                   lllvSFPlus_BFilter  Full  
+ 344429         0.638374            1.31         1.0    --    -999   1             Sherpa21                     lllvSFPlus_BVeto  Full  
+ 344430         0.072535            1.31         1.0    --    -999   1             Sherpa21                     lllvOFPlus_BVeto  Full  
+ 344431           1.3133            1.31         1.0    --    -999   1             Sherpa21                   lllvOFPlus_BFilter  Full  
+
+#ll+gamma
+ 301535           52.706               1         1.0    --    -999   1               Sherpa                       eegammaPt10_35  Full  
+ 301536           52.708               1         1.0    --    -999   1               Sherpa                     mumugammaPt10_35  Full  
+ 301887           200.75               1         1.0    --    -999   1               Sherpa                      enugammaPt10_35  Full  
+ 301888           200.91               1         1.0    --    -999   1               Sherpa                     munugammaPt10_35  Full  
+ 301889           200.78               1         1.0    --    -999   1               Sherpa                    taunugammaPt10_35  Full  
+ 301890           15.348               1         1.0    --    -999   1               Sherpa                      enugammaPt35_70  Full  
+ 301891           1.5282               1         1.0    --    -999   1               Sherpa                     enugammaPt70_140  Full  
+ 301892          0.24155               1         1.0    --    -999   1               Sherpa                        enugammaPt140  Full  
+ 301893           15.272               1         1.0    --    -999   1               Sherpa                     munugammaPt35_70  Full  
+ 301894           1.5235               1         1.0    --    -999   1               Sherpa                    munugammaPt70_140  Full  
+ 301895          0.24183               1         1.0    --    -999   1               Sherpa                       munugammaPt140  Full  
+ 301896           15.297               1         1.0    --    -999   1               Sherpa                    taunugammaPt35_70  Full  
+ 301897            1.529               1         1.0    --    -999   1               Sherpa                   taunugammaPt70_140  Full  
+ 301898           0.2426               1         1.0    --    -999   1               Sherpa                      taunugammaPt140  Full  
+ 301899            5.242               1         1.0    --    -999   1               Sherpa                       eegammaPt35_70  Full  
+ 301900          0.38455               1         1.0    --    -999   1               Sherpa                      eegammaPt70_140  Full  
+ 301901         0.047209               1         1.0    --    -999   1               Sherpa                         eegammaPt140  Full  
+ 301902           5.2455               1         1.0    --    -999   1               Sherpa                     mumugammaPt35_70  Full  
+ 301903          0.38548               1         1.0    --    -999   1               Sherpa                    mumugammaPt70_140  Full  
+ 301904          0.04724               1         1.0    --    -999   1               Sherpa                       mumugammaPt140  Full  
+ 301905            5.249               1         1.0    --    -999   1               Sherpa                   tautaugammaPt35_70  Full  
+ 301906          0.38482               1         1.0    --    -999   1               Sherpa                  tautaugammaPt70_140  Full  
+ 301907         0.047025               1         1.0    --    -999   1               Sherpa                     tautaugammaPt140  Full  
+ 301908           4.0365               1         1.0    --    -999   1               Sherpa                     nunugammaPt35_70  Full  
+ 301909          0.97151               1         1.0    --    -999   1               Sherpa                    nunugammaPt70_140  Full  
+ 301910          0.17115               1         1.0    --    -999   1               Sherpa                       nunugammaPt140  Full  
+ 343243           52.691               1         1.0    --    -999   1               Sherpa                   tautaugammaPt10_35  Full  
+ 304776           52.708               1         1.0    --    -999   1               Sherpa                   tautaugammaPt10_35  Full  
+
+# Sherpa v2.2.1 Z+Jets
+ 364100          1630.22          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV0_70_CVetoBVeto  Full  
+ 364101          223.717          0.9751         1.0    --    -999   1            Sherpa221      Zmumu_MAXHTPTV0_70_CFilterBVeto  Full  
+ 364102           127.18          0.9751         1.0    --    -999   1            Sherpa221           Zmumu_MAXHTPTV0_70_BFilter  Full  
+ 364103          75.0165          0.9751         1.0    --    -999   1            Sherpa221      Zmumu_MAXHTPTV70_140_CVetoBVeto  Full  
+ 364104          20.3477          0.9751         1.0    --    -999   1            Sherpa221    Zmumu_MAXHTPTV70_140_CFilterBVeto  Full  
+ 364105          12.3885          0.9751         1.0    --    -999   1            Sherpa221         Zmumu_MAXHTPTV70_140_BFilter  Full  
+ 364106          24.2853          0.9751         1.0    --    -999   1            Sherpa221     Zmumu_MAXHTPTV140_280_CVetoBVeto  Full  
+ 364107          9.27542          0.9751         1.0    --    -999   1            Sherpa221   Zmumu_MAXHTPTV140_280_CFilterBVeto  Full  
+ 364108          6.01361          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV140_280_BFilter  Full  
+ 364109          4.77297          0.9751         1.0    --    -999   1            Sherpa221     Zmumu_MAXHTPTV280_500_CVetoBVeto  Full  
+ 364110          2.26557          0.9751         1.0    --    -999   1            Sherpa221   Zmumu_MAXHTPTV280_500_CFilterBVeto  Full  
+ 364111          1.49132          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV280_500_BFilter  Full  
+ 364112           1.7881          0.9751         1.0    --    -999   1            Sherpa221               Zmumu_MAXHTPTV500_1000  Full  
+ 364113          0.14769          0.9751         1.0    --    -999   1            Sherpa221             Zmumu_MAXHTPTV1000_E_CMS  Full  
+ 364114          1627.18          0.9751         1.0    --    -999   1            Sherpa221          Zee_MAXHTPTV0_70_CVetoBVeto  Full  
+ 364115          223.731          0.9751         1.0    --    -999   1            Sherpa221        Zee_MAXHTPTV0_70_CFilterBVeto  Full  
+ 364116           126.45          0.9751         1.0    --    -999   1            Sherpa221             Zee_MAXHTPTV0_70_BFilter  Full  
+ 364117          76.2925          0.9751         1.0    --    -999   1            Sherpa221        Zee_MAXHTPTV70_140_CVetoBVeto  Full  
+ 364118           20.336          0.9751         1.0    --    -999   1            Sherpa221      Zee_MAXHTPTV70_140_CFilterBVeto  Full  
+ 364119          12.6228          0.9751         1.0    --    -999   1            Sherpa221           Zee_MAXHTPTV70_140_BFilter  Full  
+ 364120            25.03          0.9751         1.0    --    -999   1            Sherpa221       Zee_MAXHTPTV140_280_CVetoBVeto  Full  
+ 364121          9.37199          0.9751         1.0    --    -999   1            Sherpa221     Zee_MAXHTPTV140_280_CFilterBVeto  Full  
+ 364122          6.08263          0.9751         1.0    --    -999   1            Sherpa221          Zee_MAXHTPTV140_280_BFilter  Full  
+ 364123          4.86923          0.9751         1.0    --    -999   1            Sherpa221       Zee_MAXHTPTV280_500_CVetoBVeto  Full  
+ 364124          2.27998          0.9751         1.0    --    -999   1            Sherpa221     Zee_MAXHTPTV280_500_CFilterBVeto  Full  
+ 364125          1.49437          0.9751         1.0    --    -999   1            Sherpa221          Zee_MAXHTPTV280_500_BFilter  Full  
+ 364126           1.8081          0.9751         1.0    --    -999   1            Sherpa221                 Zee_MAXHTPTV500_1000  Full  
+ 364127          0.14857          0.9751         1.0    --    -999   1            Sherpa221               Zee_MAXHTPTV1000_E_CMS  Full  
+ 364128          1627.73          0.9751         1.0    --    -999   1            Sherpa221      Ztautau_MAXHTPTV0_70_CVetoBVeto  Full  
+ 364129          223.881          0.9751         1.0    --    -999   1            Sherpa221    Ztautau_MAXHTPTV0_70_CFilterBVeto  Full  
+ 364130          127.733          0.9751         1.0    --    -999   1            Sherpa221         Ztautau_MAXHTPTV0_70_BFilter  Full  
+ 364131          76.0262          0.9751         1.0    --    -999   1            Sherpa221    Ztautau_MAXHTPTV70_140_CVetoBVeto  Full  
+ 364132          20.2123          0.9751         1.0    --    -999   1            Sherpa221  Ztautau_MAXHTPTV70_140_CFilterBVeto  Full  
+ 364133          12.2939          0.9751         1.0    --    -999   1            Sherpa221       Ztautau_MAXHTPTV70_140_BFilter  Full  
+ 364134          24.8034          0.9751         1.0    --    -999   1            Sherpa221   Ztautau_MAXHTPTV140_280_CVetoBVeto  Full  
+ 364135          9.32824          0.9751         1.0    --    -999   1            Sherpa221  Ztautau_MAXHTPTV140_280_CFilterBVeto Full  
+ 364136          5.47909          0.9751         1.0    --    -999   1            Sherpa221      Ztautau_MAXHTPTV140_280_BFilter  Full  
+ 364137          4.79119          0.9751         1.0    --    -999   1            Sherpa221   Ztautau_MAXHTPTV280_500_CVetoBVeto  Full  
+ 364138          2.27563          0.9751         1.0    --    -999   1            Sherpa221  Ztautau_MAXHTPTV280_500_CFilterBVeto Full  
+ 364139          1.50284          0.9751         1.0    --    -999   1            Sherpa221      Ztautau_MAXHTPTV280_500_BFilter  Full  
+ 364140           1.8096          0.9751         1.0    --    -999   1            Sherpa221             Ztautau_MAXHTPTV500_1000  Full  
+ 364141          0.14834          0.9751         1.0    --    -999   1            Sherpa221           Ztautau_MAXHTPTV1000_E_CMS  Full  
+
+# Sherpa V2.2.1 Z+Jets Low Mass
+ 364198          2330.19          0.9751         1.0    --    -999   1               Sherpa      Zmm_Mll10_40_MAXHTPTV0_70_BVeto    Full  
+ 364199          82.2568          0.9751         1.0    --    -999   1               Sherpa    Zmm_Mll10_40_MAXHTPTV0_70_BFilter    Full  
+ 364200          44.8791          0.9751         1.0    --    -999   1               Sherpa    Zmm_Mll10_40_MAXHTPTV70_280_BVeto    Full  
+ 364201          5.11499          0.9751         1.0    --    -999   1               Sherpa  Zmm_Mll10_40_MAXHTPTV70_280_BFilter    Full  
+ 364202          2.75978          0.9751         1.0    --    -999   1               Sherpa  Zmm_Mll10_40_MAXHTPTV280_E_CMS_BVeto   Full  
+ 364203         0.472156          0.9751         1.0    --    -999   1               Sherpa  Zmm_Mll10_40_MAXHTPTV280_E_CMS_BFilter Full  
+ 364204          2331.22          0.9751         1.0    --    -999   1               Sherpa      Zee_Mll10_40_MAXHTPTV0_70_BVeto    Full  
+ 364205          81.3577          0.9751         1.0    --    -999   1               Sherpa    Zee_Mll10_40_MAXHTPTV0_70_BFilter    Full  
+ 364206          44.9714          0.9751         1.0    --    -999   1               Sherpa    Zee_Mll10_40_MAXHTPTV70_280_BVeto    Full  
+ 364207          5.48142          0.9751         1.0    --    -999   1               Sherpa  Zee_Mll10_40_MAXHTPTV70_280_BFilter    Full  
+ 364208          2.77741          0.9751         1.0    --    -999   1               Sherpa  Zee_Mll10_40_MAXHTPTV280_E_CMS_BVeto   Full  
+ 364209         0.473086          0.9751         1.0    --    -999   1               Sherpa  Zee_Mll10_40_MAXHTPTV280_E_CMS_BFilter Full  
+ 364210          2333.93          0.9751         1.0    --    -999   1               Sherpa      Ztt_Mll10_40_MAXHTPTV0_70_BVeto    Full  
+ 364211          81.1026          0.9751         1.0    --    -999   1               Sherpa    Ztt_Mll10_40_MAXHTPTV0_70_BFilter    Full  
+ 364212          44.8369          0.9751         1.0    --    -999   1               Sherpa    Ztt_Mll10_40_MAXHTPTV70_280_BVeto    Full  
+ 364213          5.54094          0.9751         1.0    --    -999   1               Sherpa  Ztt_Mll10_40_MAXHTPTV70_280_BFilter    Full  
+ 364214          2.79355          0.9751         1.0    --    -999   1               Sherpa  Ztt_Mll10_40_MAXHTPTV280_E_CMS_BVeto   Full  
+ 364215         0.469721          0.9751         1.0    --    -999   1               Sherpa  Ztt_Mll10_40_MAXHTPTV280_E_CMS_BFilter Full  
+
+# Sherpa v2.2.1 W+Jets
+ 364156            15770          0.9702         1.0    --    -999   1            Sherpa221        Wmunu_MAXHTPTV0_70_CVetoBVeto  Full  
+ 364157          2493.38          0.9702         1.0    --    -999   1            Sherpa221      Wmunu_MAXHTPTV0_70_CFilterBVeto  Full  
+ 364158          844.198          0.9702         1.0    --    -999   1            Sherpa221             Wmunu_MAXHTPTV0_70_BFilt  Full  
+ 364159          637.424          0.9702         1.0    --    -999   1            Sherpa221      Wmunu_MAXHTPTV70_140_CVetoBVeto  Full  
+ 364160          219.966          0.9702         1.0    --    -999   1            Sherpa221                 Wmunu_MAXHTPTV70_140  Full  
+ 364161          71.4594          0.9702         1.0    --    -999   1            Sherpa221         Wmunu_MAXHTPTV70_140_BFilter  Full  
+ 364162          212.555          0.9702         1.0    --    -999   1            Sherpa221     Wmunu_MAXHTPTV140_280_CVetoBVeto  Full  
+ 364163          98.4372          0.9702         1.0    --    -999   1            Sherpa221   Wmunu_MAXHTPTV140_280_CFilterBVeto  Full  
+ 364164          36.9148          0.9702         1.0    --    -999   1            Sherpa221        Wmunu_MAXHTPTV140_280_BFilter  Full  
+ 364165          39.3825          0.9702         1.0    --    -999   1            Sherpa221     Wmunu_MAXHTPTV280_500_CVetoBVeto  Full  
+ 364166          22.9178          0.9702         1.0    --    -999   1            Sherpa221   Wmunu_MAXHTPTV280_500_CFilterBVeto  Full  
+ 364167          9.60864          0.9702         1.0    --    -999   1            Sherpa221        Wmunu_MAXHTPTV280_500_BFilter  Full  
+ 364168            15.01          0.9702         1.0    --    -999   1            Sherpa221               Wmunu_MAXHTPTV500_1000  Full  
+ 364169           1.2344          0.9702         1.0    --    -999   1            Sherpa221             Wmunu_MAXHTPTV1000_E_CMS  Full  
+ 364170          15769.6          0.9702         1.0    --    -999   1            Sherpa221         Wenu_MAXHTPTV0_70_CVetoBVeto  Full  
+ 364171          2492.64          0.9702         1.0    --    -999   1            Sherpa221       Wenu_MAXHTPTV0_70_CFilterBVeto  Full  
+ 364172          844.638          0.9702         1.0    --    -999   1            Sherpa221            Wenu_MAXHTPTV0_70_BFilter  Full  
+ 364173          630.322          0.9702         1.0    --    -999   1            Sherpa221       Wenu_MAXHTPTV70_140_CVetoBVeto  Full  
+ 364174           215.49          0.9702         1.0    --    -999   1            Sherpa221     Wenu_MAXHTPTV70_140_CFilterBVeto  Full  
+ 364175           97.738          0.9702         1.0    --    -999   1            Sherpa221          Wenu_MAXHTPTV70_140_BFilter  Full  
+ 364176          202.836          0.9702         1.0    --    -999   1            Sherpa221      Wenu_MAXHTPTV140_280_CVetoBVeto  Full  
+ 364177          98.4433          0.9702         1.0    --    -999   1            Sherpa221    Wenu_MAXHTPTV140_280_CFilterBVeto  Full  
+ 364178          36.9965          0.9702         1.0    --    -999   1            Sherpa221         Wenu_MAXHTPTV140_280_BFilter  Full  
+ 364179          39.2433          0.9702         1.0    --    -999   1            Sherpa221      Wenu_MAXHTPTV280_500_CVetoBVeto  Full  
+ 364180          22.8465          0.9702         1.0    --    -999   1            Sherpa221    Wenu_MAXHTPTV280_500_CFilterBVeto  Full  
+ 364181          9.65665          0.9702         1.0    --    -999   1            Sherpa221         Wenu_MAXHTPTV280_500_BFilter  Full  
+ 364182           15.224          0.9702         1.0    --    -999   1            Sherpa221                Wenu_MAXHTPTV500_1000  Full  
+ 364183           1.2334          0.9702         1.0    --    -999   1            Sherpa221              Wenu_MAXHTPTV1000_E_CMS  Full  
+ 364184          15799.4          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV0_70_CVetoBVeto  Full  
+ 364185          2477.25          0.9702         1.0    --    -999   1            Sherpa221     Wtaunu_MAXHTPTV0_70_CFilterBVeto  Full  
+ 364186          854.555          0.9702         1.0    --    -999   1            Sherpa221          Wtaunu_MAXHTPTV0_70_BFilter  Full  
+ 364187          638.546          0.9702         1.0    --    -999   1            Sherpa221     Wtaunu_MAXHTPTV70_140_CVetoBVeto  Full  
+ 364188          210.382          0.9702         1.0    --    -999   1            Sherpa221   Wtaunu_MAXHTPTV70_140_CFilterBVeto  Full  
+ 364189          98.0183          0.9702         1.0    --    -999   1            Sherpa221        Wtaunu_MAXHTPTV70_140_BFilter  Full  
+ 364190          202.333          0.9702         1.0    --    -999   1            Sherpa221    Wtaunu_MAXHTPTV140_280_CVetoBVeto  Full  
+ 364191          98.5776          0.9702         1.0    --    -999   1            Sherpa221  Wtaunu_MAXHTPTV140_280_CFilterBVeto  Full  
+ 364192          40.0623          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV140_280_BFilter  Full  
+ 364193          39.3251          0.9702         1.0    --    -999   1            Sherpa221    Wtaunu_MAXHTPTV280_500_CVetoBVeto  Full  
+ 364194           22.779          0.9702         1.0    --    -999   1            Sherpa221  Wtaunu_MAXHTPTV280_500_CFilterBVeto  Full  
+ 364195          9.67021          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV280_500_BFilter  Full  
+ 364196           15.046          0.9702         1.0    --    -999   1            Sherpa221              Wtaunu_MAXHTPTV500_1000  Full  
+ 364197           1.2339          0.9702         1.0    --    -999   1            Sherpa221            Wtaunu_MAXHTPTV1000_E_CMS  Full  
 
 # Z+Jets Sherpa from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/CentralMC15ProductionList
  361372          1716.59          0.9013         1.0    --    -999   2               Sherpa                Zee_Pt0_70_CVetoBVeto  Full  
@@ -544,174 +717,5 @@
  302456       5.2052e-05             1.0         1.0    --    -999   2              Pythia8                              DCH1000  AFII  
  302457       2.8246e-05             1.0         1.0    --    -999   2              Pythia8                              DCH1100  AFII  
  302458       1.5651e-05             1.0         1.0    --    -999   2              Pythia8                              DCH1200  AFII  
- 302459       8.8774e-06             1.0         1.0    --    -999   2              Pythia8                              DCH1300  AFII  
-
-#ll+gamma
- 301535           52.706               1         1.0    --    -999   1               Sherpa                       eegammaPt10_35  Full  
- 301536           52.708               1         1.0    --    -999   1               Sherpa                     mumugammaPt10_35  Full  
- 301887           200.75               1         1.0    --    -999   1               Sherpa                      enugammaPt10_35  Full  
- 301888           200.91               1         1.0    --    -999   1               Sherpa                     munugammaPt10_35  Full  
- 301889           200.78               1         1.0    --    -999   1               Sherpa                    taunugammaPt10_35  Full  
- 301890           15.348               1         1.0    --    -999   1               Sherpa                      enugammaPt35_70  Full  
- 301891           1.5282               1         1.0    --    -999   1               Sherpa                     enugammaPt70_140  Full  
- 301892          0.24155               1         1.0    --    -999   1               Sherpa                        enugammaPt140  Full  
- 301893           15.272               1         1.0    --    -999   1               Sherpa                     munugammaPt35_70  Full  
- 301894           1.5235               1         1.0    --    -999   1               Sherpa                    munugammaPt70_140  Full  
- 301895          0.24183               1         1.0    --    -999   1               Sherpa                       munugammaPt140  Full  
- 301896           15.297               1         1.0    --    -999   1               Sherpa                    taunugammaPt35_70  Full  
- 301897            1.529               1         1.0    --    -999   1               Sherpa                   taunugammaPt70_140  Full  
- 301898           0.2426               1         1.0    --    -999   1               Sherpa                      taunugammaPt140  Full  
- 301899            5.242               1         1.0    --    -999   1               Sherpa                       eegammaPt35_70  Full  
- 301900          0.38455               1         1.0    --    -999   1               Sherpa                      eegammaPt70_140  Full  
- 301901         0.047209               1         1.0    --    -999   1               Sherpa                         eegammaPt140  Full  
- 301902           5.2455               1         1.0    --    -999   1               Sherpa                     mumugammaPt35_70  Full  
- 301903          0.38548               1         1.0    --    -999   1               Sherpa                    mumugammaPt70_140  Full  
- 301904          0.04724               1         1.0    --    -999   1               Sherpa                       mumugammaPt140  Full  
- 301905            5.249               1         1.0    --    -999   1               Sherpa                   tautaugammaPt35_70  Full  
- 301906          0.38482               1         1.0    --    -999   1               Sherpa                  tautaugammaPt70_140  Full  
- 301907         0.047025               1         1.0    --    -999   1               Sherpa                     tautaugammaPt140  Full  
- 301908           4.0365               1         1.0    --    -999   1               Sherpa                     nunugammaPt35_70  Full  
- 301909          0.97151               1         1.0    --    -999   1               Sherpa                    nunugammaPt70_140  Full  
- 301910          0.17115               1         1.0    --    -999   1               Sherpa                       nunugammaPt140  Full  
- 343243           52.691               1         1.0    --    -999   1               Sherpa                   tautaugammaPt10_35  Full  
- 304776           52.708               1         1.0    --    -999   1               Sherpa                   tautaugammaPt10_35  Full  
-
-#3 tops SM
- 304014        0.0016398               1         1.0    --    -999   1              pythia8                              3top_SM  Fast  
-
-## some other tH samples - values to be confirmed by experts!!!
- 343266       0.00166896               1         1.0    --    -999   2      MadGraphPythia8                       tHjb125_gamgam  Full  
- 343267       0.00012335               1         1.0    --    -999   1      MadGraphPythia8                       tHjb125_gamgam  Full  
- 343268       0.00061218               1         1.0    --    -999   2      MadGraphPythia8                       tHjb125_gamgam  Full  
- 343269         0.422364               1         1.0    --    -999   2      MadGraphPythia8                        tHjb125_bbbar  Full  
- 343270         0.031216               1         1.0    --    -999   1      MadGraphPythia8                        tHjb125_bbbar  Full  
- 343271          0.15492               1         1.0    --    -999   2      MadGraphPythia8                        tHjb125_bbbar  Full  
- 343272         0.222967               1         1.0    --    -999   2      MadGraphPythia8                          tHjb125_lep  Full  
- 343273         0.016479               1         1.0    --    -999   1      MadGraphPythia8                          tHjb125_lep  Full  
- 343274         0.081785               1         1.0    --    -999   2      MadGraphPythia8                          tHjb125_lep  Full  
-
-# trilepton-filtered sample - see ANALYSISTO-136
- 343637          18.2976          1.1949         1.0    --    -999   2         PowhegPythia         ttbar_hdamp172p5_threelepton  Full  
-
-# Sherpa 2.1 diboson HF filters. b-filter
- 344422         0.056385            0.91         1.0    --    -999   1             Sherpa21                         llll_BFilter  Full  
- 344423         0.833454            0.91         1.0    --    -999   1             Sherpa21                           llll_BVeto  Full  
- 344424         0.023276            0.91         1.0    --    -999   1             Sherpa21                  lllvSFMinus_BFilter  Full  
- 344425          0.43897            0.91         1.0    --    -999   1             Sherpa21                    lllvSFMinus_BVeto  Full  
- 344426         0.046242            0.91         1.0    --    -999   1             Sherpa21                  lllvOFMinus_BFilter  Full  
- 344427         0.870711            0.91         1.0    --    -999   1             Sherpa21                    lllvOFMinus_BVeto  Full  
- 344428         0.035488            0.91         1.0    --    -999   1             Sherpa21                   lllvSFPlus_BFilter  Full  
- 344429         0.638374            0.91         1.0    --    -999   1             Sherpa21                     lllvSFPlus_BVeto  Full  
- 344430         0.072535            0.91         1.0    --    -999   1             Sherpa21                     lllvOFPlus_BVeto  Full  
- 344431           1.3133            0.91         1.0    --    -999   1             Sherpa21                   lllvOFPlus_BFilter  Full  
-
-# Sherpa v2.2.1 Z+Jets
- 364100          1630.22          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV0_70_CVetoBVeto  Full  
- 364101          223.717          0.9751         1.0    --    -999   1            Sherpa221      Zmumu_MAXHTPTV0_70_CFilterBVeto  Full  
- 364102           127.18          0.9751         1.0    --    -999   1            Sherpa221           Zmumu_MAXHTPTV0_70_BFilter  Full  
- 364103          75.0165          0.9751         1.0    --    -999   1            Sherpa221      Zmumu_MAXHTPTV70_140_CVetoBVeto  Full  
- 364104          20.3477          0.9751         1.0    --    -999   1            Sherpa221    Zmumu_MAXHTPTV70_140_CFilterBVeto  Full  
- 364105          12.3885          0.9751         1.0    --    -999   1            Sherpa221         Zmumu_MAXHTPTV70_140_BFilter  Full  
- 364106          24.2853          0.9751         1.0    --    -999   1            Sherpa221     Zmumu_MAXHTPTV140_280_CVetoBVeto  Full  
- 364107          9.27542          0.9751         1.0    --    -999   1            Sherpa221   Zmumu_MAXHTPTV140_280_CFilterBVeto  Full  
- 364108          6.01361          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV140_280_BFilter  Full  
- 364109          4.77297          0.9751         1.0    --    -999   1            Sherpa221     Zmumu_MAXHTPTV280_500_CVetoBVeto  Full  
- 364110          2.26557          0.9751         1.0    --    -999   1            Sherpa221   Zmumu_MAXHTPTV280_500_CFilterBVeto  Full  
- 364111          1.49132          0.9751         1.0    --    -999   1            Sherpa221        Zmumu_MAXHTPTV280_500_BFilter  Full  
- 364112           1.7881          0.9751         1.0    --    -999   1            Sherpa221               Zmumu_MAXHTPTV500_1000  Full  
- 364113          0.14769          0.9751         1.0    --    -999   1            Sherpa221             Zmumu_MAXHTPTV1000_E_CMS  Full  
- 364114          1627.18          0.9751         1.0    --    -999   1            Sherpa221          Zee_MAXHTPTV0_70_CVetoBVeto  Full  
- 364115          223.731          0.9751         1.0    --    -999   1            Sherpa221        Zee_MAXHTPTV0_70_CFilterBVeto  Full  
- 364116           126.45          0.9751         1.0    --    -999   1            Sherpa221             Zee_MAXHTPTV0_70_BFilter  Full  
- 364117          76.2925          0.9751         1.0    --    -999   1            Sherpa221        Zee_MAXHTPTV70_140_CVetoBVeto  Full  
- 364118           20.336          0.9751         1.0    --    -999   1            Sherpa221      Zee_MAXHTPTV70_140_CFilterBVeto  Full  
- 364119          12.6228          0.9751         1.0    --    -999   1            Sherpa221           Zee_MAXHTPTV70_140_BFilter  Full  
- 364120            25.03          0.9751         1.0    --    -999   1            Sherpa221       Zee_MAXHTPTV140_280_CVetoBVeto  Full  
- 364121          9.37199          0.9751         1.0    --    -999   1            Sherpa221     Zee_MAXHTPTV140_280_CFilterBVeto  Full  
- 364122          6.08263          0.9751         1.0    --    -999   1            Sherpa221          Zee_MAXHTPTV140_280_BFilter  Full  
- 364123          4.86923          0.9751         1.0    --    -999   1            Sherpa221       Zee_MAXHTPTV280_500_CVetoBVeto  Full  
- 364124          2.27998          0.9751         1.0    --    -999   1            Sherpa221     Zee_MAXHTPTV280_500_CFilterBVeto  Full  
- 364125          1.49437          0.9751         1.0    --    -999   1            Sherpa221          Zee_MAXHTPTV280_500_BFilter  Full  
- 364126           1.8081          0.9751         1.0    --    -999   1            Sherpa221                 Zee_MAXHTPTV500_1000  Full  
- 364127          0.14857          0.9751         1.0    --    -999   1            Sherpa221               Zee_MAXHTPTV1000_E_CMS  Full  
- 364128          1627.73          0.9751         1.0    --    -999   1            Sherpa221      Ztautau_MAXHTPTV0_70_CVetoBVeto  Full  
- 364129          223.881          0.9751         1.0    --    -999   1            Sherpa221    Ztautau_MAXHTPTV0_70_CFilterBVeto  Full  
- 364130          127.733          0.9751         1.0    --    -999   1            Sherpa221         Ztautau_MAXHTPTV0_70_BFilter  Full  
- 364131          76.0262          0.9751         1.0    --    -999   1            Sherpa221    Ztautau_MAXHTPTV70_140_CVetoBVeto  Full  
- 364132          20.2123          0.9751         1.0    --    -999   1            Sherpa221  Ztautau_MAXHTPTV70_140_CFilterBVeto  Full  
- 364133          12.2939          0.9751         1.0    --    -999   1            Sherpa221       Ztautau_MAXHTPTV70_140_BFilter  Full  
- 364134          24.8034          0.9751         1.0    --    -999   1            Sherpa221   Ztautau_MAXHTPTV140_280_CVetoBVeto  Full  
- 364135          9.32824          0.9751         1.0    --    -999   1            Sherpa221  Ztautau_MAXHTPTV140_280_CFilterBVeto  Full  
- 364136          5.47909          0.9751         1.0    --    -999   1            Sherpa221      Ztautau_MAXHTPTV140_280_BFilter  Full  
- 364137          4.79119          0.9751         1.0    --    -999   1            Sherpa221   Ztautau_MAXHTPTV280_500_CVetoBVeto  Full  
- 364138          2.27563          0.9751         1.0    --    -999   1            Sherpa221  Ztautau_MAXHTPTV280_500_CFilterBVeto  Full  
- 364139          1.50284          0.9751         1.0    --    -999   1            Sherpa221      Ztautau_MAXHTPTV280_500_BFilter  Full  
- 364140           1.8096          0.9751         1.0    --    -999   1            Sherpa221             Ztautau_MAXHTPTV500_1000  Full  
- 364141          0.14834          0.9751         1.0    --    -999   1            Sherpa221           Ztautau_MAXHTPTV1000_E_CMS  Full  
-
-# Sherpa V2.2.1 Z+Jets Low Mass
- 364198          2330.19          0.9751         1.0    --    -999   1               Sherpa      Zmm_Mll10_40_MAXHTPTV0_70_BVeto  Full  
- 364199          82.2568          0.9751         1.0    --    -999   1               Sherpa    Zmm_Mll10_40_MAXHTPTV0_70_BFilter  Full  
- 364200          44.8791          0.9751         1.0    --    -999   1               Sherpa    Zmm_Mll10_40_MAXHTPTV70_280_BVeto  Full  
- 364201          5.11499          0.9751         1.0    --    -999   1               Sherpa  Zmm_Mll10_40_MAXHTPTV70_280_BFilter  Full  
- 364202          2.75978          0.9751         1.0    --    -999   1               Sherpa  Zmm_Mll10_40_MAXHTPTV280_E_CMS_BVeto  Full  
- 364203         0.472156          0.9751         1.0    --    -999   1               Sherpa  Zmm_Mll10_40_MAXHTPTV280_E_CMS_BFilter  Full  
- 364204          2331.22          0.9751         1.0    --    -999   1               Sherpa      Zee_Mll10_40_MAXHTPTV0_70_BVeto  Full  
- 364205          81.3577          0.9751         1.0    --    -999   1               Sherpa    Zee_Mll10_40_MAXHTPTV0_70_BFilter  Full  
- 364206          44.9714          0.9751         1.0    --    -999   1               Sherpa    Zee_Mll10_40_MAXHTPTV70_280_BVeto  Full  
- 364207          5.48142          0.9751         1.0    --    -999   1               Sherpa  Zee_Mll10_40_MAXHTPTV70_280_BFilter  Full  
- 364208          2.77741          0.9751         1.0    --    -999   1               Sherpa  Zee_Mll10_40_MAXHTPTV280_E_CMS_BVeto  Full  
- 364209         0.473086          0.9751         1.0    --    -999   1               Sherpa  Zee_Mll10_40_MAXHTPTV280_E_CMS_BFilter  Full  
- 364210          2333.93          0.9751         1.0    --    -999   1               Sherpa      Ztt_Mll10_40_MAXHTPTV0_70_BVeto  Full  
- 364211          81.1026          0.9751         1.0    --    -999   1               Sherpa    Ztt_Mll10_40_MAXHTPTV0_70_BFilter  Full  
- 364212          44.8369          0.9751         1.0    --    -999   1               Sherpa    Ztt_Mll10_40_MAXHTPTV70_280_BVeto  Full  
- 364213          5.54094          0.9751         1.0    --    -999   1               Sherpa  Ztt_Mll10_40_MAXHTPTV70_280_BFilter  Full  
- 364214          2.79355          0.9751         1.0    --    -999   1               Sherpa  Ztt_Mll10_40_MAXHTPTV280_E_CMS_BVeto  Full  
- 364215         0.469721          0.9751         1.0    --    -999   1               Sherpa  Ztt_Mll10_40_MAXHTPTV280_E_CMS_BFilter  Full  
-
-
-# Sherpa v2.2.1 W+Jets
- 364156            15770          0.9702         1.0    --    -999   1            Sherpa221        Wmunu_MAXHTPTV0_70_CVetoBVeto  Full  
- 364157          2493.38          0.9702         1.0    --    -999   1            Sherpa221      Wmunu_MAXHTPTV0_70_CFilterBVeto  Full  
- 364158          844.198          0.9702         1.0    --    -999   1            Sherpa221             Wmunu_MAXHTPTV0_70_BFilt  Full  
- 364159          637.424          0.9702         1.0    --    -999   1            Sherpa221      Wmunu_MAXHTPTV70_140_CVetoBVeto  Full  
- 364160          219.966          0.9702         1.0    --    -999   1            Sherpa221                 Wmunu_MAXHTPTV70_140  Full  
- 364161          71.4594          0.9702         1.0    --    -999   1            Sherpa221         Wmunu_MAXHTPTV70_140_BFilter  Full  
- 364162          212.555          0.9702         1.0    --    -999   1            Sherpa221     Wmunu_MAXHTPTV140_280_CVetoBVeto  Full  
- 364163          98.4372          0.9702         1.0    --    -999   1            Sherpa221   Wmunu_MAXHTPTV140_280_CFilterBVeto  Full  
- 364164          36.9148          0.9702         1.0    --    -999   1            Sherpa221        Wmunu_MAXHTPTV140_280_BFilter  Full  
- 364165          39.3825          0.9702         1.0    --    -999   1            Sherpa221     Wmunu_MAXHTPTV280_500_CVetoBVeto  Full  
- 364166          22.9178          0.9702         1.0    --    -999   1            Sherpa221   Wmunu_MAXHTPTV280_500_CFilterBVeto  Full  
- 364167          9.60864          0.9702         1.0    --    -999   1            Sherpa221        Wmunu_MAXHTPTV280_500_BFilter  Full  
- 364168            15.01          0.9702         1.0    --    -999   1            Sherpa221               Wmunu_MAXHTPTV500_1000  Full  
- 364169           1.2344          0.9702         1.0    --    -999   1            Sherpa221             Wmunu_MAXHTPTV1000_E_CMS  Full  
- 364170          15769.6          0.9702         1.0    --    -999   1            Sherpa221         Wenu_MAXHTPTV0_70_CVetoBVeto  Full  
- 364171          2492.64          0.9702         1.0    --    -999   1            Sherpa221       Wenu_MAXHTPTV0_70_CFilterBVeto  Full  
- 364172          844.638          0.9702         1.0    --    -999   1            Sherpa221            Wenu_MAXHTPTV0_70_BFilter  Full  
- 364173          630.322          0.9702         1.0    --    -999   1            Sherpa221       Wenu_MAXHTPTV70_140_CVetoBVeto  Full  
- 364174           215.49          0.9702         1.0    --    -999   1            Sherpa221     Wenu_MAXHTPTV70_140_CFilterBVeto  Full  
- 364175           97.738          0.9702         1.0    --    -999   1            Sherpa221          Wenu_MAXHTPTV70_140_BFilter  Full  
- 364176          202.836          0.9702         1.0    --    -999   1            Sherpa221      Wenu_MAXHTPTV140_280_CVetoBVeto  Full  
- 364177          98.4433          0.9702         1.0    --    -999   1            Sherpa221    Wenu_MAXHTPTV140_280_CFilterBVeto  Full  
- 364178          36.9965          0.9702         1.0    --    -999   1            Sherpa221         Wenu_MAXHTPTV140_280_BFilter  Full  
- 364179          39.2433          0.9702         1.0    --    -999   1            Sherpa221      Wenu_MAXHTPTV280_500_CVetoBVeto  Full  
- 364180          22.8465          0.9702         1.0    --    -999   1            Sherpa221    Wenu_MAXHTPTV280_500_CFilterBVeto  Full  
- 364181          9.65665          0.9702         1.0    --    -999   1            Sherpa221         Wenu_MAXHTPTV280_500_BFilter  Full  
- 364182           15.224          0.9702         1.0    --    -999   1            Sherpa221                Wenu_MAXHTPTV500_1000  Full  
- 364183           1.2334          0.9702         1.0    --    -999   1            Sherpa221              Wenu_MAXHTPTV1000_E_CMS  Full  
- 364184          15799.4          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV0_70_CVetoBVeto  Full  
- 364185          2477.25          0.9702         1.0    --    -999   1            Sherpa221     Wtaunu_MAXHTPTV0_70_CFilterBVeto  Full  
- 364186          854.555          0.9702         1.0    --    -999   1            Sherpa221          Wtaunu_MAXHTPTV0_70_BFilter  Full  
- 364187          638.546          0.9702         1.0    --    -999   1            Sherpa221     Wtaunu_MAXHTPTV70_140_CVetoBVeto  Full  
- 364188          210.382          0.9702         1.0    --    -999   1            Sherpa221   Wtaunu_MAXHTPTV70_140_CFilterBVeto  Full  
- 364189          98.0183          0.9702         1.0    --    -999   1            Sherpa221        Wtaunu_MAXHTPTV70_140_BFilter  Full  
- 364190          202.333          0.9702         1.0    --    -999   1            Sherpa221    Wtaunu_MAXHTPTV140_280_CVetoBVeto  Full  
- 364191          98.5776          0.9702         1.0    --    -999   1            Sherpa221  Wtaunu_MAXHTPTV140_280_CFilterBVeto  Full  
- 364192          40.0623          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV140_280_BFilter  Full  
- 364193          39.3251          0.9702         1.0    --    -999   1            Sherpa221    Wtaunu_MAXHTPTV280_500_CVetoBVeto  Full  
- 364194           22.779          0.9702         1.0    --    -999   1            Sherpa221  Wtaunu_MAXHTPTV280_500_CFilterBVeto  Full  
- 364195          9.67021          0.9702         1.0    --    -999   1            Sherpa221       Wtaunu_MAXHTPTV280_500_BFilter  Full  
- 364196           15.046          0.9702         1.0    --    -999   1            Sherpa221              Wtaunu_MAXHTPTV500_1000  Full  
- 364197           1.2339          0.9702         1.0    --    -999   1            Sherpa221            Wtaunu_MAXHTPTV1000_E_CMS  Full  
-
+ 302459       8.8774e-06             1.0         1.0    --    -999   2              Pythia8                              DCH1300  AFII
 

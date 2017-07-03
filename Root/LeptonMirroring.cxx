@@ -59,6 +59,8 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &isFakeLep, "lep_isFakeLep_", index);
   CreateBranch(tree, &isQMisID, "lep_isQMisID_", index);
   CreateBranch(tree, &isConvPh, "lep_isConvPh_", index);
+  CreateBranch(tree, &isExtConvPh, "lep_isExtConvPh_", index);
+  CreateBranch(tree, &isIntConvPh, "lep_isIntConvPh_", index);
   CreateBranch(tree, &isISR_FSR_Ph, "lep_isISR_FSR_Ph_", index);
   CreateBranch(tree, &isBrems, "lep_isBrems_", index);
 
