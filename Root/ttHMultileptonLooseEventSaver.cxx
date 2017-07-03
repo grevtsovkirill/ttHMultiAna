@@ -1873,6 +1873,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
       return; // remove all events with less than 2 leptons (including taus)
     if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 == 0)
       return; // remove all 2l opposite sign 0 tau events
+    if (m_variables->total_leptons == 1 && m_variables->nTaus_OR_Pt25 <= 1)
+      return; // remove all 1l1tau events
   } else { // Data and Nominal
     if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 == 0)
       return; // remove all events with neither leptons nor taus
