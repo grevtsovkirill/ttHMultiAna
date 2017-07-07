@@ -1283,7 +1283,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(std::shared_ptr<xAOD::ElectronCont
 	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0;  dec_loose(*e) = 1;}//TightTight SF 2LOS
 	}
 	else {
-	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0;  dec_loose(*e) = 0;}//TightTight SF 2LSS
+	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1;  dec_loose(*e) = 0;}//TightTight SF 2LSS
 	}
 
 	double sf_tt = 1.;
