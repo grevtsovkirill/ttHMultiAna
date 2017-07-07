@@ -1803,7 +1803,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   //Fill nTruthJets
   m_variables->nTruthJets =  this->getNTruthJets(goodJet);
 
-  bool useStandardOLR = true;
+  bool useStandardOLR = false;
   if (useStandardOLR) {
     // Standard OLR aka Run-1 with modified jet-mu OLR
     OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
