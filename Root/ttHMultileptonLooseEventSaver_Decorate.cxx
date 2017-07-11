@@ -272,8 +272,13 @@ ttHMultileptonLooseEventSaver::DecorateTaus(const top::Event& event) {
       tau->auxdecor<char>("passJVT") =	
 	jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
 
-      tau->auxdecor<char>("fromPV") =
-	(tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
+      try {
+        tau->auxdecor<char>("fromPV") =
+          (tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
+      }
+      catch(std::exception& e) {
+        tau->auxdecor<char>("fromPV") = -1;
+      }
     }
   }
 }
