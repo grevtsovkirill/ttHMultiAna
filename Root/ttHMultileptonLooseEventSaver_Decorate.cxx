@@ -277,7 +277,7 @@ ttHMultileptonLooseEventSaver::DecorateTaus(const top::Event& event) {
           (tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
       }
       catch(std::exception& e) {
-        tau->auxdecor<char>("fromPV") = -1;
+        tau->auxdecor<char>("fromPV") = 1;
       }
     }
   }
