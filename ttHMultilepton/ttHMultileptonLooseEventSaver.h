@@ -110,7 +110,16 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   void CopyHT(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<xAOD::JetContainer>& goodJet, std::shared_ptr<xAOD::TauJetContainer>& goodTau);
   void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
   std::string betterBtagNamedSyst (const std::string WP);
-  float getattr_truthJet(const xAOD::Jet &,std::string attr);
+  template <class T> T getattr_truthJet(const xAOD::Jet &jet, std::string  attr) {
+    T attr_value = -99;
+    if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink")
+        && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid()) {
+      const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
+      if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<T>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
+    }
+    return attr_value;
+  }
+
   int getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl);
   int getNInnerPix(const xAOD::Electron& el);
   int getNInnerPix(const xAOD::Muon& mu);

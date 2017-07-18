@@ -519,10 +519,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       //systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
       //systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
       //systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
-      systematicTree->makeOutputVariable(m_trjet_Wcount,   "m_truth_jet_Wcount");
-      systematicTree->makeOutputVariable(m_trjet_Zcount,   "m_truth_jet_Zcount");
-      systematicTree->makeOutputVariable(m_trjet_Hcount,   "m_truth_jet_Hcount");
-      systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
+      //systematicTree->makeOutputVariable(m_trjet_Wcount,   "m_truth_jet_Wcount");
+      //systematicTree->makeOutputVariable(m_trjet_Zcount,   "m_truth_jet_Zcount");
+      //systematicTree->makeOutputVariable(m_trjet_Hcount,   "m_truth_jet_Hcount");
+      //systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
 
       //truthEvent information
       systematicTree->makeOutputVariable(m_PDFinfo_X1,        "m_mcevt_pdf_X1");
@@ -1133,11 +1133,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
     if(!m_doSystematics) {
-      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"pt");},*systematicTree,"m_truth_jet_pt");
-      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"eta");},*systematicTree,"m_truth_jet_eta");
-      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"phi");},*systematicTree,"m_truth_jet_phi");
-      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"e");},*systematicTree,"m_truth_jet_e");
-      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet(jet,"m");},*systematicTree,"m_truth_jet_m");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"pt");},*systematicTree,"m_truth_jet_pt");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"eta");},*systematicTree,"m_truth_jet_eta");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"phi");},*systematicTree,"m_truth_jet_phi");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"e");},*systematicTree,"m_truth_jet_e");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"m");},*systematicTree,"m_truth_jet_m");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostHBosonsCount");},*systematicTree,"m_truth_jet_Hcount");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostTQuarksFinalCount");},*systematicTree,"m_truth_jet_Tcount");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostWBosonsCount");},*systematicTree,"m_truth_jet_Wcount");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostZBosonsCount");},*systematicTree,"m_truth_jet_Zcount");
     }
 
 

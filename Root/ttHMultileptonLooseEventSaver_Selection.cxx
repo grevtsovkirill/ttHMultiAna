@@ -1937,18 +1937,6 @@ ttHMultileptonLooseEventSaver::CheckIsBlinded() {
   m_variables->isBlinded = isBlinded;
 }
 
-
-float ttHMultileptonLooseEventSaver::getattr_truthJet(const xAOD::Jet &jet, std::string  attr)
-{
-  float attr_value = -99;
-  if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink") && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid())
-  {
-    const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
-    if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<float>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
-  }
-  return attr_value;
-}
-
 int ttHMultileptonLooseEventSaver::getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl)
 {
   int nTruth = 0;
