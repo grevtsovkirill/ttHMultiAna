@@ -8,19 +8,25 @@ lsetup "rcsetup Top,2.4.32" panda rucio pyami
 #export X509_USER_PROXY=${HOME}/.globus/gridproxy.cert
 
 # for bad electrons in HIGG8D1 with no matched clusters (e.g. run 302872)
-rc checkout_pkg TopObjectSelectionTools
-sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
+if [ ! -d TopObjectSelectionTools ]; then
+    rc checkout_pkg TopObjectSelectionTools
+    sed -i 's/\/\/This stops a crash/if (!(el.caloCluster())) return false;/' TopObjectSelectionTools/Root/ElectronLikelihoodMC15.cxx
+fi
 
 #new tau ele bdt (not needed for v29, 00-02-51 from AnalysisTop enough)
 #rc checkout_pkg atlasoff/PhysicsAnalysis/TauID/TauAnalysisTools/tags/TauAnalysisTools-00-02-54
 
 #for latest June 8th b-tagging SFs recommendations and PromptLeptonIso SFs
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-60
-patch -d TopCPTools -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
+if [ ! -d TopCPTools ]; then
+    rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/tags/TopCPTools-00-01-60
+    patch -d TopCPTools -p0 < ttHMultilepton/addPromptLeptonIsoSFs.patch
+fi
 
 #for missing tau track links
-rc checkout_pkg TopCorrections
-patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
+if [ ! -d TopCorrections ]; then
+    rc checkout_pkg TopCorrections
+    patch -d TopCorrections -p0 < ttHMultilepton/MissingTauTrackLinks.patch
+fi
 
 #for new k-factors for ttgamma and ttW ANALYSISTO-326
 rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/tags/TopDataPreparation-00-08-69
