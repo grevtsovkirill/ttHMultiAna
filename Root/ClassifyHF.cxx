@@ -110,8 +110,13 @@ void ttHMultilepton::ClassifyHF::flagJets(){
   
   for(const xAOD::TruthParticle*  part : *m_event->m_truth) {//loop truth
         
-    int OriginFlag=part->auxdata< int >("TopHadronOriginFlag");
-    
+    int OriginFlag;
+    try {
+      OriginFlag = part->auxdata< int >("TopHadronOriginFlag");
+    }
+    catch(std::exception& e) {
+      continue;
+    }
     
     if(OriginFlag==6) continue; //only hadrons flagged with origin at derivation level
     m_FinalHadrons[part->index()]=OriginFlag;
