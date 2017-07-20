@@ -6,12 +6,11 @@ export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
 source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
 mkdir YourFancyDirectory
 cd YourFancyDirectory
-lsetup "rcsetup Top,2.4.30"
 ```
 
 # Getting the code
 
-After setting up your Kerberos ticket
+After setting up your Kerberos ticket (not needed on lxplus)
 ```bash
 kinit $CERN_USER@CERN.CH
 ```
@@ -23,7 +22,7 @@ If you want a specific tag, do
 ```bash
 cd ttHMultilepton && git checkout <tag number> && cd ..
 ```
-Possibly checkout additional packages mentioned in setupRCandGrid.sh.
+Please follow the instructions in `setupRCandGrid.sh` to properly set up the package.
 
 To compile the code type
 ```bash
@@ -41,13 +40,9 @@ echo $DXAOD_PATH_TO_ROOT_FILE > infile_htop.txt
 ```
 The master command to run on the framework is
 ```bash
-top-xaod ../ttHMultilepton/share/generic_config-data15.txt infile_htop.txt
+top-xaod ../ttHMultilepton/share/generic_config-data.txt infile_htop.txt
 ```
-for 2015 and
-```bash
-top-xaod ../ttHMultilepton/share/generic_config-data16.txt infile_htop.txt
-```
-for 2016 data and for MC it is
+for data and for MC it is
 ```bash
 top-xaod ../ttHMultilepton/share/generic_config-mc15.txt infile_htop.txt
 ```
