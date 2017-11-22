@@ -15,7 +15,7 @@ config = TopExamples.grid.Config()
 config.code          = 'top-xaod'
 config.gridUsername  = 'rwolff'
 config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
-config.noSubmit      = False
+config.noSubmit      = True
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
 config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 #config.forceSite     = 'ANALY_CONNECT'
@@ -68,7 +68,7 @@ config.memory = ''
 config.suffix       = '2017-06-09.Sys_v29_noCFT_skim'
 config.settingsFile = 'generic_config-mc15-Sys.txt'
 #TopExamples.grid.submit(config,fullSim)
-TopExamples.grid.submit(config,extra)
+#TopExamples.grid.submit(config,extra)
 config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 #TopExamples.grid.submit(config,fastSim)
 #TopExamples.grid.submit(config,noCFT_ttbar_fastSim)
@@ -76,7 +76,7 @@ config.settingsFile = 'generic_config-mc15-Sys_fastSim.txt'
 config.suffix       = '2017-06-09.Sys_v29_CFT_skim'
 config.settingsFile = 'generic_config-mc15-Sys_CFT.txt'
 #TopExamples.grid.submit(config,fullSim)
-TopExamples.grid.submit(config,extra)
+#TopExamples.grid.submit(config,extra)
 config.settingsFile = 'generic_config-mc15-Sys_CFT_fastSim.txt'
 #TopExamples.grid.submit(config,fastSim)
 #TopExamples.grid.submit(config,CFT_ttbar_fastSim)
@@ -110,6 +110,15 @@ data16 = TopExamples.grid.Samples(['data16'])
 data = data_00284154 + data15 + data16
 #TopExamples.grid.submit(config,data)
 
+#################################################################################
+# print list of all datasets
+def printSampleList():
+    for name, ds in  TopExamples.grid.AvailableDatasets().iteritems():
+        print "set:",name
+        for ds_name in  ds.datasets:
+            print ds_name
+
+printSampleList()
 
 #################################################################################
 #PRW
