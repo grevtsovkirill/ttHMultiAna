@@ -661,10 +661,10 @@ unsigned int ttH::TruthSelector::CountJets(const xAOD::JetContainer* truthJets, 
 }
 
 //=========================================================================
-unsigned int ttH::TruthSelector::CountTopWLeptons(const xAOD::TruthParticleContainer* truthParticles)
+/*unsigned int ttH::TruthSelector::CountTopWLeptons(const xAOD::TruthParticleContainer* truthParticles)
 {
   return (GetTopWLep(truthParticles) != nullptr) + (GetAntiTopWLep(truthParticles) != nullptr);
-}
+}*/
 
 //=========================================================================
 unsigned int ttH::TruthSelector::CountLightLeptons(const xAOD::TruthParticleContainer* truthParticles, float ptMin, float etaMax)

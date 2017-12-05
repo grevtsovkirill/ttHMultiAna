@@ -20,7 +20,7 @@ bool DuplicateSelector::apply(const top::Event& event) const {
   std::pair<int,uint64_t> runEvent = std::make_pair(runNumber,eventNumber);
   if( m_processedEvents.insert(runEvent).second == false ){
     // event is duplicate
-    std::cout<<"Ignoring duplicate, run:"<<runNumber<<" event: "<<eventNumber<<std::cout;
+   // std::cout<<"Ignoring duplicate, run:"<<runNumber<<" event: "<<eventNumber<<std::cout;
     return false;
   }
   

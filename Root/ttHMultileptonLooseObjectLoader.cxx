@@ -20,28 +20,40 @@
 #include "TopObjectSelectionTools/TauMC15.h"
 #include "ttHMultilepton/DummyOverlapRemoval.h"
 #include "TopObjectSelectionTools/OverlapRemovalASG.h"
+//ROOT
+#include "TFile.h"
+#include "TH1.h"
+#include "TTreeReader.h"
+#include "TTreeReaderValue.h"
+#include "TError.h"
 
+#include <cstddef>
+#include <iostream>
 //Run once at the start of the program to setup our object selection (and overlap removal)
 //top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(top::TopConfig* topConfig) {
 top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<top::TopConfig> topConfig) { 
+std::cout<<"aaaa"<<std::endl;
   //create our new object
   top::TopObjectSelection* objectSelection = new top::TopObjectSelection(topConfig->objectSelectionName());
   top::check(objectSelection->setProperty( "config" , topConfig ) , "Failed to setProperty for top::TopObjectSelection" );
   top::check(objectSelection->initialize() , "Failed to initialize top::TopObjectSelection" ); 
- 
+std::cout<<"bbb"<<std::endl;
   //configure the electrons, muons, jets, large-R jets
   if (topConfig->electronID().find("LH") == std::string::npos && topConfig->electronIDLoose().find("LH") == std::string::npos) {
+std::cout<<"ccc"<<std::endl;
     //both the tight and loose user settings do not contain LH -> cut based
     objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), false, topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
   } else if (topConfig->electronID().find("LH") != std::string::npos && topConfig->electronIDLoose().find("LH") != std::string::npos) {
     //user wants likelihood electrons
     //auto electronIsolation = new top::StandardIsolation( topConfig->electronIsolation(), topConfig->electronIsolationLoose() );
+std::cout<<"ddd"<<std::endl;
     auto electronSelection = new top::ElectronLikelihoodMC15(topConfig->isPrimaryxAOD(),
 							     topConfig->electronPtcut(), 
 							     topConfig->electronVetoLArCrack(), 
 							     topConfig->electronID(), 
 							     topConfig->electronIDLoose(), 
-							     nullptr);
+							     new top::StandardIsolation(
+                                                             topConfig->electronIsolationLoose()));
     objectSelection->electronSelection( electronSelection );
   } else {
     std::cout << "\nHo hum\n";

@@ -1,19 +1,26 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-GRLDir ttHMultilepton
-GRLFile data15_13TeV.periodAllYear_DetStatus-v79-repro20-02_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml data16_13TeV.periodAllYear_DetStatus-v88-pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml
-PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_None_276262-284484_OflLumi-13TeV-005.root ttHMultilepton/ilumicalc_histograms_None_297730-311481_OflLumi-13TeV-008.root
+#GRLDir ttHMultilepton
+#GRLFile data15_13TeV.periodAllYear_DetStatus-v79-repro20-02_DQDefects-00-02-02_PHYS_StandardGRL_All_Good_25ns.xml data16_13TeV.periodAllYear_DetStatus-v88-#pro20-21_DQDefects-00-02-04_PHYS_StandardGRL_All_Good_25ns.xml
+#PRWLumiCalcFiles  ttHMultilepton/ilumicalc_histograms_None_276262-284484_OflLumi-13TeV-005.root ttHMultilepton/ilumicalc_histograms_None_297730-311481_OflLumi-13TeV-008.root
+
+GRLDir GoodRunsLists
+GRLFile data17_13TeV/20171103/physics_25ns_Triggerno17e33prim.xml
+PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/SUSYTools/mc16c_defaults.NotRecommended.prw.root
+PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20171103/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
 MuonCollectionName Muons
-JetCollectionName AntiKt4EMTopoJets
+#JetCollectionName AntiKt4EMTopoJets
+JetCollectionName AntiKt4EMPFlowJets
 LargeJetCollectionName None
 LargeJetSubstructure None
 TauCollectionName TauJets
 PhotonCollectionName None
 METCollectionName MET_RefFinal_AntiKt4EMTopo
-LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+#LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+LooseMETCollectionName MET_Reference_AntiKt4EMPFlow
 
 TruthCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthJets
@@ -43,7 +50,7 @@ ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
 ElectronIsolation Loose
-ElectronIsolationLoose PromptLepton
+#ElectronIsolationLoose PromptLepton
 
 #Muon cuts
 MuonQuality Loose
@@ -58,7 +65,7 @@ MuonIsolationLoose PromptLepton
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
 TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
-ApplyTauMVATES True
+ApplyTauMVATES false
 
 #Jet cuts
 JetPt 25000.

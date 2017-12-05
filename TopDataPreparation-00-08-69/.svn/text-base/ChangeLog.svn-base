@@ -1,0 +1,1386 @@
+2017-07-07 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * single VLQ - ANALYSISTO-356
+        * diphoton samples - ANALYSISTO-357
+        * low mll ttll and top rare decay - ANALYSISTO-350
+        * ggZH, H->2a->4b - ANALYSISTO-349
+        * TopDataPreparation-00-08-69
+
+2017-06-09 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * adding cross-sections for filtered ttbar radiation systematics - ANALYSISTO-327
+        * adding 410519-20, 410523-24, 410568-69
+        * TopDataPreparation-00-08-68
+
+2017-06-09 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * adding HH->W samples - ANALYSISTO-335
+        * TopDataPreparation-00-08-67
+
+2017-06-09 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * missing DSIDs for ttbar radiation systematics - ANALYSISTO-327
+        * adding 410515-20, 410523-24, 410568-69, 410513-4
+        * cross-section values to be confirmed by PMG
+        * TopDataPreparation-00-08-66
+
+2017-06-08 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * ttgamma and ttW update - ANALYSISTO-326
+        * TopDataPreparation-00-08-64
+
+2017-06-08 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Monotop DM - ANALYSISTO-323
+        * TopDataPreparation-00-08-63
+
+2017-06-05 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * New K-factors for Sherpa diboson b-filtered - ANALYSISTO-321
+        * TopDataPreparation-00-08-62
+
+2017-05-30 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * New VLQ samples - ANALYSISTO-319
+        * Updating some Pythia8 dijet cross-sections (361020-361032)
+        * TopDataPreparation-00-08-61
+
+2017-05-27 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Fix duplicate for 410325
+        * Add one significant digit for 410323-5
+        * TopDataPreparation-00-08-60
+
+2017-05-21 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * ttV A14 variations 410370-81 (same Xsec and Kfactor as nominal samples)
+        * ttH A14 variations 343638-43 (same Xsec and Kfactor as nominal samples)
+        * ttbar Sherpa b-filtered 410281-3 (Xsec from AMI, same K-factor as non-filtered)
+        * new ttbar+bbbar Sherpa 410323-5 (Xsec from AMI, no K-factor)
+        * TopDataPreparation-00-08-59
+
+2017-05-18 S. Calvet <scalvet@cern.ch>
+	* Bug fix for KK gluon to ttbar
+	* TopDataPreparation-00-08-58
+	
+2017-05-12 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding new tZ samples 410550-60
+        * TopDataPreparation-00-08-57
+
+2017-04-08 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Fix shower generator of 410536/7
+        * TopDataPreparation-00-08-56
+
+2017-04-08 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding or updating Higgs samples - ANALYSISTO-298, ANALYSISTO-282
+        * Adding bbH samples (cross-sections unknown) - 342286/7
+        * Fixing ttbar nonallhad colour flipped - ANALYSISTO-259
+        * Updates for the ttbar PowPy8 allhad
+           * Fixing the K-factors of the non-"noC" ones - now all to 
+           * Adding the "noC" ones
+           * Now the sum of the two samples times K-factor give the reference Xsec (times allhad BR)
+           * ANALYSISTO-295
+        * Adding nonallhad boosted C and B filtered - 410507/8
+        * TopDataPreparation-00-08-55
+
+2017-04-03 S. Calvet <scalvet@cern.ch>
+	* Add some VLQ (307034,6,7)
+	* Implent KK gluon to ttbar(307522-32)
+	* TopDataPreparation-00-08-54
+	
+2017-03-07 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Including some missing BRs - ANALYSISTO-276
+        * TopDataPreparation-00-08-53
+
+2017-03-03 S. Calvet <scalvet@cern.ch>
+	* Add same-sign top (308073-87)
+	* TopDataPreparation-00-08-52
+
+2017-03-01 S. Calvet <scalvet@cern.ch>
+	* Change k-factor for W'->tb (302724-30)
+	* Add more W' samples (308088-91)
+	* TopDataPreparation-00-08-51
+
+2017-03-01 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding VLQ samples with unknown cross-sections - ANALYSISTO-269
+        * Adding Wt aMCatNLO+H++ with uncertain K-factor - ANALYSISTO-274
+        * TopDataPreparation-00-08-50
+
+2017-02-20 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding Sherpa 2.2.1 diboson - ANALYSISTO-264
+        * TopDataPreparation-00-08-49
+
+2017-02-14 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding colour-flipped ttbar Pow+P8 410248 - ANALYSISTO-259
+        * TopDataPreparation-00-08-48
+
+2017-02-03 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Implementing the use of sherpa21 as shower generator
+        * sherpa means Sherpa 2.2, sherpa21 means Sherpa 2.1
+        * TopDataPreparation-00-08-47
+
+2017-02-02 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Various fixes for new ttbar samples - see ANALYSISTO-228, ANALYSISTO-229
+        * Adding Sherpa 2.2.1 Z+jets low mass
+        * TopDataPreparation-00-08-46
+
+2016-11-14 S. Calvet <scalvet@cern.ch>
+	* Add extention of VLQ (306984-307089)
+	* TopDataPreparation-00-08-45
+
+2016-01-13 Sergio Grancagnolo <sergio.grancagnolo@cern.ch>
+	* Updating cross-sections for the new ttbar samples
+	* ANALYSISTO-228 - ANALYSISTO-229
+	* TopDataPreparation-00-08-44
+
+2017-01-09 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Updating cross-sections for the new ttbar samples
+        * ANALYSISTO-216 - ANALYSISTO-226
+        * TopDataPreparation-00-08-43
+
+2016-12-19 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Fixing trilepton ttbar Powheg+P6 xsection (343637)
+        * Fixing diboson Sherpa 2.1 samples xsection (361063 and 361072)
+        * TopDataPreparation-00-08-42
+
+2016-12-11 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding new aMC@NLO+P8 samples without cross-section values
+        * Adding Powheg+P8 hdamp=1.5mt b-filtered samples without cross-section values
+        * TopDataPreparation-00-08-41
+
+2016-12-04 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding more Powheg+P8 hdamp=1.5mt samples
+        * TopDataPreparation-00-08-40
+
+2016-12-02 Sergio Grancagnolo <sergio.grancagnolo@cern.ch>
+	* Adding dummy cross sections to run on TRUTH1 Sherpa W+jets systematic samples
+	* TopDataPreparation-00-08-39
+
+2016-11-28 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding missing Ztautau Sherpa 2.2.2 (364133)
+        * TopDataPreparation-00-08-38
+
+2016-11-23 Sebastian Mergelmeyer <sebastian.mergelmeyer@cern.ch>
+	* fix cross sections for 361096-7, taking filter eff. into account
+	* TopDataPreparation-00-08-37
+
+2016-11-16 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding ttbar Powheg+Pythia8 hdamp=1.5mt sample 410501
+        * TopDataPreparation-00-08-36
+
+2016-11-14 S. Calvet <scalvet@cern.ch>
+	* Add extention of W'->tb (306123-32)
+	* TopDataPreparation-00-08-35
+
+2016-10-26 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Fix Sherpa 2.2.1 W/Z+jets (missing filter efficiency) - see ANALYSISTO-190
+        * Fix MG5P8 tHjb BSM (wrong Xsections, wrong showering) - see ANALYSISTO-194
+        * TopDataPreparation-00-08-34
+
+2016-10-26 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding Sherpa 2.2.1 W/Z+jets - 364102-364193 - see ANALYSISTO-190
+        * TopDataPreparation-00-08-33
+
+2016-10-21 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Modify K-factors for Sherpa 2.2.1 ttbar - see ANALYSISTO-172
+        * Modify cross-sections for MG5P8 ttgamma, adding two more - see ANALYSISTO-136
+        * TopDataPreparation-00-08-32
+
+2016-10-19 S. Calvet <scalvet@cern.ch>
+	* Add ht-sliced SM ttbar samples PowhegPythia6 (407009-11)
+	* Add MG+Pythia8 Z+jets HT slices (363123-70)
+	* TopDataPreparation-00-08-31
+
+2016-10-18 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Add various samples - see ANALYSISTO-136
+        * TopDataPreparation-00-08-30
+
+2016-10-14 S. Calvet <scalvet@cern.ch>
+	* Add Vgamma samples (301887-9, 343243, 304776)
+	* TopDataPreparation-00-08-29
+
+2016-10-13 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Sherpa 2.1 diboson HF filters block - K-factors at 0.91 and fixed cross-section for 344424
+        * TopDataPreparation-00-08-28
+
+2016-10-05 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding ttbar Sherpa 2.2.1
+        * Adding Diboson Sherpa 2.1 HF filtered
+        * Fixing triboson Sherpa systematics (pythia8->sherpa)
+        * TopDataPreparation-00-08-27
+
+2016-09-15 S. Calvet <scalvet@cern.ch>
+	* Add Z'->ttbar 600 and 800 GeV (305786, 305787)
+	* TopDataPreparation-00-08-26
+
+2016-08-29 S. Calvet <scalvet@cern.ch>
+	* Fix cross-section of Madgraph+Pythia8 SM ttbar+jets (407200-4)
+	* TopDataPreparation-00-08-25
+
+2016-08-12 S. Calvet <scalvet@cern.ch>
+	* Add mtt-sliced all-had SM ttbar samples (303722-6)
+	* Add all-Had VJets 304307-9, 304707-9, 304824-5 304623-7, 304673-7, 304628-32, 304678-82
+	* TopDataPreparation-00-08-24
+
+2016-08-11 Tom Neep <tom.neep@cern.ch>
+	* Adding 410234
+	* TopDataPreparation-00-08-23
+
+2016-07-26 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding doubly charged Higgs samples
+        * TopDataPreparation-00-08-22
+
+2016-07-22 S. Calvet <scalvet@cern.ch>
+	* Madgraph+Pythia8 SM ttbar+jets (407200-4)
+	* TopDataPreparation-00-08-21
+
+2016-07-11 S. Mergelmeyer <smergelm@cern.ch>
+	* add entry for 410164 (SM tW aMC@NLO Herwig++)
+	* TopDataPreparation-00-08-20
+
+2016-07-11 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Updating ttH cross-sections to YR4 values
+        * TopDataPreparation-00-08-19
+
+2016-07-04 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding Xsections for ttbar full-had systematic samples
+        * Adding Xsections for ttbar+bbbar, ttV samples
+        * TopDataPreparation-00-08-18
+
+2016-06-29 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding first samples using Herwig7 (ttbar, Wt, t-channel)
+        * Adding t-channel mass-variation samples
+        * TopDataPreparation-00-08-17
+
+2016-06-28 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding VH, H->2a->4b samples
+        * Adding some aMcatNLO+Pythia8 ttV samples
+        * Adding Sherpa ttbb
+        * TopDataPreparation-00-08-16
+
+2016-06-14 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Using the Herwig++ mapindex for the few fortran herwig cases
+        * TopDataPreparation-00-08-15
+
+2016-06-14 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding cross-section for Ztautau Sherpa 363122
+          * not yet available on twiki
+          * multiply AMI Xsec by filter eff (0.14503) from mail exchange with C. Gutschow
+        * TopDataPreparation-00-08-14
+
+2016-06-10 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Some more V+jets cross-sections
+        * TopDataPreparation-00-08-13
+
+2016-06-10 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding more VLQ single production
+        * TopDataPreparation-00-08-12
+
+2016-06-10 S. Calvet <scalvet@cern.ch>
+	* Remove duplicate entries
+	
+2016-06-10 S. Calvet <scalvet@cern.ch>
+	* Fix showering for 426072-88
+	* TopDataPreparation-00-08-11
+
+2016-06-07 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding showering generator for several samples, to have the MC/MC SFs correct
+        * For these, dummy cross-sections are used temporarily
+        * TopDataPreparation-00-08-10
+
+2016-06-07 Tom Neep <tom.neep@cern.ch>
+	* Fix return code from sample cross-section code.
+	* Despite causing AnalysisTop failure a return code of -1 is not
+	correctly handled on the grid and so jobs are marked as
+	finishing successfully.
+	* TopDataPreparation-00-08-09
+
+2016-05-26 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Add ttV Sherpa, more diboson Sherpa, diboson MCatNLO+fHergwig
+        * TopDataPreparation-00-08-08
+
+2016-05-24 S. Calvet <scalvet@cern.ch>
+	* Add k-factors for sherpa 2.2 W+jets and Z+jets
+	* TopDataPreparation-00-08-07
+
+2016-05-02 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding some more tH BSM samples
+        * Adding one VBF sample
+        * TopDataPreparation-00-08-06
+
+2016-05-02 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding inclusive aMCatNLO+Herwig++ ttH sample
+        * TopDataPreparation-00-08-05
+
+2016-05-02 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding H+->tb samples
+        * TopDataPreparation-00-08-04
+
+2016-04-09 S. Calvet <scalvet@cern.ch>
+	* Add k-factors for W'->tb
+	* TopDataPreparation-00-08-03
+
+2016-05-02 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Updating ttV K-factors following CrossSectionNLOttV twiki
+        * TopDataPreparation-00-08-02
+
+2016-04-17 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Fixing Makefile.Standalone to work with root6
+        * TopDataPreparation-00-08-01
+
+2016-04-16 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+        * Adding ttbar with variated top-mass (410037-410046)
+        * Changing the name of the MC15 file (XSection-MC15-13TeV.data, was XSection-MC15-13TeV-fromSusyGrp.data)
+        * Improving the initialisation of the input file in SampleXsectionSvc
+        * TopDataPreparation-00-08-00
+
+2016-04-06 S. Calvet <scalvet@cern.ch>
+	* Remove duplicate entry for 410141
+	* TopDataPreparation-00-07-49
+
+2016-03-25 S. Calvet <scalvet@cern.ch>
+	* Add new single-top samples (410047,8, 410107-10, 410141, 410145-8, 410151-4, 410215,7)
+	* TopDataPreparation-00-07-48
+
+2016-03-16 S. Calvet <scalvet@cern.ch>
+	* Add triboson samples (301535,6, 301890-910)
+	* TopDataPreparation-00-07-46
+
+2016-03-15 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+	* Fixing ttH aMCatNLOPythia8 cross-sections (343365-7)
+	* TopDataPreparation-00-07-45
+
+2016-03-14 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+	* Add ttH aMCatNLOPythia8 samples (343365-7)
+	* Add single-top+H samples (341989,92,95, 343267,70,73, 341998,201,204)
+	* TopDataPreparation-00-07-44
+
+2016-03-09 S. Calvet <scalvet@cern.ch>
+	* Add Z'->ttbar samples (301322-35)
+	* TopDataPreparation-00-07-43
+	
+2016-03-09 S. Calvet <scalvet@cern.ch>
+	* Add Graviton->ttbar samples (305012-7)
+	* TopDataPreparation-00-07-42
+	
+2016-02-26 A. Knue <aknue@cern.ch>
+	* bugfix for k-factor for 410025/26
+	* place holders for 2.2 Sherpa V+jets samples, have to be updated when k-factors available
+	* TopDataPreparation-00-07-41
+	
+2016-02-22 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+	* Add 8TeV Pythia8+EvtGen dijet samples (129270-129275)
+	* For real this time
+	* TopDataPreparation-00-07-40
+
+2016-02-21 T. Theveneaux-Pelzer <tpelzer@cern.ch>
+	* Add 8TeV Pythia8+EvtGen dijet samples (129270-129275)
+	* TopDataPreparation-00-07-39
+
+2016-02-19 S. Calvet <scalvet@cern.ch>
+	* Add single-top syst samples (410017-20, 410141)
+	* TopDataPreparation-00-07-38
+
+2016-02-14 A. Knue <aknue@cern.ch>
+	* added getShoweringIndex function to get the correct index for the parton shower alg. 
+	* added xsec for new ttbar files: 410159, 410160, 410500
+	* TopDataPreparation-00-07-37
+
+2016-02-14 A. Knue <aknue@cern.ch>
+	* added the showering information for all DSIDs in use for b-tagging SF
+	* TopDataPreparation-00-07-36
+
+2016-02-12 A. Knue <aknue@cern.ch>
+	* updated ttbar Sherpa xsec and SF
+	* updated ttV xsec and k-factors
+	* TopDataPreparation-00-07-35
+
+2016-02-09 S. Calvet <scalvet@cern.ch>
+	* Add MC12 ttbar + gamma MadGraph (117478)
+	* TopDataPreparation-00-07-34
+
+2016-02-04 S. Calvet <scalvet@cern.ch>
+	* Add single VLQ (303346-8)
+	* Add 4-tops models (contact inter. and 2UEDRPP) (302777, 302055-9)
+	* TopDataPreparation-00-07-33
+
+2016-01-24 A. Knue <aknue@cern.ch>
+	* added 410009 cross-section
+	* updated Sherpa W/Z+jets cross-sections according to recommendations here: https://twiki.cern.ch/twiki/pub/AtlasProtected/CentralMC15ProductionList/XSections_13TeV_e3651_e4133.txt
+	* TopDataPreparation-00-07-32
+
+2016-01-04 A. Knue <aknue@cern.ch>
+	* add 0.91 scale factor for all diboson sherpa samples
+	* TopDataPreparation-00-07-31
+
+2015-12-18 S. Calvet <scalvet@cern.ch>
+	* Add triboson samples (342099, 342100, 361620-7, 407022-8)
+	* TopDataPreparation-00-07-30
+
+2015-12-08 S. Calvet <scalvet@cern.ch>
+	* Add k-factor for mtt-sliced SM ttbar samples (301528-32)
+	* TopDataPreparation-00-07-29
+
+2015-12-02 S. Calvet <scalvet@cern.ch>
+	* update k-factor for sherpa diboson (361081-7)
+	* TopDataPreparation-00-07-28
+
+2015-11-26 S. Calvet <scalvet@cern.ch>
+	* added mtt-sliced SM ttbar samples (301528-32)
+	* TopDataPreparation-00-07-27
+
+2015-11-22 A.Knue <aknue@cern.ch>
+	* fixed ttbar sherpa k-factors
+	* added ttbar+V k-factors
+	* k-factors and xsec for low mll Z+jets samples (Sherpa and Madgraph)
+	* xsec for single top Wt radiation samples
+	* TopDataPreparation-00-07-26
+
+2015-11-12 S. Calvet <scalvet@cern.ch>
+	* added ttH samples (342170-2)
+	* added BBD and TTD samples (302483-5, 302501-3)
+	* TopDataPreparation-00-07-25
+
+2015-10-30 A.Knue <aknue@cern.ch>
+	* Updated W/Z+jets cross sections
+	* Added Sherpa low mll samples
+	* TopDataPreparation-00-07-24
+
+2015-10-27 A.Knue <aknue@cern.ch>
+	* added VLQ samples, top and single top samples
+	* TopDataPreparation-00-07-23
+
+2015-10-27 S. Calvet <scalvet@cern.ch>
+	* added Monotop samples (302740-76)
+	* TopDataPreparation-00-07-22
+
+2015-10-16 S. Calvet <scalvet@cern.ch>
+	* added W'->tbbar
+	* TopDataPreparation-00-07-21
+
+2015-10-09 A.Knue <aknue@cern.ch>
+	* added correct ttH xsec
+	* TopDataPreparation-00-07-20
+
+2015-10-08 A.Knue <aknue@cern.ch>
+	* added correct ttH xsec
+	* TopDataPreparation-00-07-19
+
+2015-09-15 S. Calvet <scalvet@cern.ch>
+	* added Z'->ttbar
+	* TopDataPreparation-00-07-18
+
+2015-09-15 S. Calvet <scalvet@cern.ch>
+	* added ttbar+X samples (410066-70, 410073-5, 410080-1, 410111-6, 304014)
+	* Missing k-factor for 410069-75, 304014
+	* TopDataPreparation-00-07-17
+
+2015-09-03 Andrea Knue <aknue@cern.ch>
+	* added k-factors calculated by PMG
+	* added missing xsec
+	* TopDataPreparation-00-07-16
+
+2015-07-10 Andrea Knue <aknue@cern.ch>
+	* added k-factors calculated by PMG
+	* added missing xsec
+	* TopDataPreparation-00-07-15
+
+2015-07-10 Andrea Knue <aknue@cern.ch>
+	* added 8 TeV ttbar aMCatNLO+HerwigPP
+	* TopDataPreparation-00-07-14
+
+2015-07-06 Andrea Knue <aknue@cern.ch>
+	* added diboson powheg+Py8 samples from mc12_13TeV production
+	* TopDataPreparation-00-07-13
+
+2015-06-30 Andrea Knue <aknue@cern.ch>
+	* fixed 8 TeV scale var ttbar unc
+	* TopDataPreparation-00-07-12
+	
+2015-06-29 Andrea Knue <aknue@cern.ch>
+	* added missing NLO diboson xsec
+	* TopDataPreparation-00-07-11
+	
+2015-06-18 Andrea Knue <aknue@cern.ch>
+	* fixed xsec for ttbar scale var samples
+
+2015-06-17 Andrea Knue <aknue@cern.ch>
+	* added ttbar samples and zjets incl samples with k-factor for NNLO 
+	* added W+jets incl samples with k-factor for NNLO
+	* TopDataPreparation-00-07-10
+	
+2015-06-02 Andrea Knue <aknue@cern.ch>
+	* added xsec for MC15 (for now only stolen from SUSY tools, not all higher order xsec)
+	* TopDataPreparation-00-07-09
+	
+2015-04-22  S. Calvet <scalvet@cern.ch>
+	* Fix typo on 110929
+	* TopDataPreparation-00-07-08
+
+2015-04-17  S. Calvet <scalvet@cern.ch>
+	* Add 8TeV ttbar sample (117046)
+	* TopDataPreparation-00-07-07
+
+2015-04-13  S. Calvet <scalvet@cern.ch>
+	* Add 13TeV W'->tb samples (110723,7,31, 110921,5,9)
+	* TopDataPreparation-00-07-06
+
+2015-04-10  S. Calvet <scalvet@cern.ch>
+	* Add 13TeV monotop samples (110153, 110181, 110186, 110867-9)
+	* TopDataPreparation-00-07-05
+
+2015-04-10  S. Calvet <scalvet@cern.ch>
+	* Add 8TeV ttbar scale variation Powheg+Pythia samples (110407,8, 110423,4)
+	* TopDataPreparation-00-07-03
+
+2015-03-16  S. Calvet <scalvet@cern.ch>
+	* Add 8TeV single-top (110069) and ttbar (110606)samples 
+	* TopDataPreparation-00-07-02
+
+2015-03-09  S. Calvet <scalvet@cern.ch>
+	* Add XSection-MC14-13TeV-dbl.data from Chris Pollard
+	* TopDataPreparation-00-07-01
+
+2015-01-28  S. Calvet <scalvet@cern.ch>
+	* Add XSection-MC14-13TeV-fromSusyGrp.data
+	* Add XSection-MC14-13TeV-hqt.data
+	* TopDataPreparation-00-07-00
+
+2015-01-25 Simon <simon@cern.ch>
+	* Add pedantic to makefile to stop rootcore complaining
+	* TopDataPreparation-00-06-50
+
+2014-11-10  S. Calvet <scalvet@cern.ch>
+	* Change the format for ttbar hdamp=mt sliced samples (110395-9)
+	
+2014-11-05  S. Calvet <scalvet@cern.ch>
+	* Add ttbar hdamp=mt sliced samples (110395-9)
+	* Tagging as TopDataPreparation-00-06-49
+	
+2014-09-26  S. Calvet <scalvet@cern.ch>
+	* Add k-factor for tZ (179992)
+	* Tagging as TopDataPreparation-00-06-48
+	
+2014-09-17  S. Calvet <scalvet@cern.ch>
+	* Add ttbar fullhad, hdamp=mt (110404)
+	* Tagging as TopDataPreparation-00-06-47
+	
+2014-08-21  S. Calvet <scalvet@cern.ch>
+	* Add H+->tb samples (189817-27)
+	* Add single-top mass variations samples (110268-79)
+	* Tagging as TopDataPreparation-00-06-46
+	
+2014-08-18  S. Calvet <scalvet@cern.ch>
+	* Remove duplicate entry of 110845
+	* Tagging as TopDataPreparation-00-06-45
+	
+2014-07-31  S. Calvet <scalvet@cern.ch>
+	* Add W'->tb leptonic (110741-49)
+	* Tagging as TopDataPreparation-00-06-44
+	
+2014-07-28  S. Calvet <scalvet@cern.ch>
+	* Add W'->tb leptonic (110732-49)
+	* Add ttbar  (no all hadr.) with HeraPDF and hdamp=mt (110340)
+	* Tagging as TopDataPreparation-00-06-43
+	
+2014-07-04  S. Calvet <scalvet@cern.ch>
+	* Add Powheg+pythia ttbar sliced samples (117075-9, 117175-9)
+	* Add dummy cross-sections for heavy H in ttbar (203307-18)
+	* Update list of PDF
+	* Tagging as TopDataPreparation-00-06-42
+	
+2014-07-04  S. Calvet <scalvet@cern.ch>
+	* Add tHjb (189200,1, 189203-6, 189208,9, 189465,6,8,9)
+	* Tagging as TopDataPreparation-00-06-41
+	
+2014-06-30  S. Calvet <scalvet@cern.ch>
+	* Add  ttbar Poswheg+pythia8 (187001, 187005)
+	* Add  ttbar Poswheg+herwig++ (187003, 187007)
+	* Add  ttbar Poswheg+pythia (110351-3)
+	* Add  ttbar Poswheg+herwig (110360)
+	* Tagging as TopDataPreparation-00-06-40
+	
+2014-06-16  S. Calvet <scalvet@cern.ch>
+	* Add VLQ T singlet (T-->Wb) Samples (203060-76)
+	* Tagging as TopDataPreparation-00-06-39
+	
+2014-06-06  S. Calvet <scalvet@cern.ch>
+	* Add ttbar without spin correlation, Powheg+pythia (117072)
+	* Tagging as TopDataPreparation-00-06-38
+	
+2014-06-02  S. Calvet <scalvet@cern.ch>
+	* Add more PDF
+	* Tagging as TopDataPreparation-00-06-37
+	
+2014-05-29  S. Calvet <scalvet@cern.ch>
+	* Add ttbar full-had Powheg+Herwig with AUET2 tune (110000)
+	* Tagging as TopDataPreparation-00-06-36
+	
+2014-05-26  S. Calvet <scalvet@cern.ch>
+	* Remove duplicate entries for PDF information
+	* Tagging as TopDataPreparation-00-06-35
+	
+2014-05-26  S. Calvet <scalvet@cern.ch>
+	* Add most of PDF information
+	* Tagging as TopDataPreparation-00-06-34
+
+2014-05-23  S. Calvet <scalvet@cern.ch>
+	* Add some PDF information
+	* Tagging as TopDataPreparation-00-06-33
+
+2014-05-22  S. Calvet <scalvet@cern.ch>
+	* Add single-top Powheg+Pythia P2012 tune (110070-5)
+	* Tagging as TopDataPreparation-00-06-32
+
+2014-05-19  S. Calvet <scalvet@cern.ch>
+	* Add single-top Powheg+herwig (110086-7)
+	* Add ttbar Non Perturbative Powheg+Pythia (110401-3, 117426,9, 117416,7)
+	* Tagging as TopDataPreparation-00-06-31
+
+2014-05-13  S. Calvet <scalvet@cern.ch>
+	* Add tt+V MG+Pythia (117487-91)
+	* Tagging as TopDataPreparation-00-06-30
+
+2014-05-12  S. Calvet <scalvet@cern.ch>
+	* Add Singletop with Anomalous Couplings Samples (117788-92)
+	* Add ttH Powheg+Herwig (189627-9)
+	* Tagging as TopDataPreparation-00-06-29
+
+2014-05-02  S. Calvet <scalvet@cern.ch>
+	* Update cross-section for VLQ (180673-6)
+	* Tagging as TopDataPreparation-00-06-28
+
+2014-04-30  S. Calvet <scalvet@cern.ch>
+	* Update k-factor of Monotop samples (110148-97)
+	* Tagging as TopDataPreparation-00-06-27
+
+2014-04-30  S. Calvet <scalvet@cern.ch>
+	* Add Monotop samples (110180-97)
+	* Tagging as TopDataPreparation-00-06-26
+
+2014-04-29  S. Calvet <scalvet@cern.ch>
+	* Add VLQ B singlet (188599-604, 188681-88)
+	* Add VLQ T singlet (188703-6)
+	* Add diboson massive B/C sherpa (189608)
+	* Update VLQ TTs and BBs cross-sections (158936,7, 180264-7, 180307-26, 180450, 180667-76)
+	* Tagging as TopDataPreparation-00-06-25
+	
+2014-04-28  S. Calvet <scalvet@cern.ch>
+	* Add EW ttbar sample (110898)
+	* Tagging as TopDataPreparation-00-06-24
+	
+2014-04-10  S. Calvet <scalvet@cern.ch>
+	* Add WH sample (161805)
+	* Fix cross-section of H->ZZ (160155)
+	* Tagging as TopDataPreparation-00-06-23
+	
+2014-03-31  S. Calvet <scalvet@cern.ch>
+	* Add single-top scale variation samples (110040-51)
+	* Add single-top with modifed CKM (110098)
+	* Tagging as TopDataPreparation-00-06-22
+	
+2014-03-31  S. Calvet <scalvet@cern.ch>
+	* Update k-factors for mono-top samples (110148-53,60-69)
+	* Tagging as TopDataPreparation-00-06-21
+	
+2014-03-26  S. Calvet <scalvet@cern.ch>
+	* Update cross-section of FCNC tt (182930-2)
+	* Tagging as TopDataPreparation-00-06-20
+	
+2014-03-25  S. Calvet <scalvet@cern.ch>
+	* Fix k-factor for a ttbar sample (181383)
+	* Tagging as TopDataPreparation-00-06-19
+	
+2014-03-24  S. Calvet <scalvet@cern.ch>
+	* Add heavy top quark partner (T5/3) (188554-86)
+	* Tagging as TopDataPreparation-00-06-18
+	
+2014-03-17  S. Calvet <scalvet@cern.ch>
+	* Add b*->Wt samples (182948-57)
+	* Add H+->tb samples (110674-8)
+	* Add ttbar samples (110870-2)
+	* Fix k-factor for ttbar samples (110874,7, 80, 117803, 181383)
+	* Add k-factors for VBF Higgs samples (160255, 161155, 161455, 161105, 161646, 161505, 161686)
+	* Tagging as TopDataPreparation-00-06-17
+	
+2014-03-11  S. Calvet <scalvet@cern.ch>
+	* Fix cross-section for some Z+jets (178369-83)
+	* Tagging as TopDataPreparation-00-06-16
+	
+2014-03-11  S. Calvet <scalvet@cern.ch>
+	* Add k-factor for some Z+jets (178354-83-407)
+	* Add low mass Z+jets (181310-5, 18132-5, 169450-5)
+	* Tagging as TopDataPreparation-00-06-15
+	
+2014-03-11  S. Calvet <scalvet@cern.ch>
+	* Add Bulk RS Graviton Samples (182865-77)
+	* Tagging as TopDataPreparation-00-06-14
+	
+2014-02-28  S. Calvet <scalvet@cern.ch>
+	* Add single-top samples (189440, 110090-1)
+	* Tagging as TopDataPreparation-00-06-13
+	
+2014-02-25  S. Calvet <scalvet@cern.ch>
+	* Fix cross-section for a WZ sample (185397)
+	* Tagging as TopDataPreparation-00-06-12
+	
+2014-02-21  S. Calvet <scalvet@cern.ch>
+	* Add tt FCNC samples (182926-35)
+	* Tagging as TopDataPreparation-00-06-11
+	
+2014-02-21  S. Calvet <scalvet@cern.ch>
+	* Add VV sherpa samples (161982 and 185393-7)
+	* Tagging as TopDataPreparation-00-06-10
+	
+2014-02-19  S. Calvet <scalvet@cern.ch>
+	* Update k-factors for ttbar Alpgen+Pythia ISR/FSR (201030-4, 201230-4, 201430-4, 201040-4, 201240-4, 201440-4)
+	* Tagging as TopDataPreparation-00-06-09
+	
+2014-02-10  S. Calvet <scalvet@cern.ch>
+	* Add ttbar MadGraph+Pythia (110879-81, 85-96)
+	* Tagging as TopDataPreparation-00-06-08
+	
+2014-02-06  S. Calvet <scalvet@cern.ch>
+	* Add ttbar Scale Variation samples (201030-4, 40-4, 201230-4, 40-4, 201430-4, 40-4)
+	* Add ttbar MadGraph+Pythia (110873-8)
+	* Tagging as TopDataPreparation-00-06-07
+	
+2014-02-03  S. Calvet <scalvet@cern.ch>
+	* Add DY->mumu with mass cut M>3000 GeV (129538)
+	* Tagging as TopDataPreparation-00-06-06
+	
+2014-02-03  S. Calvet <scalvet@cern.ch>
+	* Add missing W+jets 190005	
+	* Add H+ ->tb (189288-93)
+	* Tagging as TopDataPreparation-00-06-05
+	
+2014-01-25  S. Calvet <scalvet@cern.ch>
+	* Update k-factors for ttbar sherpa (117800-9)
+	* Update k-factors for ttbar ISR/FSR variation (117209,10)
+	* Update k-factors for ttbar mass variation (117836-46)
+	* Add missing sample for ttbar Massive B/C sherpa (181382)
+	* Tagging as TopDataPreparation-00-06-04
+	
+Do not use TopDataPreparation-00-06-03. Wrong tag.
+
+2014-01-25  S. Calvet <scalvet@cern.ch>
+	* Add low mass Zll 178369-83
+	* Tagging as TopDataPreparation-00-06-02
+	
+2014-01-25  S. Calvet <scalvet@cern.ch>
+	* Add sherpa Di-Boson Massive B/C Samples (177995,7,9, 183585-92, 183734-9)
+	* Tagging as TopDataPreparation-00-06-01
+	
+2014-01-23  S. Calvet <scalvet@cern.ch>
+	* Add python directory
+	* Update the file referencing the PDF
+	* Tagging as TopDataPreparation-00-06-00
+	
+2014-01-21  S. Calvet <scalvet@cern.ch>
+	* Add herwig diboson (161995-7)
+	* Add VH samples (161455, 161105, 161646, 161505, 161686)
+	* Add k-factors for Powheg+Pythia8 diboson (129477-94)
+	* Tagging as TopDataPreparation-00-05-49
+
+2014-01-17  S. Calvet <scalvet@cern.ch>
+	* Add Htb samples (167650-62, 169695, 181679)
+	* Tagging as TopDataPreparation-00-05-48
+	
+2014-01-15  S. Calvet <scalvet@cern.ch>
+	* Add ttbar+W (174233-7)
+	* Tagging as TopDataPreparation-00-05-47
+	
+2014-01-13  S. Calvet <scalvet@cern.ch>
+	* Add Single-Top aMC@NLO+Herwig (110097)
+	* Add missing Alpgen+pythia Ztautau+bb sample (178407)
+	* Tagging as TopDataPreparation-00-05-46
+	
+2014-01-10  S. Calvet <scalvet@cern.ch>
+	* Add ttbar resonance samples with m=400GeV (182764,110899)
+	* Tagging as TopDataPreparation-00-05-45
+
+2013-12-18  S. Calvet <scalvet@cern.ch>
+	* Add diboson samples (179974, 160155, 160255, 161155, 161983,7, 147191,6)
+	* Add same-sign top ISR/FSR (182692,3)
+	* Tagging as TopDataPreparation-00-05-43
+	
+2013-12-16  S. Calvet <scalvet@cern.ch>
+	* Add Sherpa Z+jets Inclusive with Massive B/C Samples (1826*)
+	* Slight change of cross-sections of Z+jets (167754, 167809, 167812,8)
+	* Tagging as TopDataPreparation-00-05-42
+
+2013-12-06  S. Calvet <scalvet@cern.ch>
+	* Add Zll Powheg+pythia8 (129504-18, 129523-37)
+	* Tagging as TopDataPreparation-00-05-41
+
+2013-12-05  S. Calvet <scalvet@cern.ch>
+	* Fix cross-section for Alpgen+pythia Z+jets+bb/cc (200332-51, 200432-51)
+	* Fix cross-section for Alpgen+pythia W+jets+c/cc/bb (200056-60, 200156-9, 200256-9)
+	* Slight change for some Z+jets (147105-26)
+	* Slight change for some W+jets (167776,9, 167782,5, 167791,4, 167747, 167770,3
+	* Tagging as TopDataPreparation-00-05-40
+
+2013-12-04  S. Calvet <scalvet@cern.ch>
+	* Add Alpgen+pythia Z+jets low mass (178354-68, 178396-406, 178384-95)
+	* Change k-factor for Boosted Z+jets sherpa, massive b,c (167749-60, 167797-844)
+	* Slight change for some Z+jets(146845, 146854, 146855, 147772)
+
+2013-12-03  S. Calvet <scalvet@cern.ch>
+	* Fix k-factors for W+c (200056-60)
+
+2013-12-02  S. Calvet <scalvet@cern.ch>
+	* Add k-factor for sherpa W and Z+jets (167740-96, 167797-844)
+	* Tagging as TopDataPreparation-00-05-39
+
+2013-11-27  S. Calvet <scalvet@cern.ch>
+	* Add ttbar Alpgen+Pythia, On-The-Fly (201020-4, 201220-4, 201420-4, 201027-8)
+	* Tagging as TopDataPreparation-00-05-38
+
+2013-11-26 J. Adelman <jahreda@cern.ch>
+	* Update ROOTCORE directory
+	* Tagging as TopDataPreparation-00-05-37
+
+2013-11-19  S. Calvet <scalvet@cern.ch>
+	* Add ttbar sherpa samples (181381-2,  181384-6, 181388-9)
+	* Add W+jets Boosted with Massive B/C Samples sherpa (167788-90)
+	* Tagging as TopDataPreparation-00-05-36
+
+2013-11-12  S. Calvet <scalvet@cern.ch>
+	* Add KKg samples (180575,6, 180384-90)
+	* Tagging as TopDataPreparation-00-05-35
+
+2013-11-08  S. Calvet <scalvet@cern.ch>
+	* Add W+jets with Akt10 filtered Samples (190001-4, 190011-5, 190021-5, 190030-4, 190040-3, 190050-3)
+	* Tagging as TopDataPreparation-00-05-34
+
+2013-10-29  S. Calvet <scalvet@cern.ch>
+	* Fix k-factors for ttbar+HF (116108,9)
+	* Add monotop samples (110148-53, 110160-9, 110154-9, 110170-9)
+	* Tagging as TopDataPreparation-00-05-33
+
+2013-10-11  S. Calvet <scalvet@cern.ch>
+	* Change the digits of Xsection for 117012,4 (accordingly to the wiki)
+	* Add single top - FCNC ISR/FSR (117007-10)
+	* Tagging as TopDataPreparation-00-05-32
+	
+2013-10-02  S. Calvet <scalvet@cern.ch>
+	* MC11: fix k-factor for 117049
+	* MC11: add new tt samples 110198,9 (McAtNloHerwigpp_UEEE4_MRSTMCal_CT10ME)
+	* Tagging as TopDataPreparation-00-05-31
+
+2013-09-30  S. Calvet <scalvet@cern.ch>
+	* Add ttbar MC@NLO Herwig++ (110198-9)
+	* Tagging as TopDataPreparation-00-05-30
+
+2013-09-25  S. Calvet <scalvet@cern.ch>
+	* Add ttbar with dilepton filter (181087-8)
+	* Tagging as TopDataPreparation-00-05-29
+
+2013-09-23  S. Calvet <scalvet@cern.ch>
+	* MC11: Add single-top Protos+Pythia (117500-11, 117773-87, 117755-63)
+	* Tagging as TopDataPreparation-00-05-28
+
+2013-09-18  S. Calvet <scalvet@cern.ch>
+	* Add high mass VLQ signals (180667-76)
+	* Tagging as TopDataPreparation-00-05-27
+
+2013-09-11  S. Calvet <scalvet@cern.ch>
+	* Add WW DPI (147281)
+	* Add tZ samples (179991,2)
+	* Tagging as TopDataPreparation-00-05-26
+
+2013-09-09  S. Calvet <scalvet@cern.ch>
+	* Add ttbar mass sliced full had (117304-7)
+	* Update k-factors for  ttbar mass sliced not full had (117275-8)
+	* Tagging as TopDataPreparation-00-05-25
+
+2013-08-30  S. Calvet <scalvet@cern.ch>
+	* MC11: Add ttbar powheg+herwig with HERA pdf (117001)
+	* Tagging as TopDataPreparation-00-05-24
+
+2013-08-28  S. Calvet <scalvet@cern.ch>
+	* Add k-factor for alpgen ttbar+HF (181106-9)
+	* Tagging as TopDataPreparation-00-05-23
+
+2013-08-27  S. Calvet <scalvet@cern.ch>
+	* Add k-factor for sherpa ttbar (181380, 181383)
+	* Tagging as TopDataPreparation-00-05-22
+
+2013-08-23  S. Calvet <scalvet@cern.ch>
+	* Add ttZ samples (174248-52)
+	* Add ttbar Massive B/C (181380,3)
+	* Add ttbar Mass Variation not all had (117836,8, 40, 2, 4, 6)
+	* Add ttbar+HF alpgen (181106-9)
+	* Add dibosons sherpa (157814-9) powheg+pythia8 (129477-94)
+	* Add Z+jets (156803-28)
+	* Add W+jets (167761-6, 167770-5)
+	* Add single-top (110095)
+	* Update k-factors for ttbar Dilepton noSpinCorr  (117200)
+	* Update k-factors for ttbar mass variations (110002,3)
+	* update k-factors for ttbar (110001, 105860,1)
+	* update k-factors for single-top (110111,2, 110104, 110143,5,7)
+	* update k-factors for ttH (169889)
+	* Update cross-sections for ttbar Alpgen+herwig (164440-55)
+	* Update cross-sections for VV (126928-42)
+	* Update cross-sections for JF17 (129160)
+	* Update cross-sections for KKg
+	* Add k-factors/update cross-section for Z+jets (147105-26, 200332-51, 200432-51, 147105-26, 200332-51, 200432-51, 147770-3)
+	* Add k-factors/update cross-section for W+jets (147025-46, 200256-9, 200156-9, 200056-60, 147025-46, 200056-60, 200156-9, 200256-9, 167742,5,8, 167769)
+	* Tagging as TopDataPreparation-00-05-21
+
+2013-08-19  S. Calvet <scalvet@cern.ch>
+	* Slight change of cross-section for 110001, 117837,9, 117841,3,5
+	* Add mass variation sample for ttbar (117835)
+	* Add ttbar with modified BR (110608-9)
+	* Update k-factor for 164440-3, 164450-3
+	* Add ttbar samples (164444,5, 164454,5)
+	* MC11: sligh change for 117200
+	* MC11: Add 117494-7
+	* Tagging as TopDataPreparation-00-05-20
+
+2013-07-31  S. Calvet <scalvet@cern.ch>
+	* Fix k-factor for 7TeV 117200
+	* Tagging as TopDataPreparation-00-05-19
+	
+2013-07-15  S. Calvet <scalvet@cern.ch>
+	* Fix typo on sgluon
+	* Tagging as TopDataPreparation-00-05-18
+
+2013-07-15  S. Calvet <scalvet@cern.ch>
+	* Update k-factors for 110001-3 (ttbar)
+	* Update k-factors for 110141,3,5,7, 110104, 110111,2 (single-top)
+	* Update k-factors for background samples for same-sign di-lepton
+	* Add k-factors for sgluon samples
+	* Tagging as TopDataPreparation-00-05-17
+
+2013-07-15  S. Calvet <scalvet@cern.ch>
+	* Add not spin correlation ttbar (117200)
+	* Tagging as TopDataPreparation-00-05-16
+
+2013-07-12  S. Calvet <scalvet@cern.ch>
+	* Update all ttH cross-sections
+	* Add new ttH samples (169887-9)
+	* Add single top syst sample (110108)
+	* Slight change of JF17 cross-section (129160)
+	* Tagging as TopDataPreparation-00-05-15
+
+2013-07-09  S. Calvet <scalvet@cern.ch>
+	* Add k-factor for single-top samples (110100, 110137, 110138)
+	* Tagging as TopDataPreparation-00-05-14
+
+2013-07-08  S. Calvet <scalvet@cern.ch>
+	* Add single-top samples (110102-4, 110105-7,8-12)
+	* Add k-factor for single-top samples (110099, 110113-8, 110124-36)
+	* Tagging as TopDataPreparation-00-05-13
+
+2013-07-08  S. Calvet <scalvet@cern.ch>
+	* MC11: slight update of ttbar cross-sections
+	* Tagging as TopDataPreparation-00-05-12
+
+2013-07-04  S. Calvet <scalvet@cern.ch>
+	* MC11: update ttbar cross-sections
+	* Tagging as TopDataPreparation-00-05-11
+
+2013-07-03  S. Calvet <scalvet@cern.ch>
+	* add W' (110721-31, 110754-64)
+	* Tagging as TopDataPreparation-00-05-10
+
+2013-07-02  S. Calvet <scalvet@cern.ch>
+	* add ttbar (117001)
+	* add W' (110855, 110858, 110861, 110864)
+	* Tagging as TopDataPreparation-00-05-09
+
+2013-07-01  S. Calvet <scalvet@cern.ch>
+	* update ttbar cross-sections and k-factors
+	* update W' k-factor
+	* add W' with varied g'/g (110843-66)
+	* add ttbar mass variations (117837, 39, 41, 43, 45)
+	* add ttbar Renormalisation/factorisation scale variation (117856-9, 174763-6)
+	* Tagging as TopDataPreparation-00-05-08
+
+2013-06-29  S. Calvet <scalvet@cern.ch>
+	* update ttbar cross-sections
+	* Tagging as TopDataPreparation-00-05-07
+
+2013-06-28  S. Calvet <scalvet@cern.ch>
+	* Add Znunu+jets Alpgen+Herwig samples (167060-3, 166990-3)
+	* Tagging as TopDataPreparation-00-05-06
+
+2013-06-27  S. Calvet <scalvet@cern.ch>
+	* Add single-top mass variations (110124-38)
+	* Slight change of ttbar (105200) k-factor
+	* Slight change of W/Z+gamma sherpa cross-sections
+
+2013-06-24  S. Calvet <scalvet@cern.ch>
+	* Add ttbat+gamma (164439, 167730-7, 169701-6)
+	* Tagging as TopDataPreparation-00-05-05
+	
+2013-06-21  S. Calvet <scalvet@cern.ch>
+	* Add same sign WW (129800)
+	* Tagging as TopDataPreparation-00-05-04
+	
+2013-06-10  S. Calvet <scalvet@cern.ch>
+	* Add Triboson samples (167006-8)
+	* Tagging as TopDataPreparation-00-05-03
+	
+2013-06-07  S. Calvet <scalvet@cern.ch>
+	* Update the k-factors for diboson/sherpa (126892-5)
+	* Tagging as TopDataPreparation-00-05-02
+	
+2013-05-17  S. Calvet <scalvet@cern.ch>
+	* Single Top mass variation Samples (110099, 110100, 1101113-8)
+	* Tagging as TopDataPreparation-00-05-01
+	
+2013-05-16  S. Calvet <scalvet@cern.ch>
+	* alpgen+pythia W+jets (auto) 147025-46, 200056-60, 200156-59, 200256-9
+	* alpgen+pythia Z+jets (auto) 147105-26, 200332-51, 200432-51
+	
+2013-04-30  S. Calvet <scalvet@cern.ch>
+	* Comment out print out in SamplePDF.cxx
+	
+2013-04-25  S. Calvet <scalvet@cern.ch>
+	* Add SamplePDF.cxx
+	* Tagging as TopDataPreparation-00-05-00
+	
+2013-04-22  S. Calvet <scalvet@cern.ch>
+	* Add PDF-MC12-8TeV.data
+	
+2013-04-22  S. Calvet <scalvet@cern.ch>
+	* Add 2 sherpa Z+jets sample 167836/7
+	* Tagging as TopDataPreparation-00-04-17
+	
+2013-04-22  S. Calvet <scalvet@cern.ch>
+	* MC11: add various ttbar samples (110010/1, 110201/4, 129476)
+	* Tagging as TopDataPreparation-00-04-16
+	
+2013-04-15  S. Calvet <scalvet@cern.ch>
+	* MC11: add AlpgenJimmyttbbinclNp0/1 (116108-9)
+	* Tagging as TopDataPreparation-00-04-15
+	
+2013-04-02  S. Calvet <scalvet@cern.ch>
+	* add k-factor for ttbar+X (174830-3)
+	* Tagging as TopDataPreparation-00-04-14
+	
+2013-03-26  S. Calvet <scalvet@cern.ch>
+	* Add same-sign top samples
+	* Add add k-factors for sgluon
+	* Tagging as TopDataPreparation-00-04-12
+	
+2013-03-07  S. Calvet <scalvet@cern.ch>
+	* Fix typo for stop samples (166987-9)
+	* Tagging as TopDataPreparation-00-04-10
+	
+2013-03-04  S. Calvet <scalvet@cern.ch>
+	* add FCNC top quark decays (110600-4). From filipe.veloso@cern.ch
+	* Tagging as TopDataPreparation-00-04-09
+	
+2013-03-04  S. Calvet <scalvet@cern.ch>
+	* add new signle-top 110119-42
+	* add ttbar Powheg+Pythia NP systematics (117418, 117427-9)
+	* Tagging as TopDataPreparation-00-04-08
+	
+2013-02-21  S. Calvet <scalvet@cern.ch>
+	* add cross-sections for ttH(tautau) 161705-33
+	* Tagging as TopDataPreparation-00-04-07
+	
+2013-02-20  S. Calvet <scalvet@cern.ch>
+	* update VLQ samples (filtering efficiency)
+	* Tagging as TopDataPreparation-00-04-06
+	
+2013-02-19  S. Calvet <scalvet@cern.ch>
+	* add VLQ samples
+	* Tagging as TopDataPreparation-00-04-05
+
+2013-02-15  S. Calvet <scalvet@cern.ch>
+	* fix cross-section of Di-Top Pt Slice Samples (110911-5)
+	* add k-factor to b'
+	* add ttH samples (169070-2)
+	* add H+tb (146520-32)
+	* add stop with Madgraph (166987-9)
+	* add sherpa boosted W+jets167767-96) and Z+jets (167797-844)
+	* add Z+jets (147078, 147086, 147094, 167103, 167108)
+	* slight change of tt+X
+	* slight change of diboson cross-sections
+	* slight change of QCD DiJet (147910-76, 159110-7, 147900-7) cross-sections
+	* slight change of stop cross-sections
+	* slight change of V+gamma cross-sections
+	* slight change of W' and Z' cross-sections
+	* slight change of W+jets cross-sections
+	* slight change of W+jets /Z+jets cross-sections
+	* Tagging as TopDataPreparation-00-04-04
+	
+2013-02-15  S. Calvet <scalvet@cern.ch>
+	* add herwig++ diJet (159110-7)
+	* add powheg+pythia ttbar 117050
+	* add ttbar mass slices (117304-7)
+	* add tt+X (174830-3, 158814)
+	* add 2UEDRPP (159800-3)
+	* add sgluonsgluon->ttbar (180334-51)
+	* add single-top (110101, 110119)
+	* add k-factors for u4u4 (158630-40)
+	* slight change of ttbar cross-sections 
+	* slight change of single-top cross-sections 
+	* slight change of tt+X 119354-6, 119583, 158813
+	* Tagging as TopDataPreparation-00-04-03
+
+2013-01-31  S. Calvet <scalvet@cern.ch>
+	* MC12: add powheg single-top (110140-7)
+	* Tagging as TopDataPreparation-00-04-02
+
+2013-01-25  S. Calvet <scalvet@cern.ch>
+	* MC12: fix a typo for 117675
+	* Tagging as TopDataPreparation-00-04-01
+
+2013-01-21  S. Calvet <scalvet@cern.ch>
+	* MC12: remove old MC11 samples
+	* MC12: add shower information
+	* Tagging as TopDataPreparation-00-04-00
+
+2013-01-11  S. Calvet <scalvet@cern.ch>
+	* MC11: add more ttbar samples (117520-39, 117835-46, 117419, 117430, 110101-18)
+	* Tagging as TopDataPreparation-00-03-07
+
+2013-01-08  S. Calvet <scalvet@cern.ch>
+	* MC12: Change k-factor for alpgen W+c (117293-7, 126601-5) to 1.52
+	* Tagging as TopDataPreparation-00-03-06
+
+2012-12-14  D. Calvet <calvet@in2p3.fr>
+	* Bug fix for reading blank lines
+
+2012-12-14  S. Calvet <scalvet@cern.ch>
+	* remove white spaces that makes duplicate entries
+	* Tagging as TopDataPreparation-00-03-05
+
+2012-12-14  S. Calvet <scalvet@cern.ch>
+	* slight change of top & single-top cross-sections
+	* add k-factor for 117807
+	* add same-signe WWj 158818/9
+	* slight change of diboson (Powheg+Pythia) cross-sections 
+	* add k-factor for some diboson (MC@NLO+Herwig, Herwig, Alpgen+Herwig, sherpa, some Powheg+Pythia) 
+	* remove "not in TWiki  #MC11 value" samples
+	* Add Sherpa Massive B/C W+jets (167740-8)
+	* Slight change of W+jets Sherpa, Alpgen+pythia W+jets cross-sections
+	* add k-factor for Z+jets
+	* add k-factor for W' (110921-31, 110954-64)
+	* Tagging as TopDataPreparation-00-03-04
+
+2012-12-06  S. Calvet <scalvet@cern.ch>
+	* Add uncertainty for single-top sample (108343-6, 117360-2) by Hovhannes Khandanyan
+	* Tagging as TopDataPreparation-00-03-03
+
+2012-11-28  S. Calvet <scalvet@cern.ch>
+	* Slight change in higgs cross-section/k-factors
+	* Add Alpgen+Herwig W + Gamma + jets (146430-5)
+	* Add Alpgen+Herwig W + GammaGamma + jets (129820-8)
+	* Slight change of ttW+j (119354) and ttZ+j (119356)
+	* Add ttbar + WW (158813)
+	* Tagging as TopDataPreparation-00-03-02
+	
+2012-11-27  S. Calvet <scalvet@cern.ch>
+	* Remove duplicate entries for KKgluon
+	* Add a check against duplicate entries
+	* Tagging as TopDataPreparation-00-03-01
+	
+2012-11-26  S. Calvet <scalvet@cern.ch>
+	* include the possibility of storing cross-section uncertainties
+	* Tagging as TopDataPreparation-00-03-00
+	
+2012-11-26  S. Calvet <scalvet@cern.ch>
+	* fix cross-sections of ttH(->WW) 161303-7
+	* fix cross-sections of ttH(->tautau) 161708, 161719,161730
+	* fix k-factor for ttH(->bb) 161880-4, 161891-5
+	* add k-factor for ttH(->gamgam) 160069
+	* Tagging as TopDataPreparation-00-02-06
+	
+2012-11-23  S. Calvet <scalvet@cern.ch>
+	* MC12: update ttH(->bb)
+	* MC12: add ttH(WW) (161303-7)
+	* MC12: add ttH(gam-gam) (160069)
+	* MC12: add ttH(tautau) (161708, 161719, 161730)
+	* Tagging as TopDataPreparation-00-02-05
+	
+2012-11-16  S. Calvet <scalvet@cern.ch>
+	* Cleaning: remove useless samples from XSection-MC12-8TeV-4gt.data
+	* Tagging as TopDataPreparation-00-02-04
+	
+2012-11-16  S. Calvet <scalvet@cern.ch>
+	* MC12: add Wprime 110921-31, 110954-64, 110987-97
+	* MC12: add u4u4 158630-407
+	* MC12: add 4top samples 158344, 158345
+	* MC12: add JF17 129160
+	* MC12: add Alpgen+herwig Z+jets low mass (146830-55)
+	* MC12: add Z+jets sherpa, massive b,c (167749-60)
+	* MC12: update tbH+ 109745, 109748
+	* MC12: update some KKGluonTTbar
+	* MC12: update 145161
+	* MC12: update stop grid
+	* MC12: update Alpgen+Herwig diboson
+	* MC12: update b' (158102-27)
+	* Tagging as TopDataPreparation-00-02-03
+
+2012-11-15  S. Calvet <scalvet@cern.ch>
+	* MC11: add ttbar samples for systematics studies (110006/7, 117851)
+	* Tagging as TopDataPreparation-00-02-02
+	
+2012-11-15  S. Calvet <scalvet@cern.ch>
+	* MC12: update cross-section/k-factor for tt+X (119353-6, 119583)
+	* Tagging as TopDataPreparation-00-02-01
+	
+2012-11-14  S. Calvet <scalvet@cern.ch>
+	* Default file is for MC12 and no more MC11
+	* Tagging as TopDataPreparation-00-02-00
+	
+2012-11-12  S. Calvet <scalvet@cern.ch>
+	* MC12: Slight changes of ttbar, single-top k-factors
+	* MC12: Slight changes of W+jets Sherpa k-factors
+	* MC12: Add 117807 (ttbar), 117011-4 (FCNC single-top)
+	* MC12: Add 158115-27 (b')
+	* MC12: change cross-section of 119583 (ttbarWW)
+	* MC12: change cross-section of 147910-7 (QCD di-jet)
+	* MC12: big update of 110911-5 (ttbar pT sliced)
+	* Tagging as TopDataPreparation-00-01-02
+
+2012-11-08  S. Calvet <scalvet@cern.ch>
+	* MC12: Add file XSection-MC12-8TeV-4gt.data
+	* Tagging as TopDataPreparation-00-01-01
+
+2012-11-05  S. Calvet <scalvet@cern.ch>
+	* MC12: Add 164450-1
+	* MC12: Add k-factor for alpgen ttbar+X
+	* MC12: Add sherpa Znunu
+	* MC12: Add file XSection-MC12-8TeV-Higgs.data
+	* Tagging as TopDataPreparation-00-01-00
+
+	
+2012-10-31 S. Calvet <scalvet@cern.ch>
+	* MC11: add ttbar ISR/FSR variation (updated P2011C centered samples)
+	* Tagging as TopDataPreparation-00-00-28
+	
+2012-10-15 S. Calvet <scalvet@cern.ch>
+	* Update ttW(+j)
+	* Tagging as TopDataPreparation-00-00-27
+	
+2012-10-12 S. Calvet <scalvet@cern.ch>
+	* Add ttbar Alpgen+herwig 164440-3 164450-3 116108-9
+	* Update W+jets Sherpa, Alpgen+pythia and Alpgen+herwig k-factors
+	* Tagging as TopDataPreparation-00-00-26
+	
+2012-10-03 S. Calvet <scalvet@cern.ch>
+	* MC12: Add Sherpa diboson 126892-5
+	* MC12: remove duplicate ttZ+jets !
+	* Tagging as TopDataPreparation-00-00-25
+	
+2012-10-02 S. Calvet <scalvet@cern.ch>
+	* MC12: Add Sherpa W/Z+Gamma Samples 126739, 126742, 126856, 145161, 145162, 126854
+	* MC12: update single top baseline samples
+	* MC12: update ttZ+jets
+	* Tagging as TopDataPreparation-00-00-24
+	
+2012-10-02 S. Calvet <scalvet@cern.ch>
+	* MC12: Update Sherpa ttbar (117800-9) k-factors
+	* MC12: Add W+jets sherpa 147774-6
+	* MC12: Add Z+jets sherpa 147770-3
+	* MC12: Add Z+jets Alpgen+pythia 117650-5, 117660-5, 117670-5, 110817-28, 110805-16
+	* Tagging as TopDataPreparation-00-00-23
+	
+2012-09-28 S. Calvet <scalvet@cern.ch>
+	* MC12: Add b' (158102-14), tbH+ (109745,8), 
+	* MC12: Add stop grid (118494-501, 127770-851, 144208-13, 164241-53, 164646-9)
+	* MC12: Add QCD DiJet (147900-17)
+	* MC12: Add Alpgen+pythia W+jets (117680-5, 117690-5, 117700-5)
+	* MC12: Add Alpgen+pythia W+cc+jets (126606-9), W+bb+jets (110801-5), W+c+jets (126601-5)
+	* MC12: Add PowhegPythia8 W+jets, Z+jets (147800-8)
+	* MC12: Update MC@NLO+Herwig diboson (105921-9)
+	* MC12: Update Sherpa ttbar (117800-9)
+	* Tagging as TopDataPreparation-00-00-22
+
+2012-09-27 S. Calvet <scalvet@cern.ch>
+	* MC12: update 108343-6, 117360-2. Add 119355-6
+	* Tagging as TopDataPreparation-00-00-21
+
+2012-09-25 S. Calvet <scalvet@cern.ch>
+	* MC12: update 119355 and 119356
+	* Tagging as TopDataPreparation-00-00-20
+
+2012-09-24 S. Calvet <scalvet@cern.ch>
+	* fix previous commit
+	* MC11 & MC12: remove samples 117255-70, as they should not be use anymore
+	* Tagging as TopDataPreparation-00-00-19
+
+2012-09-21
+	* Wrong tag TopDataPreparation-00-00-18
+	* do not use it !!
+
+2012-09-13 S. Calvet <scalvet@cern.ch>
+	* MC11: add ttbar Underlying Event and single top Powheg+Pythia
+	* Tagging as TopDataPreparation-00-00-17
+
+2012-09-11 S. Calvet <scalvet@cern.ch>
+	* MC11: fix cross section of 117240-3 and add k-factor for 117406-9
+	* Tagging as TopDataPreparation-00-00-16
+
+2012-09-11 S. Calvet <scalvet@cern.ch>
+	* MC11: fix cross section of 117406-9
+	* Tagging as TopDataPreparation-00-00-15
+
+2012-08-28 S. Calvet <scalvet@cern.ch>
+	* MC11: adding missing samples: 117080-2 117883-6
+	* Tagging as TopDataPreparation-00-00-14
+
+2012-08-27 S. Calvet <scalvet@cern.ch>
+	* MC11: correct typo on 117050
+	* Tagging as TopDataPreparation-00-00-13
+
+2012-08-18 S. Calvet <scalvet@cern.ch>
+	* MC12: update 105860 
+	* MC11: update QCD samples
+	* MC11: add 117049 & 117050
+	* Tagging as TopDataPreparation-00-00-12
+	
+2012-08-13 S. Calvet <scalvet@cern.ch>
+	* MC12: update a lot of cross-sections (mostly very small changes)
+	* Tagging as TopDataPreparation-00-00-11
+	
+2012-08-10 S. Calvet <scalvet@cern.ch>
+	* MC11: add single-top 167.5 samples
+	* MC11: add ttbar Alpgen+Pythia samples
+	* Tagging as TopDataPreparation-00-00-10
+
+2012-07-27  CALVET David  <calvet@clratlserv03.in2p3.fr>
+	* MC11: Updating T5/3 cross-sections
+	* no new tag
+
+2012-07-23 S. Calvet <scalvet@cern.ch>
+	* MC12: cross-sections for single-top AFII
+	* no new tag
+	
+2012-07-18 S. Calvet <scalvet@cern.ch>
+	* First version of MC12 cross-sections (not yet complete)
+	* Adding k-factors for ttW/Z(j) samples
+	* Adding missing mass variation for single-top
+	* Tagging as TopDataPreparation-00-00-09
+
+2012-06-06  CALVET David  <calvet@clratlserv03.in2p3.fr>
+
+	* Correcting wrong Xsections for ttZ(j) samples
+	* Tagging as TopDataPreparation-00-00-08
+	
+2012-06-04  CALVET David  <calvet@in2p3.fr>
+
+	* Adding samples for same-sign dilepton analysis
+	* Tagging as TopDataPreparation-00-00-07
+
+2012-05-31 S. Calvet <scalvet@cern.ch>
+	* Fix scale factor for W+c
+	* Tagging as TopDataPreparation-00-00-06
+
+2012-05-22 S. Calvet <scalvet@cern.ch>
+	* Add add cross-section for ISR/FSR variations for single top
+	* Tagging as TopDataPreparation-00-00-05
+
+2012-03-29 S. Calvet <scalvet@cern.ch>
+	* Add Makefile.Standalone
+	* Add ttbar colour reconnection cross-sections
+	* Tagging as TopDataPreparation-00-00-04
+
+2012-02-24 W. H. Bell <W.Bell@cern.ch>
+	* Fixing the input path in the Svc class.
+	* Tagging as TopDataPreparation-00-00-03
+
+2012-01-17 W. H. Bell <W.Bell@cern.ch>
+	* Removing WhichPeriod* and data files until after Friday's full status report.
+	* Tagging as TopDataPreparation-00-00-02 
+
+2012-01-17 W. H. Bell <W.Bell@cern.ch>
+	* Creating package to house data preparation classes and input data files used by the top group.
+	* Tagging as TopDataPreparation-00-00-01
