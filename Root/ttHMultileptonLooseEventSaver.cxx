@@ -14,11 +14,17 @@
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
 #include "TError.h"
+#include <iostream>
 
 //ASG OR
 #include "AssociationUtils/OverlapRemovalInit.h"
 
 #include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
+
+#include "xAODPFlow/PFO.h"
+#include "xAODPFlow/PFOContainer.h"
+#include "xAODPFlow/PFOAuxContainer.h"
+
 
 ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_outputFile(nullptr),
@@ -27,7 +33,7 @@ ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
   m_sfRetriever(nullptr),
   m_trigDecTool("Trig::TrigDecisionTool"),
   m_purwtool("CP::PileupReweightingTool"),
-  m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
+ // m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
   m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
   m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
   m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
@@ -208,14 +214,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   }
 
   //prepare btag eigen vectors
-  if (m_isMC) {
+/*  if (m_isMC) {
+std::cout<<m_bTagSF_default<<std::endl;
     m_weight_bTagSF_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars(m_bTagSF_default) );
     m_weight_bTagSF_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars(m_bTagSF_default) );
     m_weight_bTagSF_eigen_C_up      .resize(m_config->btagging_num_C_eigenvars(m_bTagSF_default) );
     m_weight_bTagSF_eigen_C_down    .resize(m_config->btagging_num_C_eigenvars(m_bTagSF_default) );
     m_weight_bTagSF_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars(m_bTagSF_default) );
     m_weight_bTagSF_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars(m_bTagSF_default) );
-  }
+  }*/
   //init Tools
 
   //Pileup Reweighting Tool from TopToolStore
@@ -337,10 +344,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
 	ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
 	t->setName("MuonTrigEff-"+std::to_string(++nTools)+systvar.second);
-	t->setProperty("CalibrationRelease", "170209_Moriond").ignore();
+	t->setProperty("CalibrationRelease", "170128_Moriond").ignore();
 	t->setProperty("MuonQuality", "Loose").ignore();
-	t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
-	t->setProperty("Year", year).ignore();     
+	//t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
+	//t->setProperty("Year", year).ignore();     
 	top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
 	m_muonToolsHandles.push_back(t->getHandle());
       }
@@ -376,7 +383,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
   //    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
   top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-  auto isolation_WPs{"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
+  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
   for (auto wp : isolation_WPs) {
     top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
     top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
@@ -401,7 +408,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
 
   //Jet Tool from Top Tool Store
-  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
+//  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
   //Tau Tools
   //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
@@ -451,7 +458,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
       //btag
       //B
-      for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
+    /*  for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
 	std::stringstream branchName; branchName << "bTagSF_weight_" << m_bTagSF_default << "_B" << i;
 	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
 	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
@@ -493,7 +500,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 					   branchNameUp );
 	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_Others_down[name],
 					   branchNameDown );
-      }
+      }*/
 
 
       //JVT
@@ -1202,7 +1209,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); },           *systematicTree, std::string(tauprefix+"E").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
+     // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
@@ -1258,7 +1265,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  int decayMode = 0;
-	  tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
+	 // tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
+	//tau.panTauDetail(xAOD::TauJetParameters::pantau_CellBasedInput_DecayMode, decayMode);
 	  return decayMode;
 	}, *systematicTree, std::string(tauprefix+"PanTauDecayMode").c_str());
 
@@ -1496,7 +1504,8 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   // waiting for fix in TopCorrections
-  m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
+ // m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
+  m_mu      = m_purwtool->getCorrectedAverageInteractionsPerCrossing( *event.m_info, false);
 
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
@@ -1619,7 +1628,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //ttbar DLF, MLF classification
   if (top::isSimulation(event)) {
-    m_DLF_Classification = truthSelector.CountTopWLeptons(event.m_truth);
+//    m_DLF_Classification = truthSelector.CountTopWLeptons(event.m_truth);
     //m_MLF_Classification = truthSelector.CountLightLeptons(event.m_truth, 10e3, 2.6);
   }
 
@@ -2162,14 +2171,14 @@ void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
   //do sys weights only in "nominal" tree
   if(     top::isSimulation(event) and m_sfRetriever ){
 
-    m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
+/*    m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
     m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
     m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
     m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
     m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
-    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
+    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);*/
     //btag
-    if(m_doSFSystematics) {
+   /* if(m_doSFSystematics) {
       m_sfRetriever->btagSF_eigen_vars(event,
 				       top::topSFSyst::BTAG_SF_EIGEN_B,
 				       m_weight_bTagSF_eigen_B_up,
@@ -2208,6 +2217,6 @@ void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
 	m_weight_bTagSF_eigen_Others_down[name] /= m_bTagSF_weight;
       }
 
-    }//endif sys
+    }//endif sys*/
   }//endif nom
 }

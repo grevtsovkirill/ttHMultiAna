@@ -118,9 +118,9 @@ ttHMultileptonLooseEventSaver::Decorate(const top::Event& event) {
     float smallestDr = 1e5;
     for (const auto jetItr : event.m_jets) 
     {
-        if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
-          continue;
-        }
+        //if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
+          //continue;
+        //}
         if (jetItr->pt() < 25e3) {
           continue;
         }

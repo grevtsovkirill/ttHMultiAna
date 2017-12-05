@@ -15,10 +15,10 @@ int main()
 	const char* outfile_name[]={"Xsection13TeV_tth_bkg_v1.txt", "Xsection13TeV_tth_sig_v1.txt"};
 
 	SampleXsection tdp;
-	const char* const rc = getenv("ROOTCOREBIN");
-	cout<<"RootCore: "<<rc<<endl;
-	std::string filename = std::string(rc) + "/../TopDataPreparation/data/XSection-MC15-13TeV.data";
-	//std::string filename =  "/data/work/XSection-MC15-13TeV-fromSusyGrp.data";
+	//const char* const rc = getenv("ROOTCOREBIN");
+	//cout<<"RootCore: "<<rc<<endl;
+	std::string filename = "../../XSection-MC15-13TeV.data";
+	//std::string filename =std::string(rc) +  "/data/work/XSection-MC15-13TeV-fromSusyGrp.data";
 	if (!tdp.readFromFile(filename.c_str())) {
 	        std::cout << "TopDataPreparation - could not read file\n";
 	        std::cout << filename << "\n";
