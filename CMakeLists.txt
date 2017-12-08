@@ -54,5 +54,34 @@ atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
                                   ${ROOT_LIBRARIES}
                    INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
 
+atlas_add_executable( update_xsection
+                      util/update_xsection.cxx
+			LINK_LIBRARIES xAODCore
+                                     xAODRootAccess
+                                     xAODEgamma
+                                     xAODMuon
+                                     xAODJet
+                                     xAODMissingET
+                                     xAODCutFlow
+                                     AsgTools
+                                     AthContainers
+                                     PATInterfaces
+                                     TopCPTools
+                                     TopEventSelectionTools
+                                     TopConfiguration
+                                     TopCorrections
+                                     TopEvent
+                                     TopParticleLevel
+                                     TopPartons
+                                     TopObjectSelectionTools
+                                     TopSystematicObjectMaker
+                                     TopFakes
+				     TopDataPreparation
+                                     TopHLUpgrade
+                                     ${ROOT_LIBRARIES}
+                                     TopAnalysis   )
+
+
+
 
 atlas_install_data(DIRECTORY data/* )
