@@ -1,4 +1,4 @@
-#Directory Sturucture
+# Directory Sturucture
 
 ```bash
 setupATLAS
@@ -13,7 +13,7 @@ If you want a specific branch,
 ```bash
 git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git -b <branch_name> ttHMultilepton
 ```
-#Setting up
+# Setting up
 
 You need to have the TrigGlobalEfficiencyCorrection locally in your source directory and the "CMakeLists.txt" of AnalysisTop (this step will be reconsidered).
 Follow the instructions to compile in the build directory.
