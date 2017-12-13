@@ -832,6 +832,49 @@ std::cout<<m_bTagSF_default<<std::endl;
       }
     }
 
+    std::vector<std::string> R21_Ele_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+    for(std::string var: R21_Ele_PLI_vars){
+	Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	float m_el_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
+        return (float) m_el_nonprompt_float;}, *systematicTree, ("electron_isovet" + var).c_str());
+    }
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+    	unsigned char m_el_ambigtype_int = -99;
+    	SG:AuxElement::Accessor<unsigned char> AccessorAmbigType("ambiguityType");
+	if(AccessorAmbigType.isAvailable(ele)) {
+		m_el_ambigtype_int = AccessorAmbigType(ele);}
+	return (unsigned char) m_el_ambigtype_int;}, *systematicTree, ("electron_ambiguityType"));
+    
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_numPixLayerHits("numberOfInnermostPixelLayerHits");
+	unsigned char m_el_numPixLayerHits=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		m_el_numPixLayerHits=1;}
+		//if (Accessor_numPixLayerHits.isAvailable(*eltrack)) m_el_numPixLayerHits=Accessor_numPixLayerHits(*eltrack);}
+	return (unsigned char) m_el_numPixLayerHits; }, *systematicTree, "electron_numberOfInnermostPixelLayerHits");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_numPixLayerOutliers("numberOfInnermostPixelLayerOutliers");
+	unsigned char m_el_numPixLayerOutliers=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		if (Accessor_numPixLayerOutliers.isAvailable(*eltrack)) m_el_numPixLayerOutliers=Accessor_numPixLayerOutliers(*eltrack);}
+	return (unsigned char) m_el_numPixLayerOutliers; }, *systematicTree, "electron_numberOfInnermostPixelLayerOutliers");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_expectInnerPixelLayerHit("expectInnermostPixelLayerHit");
+	unsigned char m_el_expectInnerPixelLayerHit=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		if (Accessor_expectInnerPixelLayerHit.isAvailable(*eltrack)) m_el_expectInnerPixelLayerHit=Accessor_expectInnerPixelLayerHit(*eltrack);}
+	return (unsigned char) m_el_expectInnerPixelLayerHit; }, *systematicTree, "electron_expectInnerPixelLayerHit");
+
+
+
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
 
     // Muons
@@ -1131,6 +1174,16 @@ std::cout<<m_bTagSF_default<<std::endl;
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT");
     }
 
+    // R21 New Muon Vars -
+    std::vector<std::string> R21_Muon_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+    for(std::string var: R21_Muon_PLI_vars){
+        Wrap2(muvec, [=](const xAOD::Muon& mu) {
+        float m_mu_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
+        return (float) m_mu_nonprompt_float;}, *systematicTree, ("muon_isoveto_" + var).c_str());
+    }
+
     vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
 
     // Jets
@@ -1163,7 +1216,7 @@ std::cout<<m_bTagSF_default<<std::endl;
       Wrap2(jetvec, [](const xAOD::Jet& jet) { int this_jvt = -1; if(jet.isAvailable<char>("passJVT")) 
         this_jvt = jet.auxdataConst<char>("passJVT"); return this_jvt;}, *systematicTree, "m_jet_passjvt");
       //Jet cleaning flag
-      Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
+     // Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
       //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); },
       //  *systematicTree, "m_jet_flavor_weight_MV1");
     }
@@ -1299,6 +1352,12 @@ std::cout<<m_bTagSF_default<<std::endl;
 	}, *systematicTree, std::string(tauprefix+"ele_match_lhscore").c_str());
 
     }
+       Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+       float m_tau_nonprompt_float = -99.;
+       SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptTauVeto");
+       if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_float = AccessorNonPrompt(tau);
+       return (float) m_tau_nonprompt_float;}, *systematicTree, std::string(tauprefix+"_PromptTauVeto").c_str());
+
 
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
@@ -1529,9 +1588,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_MEphoton_mother_pt = -1.;
   m_MEphoton_mother_eta = 0.;
   m_MEphoton_mother_phi = 0.;
-  if (event.m_truth != nullptr) {
+  if (event.m_truth != nullptr ) {
     for (const auto& particle : *(event.m_truth)) {
       int pdgId = 22; // look at photons
+      if (particle!=nullptr && particle->parent(0)!=nullptr){
       if (fabs(particle->pdgId()) == pdgId
           && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
         int motherPdgId = 999;
@@ -1544,7 +1604,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
         }
         if (abs(motherPdgId) < 100 && particle->barcode() < 2e5 && particle->pt() > 0 && motherPt > 0) {
           m_hasMEphoton = true;
-          // std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
+           std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
           double dr = particle->p4().DeltaR(mother->p4()); // always look at DR
           if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18))
             m_hasMEphoton_DRgt02_nonhad = true; // in selection use with "(!m_hasMEphoton_DRgt02_nonhad)!=(mc_channel_number==410082)"
@@ -1572,6 +1632,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
           }
         }
       }
+     }
     }
   }
   if (!m_hasMEphoton)
