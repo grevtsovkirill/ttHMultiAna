@@ -36,6 +36,14 @@ DUPLICATEVETO
 SAVE
 ```
 
+## 0. Create Validation script
+
+Can be very simple, like counting every type of object. This can be used everytime you make a change to the code, so you can be sure you keep the physics functionality the same and really just change the techincal aspects of the code.
+
+Then always run it on the same test file after every of the below tasks are completed.
+
+Time Estimate: couple of minutes
+
 ## 1. Decorate top::Event with custom ttHML object
 
 As tthML object to hold our information we can use [ttHMultilepton::Variables](https://gitlab.cern.ch/atlasHTop/ttHMultiAna/blob/master/ttHMultilepton/Variables.h).
@@ -48,6 +56,8 @@ Technically this will a "Selector" e.g. "CREATEVARIABLES" that will simply be ad
 
 Example of this in TTHbbLeptonic: [TTHbbCreateEvent](https://gitlab.cern.ch/atlasHTop/TTHbbAnalysis/blob/master/TTHbbLeptonic/Root/TTHbbCreateEvent.cxx)
 
+Time Estimate: can be done very quickly by following the example.
+
 ## 2. Add vectors of elec, muon, tau, etc to Variables
 
 We can use the xAOD types of all these objects. The objects already exists and are calibrated by AT. We just need to select a subset of these. An efficient concept to do this are VIEW containers. They are containers of pointers to xAOD objects that are already inside another container. Also see the (documentation in the AB tutorial)[https://atlassoftwaredocs.web.cern.ch/ABtutorial/basic_xaod_modify/#constdatavector-advancedoptional]
@@ -56,18 +66,26 @@ Example of how its done in AT: [defined as object, not pointer](https://gitlab.c
 
 Essentially these vectors will replace goodEL, goodMu, goodJet, goodTau that are now created in the Saver.
 
+Time Estimate: quick by following example.
+
 ## 3.a Create "Selectors" to select elec, muon, tau, etc
 
 Move the object selection out of Saver. Basically everything in ttHMultileptonLooseEventSaver_Selection.cxx to seperate Selector classes.
+
+Time Estimate: Need to get familiar with the BaseSelector class. Then each selector is straightforward.
 
 ## 3.b Create "Selector" for Overlap Removal
 
 Probably best to use the ASG tool instead of our own implementation. ASG OLR should be configurable to do anything we want.
 ASG tool is easy to use with xAOD containers, but I think it returns vectors of integers (0 or 1) ofthe OR decision (or maybe shallow copies?). Those would have to be translated into properly filled view containers.
 
+Time Estimate: Need to get familiar with the ASG OR tool. Check the implementation in AT and the ASG documentation. Couple of days.
+
 ## 4. Create "Selector" for object decoration
 
 Everything that is inside ttHMultileptonLooseEventSaver_Decorate.cxx to seperate Selector classes.
+
+Time Estimate: quick
 
 ## 5. Create "Selector" for calculating per-event scale factors from per-object scale factors
 
@@ -77,14 +95,19 @@ For trigger SFs we need to use a custom tool so that will definitely need a new 
 
 When we have this, we wont need the awkward construction with "Loose" lepton selections that are actually tight in the config files. We can then just use one most loose definition in the hardcoded AT object selection and then add different collections for tighter definitions with the selectors.
 
+Time Estimate: This is probably the most complicated. several days?
+
 ## 6. Turn TruthMatchAlgo and TruthSelector into Selector
 
 These are already a seperate classes, just need the Selector interface.
+
+Time Estimate: quick
 
 ## 7. Other stuff
 
 Everyhing in the Saver that is _not_ makeOutputVariable() or Wrap2() needs to be reviewed if it really has a place there.
 
+Time Estimate: TBD
 
 ## General remarks
 
