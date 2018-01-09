@@ -1,9 +1,0 @@
-Go to TopDirectory
-(1) check-out the latest tag or trunk of TopDataPreparation package 
-rc checkout_pkg atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk  
-
-(2) compile all the packages again
-rc build
-
-(3) cd ttHMultilepton/util
-(4) update_xsection
