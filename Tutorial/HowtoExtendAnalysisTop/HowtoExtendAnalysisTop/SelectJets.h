@@ -25,10 +25,11 @@ class SelectJets:public top::EventSelectorBase {
   std::string name() const override;
   ttHMLAsgHelper* m_asgHelper;
  private:
-
+  bool m_doSFSystematics;
   std::shared_ptr<top::TopConfig> m_config;
+  mutable const top::Event* m_event;
  // std::string name;
-
+  std::string m_jets;
   std::string m_params;
 
 

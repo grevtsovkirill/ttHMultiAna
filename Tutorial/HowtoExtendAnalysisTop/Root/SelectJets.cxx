@@ -17,6 +17,7 @@
 #include "HowtoExtendAnalysisTop/ttHMLAsgHelper.h"
 
 SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config):
+  m_event(0),
   m_config(config)
 {
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
@@ -27,6 +28,7 @@ SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
    }
   m_params=params;
+  m_jets="SelectedJets";
 
 }
 
@@ -36,6 +38,7 @@ SelectJets::~SelectJets(){
 
 bool SelectJets::apply(const top::Event & event) const{
 
+  m_event = &event;
 
   if(!event.m_info->isAvailable<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables")){
    std::cout <<name() <<": ttHMLEventVariables (std::shared_ptr<ttHML::Event>) object not found" << std::endl;
@@ -47,12 +50,12 @@ bool SelectJets::apply(const top::Event & event) const{
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
   std::string jetname = m_config->sgKeyJets();
-  std::string retjet="SelectedJets";
+  //std::string retjet="SelectedJets";
   //const xAOD::JetContainer* Jets = m_asgHelper->getJetContainer(jetname);
   //const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(jetname);
   m_asgHelper->getJetContainer(jetname);
-  const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(retjet);
-
+  const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(m_jets);
+  tthevt->onelep_type=3;
 
 
 /*

@@ -50,6 +50,11 @@ namespace top{
   ///-- saveEvent - run for every systematic and every event --///
   void CustomEventSaver::saveEvent(const top::Event& event) 
   {
+  std::shared_ptr<ttHML::Event> tthevt;
+  if(event.m_info->isAvailable<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables")){
+    tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
+  }
+
     ///-- set our variables to zero --///
     m_randomNumber = 0.;
     m_someOtherVariable = 0.;
