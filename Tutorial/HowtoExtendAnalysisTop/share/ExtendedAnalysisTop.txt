@@ -17,15 +17,18 @@ METCollectionName MET_Reference_AntiKt4EMTopo
 TruthCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthJets
 
-ObjectSelectionName top::ObjectLoaderStandardCuts # top::CustomObjectLoader
+ObjectSelectionName top::CustomObjectLoader
 OutputFormat top::CustomEventSaver
 OutputEvents SelectedEvents
 OutputFilename output.root
 
-ElectronID TightLH
-ElectronIDLoose MediumLH
-ElectronIsolation Gradient
-ElectronIsolationLoose None
+#Electron cuts
+ElectronID LooseAndBLayerLH
+ElectronIDLoose TightLH
+ElectronPt 5000
+ElectronIsolation Loose
+#ElectronIsolationLoose PromptLepton
+
 
 # DoTight/DoLoose to activate the loose and tight trees
 # each should be one in: Data, MC, Both, False
@@ -33,10 +36,10 @@ DoTight Both
 DoLoose Data
 
 # Turn on MetaData to pull IsAFII from metadata
-UseAodMetaData True
-# IsAFII False
+#UseAodMetaData True
+IsAFII False
 
-#NEvents 500
+NEvents 500
 
 
 SELECTION customSelection
@@ -45,6 +48,10 @@ GRL
 GOODCALO
 PRIVTX
 EVEN
+SELECTJETS
+SELECTELECTRONS
+SELECTTAUS
+SELECTMUONS
 RUN_NUMBER >= 297730
 MU_N 25000 >= 1
 JETCLEAN LooseBad

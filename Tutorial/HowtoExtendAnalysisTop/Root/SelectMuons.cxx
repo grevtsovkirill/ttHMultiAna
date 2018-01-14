@@ -2,12 +2,12 @@
   Copyright (C) 2002-2017 CERN for the benefit of the ATLAS collaboration
 */
 
-#include "HowtoExtendAnalysisTop/SelectJets.h"
+#include "HowtoExtendAnalysisTop/SelectMuons.h"
 
 #include "TLorentzVector.h"
 #include <sstream>
 #include <algorithm>
-#include "xAODJet/JetContainer.h"
+#include "xAODMuon/MuonContainer.h"
 #include "TopEvent/EventTools.h"
 
 
@@ -16,7 +16,7 @@
 #include "AsgTools/ToolHandle.h"
 #include "HowtoExtendAnalysisTop/ttHMLAsgHelper.h"
 
-SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config):
+SelectMuons::SelectMuons(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
   m_config(config)
 {
@@ -28,15 +28,15 @@ SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
    }
   m_params=params;
-  m_jets="SelectedJets";
+  m_Muons="SelectedMuons";
 
 }
 
-SelectJets::~SelectJets(){
+SelectMuons::~SelectMuons(){
 
 }
 
-bool SelectJets::apply(const top::Event & event) const{
+bool SelectMuons::apply(const top::Event & event) const{
 
   m_event = &event;
 
@@ -49,35 +49,17 @@ bool SelectJets::apply(const top::Event & event) const{
  }
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
-  std::string jetname = m_config->sgKeyJets();
-  //std::string retjet="SelectedJets";
-  //const xAOD::JetContainer* Jets = m_asgHelper->getJetContainer(jetname);
-  //const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(jetname);
-  //m_asgHelper->getJetContainer(jetname);
-  //tthevt->GetJetContainer(jetname);
-  const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(m_jets);
-  tthevt->onelep_type=3;
-
-
-/*
-const xAOD::JetContainer *alljets = nullptr;
- top::check(evtStore()->retrieve (alljets, "Jets"));
-auto selectedJets = std::make_unique<ConstDataVector<xAOD::JetContainer>> (SG::VIEW_ELEMENTS);
-for (const auto jet : *alljets) {
-    if (jet->pt() < 25e3) {
-      continue;
-    }
-selectedJets.push_back(jet);
-}
-top::check(evtStore()->record( selectedJets.release(), "selectedJets"));
-*/
+  //std::string elname = m_config->sgKeyMuons();
+  //m_asgHelper->getMuonContainer(m_config->sgKeyMuons());
+  const xAOD::MuonContainer* Muons = m_asgHelper->RetrieveMuons(m_Muons);
+ // tthevt->onelep_type=3;
 
   return true;
 
 }
 
-std::string SelectJets::name() const{
-  return "TTHBBEDM";
+std::string SelectMuons::name() const{
+  return "SELECTMUONS";
 }
 
 

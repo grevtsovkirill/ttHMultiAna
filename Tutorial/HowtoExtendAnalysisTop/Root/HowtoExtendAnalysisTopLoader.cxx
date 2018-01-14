@@ -6,7 +6,11 @@
 
 #include "HowtoExtendAnalysisTop/EvenEventNumberSelector.h"
 #include "TopConfiguration/TopConfig.h"
+
 #include "HowtoExtendAnalysisTop/SelectJets.h"
+#include "HowtoExtendAnalysisTop/SelectElectrons.h"
+#include "HowtoExtendAnalysisTop/SelectTaus.h"
+#include "HowtoExtendAnalysisTop/SelectMuons.h"
 #include <iostream>
 #include "TFile.h"
 
@@ -25,9 +29,14 @@ namespace top{
 
     if (toolname == "EVEN")
         return new EvenEventNumberSelector(param, config);  
-    if(toolname == "TTHBBEDM")
+    if(toolname == "SELECTJETS")
         return new SelectJets(param, config);
-
+   if(toolname == "SELECTELECTRONS")
+        return new SelectElectrons(param, config);
+    if(toolname == "SELECTTAUS")
+        return new SelectTaus(param, config);
+    if(toolname == "SELECTMUONS")
+        return new SelectMuons(param, config);
     //else if (toolname.find("OTHER_TOOL") == 0)
     //  return OtherToolThatYouInvented()    
     

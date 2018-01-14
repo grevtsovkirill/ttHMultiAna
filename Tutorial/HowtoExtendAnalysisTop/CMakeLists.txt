@@ -1,5 +1,5 @@
 # Auto-generated on: 2017-11-24 15:14:15.262411
-
+cmake_minimum_required( VERSION 3.2 FATAL_ERROR )
 # Declare the name of this package:
 atlas_subdir( HowtoExtendAnalysisTop None )
 
@@ -12,6 +12,20 @@ atlas_depends_on_subdirs( PUBLIC
                           TopAnalysis
                           JetJvtEfficiency
                           TopDataPreparation
+                          xAODCaloEvent
+                          xAODBase
+                          xAODTruth 
+			  xAOD/xAODCore
+			  Event/xAOD/xAODEgamma
+		 	  Event/xAOD/xAODEventInfo
+    			  Event/xAOD/xAODJet
+			  Event/xAOD/xAODMissingET
+			  Event/xAOD/xAODTrigMissingE
+			  Event/xAOD/xAODMuon
+			  Event/xAOD/xAODTau
+			  Event/xAOD/xAODTracking
+		  	  Event/xAOD/xAODTruth
+			  Event/xAOD/xAODPFlow
                           AsgTools )
 
 # This package uses ROOT:
@@ -35,6 +49,18 @@ atlas_add_library( HowtoExtendAnalysisTop Root/*.cxx Root/*.h Root/*.icc
                           	  TopDataPreparation
                                   JetJvtEfficiencyLib
                                   AsgTools
+                                  xAODCaloEvent
+                                  xAODBase
+                                  xAODTruth
+                                  xAODCore
+			  xAODEgamma
+		 	  xAODEventInfo
+    		xAODJet
+			  xAODMuon
+			  xAODTau
+			  xAODTracking
+		  	xAODTruth
+			  xAODPFlow
                                   ${ROOT_LIBRARIES}
                    INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
 
