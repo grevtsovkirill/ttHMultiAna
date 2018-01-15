@@ -52,8 +52,14 @@ bool SelectElectrons::apply(const top::Event & event) const{
   std::string elname = m_config->sgKeyElectrons();
   //m_asgHelper->getElectronContainer(elname);
   //tthevt->GetElectronContainer(elname);
-  const xAOD::ElectronContainer* Electrons = m_asgHelper->RetrieveElectrons(m_electrons);
+  const xAOD::ElectronContainer* Electrons = m_asgHelper->RetrieveElectrons("AllElectrons");
  // tthevt->onelep_type=3;
+
+  ConstDataVector<xAOD::ElectronContainer> * selElectrons = new ConstDataVector<xAOD::ElectronContainer>(SG::VIEW_ELEMENTS);
+  for( const auto elItr : *Electrons){ // ELECTRON SELECTIONS CAN GO HERE
+        selElectrons->push_back(elItr);
+  }
+  m_asgHelper->saveElectronContainer( selElectrons,m_electrons);
 
   return true;
 

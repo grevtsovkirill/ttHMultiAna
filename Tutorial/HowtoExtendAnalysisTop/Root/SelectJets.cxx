@@ -50,14 +50,22 @@ bool SelectJets::apply(const top::Event & event) const{
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
   std::string jetname = m_config->sgKeyJets();
-  //std::string retjet="SelectedJets";
-  //const xAOD::JetContainer* Jets = m_asgHelper->getJetContainer(jetname);
-  //const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(jetname);
-  //m_asgHelper->getJetContainer(jetname);
-  //tthevt->GetJetContainer(jetname);
-  const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(m_jets);
+  const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets("AllJets");
   tthevt->onelep_type=3;
 
+  ConstDataVector<xAOD::JetContainer> * selJets = new ConstDataVector<xAOD::JetContainer>(SG::VIEW_ELEMENTS);
+  for( const auto jetItr : *Jets){
+	if(jetItr->pt() < 25e3){continue;}	
+	if(fabs(jetItr->eta()) > 2.5){ continue;}
+	if (jetItr->pt() < 60e3 && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4) {continue;}
+	if (jetItr->isAvailable<float>("AnalysisTop_JVT")) {if(jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59) continue;}	
+ 	selJets->push_back(jetItr);
+  }
+  std::cout << "SkimmedJetSize: " << selJets->size() << std::endl;
+  m_asgHelper->saveJetContainer( selJets,m_jets);  
+
+  const xAOD::JetContainer* Test_Jets = m_asgHelper->RetrieveJets(m_jets);
+ std::cout << "TestJets Size: " << Test_Jets->size() << std::endl;
 
 /*
 const xAOD::JetContainer *alljets = nullptr;
@@ -77,7 +85,7 @@ top::check(evtStore()->record( selectedJets.release(), "selectedJets"));
 }
 
 std::string SelectJets::name() const{
-  return "TTHBBEDM";
+  return "SELECTJETS";
 }
 
 

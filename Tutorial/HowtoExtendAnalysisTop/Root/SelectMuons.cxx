@@ -28,7 +28,7 @@ SelectMuons::SelectMuons(std::string params,std::shared_ptr<top::TopConfig> conf
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
    }
   m_params=params;
-  m_Muons="SelectedMuons";
+  m_muons="SelectedMuons";
 
 }
 
@@ -51,8 +51,15 @@ bool SelectMuons::apply(const top::Event & event) const{
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
   //std::string elname = m_config->sgKeyMuons();
   //m_asgHelper->getMuonContainer(m_config->sgKeyMuons());
-  const xAOD::MuonContainer* Muons = m_asgHelper->RetrieveMuons(m_Muons);
+  const xAOD::MuonContainer* Muons = m_asgHelper->RetrieveMuons("AllMuons");
  // tthevt->onelep_type=3;
+
+  ConstDataVector<xAOD::MuonContainer> * selMuons = new ConstDataVector<xAOD::MuonContainer>(SG::VIEW_ELEMENTS);
+  for( const auto muItr : *Muons){ // MUON SELECTIONS CAN GO HERE
+        selMuons->push_back(muItr);
+  }
+  m_asgHelper->saveMuonContainer( selMuons,m_muons);
+
 
   return true;
 

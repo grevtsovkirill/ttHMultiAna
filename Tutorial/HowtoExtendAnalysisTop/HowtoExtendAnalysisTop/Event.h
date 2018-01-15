@@ -28,6 +28,7 @@ namespace ttHML {
       virtual ~Event();
     
     void GetJetContainer(std::string name);
+    //void GetElectronContainer(std::string name,std::string collection_name);
     void GetElectronContainer(std::string name);
     void GetMuonContainer(std::string name); 
     void GetTauContainer(std::string name); 
