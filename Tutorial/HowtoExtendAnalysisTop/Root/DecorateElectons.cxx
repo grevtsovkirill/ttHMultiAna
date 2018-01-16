@@ -25,13 +25,13 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
   m_config(config)
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-  top::check( m_electronChargeIDLoose.setProperty("TrainingFile", "HowtoExtendAnalysisTop/data/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDLoose: Failed to set training file." );
+  top::check( m_electronChargeIDLoose.setProperty("TrainingFile", "ElectronPhotonSelectorTools/ChargeID/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDLoose: Failed to set training file." );
   top::check( m_electronChargeIDLoose.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDLoose: Failed to set output level." );
   top::check( m_electronChargeIDLoose.initialize(), "ElectronChargeIDLoose: Failed to initialize." );
-  top::check( m_electronChargeIDMedium.setProperty("TrainingFile", "HowtoExtendAnalysisTop/data/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDMedium: Failed to set training file." );
+  top::check( m_electronChargeIDMedium.setProperty("TrainingFile", "ElectronPhotonSelectorTools/ChargeID/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDMedium: Failed to set training file." );
   top::check( m_electronChargeIDMedium.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDMedium: Failed to set output level." );
   top::check( m_electronChargeIDMedium.initialize(), "ElectronChargeIDMedium: Failed to initialize." );
-  top::check( m_electronChargeIDTight.setProperty("TrainingFile", "HowtoExtendAnalysisTop/data/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDTight: Failed to set training file." );
+  top::check( m_electronChargeIDTight.setProperty("TrainingFile", "ElectronPhotonSelectorTools/ChargeID/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDTight: Failed to set training file." );
   top::check( m_electronChargeIDTight.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDTight: Failed to set output level." );
   top::check( m_electronChargeIDTight.initialize(), "ElectronChargeIDTight: Failed to initialize." );
 
