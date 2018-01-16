@@ -29,7 +29,7 @@ class SelectMuons:public top::EventSelectorBase {
   std::shared_ptr<top::TopConfig> m_config;
   mutable const top::Event* m_event;
  // std::string name;
-  std::string m_muons;
+  std::string m_Muons;
   std::string m_params;
 
 

@@ -39,22 +39,6 @@ const xAOD::JetContainer*  ttHMLAsgHelper::RetrieveJets(std::string retname)cons
   top::check(evtStore()->retrieve(fj,retname),"Failed to retrieve Jets");
   return fj;
 }
-void ttHMLAsgHelper::saveJetContainer(ConstDataVector<xAOD::JetContainer>* jets, std::string name){
-	top::check(evtStore()->record(jets,name),"Failed to save Jets");
-}
-
-void ttHMLAsgHelper::saveElectronContainer(ConstDataVector<xAOD::ElectronContainer>* electrons, std::string name){
-        top::check(evtStore()->record(electrons,name),"Failed to save Electrons");
-}
-
-void ttHMLAsgHelper::saveMuonContainer(ConstDataVector<xAOD::MuonContainer>* muons, std::string name){
-        top::check(evtStore()->record(muons,name),"Failed to save Muons");
-}
-
-void ttHMLAsgHelper::saveTauContainer(ConstDataVector<xAOD::TauJetContainer>* taus, std::string name){
-        top::check(evtStore()->record(taus,name),"Failed to save Taus");
-}
-
 //void ttHMLAsgHelper::getJetContainer(xAOD::JetContainer* jets) {
 void ttHMLAsgHelper::getJetContainer(std::string name) {
   //const xAOD::JetContainer* selected_jets(nullptr);

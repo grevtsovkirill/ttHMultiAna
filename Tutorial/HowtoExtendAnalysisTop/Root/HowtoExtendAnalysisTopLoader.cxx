@@ -6,7 +6,7 @@
 
 #include "HowtoExtendAnalysisTop/EvenEventNumberSelector.h"
 #include "TopConfiguration/TopConfig.h"
-
+#include "HowtoExtendAnalysisTop/DecorateElectrons.h"
 #include "HowtoExtendAnalysisTop/SelectJets.h"
 #include "HowtoExtendAnalysisTop/SelectElectrons.h"
 #include "HowtoExtendAnalysisTop/SelectTaus.h"
@@ -29,6 +29,8 @@ namespace top{
 
     if (toolname == "EVEN")
         return new EvenEventNumberSelector(param, config);  
+    if(toolname == "DECORATEEL")
+        return new DecorateElectrons(param, config);
     if(toolname == "SELECTJETS")
         return new SelectJets(param, config);
    if(toolname == "SELECTELECTRONS")

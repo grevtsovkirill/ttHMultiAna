@@ -29,6 +29,7 @@ class SelectElectrons:public top::EventSelectorBase {
   std::shared_ptr<top::TopConfig> m_config;
   mutable const top::Event* m_event;
  // std::string name;
+  mutable int nelec2;
   std::string m_electrons;
   std::string m_params;
 

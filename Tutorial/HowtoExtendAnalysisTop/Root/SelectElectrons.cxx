@@ -29,7 +29,7 @@ SelectElectrons::SelectElectrons(std::string params,std::shared_ptr<top::TopConf
    }
   m_params=params;
   m_electrons="SelectedElectrons";
-
+  nelec2=0;
 }
 
 SelectElectrons::~SelectElectrons(){
@@ -50,17 +50,19 @@ bool SelectElectrons::apply(const top::Event & event) const{
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
   std::string elname = m_config->sgKeyElectrons();
+
+  for (auto elItr : event.m_electrons) {
+        if (fabs(elItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
+    continue;
+    }
+  nelec2++;
+  }
+
   //m_asgHelper->getElectronContainer(elname);
   //tthevt->GetElectronContainer(elname);
-  const xAOD::ElectronContainer* Electrons = m_asgHelper->RetrieveElectrons("AllElectrons");
+  //const xAOD::ElectronContainer* Electrons = m_asgHelper->RetrieveElectrons(m_electrons);
  // tthevt->onelep_type=3;
-
-  ConstDataVector<xAOD::ElectronContainer> * selElectrons = new ConstDataVector<xAOD::ElectronContainer>(SG::VIEW_ELEMENTS);
-  for( const auto elItr : *Electrons){ // ELECTRON SELECTIONS CAN GO HERE
-        selElectrons->push_back(elItr);
-  }
-  m_asgHelper->saveElectronContainer( selElectrons,m_electrons);
-
+std::cout<<"nelecafter= " <<nelec2<<std::endl;
   return true;
 
 }

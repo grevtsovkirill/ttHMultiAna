@@ -66,4 +66,5 @@ atlas_add_library( HowtoExtendAnalysisTop Root/*.cxx Root/*.h Root/*.icc
 
 # Install data files from the package:
 atlas_install_data( DIRECTORY share )
+atlas_install_data(DIRECTORY data/* )
 

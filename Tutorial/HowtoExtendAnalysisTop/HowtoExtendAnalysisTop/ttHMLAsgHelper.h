@@ -19,11 +19,6 @@ class ttHMLAsgHelper: public asg::AsgTool{
   const xAOD::MuonContainer* RetrieveMuons(std::string retname) const;
   const xAOD::TauJetContainer* RetrieveTaus(std::string retname) const;
 
-  void saveElectronContainer(ConstDataVector<xAOD::ElectronContainer> * electrons, std::string name);
-  void saveMuonContainer(ConstDataVector<xAOD::MuonContainer> * muons, std::string name);
-  void saveTauContainer(ConstDataVector<xAOD::TauJetContainer> * taus, std::string name); 
- 
-  void saveJetContainer(ConstDataVector<xAOD::JetContainer> * jets, std::string name);
   const xAOD::JetContainer* RetrieveJets(std::string retname) const;
   void getJetContainer(std::string name);
   const xAOD::ElectronContainer* RetrieveElectrons(std::string retname) const;

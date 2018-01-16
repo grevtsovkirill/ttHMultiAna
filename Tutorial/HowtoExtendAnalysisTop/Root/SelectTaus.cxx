@@ -51,15 +51,8 @@ bool SelectTaus::apply(const top::Event & event) const{
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
   std::string tauname = m_config->sgKeyTaus();
   //tthevt->GetTauContainer(tauname);
-  const xAOD::TauJetContainer* Taus = m_asgHelper->RetrieveTaus("AllTaus");
+  //const xAOD::TauJetContainer* Taus = m_asgHelper->RetrieveTaus(m_taus);
  // tthevt->onelep_type=3;
-
-  ConstDataVector<xAOD::TauJetContainer> * selTaus = new ConstDataVector<xAOD::TauJetContainer>(SG::VIEW_ELEMENTS);
-  for( const auto tauItr : *Taus){ // Tau SELECTIONS CAN GO HERE
-        selTaus->push_back(tauItr);
-  }
-  m_asgHelper->saveTauContainer( selTaus,m_taus);
-
 
   return true;
 
