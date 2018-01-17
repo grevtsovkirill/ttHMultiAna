@@ -13,7 +13,7 @@
 #include "HowtoExtendAnalysisTop/ttHMLAsgHelper.h"
 #include "xAODJet/JetContainer.h"
 #include <unordered_map>
-
+#include "JetSelectorTools/JetCleaningTool.h"
 class SelectJets:public top::EventSelectorBase {
 
  public:
@@ -25,6 +25,7 @@ class SelectJets:public top::EventSelectorBase {
   std::string name() const override;
   ttHMLAsgHelper* m_asgHelper;
  private:
+  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
   bool m_doSFSystematics;
   std::shared_ptr<top::TopConfig> m_config;
   mutable const top::Event* m_event;

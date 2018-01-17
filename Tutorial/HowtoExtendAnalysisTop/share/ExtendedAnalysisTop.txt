@@ -1,9 +1,7 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libHowtoExtendAnalysisTop
 
 PRWConfigFiles dev/SUSYTools/mc16a_defaults_buggy.NotRecommended.prw.root
-#PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
-
-PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root 
+PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
 
 GRLDir GoodRunsLists
 GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml
@@ -34,8 +32,8 @@ ElectronIsolation Loose
 
 # DoTight/DoLoose to activate the loose and tight trees
 # each should be one in: Data, MC, Both, False
-#DoTight Both
-#DoLoose Data
+DoTight Both
+DoLoose Data
 
 # Turn on MetaData to pull IsAFII from metadata
 #UseAodMetaData True
@@ -46,13 +44,10 @@ NEvents 500
 
 SELECTION customSelection
 INITIAL
-#GRL
-#GOODCALO
+GRL
+GOODCALO
 PRIVTX
 EVEN
-DECORATEEL
-DECORATETAUS
-DECORATEMUONS
 SELECTJETS
 SELECTELECTRONS
 SELECTTAUS

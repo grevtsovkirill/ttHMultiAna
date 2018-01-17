@@ -18,8 +18,12 @@
 
 SelectMuons::SelectMuons(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
+  muonSelection("MuonSelection"),
   m_config(config)
 {
+  top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
+  top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
+
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
    } 
@@ -49,6 +53,26 @@ bool SelectMuons::apply(const top::Event & event) const{
  }
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
+
+  for (const auto muItr : event.m_muons) {
+    auto abseta = fabs(muItr->eta());
+    if (!(abseta < 2.5 && muonSelection.getQuality(*muItr) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(*muItr))) {
+      continue;
+    }
+    if (muItr->pt() < 10e3) {
+      continue;
+    }
+    if (fabs(muItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
+      continue;
+    }
+    if (fabs(muItr->auxdataConst<float>("d0sig")) > 10) {
+      continue;
+    }
+    tthevt-> selected_muons->push_back(muItr);
+  }
+  std::sort (tthevt->selected_muons->begin(), tthevt->selected_muons->end(), ttHMLAsgHelper::pt_sort());
+  top::check(m_asgHelper->evtStore()->record(tthevt->selected_muons,"Selected_muons"), "recording Selected_muons failed.");
+
   //std::string elname = m_config->sgKeyMuons();
   //m_asgHelper->getMuonContainer(m_config->sgKeyMuons());
   //const xAOD::MuonContainer* Muons = m_asgHelper->RetrieveMuons(m_Muons);

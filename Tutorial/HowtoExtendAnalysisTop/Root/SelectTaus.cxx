@@ -49,7 +49,32 @@ bool SelectTaus::apply(const top::Event & event) const{
  }
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
-  std::string tauname = m_config->sgKeyTaus();
+  for (const auto tauItr : event.m_tauJets) {
+    if (abs(tauItr->charge()) != 1) {
+      continue;
+    }
+    if (!(tauItr->nTracks() == 1 || tauItr->nTracks() == 3)) {
+      continue;
+    }
+    auto abseta = fabs(tauItr->eta());
+    if (!(abseta < 1.37 || (1.52 < abseta && abseta < 2.5))) {
+      continue;
+    }
+    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) {
+      continue;
+    }
+    if (tauItr->pt() < 25e3) {
+      continue;
+    }
+    if ( !( tauItr->auxdata<int>("passEleBDT") ) ) {
+      continue;
+    }
+    tthevt->selected_taus->push_back(tauItr);
+  }
+  std::sort (tthevt->selected_taus->begin(), tthevt->selected_taus->end(), ttHMLAsgHelper::pt_sort());
+  top::check(m_asgHelper->evtStore()->record(tthevt->selected_taus,"Selected_taus"), "recording Selected_taus failed.");
+
+ // std::string tauname = m_config->sgKeyTaus();
   //tthevt->GetTauContainer(tauname);
   //const xAOD::TauJetContainer* Taus = m_asgHelper->RetrieveTaus(m_taus);
  // tthevt->onelep_type=3;

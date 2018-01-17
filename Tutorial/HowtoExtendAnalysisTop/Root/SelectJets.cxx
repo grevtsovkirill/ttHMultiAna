@@ -18,8 +18,10 @@
 
 SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
+  m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
   m_config(config)
 {
+  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
    } 
@@ -49,7 +51,32 @@ bool SelectJets::apply(const top::Event & event) const{
  }
 
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
-  std::string jetname = m_config->sgKeyJets();
+
+
+
+  for (const auto jetItr : event.m_jets) {
+    if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
+      continue;
+    }
+    if (jetItr->pt() < 25e3) {
+      continue;
+    }
+    if (fabs(jetItr->eta()) > 2.5) {
+      continue;
+    }
+    if (jetItr->pt() < 60e3
+      && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4)
+      continue;
+    if (jetItr->isAvailable<float>("AnalysisTop_JVT")) {
+      if(jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59)
+      continue;
+    }
+    tthevt->selected_jets->push_back(jetItr);
+  }
+  std::sort (tthevt->selected_jets->begin(), tthevt->selected_jets->end(), ttHMLAsgHelper::pt_sort());
+  top::check(m_asgHelper->evtStore()->record(tthevt->selected_jets,"Selected_jets"), "recording Selected_jets failed.");
+
+  //std::string jetname = m_config->sgKeyJets();
   //std::string retjet="SelectedJets";
   //const xAOD::JetContainer* Jets = m_asgHelper->getJetContainer(jetname);
   //const xAOD::JetContainer* Jets = m_asgHelper->RetrieveJets(jetname);
