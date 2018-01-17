@@ -51,12 +51,52 @@ bool SelectElectrons::apply(const top::Event & event) const{
   std::shared_ptr<ttHML::Event> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Event> >("ttHMLEventVariables");
   std::string elname = m_config->sgKeyElectrons();
 
-  for (auto elItr : event.m_electrons) {
+  /*for (auto elItr : event.m_electrons) {
         if (fabs(elItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
     continue;
     }
   nelec2++;
+  }*/
+ // xAOD::ElectronContainer* goodElectrons = new xAOD::ElectronContainer();
+ // xAOD::AuxContainerBase* goodElectronsAux = new xAOD::AuxContainerBase();
+ // goodElectrons->SG::setStore(goodElectronsAux);
+
+for (const auto elItr : event.m_electrons) {
+    if (elItr->pt() < 10e3) {
+      //std::cout << "Fail pt cut" << std::endl;
+      continue;
+    }
+ 
+    auto abseta = fabs(elItr->caloCluster()->etaBE(2));
+    if (!(abseta < 1.37 || (1.52 < abseta && abseta < 2.47))) {
+      //std::cout << "Fail eta cut" << std::endl;
+      continue;
+    }
+
+    if (!elItr->auxdataConst<int>("passLHLoose")) {
+
+      continue;
+    }
+
+    if (fabs(elItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
+      //std::cout << "Fail z0sintheta" << std::endl;
+      continue;
+    }
+
+    if (fabs(elItr->auxdataConst<float>("d0sig")) > 10) {
+      //std::cout << "Fail d0sig" << std::endl;
+      continue;
+    }
+
+    //auto newElectron = new xAOD::Electron(*elItr);
+    tthevt->selected_electrons->push_back(elItr);
   }
+  std::sort (tthevt->selected_electrons->begin(), tthevt->selected_electrons->end(), ttHMLAsgHelper::pt_sort());
+ // m_asgHelper->RecordElectrons(tthevt->selected_electrons,m_electrons);
+
+
+
+
 
   //m_asgHelper->getElectronContainer(elname);
   //tthevt->GetElectronContainer(elname);

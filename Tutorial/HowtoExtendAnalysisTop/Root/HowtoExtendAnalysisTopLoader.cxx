@@ -11,6 +11,8 @@
 #include "HowtoExtendAnalysisTop/SelectElectrons.h"
 #include "HowtoExtendAnalysisTop/SelectTaus.h"
 #include "HowtoExtendAnalysisTop/SelectMuons.h"
+#include "HowtoExtendAnalysisTop/DecorateTaus.h"
+#include "HowtoExtendAnalysisTop/DecorateMuons.h"
 #include <iostream>
 #include "TFile.h"
 
@@ -31,6 +33,10 @@ namespace top{
         return new EvenEventNumberSelector(param, config);  
     if(toolname == "DECORATEEL")
         return new DecorateElectrons(param, config);
+    if(toolname == "DECORATETAUS")
+        return new DecorateTaus(param, config);
+    if(toolname == "DECORATEMUONS")
+        return new DecorateMuons(param, config);
     if(toolname == "SELECTJETS")
         return new SelectJets(param, config);
    if(toolname == "SELECTELECTRONS")
