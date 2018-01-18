@@ -13,6 +13,7 @@
 #include "HowtoExtendAnalysisTop/SelectMuons.h"
 #include "HowtoExtendAnalysisTop/DecorateTaus.h"
 #include "HowtoExtendAnalysisTop/DecorateMuons.h"
+#include "HowtoExtendAnalysisTop/FillVariables.h"
 #include <iostream>
 #include "TFile.h"
 
@@ -45,6 +46,8 @@ namespace top{
         return new SelectTaus(param, config);
     if(toolname == "SELECTMUONS")
         return new SelectMuons(param, config);
+    if(toolname == "FILLVARIABLES")
+        return new FillVariables(param, config);
     //else if (toolname.find("OTHER_TOOL") == 0)
     //  return OtherToolThatYouInvented()    
     

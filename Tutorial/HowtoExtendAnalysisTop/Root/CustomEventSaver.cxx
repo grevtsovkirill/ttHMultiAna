@@ -18,10 +18,6 @@
 #include <cmath>
 #include <algorithm>
 
-#include "HowtoExtendAnalysisTop/CustomEventSaver.h"
-#include "TopEvent/Event.h"
-#include "TopEventSelectionTools/TreeManager.h"
-
 #include <TRandom3.h>
 
 
@@ -39,11 +35,14 @@ namespace top{
     ///-- Let the base class do all the hard work --///
     ///-- It will setup TTrees for each systematic with a standard set of variables --///
     top::EventSaverFlatNtuple::initialize(config, file, extraBranches);
+
+	m_ttHEvent = new ttHML::Event();
     
     ///-- Loop over the systematic TTrees and add the custom variables --///
     for (auto systematicTree : treeManagers()) {
       systematicTree->makeOutputVariable(m_randomNumber, "randomNumber");
       systematicTree->makeOutputVariable(m_someOtherVariable,"someOtherVariable");
+	  m_ttHEvent->BootstrapTree(systematicTree,false);
     }
   }
   
@@ -63,7 +62,8 @@ namespace top{
     TRandom3 random( event.m_info->eventNumber() );
     m_randomNumber = random.Rndm();    
     m_someOtherVariable = 42;
-    
+ 
+    m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
     ///-- Let the base class do all the hard work --///
     top::EventSaverFlatNtuple::saveEvent(event);
   }
