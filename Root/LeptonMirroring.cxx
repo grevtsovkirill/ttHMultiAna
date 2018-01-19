@@ -9,7 +9,7 @@ template<typename PTR> void CreateBranch(std::shared_ptr<top::TreeManager> tree,
   tree->makeOutputVariable(*addr, fmt1.str().c_str());
 }
 
-void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index) {
+void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index) {
   CreateBranch(tree, &ID,    "lep_ID_", index);
   CreateBranch(tree, &Index, "lep_Index_", index);
   CreateBranch(tree, &Pt,    "lep_Pt_", index);
@@ -117,3 +117,4 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &SFObjTight[0],  "lep_SFObjTight_", index);
   CreateBranch(tree, &nInnerPix, "lep_nInnerPix_", index);
 }
+

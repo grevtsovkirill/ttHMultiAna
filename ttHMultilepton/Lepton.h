@@ -6,7 +6,7 @@
 
 #define MAXSYST 50
 
-namespace ttHMultilepton {
+namespace ttHML {
   enum LepType { ELECTRON, MUON, GENERIC };
   struct Lepton
   {
@@ -181,3 +181,4 @@ namespace ttHMultilepton {
   };
 }
 #endif
+
