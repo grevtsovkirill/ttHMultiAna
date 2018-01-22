@@ -15,6 +15,11 @@
 #include "ttHMultilepton/Lepton.h"
 #include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/TreeAssist.h"
+#include <TH1F.h>
+#include <TString.h>
+#include <random>
+#include <algorithm>
+
 
 
 using namespace ttHML;
@@ -42,6 +47,7 @@ using namespace xAOD;
       ///-- We will be setting our custom variables on a per-event basis --///
       virtual void saveEvent(const top::Event& event) override;
       void CopyLeptons(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons);
+      
     private:
       ///-- Some additional custom variables for the output --///
   ///The file where everything goes
@@ -111,8 +117,8 @@ using namespace xAOD;
       void recordSelectionDecision(const top::Event& event);
 
   // utility functions
-/*  void CopyElectron(xAOD::Electron&, ttHMultilepton::Lepton&);
-  void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
+  void CopyElectron(xAOD::Electron&, ttHML::Lepton&);
+/*  void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
   void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
   void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
