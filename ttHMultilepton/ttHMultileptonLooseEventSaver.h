@@ -10,6 +10,12 @@
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopCorrections/ScaleFactorRetriever.h"
 #include "TopDataPreparation/SampleXsection.h"
+#include "TrigDecisionTool/TrigDecisionTool.h"
+#include "PMGTools/PMGSherpa22VJetsWeightTool.h"
+#include "PileupReweighting/PileupReweightingTool.h"
+
+
+
 //#include "ttHMultilepton/TreeAssist.h"
 //#include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
@@ -47,7 +53,15 @@ using namespace xAOD;
       ///-- We will be setting our custom variables on a per-event basis --///
       virtual void saveEvent(const top::Event& event) override;
       void CopyLeptons(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons);
-      
+      void CopyJets(const xAOD::JetContainer& Jets);
+      void CopyTaus(const xAOD::TauJetContainer& Taus);
+      void CheckIsBlinded();
+      void CopyHT(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::JetContainer& goodJets, const xAOD::TauJetContainer& goodTaus);
+      void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
+      int getNTruthJets(const xAOD::JetContainer jetColl);
+      int getNInnerPix(const xAOD::Electron& el);
+      int getNInnerPix(const xAOD::Muon& mu);
+
     private:
       ///-- Some additional custom variables for the output --///
   ///The file where everything goes
@@ -67,8 +81,8 @@ using namespace xAOD;
   ///Scale factors
       std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
 
-//      ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
-//      ToolHandle<CP::IPileupReweightingTool> m_purwtool;
+      ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
+      ToolHandle<CP::IPileupReweightingTool> m_purwtool;
 //  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
@@ -117,23 +131,23 @@ using namespace xAOD;
       void recordSelectionDecision(const top::Event& event);
 
   // utility functions
-  void CopyElectron(xAOD::Electron&, ttHML::Lepton&);
-/*  void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
-  void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
-  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
+  void CopyElectron(const xAOD::Electron&, ttHML::Lepton&);
+  void CopyMuon(const xAOD::Muon&,     ttHML::Lepton&);
+  void CopyTau( const xAOD::TauJet&,   ttHML::Tau&);
+/*  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
   void setBtagSFs(const top::Event& event);*/
 
   //some event weights
-/*  double m_mcWeight;
+  double m_mcWeight;
   std::vector<float> m_lhe3weights;
   double m_pileup_weight;
   double m_pileup_weight_UP;
   double m_pileup_weight_DOWN;
   //btag SF weights
-  std::string m_bTagSF_default;
+/*  std::string m_bTagSF_default;
   double m_bTagSF_weight;
   double m_bTagSF60_weight;
   double m_bTagSF70_weight;
@@ -223,7 +237,7 @@ using namespace xAOD;
  // ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
- // ToolHandle<PMGTools::PMGSherpa22VJetsWeightTool> m_sherpaRW;
+  ToolHandle<PMGTools::PMGSherpa22VJetsWeightTool> m_sherpaRW;
 
   //MC
 /*  int   m_higgsMode;
@@ -332,6 +346,16 @@ using namespace xAOD;
       { top::topSFSyst::TAU_SF_RECO_HIGHPT_DOWN,  "TAU_SF_RECO_HIGHPT_DOWN" },
         };
 
+  TH1F * h_decayMode;
+
+  #ifndef __CINT__
+  std::vector<ScalarWrapperCollection> vec_scalar_wrappers;
+  std::vector<VectorWrapperCollection> vec_electron_wrappers;
+  std::vector<VectorWrapperCollection> vec_muon_wrappers;
+  std::vector<VectorWrapperCollection> vec_jet_wrappers;
+  std::vector<VectorWrapperCollection> vec_tau_wrappers;
+  std::vector<VectorWrapperCollection> vec_vtx_wrappers;
+  #endif
 
       
       ///-- Tell RootCore to build a dictionary (we need this) --///
