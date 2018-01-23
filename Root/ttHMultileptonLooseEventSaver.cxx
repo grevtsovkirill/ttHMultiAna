@@ -373,7 +373,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     if(event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
       tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
     }
-  if (event.m_ttreeIndex >= m_treeManagers.size()) {
+/*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
     return;
   }
@@ -381,7 +381,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   // only save selected events
   if(!event.m_saveEvent) {
     return;
-  }
+  }*/
 
   //unique name for selected containers
   std::size_t sysHash = event.m_hashValue;

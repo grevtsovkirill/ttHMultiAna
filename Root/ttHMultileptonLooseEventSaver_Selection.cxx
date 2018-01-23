@@ -26,9 +26,10 @@ template<typename T> int CountPassOR(DataVector<T>& vec, bool doTauOR = false) {
   //for (size_t idx = 0; idx < vec.size(); ++idx) {
   //if (passovr(vec, idx)) {
   for (const auto iItr : vec) {
-    if (iItr->template auxdataConst<char>("ttHpassOVR") && (!doTauOR || iItr->template auxdataConst<char>("ttHpassTauOVR") ) ) {
+//    if (iItr->template auxdataConst<char>("ttHpassOVR") && (!doTauOR || iItr->template auxdataConst<char>("ttHpassTauOVR") ) ) {
       rv++;
-    }
+    std::cout<<"open it when we have OR"<<std::endl;
+   // }
   }
   return rv;
 }
@@ -425,8 +426,8 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 
   //same thing for jet with tau OR
   for (const auto jetItr : goodJets) {
-    if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
-
+//    if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+    std::cout<<"open it when we have OR_1"<<std::endl;
       auto btagging = jetItr->btagging();
       if (btagging) {
 	double mv2c;
@@ -459,7 +460,7 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	  }
 	}
       }
-    }
+//    }
   }
 
   std::sort(sorter_jets.begin(), sorter_jets.end(),
