@@ -35,11 +35,16 @@ namespace ttHML {
     ConstDataVector<xAOD::MuonContainer> * selected_muons = new ConstDataVector<xAOD::MuonContainer>(SG::VIEW_ELEMENTS);
     ConstDataVector<xAOD::TauJetContainer> * selected_taus = new ConstDataVector<xAOD::TauJetContainer>(SG::VIEW_ELEMENTS);
 
+    ConstDataVector<xAOD::JetContainer> * selected_OR_jets   =  new ConstDataVector<xAOD::JetContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::ElectronContainer> * selected_OR_electrons = new ConstDataVector<xAOD::ElectronContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::MuonContainer> * selected_OR_muons = new ConstDataVector<xAOD::MuonContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::TauJetContainer> * selected_OR_taus = new ConstDataVector<xAOD::TauJetContainer>(SG::VIEW_ELEMENTS);
+
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFSystematics);
     std::shared_ptr<ttHML::EventData> m_info;
     void AssignOutput(ttHML::Variables* evt_one, std::shared_ptr<ttHML::Variables> evt_two);
-
+    void clearReco();
 
 	int onelep_type;
     int dilep_type;

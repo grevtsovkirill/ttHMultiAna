@@ -13,8 +13,12 @@
 #include "TrigDecisionTool/TrigDecisionTool.h"
 #include "PMGTools/PMGSherpa22VJetsWeightTool.h"
 #include "PileupReweighting/PileupReweightingTool.h"
+#include "MuonSelectorTools/MuonSelectionTool.h"
+#include "JetInterface/IJetSelector.h"
 
+#include "AssociationUtils/IOverlapRemovalTool.h"
 
+#include "AssociationUtils/ToolBox.h"
 
 //#include "ttHMultilepton/TreeAssist.h"
 //#include "ttHMultilepton/TruthSelector.h"
@@ -31,7 +35,7 @@
 using namespace ttHML;
 using namespace xAOD;
 //using CP::IsolationSelectionTool;
-//using CP::MuonSelectionTool;
+using CP::MuonSelectionTool;
 //using TauAnalysisTools::TauSelectionTool;
 
 
@@ -83,19 +87,19 @@ using namespace xAOD;
 
       ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
       ToolHandle<CP::IPileupReweightingTool> m_purwtool;
-//  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
+      ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
-//  MuonSelectionTool                      muonSelection;
+  MuonSelectionTool                      muonSelection;
 //  IsolationSelectionTool                 iso_1;
 //  ttH::TruthSelector                     truthSelector;
 //  TauSelectionTool                       m_tauSelectionEleOLR;
 //  TauSelectionTool                       m_tauSelectionEleBDT;
 //  TauSelectionTool                       m_tauSelectionMuonOLR;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
-//  ORUtils::ToolBox                       m_ORtoolBox[3];
-//  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
+  ORUtils::ToolBox                       m_ORtoolBox[3];
+  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
   
   //Trigger Scale Factors -- NEW -- 
   // --> Electrons

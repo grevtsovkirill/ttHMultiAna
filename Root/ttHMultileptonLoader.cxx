@@ -13,7 +13,8 @@
 #include "ttHMultilepton/SelectMuons.h"
 #include "ttHMultilepton/DecorateTaus.h"
 #include "ttHMultilepton/DecorateMuons.h"
-
+#include "ttHMultilepton/SelectOR.h"
+#include "ttHMultilepton/NLeptonPlusTauSelector.h"
 #include <iostream>
 #include "TFile.h"
 
@@ -46,6 +47,10 @@
         return new SelectTaus(param, config);
     if(toolname == "SELECTMUONS")
         return new SelectMuons(param, config);
+    if(toolname == "SELECT_OR")
+        return new SelectOR(param, config);
+    if(toolname == "NLEPTONPLUSTAU")
+        return new NLeptonPlusTauSelector(param);
 //    if(toolname == "FILLVARIABLES")
 //        return new FillVariables(param, config);
     //else if (toolname.find("OTHER_TOOL") == 0)

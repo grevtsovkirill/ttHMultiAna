@@ -13,7 +13,7 @@
 #include "TopObjectSelectionTools/TauMC15.h"
 #include "TopObjectSelectionTools/JetMC15.h"
 #include "TopObjectSelectionTools/OverlapRemovalASG.h"
-
+#include "ttHMultilepton/DummyOverlapRemoval.h"
 ///-- The custom object selections we have defined in this package --///
 #include "ttHMultilepton/ttHMultileptonLooseObjectLoader.h"
 
@@ -78,8 +78,8 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
     }
 
     ///-- Overlap removal --///
-    objectSelection->overlapRemovalPostSelection(new top::OverlapRemovalASG());
-
+//    objectSelection->overlapRemovalPostSelection(new top::OverlapRemovalASG());
+    objectSelection->overlapRemovalPostSelection(new DummyOverlapRemoval());
     return objectSelection;
   }
 

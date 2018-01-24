@@ -284,8 +284,19 @@ void Variables::AssignOutput(ttHML::Variables* m_ttHEvent, std::shared_ptr<ttHML
 
 }
 
-//void Variables::clear(){
-//}
+  void Variables::clearReco(){
+    selected_jets->clear();
+    selected_electrons->clear();
+    selected_muons->clear();
+    selected_taus->clear();
+    selected_OR_jets->clear();
+    selected_OR_electrons->clear();
+    selected_OR_muons->clear();
+    selected_OR_taus->clear();
+//    clearDecorations();
+//    m_reco=false;
+  }
+
 
 }
 

@@ -6,12 +6,16 @@
 #include "TopEvent/Event.h"
 #include "TopEventSelectionTools/TreeManager.h"
 #include "ttHMultilepton/Variables.h"
+#include "AssociationUtils/OverlapRemovalInit.h"
+
 
 #include "TopConfiguration/TopConfig.h"
 
 #include "TopConfiguration/ConfigurationSettings.h"
 #include "TopConfiguration/SelectionConfigurationData.h"
 #include "PathResolver/PathResolver.h"
+#include "xAODMissingET/MissingET.h"
+#include "xAODMissingET/MissingETContainer.h"
 
 #include <TRandom3.h>
 #include <TLorentzVector.h>
@@ -32,7 +36,7 @@
     m_sfRetriever(nullptr),
     m_trigDecTool("Trig::TrigDecisionTool"),
     m_purwtool("CP::PileupReweightingTool"),
-    // m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
+    m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
 //    m_electronToolsFactory(0),
     //m_muonToolsHandles("MuonToolsHandles"),
 //    m_muonToolsFactory(0),
@@ -57,6 +61,7 @@
     m_beam_sigmaz(-999),  
     m_pv(nullptr),
     m_runYear(0),
+    muonSelection("MuonSelection"),
 //    m_HF_Classification(0.),
 //    m_HF_ClassificationTop(0.),
 //    m_DLF_Classification(0.),
@@ -164,9 +169,44 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     top::check( m_sampleXsection.readFromFile(tdpfile.c_str()),
 		"Failed to open AMI X-section file");
   }
+  std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
+  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
+
+//Muon Tools
+  //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
+  top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
+  top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
+
+  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
   top::check( m_purwtool.retrieve() , "Failed to retrieve PileupReweightingTool" );
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
+std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
+    // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "_isolFixedCutTight"}, 
+    //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_isolLoose"},
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_CFT_isolLoose"}, 
+    // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
+    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseAndBLayerLLH", ""}, 
+    // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    //{"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_isolLoose"}, 
+    {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"}, 
+    // dielectron trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "LooseAndBLayerLLH", ""}, 
+    // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    //{"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_isolLoose"},
+    {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"},  
+    // e-mu trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseAndBLayerLLH", ""}
+  };
+
+ int nTrig = -1;
+
+//  m_trigGlobEffCorr.resize(m_lep_trigger_sf_names.size());
+
+//  for (unsigned int t=0; t<m_trigGlobEffCorr.size(); ++t)
+//    m_trigGlobEffCorr[t]=nullptr;
+
 
     m_ttHEvent = new ttHML::Variables();
 /*
@@ -356,14 +396,793 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
       // vertexType enum in xAODTracking/xAODTracking/TrackingPrimitives.h: 1 is Primary, 3 is PU
       vec_vtx_wrappers.push_back(VectorWrapperCollection(vtxvec));
     }
+//leptons
+    std::vector<VectorWrapper*> elevec;
+    std::vector<VectorWrapper*> muvec;
+
+    //Isolation
+    if(!m_doSystematics) {
+      for (auto wp : isolation_WPs) {
+        std::string isoname("Iso_"); isoname += wp;
+        std::string eleisoname("electron_isolation"); eleisoname += wp;
+        std::string muisoname("muon_isolation"); muisoname += wp;
+        Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>(isoname); }, *systematicTree, eleisoname.c_str());
+        Wrap2(muvec,  [=](const xAOD::Muon& mu) {      return (char)  mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
+      }
+    }
+
+    /// special case for FixedCutTight (el only)
+    if(!m_doSystematics) {
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("Iso_FixedCutTight"); },
+        *systematicTree, "electron_isolationFixedCutTight");
+    }
+
+    //debug inconsistency between our Iso and Top Iso
+    //Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("AnalysisTop_Isol_Loose"); }, *systematicTree, "electron_isolationLoose_Top");
+    //Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("AnalysisTop_Isol_Loose"); }, *systematicTree, "muon_isolationLoose_Top");
+
+
+    //leptons
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.pt(); },  *systematicTree, "electron_pt");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.eta(); }, *systematicTree, "electron_eta");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.caloCluster()->etaBE(2); }, *systematicTree, "electron_EtaBE2");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); },   *systematicTree, "electron_E");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
+
+    if(!m_doSystematics) {
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("d0sig"); },             *systematicTree, "electron_sigd0PV");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("delta_z0_sintheta"); }, *systematicTree, "electron_z0SinTheta");
+
+      //Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "electron_ptcone20");
+      //Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "electron_ptcone30");
+      //Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "electron_ptcone40");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone20); return iso; },
+        *systematicTree, "electron_topoetcone20");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone30); return iso; },
+        *systematicTree, "electron_topoetcone30");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::topoetcone40); return iso; },
+        *systematicTree, "electron_topoetcone40");
+      //miniiso
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone20); return iso; },
+        *systematicTree, "electron_ptvarcone20");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone30); return iso; },
+        *systematicTree, "electron_ptvarcone30");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float iso = 1e6; ele.isolationValue(iso, xAOD::Iso::ptvarcone40); return iso; },
+        *systematicTree, "electron_ptvarcone40");
+    }
+
+    if(!m_doSystematics) {
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<int>("passLHLoose"); },  *systematicTree, "electron_isLooseLH");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<int>("passLHMedium"); }, *systematicTree, "electron_isMediumLH");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<int>("passLHTight"); },  *systematicTree, "electron_isTightLH");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("sharesTrk"); },  *systematicTree, "electron_sharesTrk");
+    }
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
+
+    //non-prompt bdt vars
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  float m_el_nonprompt_bdt = -99.;
+	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
+	  if(AccessorNonPromptBDT.isAvailable(ele)) m_el_nonprompt_bdt = AccessorNonPromptBDT(ele);
+	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
+
+    // electron QmisID
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float m_el_QmisID = -99;
+          static SG::AuxElement::Accessor<char> AccessorQmisID("isQMisID");
+          if(AccessorQmisID.isAvailable(ele)) m_el_QmisID = AccessorQmisID(ele);
+          return (char) m_el_QmisID; }, *systematicTree, "electron_isQMisID");
+
+    // electron charge flip tagger tool
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float chargeIDBDTLoose = -99.;
+          static SG::AuxElement::Accessor<float> AccessorChargeIDBDTLoose("chargeIDBDTLoose");
+          if(AccessorChargeIDBDTLoose.isAvailable(ele)) chargeIDBDTLoose = AccessorChargeIDBDTLoose(ele);
+          return (float) chargeIDBDTLoose; }, *systematicTree, "electron_ChargeIDBDTLoose");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float chargeIDBDTMedium = -99.;
+          static SG::AuxElement::Accessor<float> AccessorChargeIDBDTMedium("chargeIDBDTMedium");
+          if(AccessorChargeIDBDTMedium.isAvailable(ele)) chargeIDBDTMedium = AccessorChargeIDBDTMedium(ele);
+          return (float) chargeIDBDTMedium; }, *systematicTree, "electron_ChargeIDBDTMedium");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          float chargeIDBDTTight = -99.;
+          static SG::AuxElement::Accessor<float> AccessorChargeIDBDTTight("chargeIDBDTTight");
+          if(AccessorChargeIDBDTTight.isAvailable(ele)) chargeIDBDTTight = AccessorChargeIDBDTTight(ele);
+          return (float) chargeIDBDTTight; }, *systematicTree, "electron_ChargeIDBDTTight");
+
+    if(!m_doSystematics) {
+      for (std::string trigger_name : triggernames) {
+        if( trigger_name.find("_e") == std::string::npos && trigger_name.find("_2e") == std::string::npos ) continue;
+        std::string trigmatch_name = "TRIGMATCH_"; trigmatch_name += trigger_name;
+        std::string branch_name = "electron_match_"; branch_name += trigger_name;
+        Wrap2(elevec, [=](const xAOD::Electron& ele) {
+            int is_matched(0);
+            if (ele.isAvailable<char>(trigmatch_name)) is_matched = ele.auxdataConst<char>(trigmatch_name);
+            return (int) is_matched;
+          }, *systematicTree, branch_name.c_str() );
+      }
+    }
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	return getNInnerPix(ele);
+      }, *systematicTree, "electron_nInnerPix");
+
+    //////// NOMINAL ONLY
+    if(!m_doSystematics) {
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.author(); }, *systematicTree, "electron_author");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float d0 = ele.trackParticle()->d0(); return (float) (d0); }, *systematicTree, "electron_d0");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float z0 = ele.trackParticle()->z0(); return (float) (z0); }, *systematicTree, "electron_z0");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { float vz = ele.trackParticle()->vz(); return (float) (vz); }, *systematicTree, "electron_vz");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("delta_z0"); },        *systematicTree, "electron_deltaz0");
+
+      //truth origin HERE
+      //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
+      //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
+
+      // Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthOrigin(ele); }, *systematicTree, "electron_truthOrigin");
+      // Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) xAOD::TruthHelpers::getParticleTruthType(ele); },   *systematicTree, "electron_truthType");
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  int m_el_true_origin = -99;
+	  static SG::AuxElement::Accessor<int> origel("truthOrigin");
+	  if (origel.isAvailable(ele)) m_el_true_origin = origel(ele);
+	  return (int) m_el_true_origin; }, *systematicTree, "electron_truthOrigin");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  int m_el_true_type = -99;
+	  static SG::AuxElement::Accessor<int> typeel("truthType");
+	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
+	  return (int) m_el_true_type; },   *systematicTree, "electron_truthType");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	  int m_el_true_type = -99;
+	  static SG::AuxElement::Accessor<int> typeel("firstEgMotherPdgId");
+	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
+	  return (int) m_el_true_type; },   *systematicTree, "electron_firstEgMotherPdgId");
+
+      // Add non-prompt electron vars
+      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
+
+      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
+      for(std::string var: short_vars) {
+	Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	    short m_el_nonprompt_short = -99;
+	    SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
+	    if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_short = AccessorNonPrompt(ele);
+	    return (short) m_el_nonprompt_short; }, *systematicTree, ("electron_" + var).c_str());
+      }
+
+      bool m_writeAllNonPromptInputVars = true;
+
+      if(m_writeAllNonPromptInputVars) {
+	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3",
+					       "PromptLeptonIso_DRlj", "PromptLeptonIso_LepJetPtFrac",
+					       "PromptLepton_TagWeight", "PromptLeptonNoIso_TagWeight"};
+	for(std::string var: float_vars) {
+	  Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	      float m_el_nonprompt_float = -99.;
+	      SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+	      if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
+	      return (float) m_el_nonprompt_float; }, *systematicTree, ("electron_" + var).c_str());
+	}
+      }
+    }
+
+    std::vector<std::string> R21_Ele_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+    for(std::string var: R21_Ele_PLI_vars){
+	Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	float m_el_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
+        return (float) m_el_nonprompt_float;}, *systematicTree, ("electron_isovet" + var).c_str());
+    }
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+    	unsigned char m_el_ambigtype_int = -99;
+    	SG:AuxElement::Accessor<unsigned char> AccessorAmbigType("ambiguityType");
+	if(AccessorAmbigType.isAvailable(ele)) {
+		m_el_ambigtype_int = AccessorAmbigType(ele);}
+	return (unsigned char) m_el_ambigtype_int;}, *systematicTree, ("electron_ambiguityType"));
+    
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_numPixLayerHits("numberOfInnermostPixelLayerHits");
+	unsigned char m_el_numPixLayerHits=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		m_el_numPixLayerHits=1;}
+		//if (Accessor_numPixLayerHits.isAvailable(*eltrack)) m_el_numPixLayerHits=Accessor_numPixLayerHits(*eltrack);}
+	return (unsigned char) m_el_numPixLayerHits; }, *systematicTree, "electron_numberOfInnermostPixelLayerHits");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_numPixLayerOutliers("numberOfInnermostPixelLayerOutliers");
+	unsigned char m_el_numPixLayerOutliers=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		if (Accessor_numPixLayerOutliers.isAvailable(*eltrack)) m_el_numPixLayerOutliers=Accessor_numPixLayerOutliers(*eltrack);}
+	return (unsigned char) m_el_numPixLayerOutliers; }, *systematicTree, "electron_numberOfInnermostPixelLayerOutliers");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_expectInnerPixelLayerHit("expectInnermostPixelLayerHit");
+	unsigned char m_el_expectInnerPixelLayerHit=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		if (Accessor_expectInnerPixelLayerHit.isAvailable(*eltrack)) m_el_expectInnerPixelLayerHit=Accessor_expectInnerPixelLayerHit(*eltrack);}
+	return (unsigned char) m_el_expectInnerPixelLayerHit; }, *systematicTree, "electron_expectInnerPixelLayerHit");
+
+
+
+    vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
+
+// Muons
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.pt(); },  *systematicTree, "muon_pt");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.e(); },   *systematicTree, "muon_E");
+    if(!m_doSystematics) {
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(mu))
+        isqual=1; return isqual;},*systematicTree, "muon_isLoose");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu))
+        isqual=1; return isqual;},*systematicTree, "muon_isMedium");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))
+        isqual=1; return isqual;},*systematicTree, "muon_isTight");
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("InnerDetectorPt"); },    *systematicTree, "muon_PtID");
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
+    }
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) (-13*mu.charge()); }, *systematicTree, "muon_ID");
+
+    if(!m_doSystematics) {
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("d0sig"); }, *systematicTree, "muon_sigd0PV");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("delta_z0_sintheta"); }, *systematicTree, "muon_z0SinTheta");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance);
+        return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance);
+        return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance);
+        return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
+
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) {
+      // 	 const xAOD::TrackParticle* cbtrack = mu.trackParticle( xAOD::Muon::CombinedTrackParticle );
+      // 	 float qOverP = cbtrack->qOverP();
+      // 	 return qOverP; }, *systematicTree, "muon_qOverP");
+    }
+
+    if(!m_doSystematics) {
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float rho=-9999;
+	if( idtrack && metrack ) {
+	  float mePt = -999999., idPt = -999999.;
+
+	  try{
+	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+	    mePt = mePt_acc(mu);
+	    idPt = idPt_acc(mu);
+	  } catch ( SG::ExcNoAuxStore b ) {
+	    ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+	  }
+
+
+	  float cbPt = mu.pt();
+	  rho           = fabs( idPt - mePt ) / cbPt;
+	}
+	return rho; }, *systematicTree, "muon_rho");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float qOverPsigma = -9999;
+	if( idtrack && metrack ) {
+	  qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+	}
+	return qOverPsigma; }, *systematicTree, "muon_qOverPsigma");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	const xAOD::TrackParticle* idtrack = mu.trackParticle( xAOD::Muon::InnerDetectorTrackParticle );
+	const xAOD::TrackParticle* metrack = mu.trackParticle( xAOD::Muon::ExtrapolatedMuonSpectrometerTrackParticle );
+	float qOverPsignif = -9999;
+	if( idtrack && metrack ) {
+	  float mePt = -999999., idPt = -999999.;
+
+	  try{
+	    static SG::AuxElement::Accessor<float> mePt_acc("MuonSpectrometerPt");
+	    static SG::AuxElement::Accessor<float> idPt_acc("InnerDetectorPt");
+	    mePt = mePt_acc(mu);
+	    idPt = idPt_acc(mu);
+	  } catch ( SG::ExcNoAuxStore b ) {
+	    ATH_MSG_FATAL( "No MomentumCorrections decorations available! MuonSelectionTool can not work!!! " <<
+			   "Please apply MuonMomentumCorrections before feeding the muon to MuonSelectorTools." );
+	    throw std::runtime_error( "No MomentumCorrections decorations available, throwing a runtime error" );
+	  }
+
+	  float meP  = 1.0 / ( sin(metrack->theta()) / mePt);
+	  float idP  = 1.0 / ( sin(idtrack->theta()) / idPt);
+	  float qOverPsigma   = sqrt( idtrack->definingParametersCovMatrix()(4,4) + metrack->definingParametersCovMatrix()(4,4) );
+	  qOverPsignif  = fabs( (metrack->charge() / meP) - (idtrack->charge() / idP) ) / qOverPsigma;
+	}
+	return qOverPsignif; }, *systematicTree, "muon_qOverPsignif");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float reducedChi2   = mu.primaryTrackParticle()->chiSquared()/mu.primaryTrackParticle()->numberDoF();return reducedChi2; }, *systematicTree, "muon_reducedChi2");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	uint8_t nprecisionLayers;
+
+	if( fabs(mu.eta()) > 2.0 ) {
+	  nprecisionLayers = 0;
+	  uint8_t innerSmallHits, innerLargeHits, middleSmallHits, middleLargeHits, outerSmallHits, outerLargeHits;
+	  if ( !mu.summaryValue(innerSmallHits, xAOD::MuonSummaryType::innerSmallHits) ||
+	       !mu.summaryValue(innerLargeHits, xAOD::MuonSummaryType::innerLargeHits) ||
+	       !mu.summaryValue(middleSmallHits, xAOD::MuonSummaryType::middleSmallHits) ||
+	       !mu.summaryValue(middleLargeHits, xAOD::MuonSummaryType::middleLargeHits) ||
+	       !mu.summaryValue(outerSmallHits, xAOD::MuonSummaryType::outerSmallHits) ||
+	       !mu.summaryValue(outerLargeHits, xAOD::MuonSummaryType::outerLargeHits) ){
+
+	    ATH_MSG_VERBOSE("getQuality - Muon in CSC region and MS hits information missing!!!");
+	  }
+	  else {
+	    if( innerSmallHits>1  || innerLargeHits>1  ) nprecisionLayers += 1;
+	    if( middleSmallHits>2 || middleLargeHits>2 ) nprecisionLayers += 1;
+	    if( outerSmallHits>2  || outerLargeHits>2  ) nprecisionLayers += 1;
+	  }
+	}
+	else {
+	  mu.summaryValue(nprecisionLayers, xAOD::SummaryType::numberOfPrecisionLayers);
+	}
+	return nprecisionLayers; }, *systematicTree, "muon_numPrecLayers");
+    }
+
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float momBalSignif = mu.floatParameter(xAOD::Muon::momentumBalanceSignificance); return (float) (momBalSignif); }, *systematicTree, "muon_momBalSignif");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatCurvSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float scatNeighSignif = mu.floatParameter(xAOD::Muon::scatteringNeighbourSignificance); return (float) (scatNeighSignif); }, *systematicTree, "muon_scatNeighSignif");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { float qOverPSignif = mu.floatParameter(xAOD::Muon::scatteringCurvatureSignificance); return (float) (scatCurvSignif); }, *systematicTree, "muon_scatCurvSignif");
+    //Wrap2(muvec, [=](const xAOD::Muon& mu) { return (short) mu.uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers); }, *systematicTree, "muon_numPrecLayers");
+
+    if(!m_doSystematics) {
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone20); return iso; }, *systematicTree, "muon_ptcone20");
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone30); return iso; }, *systematicTree, "muon_ptcone30");
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptcone40); return iso; }, *systematicTree, "muon_ptcone40");
+      // topoiso
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); return iso; }, *systematicTree, "muon_topoetcone20");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); return iso; }, *systematicTree, "muon_topoetcone30");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); return iso; }, *systematicTree, "muon_topoetcone40");
+      // miniiso
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); return iso; }, *systematicTree, "muon_ptvarcone20");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); return iso; }, *systematicTree, "muon_ptvarcone30");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); return iso; }, *systematicTree, "muon_ptvarcone40");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdataConst<char>("sharesTrk"); },  *systematicTree, "muon_sharesTrk");
+    }
+    Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
+
+    //non-prompt bdt vars
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  float m_mu_nonprompt_bdt = -99.;
+	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
+	  if(AccessorNonPromptBDT.isAvailable(mu)) m_mu_nonprompt_bdt = AccessorNonPromptBDT(mu);
+	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLeptonIso_TagWeight");
+
+    // muon QmisID
+    if(!m_doSystematics) {
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+          float m_mu_QmisID = -99;
+          static SG::AuxElement::Accessor<char> AccessorQmisID("isQMisID");
+          if(AccessorQmisID.isAvailable(mu)) m_mu_QmisID = AccessorQmisID(mu);
+          return (char) m_mu_QmisID; }, *systematicTree, "muon_isQMisID");
+    }
+
+    //Trigger matching
+    if(!m_doSystematics) {
+      for (std::string trigger_name : triggernames) {
+        if( trigger_name.find("_mu") == std::string::npos && trigger_name.find("_2mu") == std::string::npos ) continue;
+        std::string trigmatch_name = "TRIGMATCH_"; trigmatch_name += trigger_name;
+        std::string branch_name = "muon_match_"; branch_name += trigger_name;
+        Wrap2(muvec, [=](const xAOD::Muon& mu) {
+            int is_matched(0);
+            if (mu.isAvailable<char>(trigmatch_name)) is_matched = mu.auxdataConst<char>(trigmatch_name);
+            return (int) is_matched;
+          }, *systematicTree, branch_name.c_str() );
+      }
+    }
+
+
+    //////// NOMINAL ONLY
+    if(!m_doSystematics) {
+
+      //extra IP info
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.primaryTrackParticle()->d0(); }, *systematicTree, "muon_d0");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.primaryTrackParticle()->z0(); }, *systematicTree, "muon_z0");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.primaryTrackParticle()->vz(); }, *systematicTree, "muon_vz");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float>("delta_z0"); }, *systematicTree, "muon_deltaz0");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.author(); },   *systematicTree, "muon_author");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.muonType(); }, *systematicTree, "muon_type");
+
+      //truth origin HERE
+      //For muons - one more step as the info is attached to TruthMuonParticle, not xAOD::Muon.
+      //coding of the enums, see here: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/MCTruthClassifier/tags/MCTruthClassifier-00-00-26/MCTruthClassifier/MCTruthClassifierDefs.h
+      //meaning of the enums, see here: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#Egamma_electrons_classification
+
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  static SG::AuxElement::Accessor<int> acc_mctt("truthType");
+	  int m_mu_true_type=-99;
+	  const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
+	  if (mutrack!=nullptr) {
+	    if (acc_mctt.isAvailable(*mutrack)) m_mu_true_type = acc_mctt(*mutrack);
+	  }
+	  return (int) m_mu_true_type; }, *systematicTree, "muon_truthType");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  static SG::AuxElement::Accessor<int> acc_mcto("truthOrigin");
+	  int m_mu_true_origin=-99;
+	  const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
+	  if (mutrack!=nullptr) {
+	    if (acc_mcto.isAvailable(*mutrack)) m_mu_true_origin = acc_mcto(*mutrack);
+	  }
+	  return (int) m_mu_true_origin; }, *systematicTree, "muon_truthOrigin");
+
+
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) {
+      // 	  const xAOD::TruthParticle* matched_truth_muon=0;
+      // 	  int mu_type = -99;
+      // 	  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+      // 	    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+      // 	    if(link.isValid()){
+      // 	      matched_truth_muon = *link;
+      // 	      mu_type = matched_truth_muon->auxdata<int>("truthType");
+      // 	    }
+      // 	  } return (int) mu_type; }, *systematicTree, "muon_truthType");
+
+      // Wrap2(muvec, [=](const xAOD::Muon& mu) {
+      // 	  const xAOD::TruthParticle* matched_truth_muon=0;
+      // 	  int mu_orig = -99;
+      // 	  if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+      // 	    ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+      // 	    if(link.isValid()){
+      // 	      matched_truth_muon = *link;
+      // 	      mu_orig = matched_truth_muon->auxdata<int>("truthOrigin");
+      // 	    }
+      // 	  } return (int) mu_orig; }, *systematicTree, "muon_truthOrigin");
+
+      //There is a second way to get truth type for all muons, from track particle. See diffs from https://twiki.cern.ch/twiki/bin/view/Atlas/XAODMuon#How_to_retrieve_truth_type_and_o
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  const xAOD::TrackParticle* idtp=0;
+	  int mu_type = -99;
+	  ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+	  if(idtpLink.isValid()){
+	    idtp = *idtpLink;
+	    mu_type = idtp->auxdata<int>("truthType");
+	  } return (int) mu_type; }, *systematicTree, "muon_trackType");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	  const xAOD::TrackParticle* idtp=0;
+	  int mu_orig = -99;
+	  ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+	  if(idtpLink.isValid()){
+	    idtp = *idtpLink;
+	    mu_orig = idtp->auxdata<int>("truthOrigin");
+	  } return (int) mu_orig; }, *systematicTree, "muon_trackOrigin");
+
+      // Add non-prompt muon vars
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "muon_jetFitterComb");
+
+      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
+      for(std::string &var: short_vars) {
+	Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	    short m_mu_nonprompt_short = -99;
+	    SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
+	    if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_short = AccessorNonPrompt(mu);
+	    return (short) m_mu_nonprompt_short; }, *systematicTree, ("muon_" + var).c_str());
+      }
+
+      bool m_writeAllNonPromptInputVars = true;
+
+      if(m_writeAllNonPromptInputVars) {
+	std::vector<std::string> float_vars = {"PromptLeptonIso_ip2", "PromptLeptonIso_ip3", "PromptLeptonIso_DRlj",
+					       "PromptLeptonIso_LepJetPtFrac", "PromptLepton_TagWeight",
+					       "PromptLeptonNoIso_TagWeight"};
+	for(std::string &var: float_vars) {
+	  Wrap2(muvec, [=](const xAOD::Muon& mu) {
+	      float m_mu_nonprompt_float = -99.;
+	      SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+	      if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
+	      return (float) m_mu_nonprompt_float; }, *systematicTree, ("muon_" + var).c_str());
+	}
+      }
+    }
+    //muon_D BDT
+    if(!m_doSystematics) {
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_pt");}, *systematicTree, "muon_jet_pt");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_eta");}, *systematicTree, "muon_jet_eta");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_phi");}, *systematicTree, "muon_jet_phi");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("dRJet");}, *systematicTree, "muon_jet_dr");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_ptRel");}, *systematicTree, "muon_jet_ptRel");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_numTrk");}, *systematicTree, "muon_jet_numTrk");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_sumPtTrk");},*systematicTree, "muon_jet_sumPtTrk");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("MV2c10_weight");},*systematicTree, "muon_jet_MV2c10_Weight");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_tagWeightBin");}, *systematicTree, "muon_jet_tagWeightBin");
+
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("muon_BDT");},*systematicTree, "muon_jet_BDT");
+    }
+
+    vec_muon_wrappers.push_back(VectorWrapperCollection(muvec));
+
+    // Jets
+    std::vector<VectorWrapper*> jetvec;
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.pt(); }, *systematicTree, "m_jet_pt");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
+ /*   if(!m_doSystematics) {
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"pt");},*systematicTree,"m_truth_jet_pt");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"eta");},*systematicTree,"m_truth_jet_eta");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"phi");},*systematicTree,"m_truth_jet_phi");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"e");},*systematicTree,"m_truth_jet_e");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"m");},*systematicTree,"m_truth_jet_m");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostHBosonsCount");},*systematicTree,"m_truth_jet_Hcount");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostTQuarksFinalCount");},*systematicTree,"m_truth_jet_Tcount");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostWBosonsCount");},*systematicTree,"m_truth_jet_Wcount");
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostZBosonsCount");},*systematicTree,"m_truth_jet_Zcount");
+    }*/
+
+
+    if(!m_doSystematics) {
+      //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF");
+      //  return (float) (tmp.size() ? tmp[0] : -2); }, *systematicTree, "m_jet_jvtxf");
+      // not in sample xAOD
+      //Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("Jvt"); }, *systematicTree, "m_jet_jvt_uncal");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.jetP4("JetEMScaleMomentum").eta(); }, *systematicTree, "m_jet_etaEM");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { float this_jvt = -999.; if(jet.isAvailable<float>("AnalysisTop_JVT"))
+        this_jvt = jet.auxdataConst<float>("AnalysisTop_JVT"); return this_jvt;}, *systematicTree, "m_jet_jvt");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { int this_jvt = -1; if(jet.isAvailable<char>("passJVT")) 
+        this_jvt = jet.auxdataConst<char>("passJVT"); return this_jvt;}, *systematicTree, "m_jet_passjvt");
+      //Jet cleaning flag
+      Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
+      //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); },
+      //  *systematicTree, "m_jet_flavor_weight_MV1");
+    }
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0);
+      return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); },
+      *systematicTree, "m_jet_flavor_weight_MV2c10");
+    //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); },
+    //  *systematicTree, "m_jet_OVRStatus");
+    if(!m_doSystematics) {
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<int>>(xAOD::JetAttribute::NumTrkPt500);
+        return (int)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_numTrk");
+    }
+    //Continous b-tag
+    //https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingCalibrationDataInterface#Example_for_continuous_tagging
+    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin")) ?jet.auxdataConst<int>("tagWeightBin") : -2;},
+      *systematicTree,"m_jet_tagWeightBin");
+
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
+
+    //////// NOMINAL ONLY
+    if(!m_doSystematics) {
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c20", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c20");
+      // is it the 1 GeV counting we want?
+      Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float> >(xAOD::JetAttribute::SumPtTrkPt500); return (float) (tmp.size() ? tmp[m_pv->index()] : 0.); }, *systematicTree, "m_jet_sumPtTrk");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<float>("EMFrac"); }, *systematicTree, "m_jet_emfrac");
+      // No label tagging in sample MC
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<int>("ConeTruthLabelID"); }, *systematicTree, "m_jet_flavor_truth_label");
+      Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<int>("PartonTruthLabelID"); }, *systematicTree, "m_jet_flavor_truth_label_ghost");
+
+    }
+
+    vec_jet_wrappers.push_back(VectorWrapperCollection(jetvec));
+
+    //Taus
+    std::vector<VectorWrapper*> tauvec;
+    std::string tauprefix = "m_tau_";
+    if(!m_doSystematics) {
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.pt(); },          *systematicTree, std::string(tauprefix+"pt").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.eta(); },         *systematicTree, std::string(tauprefix+"eta").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.phi(); },         *systematicTree, std::string(tauprefix+"phi").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); },           *systematicTree, std::string(tauprefix+"E").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
+     // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+      
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.auxdataConst<char>("MVATESQuality"); },   *systematicTree, std::string(tauprefix+"MVATESQuality").c_str());
+  
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
+  
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+        return tau.auxdata<int>("passEleOLR");
+      }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
+    
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+        return tau.auxdata<int>("passEleBDT");
+      }, *systematicTree, std::string(tauprefix+"passEleBDT").c_str());
+
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+        return tau.auxdata<int>("passMuonOLR");
+      }, *systematicTree, std::string(tauprefix+"passMuonOLR").c_str());
+      
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+        return tau.auxdata<int>("IsHadronic");
+      }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+        return tau.auxdata<float>("MV2c10");
+      }, *systematicTree, std::string(tauprefix+"MV2c10").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	    return tau.auxdata<int>("tagWeightBin");
+      }, *systematicTree, std::string(tauprefix+"tagWeightBin").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	    return tau.auxdata<char>("passJVT");
+      }, *systematicTree, std::string(tauprefix+"passJVT").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+        return tau.auxdata<char>("fromPV");
+      }, *systematicTree, std::string(tauprefix+"fromPV").c_str());
+    }
+
+    //////// NOMINAL ONLY
+    if(!m_doSystematics) {
+      //substructure
+
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("ptTauEtaCalib"); },    *systematicTree, std::string(tauprefix+"ptTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("etaTauEtaCalib"); },   *systematicTree, std::string(tauprefix+"etaTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("phiTauEtaCalib"); },   *systematicTree, std::string(tauprefix+"phiTauEtaCalib").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("mTauEtaCalib"); },     *systematicTree, std::string(tauprefix+"mTauEtaCalib").c_str());
+      
+
+      //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
+      //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  int isTruthMatched = 0;
+	  if(tau.isAvailable<char>("IsTruthMatched")) isTruthMatched = (int) tau.auxdata<char>("IsTruthMatched");
+	  return isTruthMatched;
+	}, *systematicTree, std::string(tauprefix+"isTruthMatched").c_str());
+
+      //decorated in ttHMultileptonLooseEventSaver_Decorate.cxx
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<int>("tauTruthOrigin");
+	}, *systematicTree, std::string(tauprefix+"truthOrigin").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<int>("tauTruthType");
+	}, *systematicTree, std::string(tauprefix+"truthType").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<int>("truthJetFlavour");
+	}, *systematicTree, std::string(tauprefix+"truthJetFlavour").c_str());
+
+
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+	  return tau.auxdata<float>("ele_match_lhscore");
+	}, *systematicTree, std::string(tauprefix+"ele_match_lhscore").c_str());
+
+    }
+
+    vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
+
+    //Truth jets
+    //std::vector<VectorWrapper*> trjetvec;
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.pt();  }, *systematicTree, "m_jetTruth_pt");
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.eta(); }, *systematicTree, "m_jetTruth_eta");
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.phi(); }, *systematicTree, "m_jetTruth_phi");
+    //Wrap2(trjetvec, [](const xAOD::Jet& trjet) { return (float) trjet.e();   }, *systematicTree, "m_jetTruth_E");
+
+    //Event selection pass/fail branches
+    int index(0);
+    for (const auto& branchName : m_extraBranches) {
+        m_selectionDecisions[index] = 0;
+        systematicTree->makeOutputVariable(m_selectionDecisions[index], branchName);
+        ++index;
+    }
+
 
     for (size_t idx = 0; idx < LEPTON_ARR_SIZE; ++idx) {
       m_leptons[idx].BootstrapTree(systematicTree, idx);
+    }
+    for (size_t idx = 0; idx < TAU_ARR_SIZE; ++idx) {
+      m_taus[idx].BootstrapTree(systematicTree, idx);
     }
 
 
     m_ttHEvent->BootstrapTree(systematicTree,false);
     }
+ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
+			    "passPreORSelection");
+  OR_flags.doElectrons = m_config->useElectrons();
+  OR_flags.doMuons     = m_config->useMuons();
+  OR_flags.doJets      = false;
+  OR_flags.doTaus      = false;
+  OR_flags.doPhotons   = false;
+  OR_flags.outputLabel = "sharesTrk";
+
+  top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
+	     "Failed to setup OR Tool box");
+
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in eleMuORT");
+
+  top::check(m_ORtoolBox[0].initialize(),
+	     "Failed to initialize overlap removal tools");
+  m_overlapRemovalTool[0] = std::move(m_ORtoolBox[0].masterTool);
+
+  // everything
+  ORUtils::ORFlags OR_flags_nominal("OverlapRemovalttHNom",
+				    "",
+				    "ttHpassTauOVR");
+  OR_flags_nominal.doElectrons = m_config->useElectrons();
+  OR_flags_nominal.doMuons     = m_config->useMuons();
+  OR_flags_nominal.doJets      = true;
+  OR_flags_nominal.doTaus      = true;
+  OR_flags_nominal.doPhotons   = false;
+  OR_flags_nominal.outputPassValue = true;
+
+  top::check(ORUtils::recommendedTools(OR_flags_nominal,m_ORtoolBox[1]),
+	     "Failed to setup OR Tool box for nominal selections");
+
+  top::check(m_ORtoolBox[1].muJetORT.setProperty("MuJetPtRatio", 100000),
+  	     "Failed to set MuJetPtRatio to a crazy threshold");
+  top::check(m_ORtoolBox[1].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
+             "Failed to set MuJetTrkPtRatio to a crazy threshold");
+
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[1].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in nominal OR");
+
+  top::check(m_ORtoolBox[1].initialize(),
+	     "Failed to initialize overlap removal tools for nominal selection");
+  m_overlapRemovalTool[1] = std::move(m_ORtoolBox[1].masterTool);
+
+  // everything except tau
+  ORUtils::ORFlags OR_flags_nominal_no_tau("OverlapRemovalttHNomNoTau",
+					   "",
+					   "ttHpassOVR");
+  OR_flags_nominal_no_tau.doElectrons = m_config->useElectrons();
+  OR_flags_nominal_no_tau.doMuons     = m_config->useMuons();
+  OR_flags_nominal_no_tau.doJets      = true;
+  OR_flags_nominal_no_tau.doTaus      = false;
+  OR_flags_nominal_no_tau.doPhotons   = false;
+  OR_flags_nominal_no_tau.outputPassValue = true;
+  OR_flags_nominal_no_tau.outputLabel = "ttHpassOVR";
+
+  top::check(ORUtils::recommendedTools(OR_flags_nominal_no_tau,m_ORtoolBox[2]),
+	     "Failed to setup OR Tool box for nominal-but-tau selections");
+
+  // if (m_config->useMuons() && m_config->useElectrons())
+  //   top::check(m_ORtoolBox[2].eleMuORT.setProperty("RemoveCaloMuons", false),
+  // 	       "Failed to set RemoveCaloMuons in nominal-but-tau OR");
+
+  top::check(m_ORtoolBox[2].muJetORT.setProperty("MuJetPtRatio", 100000),
+             "Failed to set MuJetPtRatio to a crazy threshold");
+  top::check(m_ORtoolBox[2].muJetORT.setProperty("MuJetTrkPtRatio", 100000),
+             "Failed to set MuJetTrkPtRatio to a crazy threshold");
+
+
+  top::check(m_ORtoolBox[2].initialize(),
+	     "Failed to initialize overlap removal tools for nominal selection");
+  m_overlapRemovalTool[2] = std::move(m_ORtoolBox[2].masterTool);
+
+  //for decorating the OR decision back onto the vectors
+  m_decor_ttHpassOVR    = new SG::AuxElement::Decorator< char >("ttHpassOVR");
+  m_decor_ttHpassTauOVR = new SG::AuxElement::Decorator< char >("ttHpassTauOVR");
+
+
+
   }
   
   ///-- saveEvent - run for every systematic and every event --///
@@ -373,6 +1192,21 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     if(event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
       tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
     }
+if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
+    if(tthevt)tthevt->clearReco();
+    return;
+  }
+  if(!m_config->saveOnlySelectedEvents()){
+    top::EventSaverFlatNtuple::saveEvent(event);
+    if(tthevt)tthevt->clearReco();
+    return;
+  }
+
+  if(!tthevt){
+    std::cout << "TTHbbLeptonicEventSaver: TTHbbEventVariables (TTHbb::Event*) object not found" << std::endl;
+    std::cout << "------> aborting :-( " << std::endl;
+    abort();
+  }
 /*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
     return;
@@ -432,6 +1266,19 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
   }
+  m_met_met = event.m_met->met();
+  m_met_phi = event.m_met->phi();
+  m_met_sumet = event.m_met->sumet();
+  const xAOD::MissingETContainer *newMetContainer(nullptr);
+  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET container");
+
+  const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];
+  MET_softTrk_et = softTrkMet->met();
+  MET_softTrk_phi = softTrkMet->phi();
+
+  const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];
+  MET_softClus_et = softClusMet->met();
+  MET_softClus_phi = softClusMet->phi();
 
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
 /*
@@ -735,17 +1582,54 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     const xAOD::MuonContainer* Muons(nullptr);
     const xAOD::JetContainer* Jets(nullptr);
     const xAOD::TauJetContainer* Taus(nullptr);
-    top::check( evtStore()->retrieve(Electrons,"Selected_Electrons"),"Failed to retrieve Electrons");
-    top::check( evtStore()->retrieve(Muons,"Selected_muons"),"Failed to retrieve Muons");
-    top::check( evtStore()->retrieve(Jets,"Selected_jets"),"Failed to retrieve JEts");
-    top::check( evtStore()->retrieve(Taus,"Selected_taus"),"Failed to retrieve Taus");
+    top::check( evtStore()->retrieve(Electrons,"SelectedORElectrons"),"Failed to retrieve Electrons");
+    top::check( evtStore()->retrieve(Muons,"SelectedORMuons"),"Failed to retrieve Muons");
+    top::check( evtStore()->retrieve(Jets,"SelectedORJets"),"Failed to retrieve JEts");
+    top::check( evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
     CopyTaus(*Taus);
     CheckIsBlinded();
     m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
+ xAOD::JetContainer* calibratedJets(nullptr);
+  top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
+
+  if(m_doSystematics) {
+    vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
+   // MakeJetIndices(goodJet, event.m_jets);
+  }
+  else {
+    vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
+  //  MakeJetIndices(goodJet, *calibratedJets);
+  }
+
+  // xAOD::ElectronContainer* calibratedElectrons(nullptr);
+  // top::check(evtStore()->retrieve(calibratedElectrons, m_config->sgKeyElectronsTDS(sysHash)), "Failed to retrieve calibrated electrons");
+  // std::function<bool(const xAOD::Electron&)>elecSelector = [](const xAOD::Electron& el){ return el.auxdataConst<int>("passLHLoose") && el.pt()>5e3 ; };
+  // vec_electron_wrappers[event.m_ttreeIndex].push_selected(*calibratedElectrons, elecSelector);
+
+  vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
+  vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
+  vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
+  vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
+
+
+
+
+
+
+  /// other variables not in TTHbb::Event decoration
+  // if(event.m_info->isAvailable<int>("nJets"))
+  //   m_nJets                  = event.m_info->auxdecor<int>("nJets");
+
+  top::EventSaverFlatNtuple::saveEvent(event);
+  tthevt->clearReco();
+
+
+
+
     ///-- Let the base class do all the hard work --///
-    top::EventSaverFlatNtuple::saveEvent(event);
+  //  top::EventSaverFlatNtuple::saveEvent(event);
   }
   
 
