@@ -197,28 +197,6 @@ void Variables::AssignOutput(ttHML::Variables* m_ttHEvent, std::shared_ptr<ttHML
     m_ttHEvent->isQMisIDEvent = tthevt->isQMisIDEvent;
     m_ttHEvent->isFakeEvent = tthevt->isFakeEvent;
     m_ttHEvent->isLepFromPhEvent = tthevt->isLepFromPhEvent;
-
- /*   format XXmn("%1%%2%%3%"), XXmno("%1%%2%%3%%4%"), XXmnop("%1%%2%%3%%4%%5%");
-    for (size_t idx1 = 0; idx1 < LEPTON_ARR_SIZE-1; ++idx1) {
-      for (size_t idx2 = idx1+1; idx2 < LEPTON_ARR_SIZE; ++idx2) {
-        XXmn % "Mll" % idx1 % idx2;
-        m_ttHEvent->Mll[idx1][idx2-1] = tthevt->Mll[idx1][idx2-1];
-        XXmn % "Ptll" % idx1 % idx2;
-        m_ttHEvent->Ptll[idx1][idx2-1] = tthevt->Ptll[idx1][idx2-1];
-        XXmn % "DRll" % idx1 % idx2;
-        m_ttHEvent->DRll[idx1][idx2-1] = tthevt->DRll[idx1][idx2-1];
-        XXmn % "matchDLTll" % idx1 % idx2;
-        m_ttHEvent->matchDLTll[idx1][idx2-1] = tthevt->matchDLTll[idx1][idx2-1];
-        for (size_t idx3 = idx2+1; idx3 < LEPTON_ARR_SIZE; ++idx3) {
-          XXmno % "Mlll" % idx1 % idx2 % idx3;
-		  m_ttHEvent->Mlll[idx1][idx2-1][idx3-2] = tthevt->Mlll[idx1][idx2-1][idx3-2];          
-          for (size_t idx4 = idx3+1; idx4 < LEPTON_ARR_SIZE; ++idx4) {
-            XXmnop % "Mllll" % idx1 % idx2 % idx3 % idx4;
-			m_ttHEvent->Mllll[idx1][idx2-1][idx3-2][idx4-3] = tthevt->Mllll[idx1][idx2-1][idx3-2][idx4-3];            
-          }
-        }
-      }
-    }
     m_ttHEvent->best_Z_Mll = tthevt->best_Z_Mll;
     m_ttHEvent->best_Z_other_MtLepMet = tthevt->best_Z_other_MtLepMet;
     m_ttHEvent->best_Z_other_Mll = tthevt->best_Z_other_Mll;
@@ -259,6 +237,29 @@ void Variables::AssignOutput(ttHML::Variables* m_ttHEvent, std::shared_ptr<ttHML
     m_ttHEvent->sublead_jetEta = tthevt->sublead_jetEta;
     m_ttHEvent->sublead_jetPhi = tthevt->sublead_jetPhi;
     m_ttHEvent->sublead_jetE = tthevt->sublead_jetE;
+
+ /*   format XXmn("%1%%2%%3%"), XXmno("%1%%2%%3%%4%"), XXmnop("%1%%2%%3%%4%%5%");
+    for (size_t idx1 = 0; idx1 < LEPTON_ARR_SIZE-1; ++idx1) {
+      for (size_t idx2 = idx1+1; idx2 < LEPTON_ARR_SIZE; ++idx2) {
+        XXmn % "Mll" % idx1 % idx2;
+        m_ttHEvent->Mll[idx1][idx2-1] = tthevt->Mll[idx1][idx2-1];
+        XXmn % "Ptll" % idx1 % idx2;
+        m_ttHEvent->Ptll[idx1][idx2-1] = tthevt->Ptll[idx1][idx2-1];
+        XXmn % "DRll" % idx1 % idx2;
+        m_ttHEvent->DRll[idx1][idx2-1] = tthevt->DRll[idx1][idx2-1];
+        XXmn % "matchDLTll" % idx1 % idx2;
+        m_ttHEvent->matchDLTll[idx1][idx2-1] = tthevt->matchDLTll[idx1][idx2-1];
+        for (size_t idx3 = idx2+1; idx3 < LEPTON_ARR_SIZE; ++idx3) {
+          XXmno % "Mlll" % idx1 % idx2 % idx3;
+		  m_ttHEvent->Mlll[idx1][idx2-1][idx3-2] = tthevt->Mlll[idx1][idx2-1][idx3-2];          
+          for (size_t idx4 = idx3+1; idx4 < LEPTON_ARR_SIZE; ++idx4) {
+            XXmnop % "Mllll" % idx1 % idx2 % idx3 % idx4;
+			m_ttHEvent->Mllll[idx1][idx2-1][idx3-2][idx4-3] = tthevt->Mllll[idx1][idx2-1][idx3-2][idx4-3];            
+          }
+        }
+      }
+    }
+
     //m_ttHEvent->selected_jets = tthevt->selected_jets;
     //m_ttHEvent->selected_jets_T = tthevt->selected_jets_T;
 
