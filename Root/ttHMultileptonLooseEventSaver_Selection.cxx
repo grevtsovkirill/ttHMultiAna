@@ -74,7 +74,21 @@ int ttHMultileptonLooseEventSaver::getNInnerPix(const xAOD::Electron& el) {
   }
   return -999;
 }
+int ttHMultileptonLooseEventSaver::getNInnerPix(const xAOD::Muon& mu) {
+  uint8_t val8;
+  const auto& link = mu.inDetTrackParticleLink();
+  if (!link.isValid()) return -999;
+  int expInPix = (*link)->summaryValue(val8, xAOD::expectInnermostPixelLayerHit) ? val8 : -999;
+  int expNextInPix = (*link)->summaryValue(val8, xAOD::expectNextToInnermostPixelLayerHit) ? val8 : -999;
+  if (1 == expInPix) {
+    return ((*link)->summaryValue(val8, xAOD::numberOfInnermostPixelLayerHits) ? val8 : -999);
+  }
+  else if (1 == expNextInPix) {
+    return ((*link)->summaryValue(val8, xAOD::numberOfNextToInnermostPixelLayerHits) ? val8 : -999);
+  }
+  return -999;
 
+}
 
 void ttHMultileptonLooseEventSaver::CopyLeptons(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons){
 
@@ -151,9 +165,104 @@ std::vector<const TLorentzVector*> p4s;
     if (typ == ttHML::ELECTRON) {
       CopyElectron(*((Electrons)[lidx]), m_leptons[idx]);
     } else {
-   //   CopyMuon(*(Muons)[lidx], m_leptons[idx]);
+      CopyMuon(*((Muons)[lidx]), m_leptons[idx]);
     }
   }
+if (totleptons >= 2) {
+    TLorentzVector p4_01 = (*p4s[0]+*p4s[1]);
+    //m_ttHEvent->Mll01 = p4_01.M();
+    //m_ttHEvent->Ptll01 = p4_01.Pt();
+    //m_ttHEvent->DRll01 = p4s[0]->DeltaR(*p4s[1]);
+    int zidx[2]{-1,-1};
+    for (int idx1 = 0; idx1 < capped_totleptons-1; ++idx1) {
+      for (int idx2 = idx1+1; idx2 < capped_totleptons; ++idx2) {
+	TLorentzVector p4sum = *p4s[idx1] + *p4s[idx2];
+	m_ttHEvent->Mll[idx1][idx2-1] = p4sum.M();
+	m_ttHEvent->Ptll[idx1][idx2-1] = p4sum.Pt();
+	m_ttHEvent->DRll[idx1][idx2-1] = p4s[idx1]->DeltaR(*p4s[idx2]);
+        m_ttHEvent->matchDLTll[idx1][idx2-1] = ( (int)m_leptons[idx1].isTrigMatchDLT && (int)m_leptons[idx2].isTrigMatchDLT
+          && std::max(m_leptons[idx1].Pt, m_leptons[idx2].Pt)
+          > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016)*23e3) );
+	// min Mll variables
+	if (m_leptons[idx1].ID * m_leptons[idx2].ID < 0) {
+	  if (m_ttHEvent->minOSMll == 0 || 
+	      m_ttHEvent->Mll[idx1][idx2-1] < m_ttHEvent->minOSMll) {
+	    m_ttHEvent->minOSMll = m_ttHEvent->Mll[idx1][idx2-1];
+	  }
+	}
+	if (m_leptons[idx1].ID == -m_leptons[idx2].ID) {
+	  if (m_ttHEvent->best_Z_Mll == 0 ||
+	      (fabs(m_ttHEvent->Mll[idx1][idx2-1]-91.1876e3) <
+	       fabs(m_ttHEvent->best_Z_Mll-91.1876e3))) {
+	    m_ttHEvent->best_Z_Mll=m_ttHEvent->Mll[idx1][idx2-1];
+	    zidx[0] = idx1; zidx[1] = idx2;
+	  }
+	  // min Mll variables
+	  if (m_ttHEvent->minOSSFMll == 0 || 
+	      m_ttHEvent->Mll[idx1][idx2-1] < m_ttHEvent->minOSSFMll) {
+	    m_ttHEvent->minOSSFMll = m_ttHEvent->Mll[idx1][idx2-1];
+	  }
+	}
+	for (int idx3 = idx2+1; idx3 < capped_totleptons; ++idx3) {
+	  TLorentzVector p4sum3 = p4sum + *p4s[idx3];
+	  m_ttHEvent->Mlll[idx1][idx2-1][idx3-2] = p4sum3.M();
+	  for (int idx4 = idx3+1; idx4 < capped_totleptons; ++idx4) {
+	    TLorentzVector p4sum4 = p4sum3 + *p4s[idx4];
+	    m_ttHEvent->Mllll[idx1][idx2-1][idx3-2][idx4-3] = p4sum4.M();
+	  }
+	}
+      }
+    }
+    if (totleptons==3 && zidx[0] >= 0) {
+      int oidx = 3 - zidx[0] - zidx[1];
+      TLorentzVector p4met;
+      p4met.SetPtEtaPhiM(m_met_met,0,m_met_phi,0);
+      m_ttHEvent->best_Z_other_MtLepMet = (p4met + *p4s[oidx]).Mt();
+    }
+    if (totleptons==4 && zidx[0] >= 0) {
+      std::vector<int> otherleps;
+      for (int idx = 0; idx < 4; ++idx) {
+	if (idx != zidx[0] && idx != zidx[1]) {
+	  otherleps.push_back(idx);
+	}
+      }
+      m_ttHEvent->best_Z_other_Mll = m_ttHEvent->Mll[otherleps[0]][otherleps[1]-1];
+    }
+  }
+
+  // Flag event if there's at least one truth-QMisID/truth-fake/truth-From-Non-GEANT-Photon lepton
+  //
+  // By construction, "isLepFromPhEvent==1" is a subset of "isFakeEvent==1"
+  //
+  if ( m_isMC && totleptons >= 1 ) {
+
+    m_ttHEvent->isQMisIDEvent = 0; // default
+    for (short idx = 0; idx < capped_totleptons; ++idx) {
+      if ( m_leptons[idx].isQMisID == 1 ) {
+    	m_ttHEvent->isQMisIDEvent = 1;
+    	break;
+      }
+    }
+    m_ttHEvent->isFakeEvent = 0; // default
+    for (short idx = 0; idx < capped_totleptons; ++idx) {
+      if ( m_leptons[idx].isFakeLep == 1 ) {
+    	m_ttHEvent->isFakeEvent = 1;
+    	break;
+      }
+    }
+    m_ttHEvent->isLepFromPhEvent = 0; // default
+    for (short idx = 0; idx < capped_totleptons; ++idx) {
+	if ( m_leptons[idx].isConvPh == 1 || m_leptons[idx].isISR_FSR_Ph == 1 ) {
+    	m_ttHEvent->isLepFromPhEvent = 1;
+    	break;
+      }
+    }
+  } else {
+    m_ttHEvent->isQMisIDEvent    = -1; // default for data
+    m_ttHEvent->isFakeEvent      = -1; // default for data
+    m_ttHEvent->isLepFromPhEvent = -1; // default for data
+  }
+
 }
 
 void ttHMultileptonLooseEventSaver::
@@ -487,6 +596,239 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
     m_ttHEvent->sublead_jetPhi = p4s[1]->Phi();
     m_ttHEvent->sublead_jetE	= p4s[1]->E();
   }
+}
+void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Lepton& lep){
+  CopyIParticle(mu, lep);
+  CopyIso(mu, lep);
+  CopyIParam(mu, lep);
+  lep.ID = -13*mu.charge();
+  lep.isLoose  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Loose  && muonSelection.passedIDCuts(mu) );
+  lep.isMedium = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu) );
+  lep.isTight  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Tight  && muonSelection.passedIDCuts(mu) );
+
+  // lep.d0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->d0();
+  // lep.z0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->z0();
+  lep.d0 = mu.primaryTrackParticle()->d0();
+  lep.z0 = mu.primaryTrackParticle()->z0();
+  lep.vz = mu.primaryTrackParticle()->vz();
+
+  static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
+  lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetNTrk("jet_numTrk");
+  lep.mujet_jetNTrk = (mujet_jetNTrk.isAvailable(mu)) ? mujet_jetNTrk(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetSumPtTrk("jet_sumPtTrk");
+  lep.mujet_jetSumPtTrk = (mujet_jetSumPtTrk.isAvailable(mu)) ? mujet_jetSumPtTrk(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_mv2c10("MV2c10_weight");
+  lep.mujet_mv2c10 = (mujet_mv2c10.isAvailable(mu)) ? mujet_mv2c10(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_deltaR("dRJet"); //changed for PromptLeptonIso calibration
+  lep.mujet_deltaR = (mujet_deltaR.isAvailable(mu)) ? mujet_deltaR(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_ptRel("jet_ptRel");
+  lep.mujet_ptRel = (mujet_ptRel.isAvailable(mu)) ? mujet_ptRel(mu): -99;
+
+  static SG::AuxElement::Accessor<float> mujet_jetPtOverpt("jet_pt");
+  lep.mujet_jetPtOverpt = (mujet_jetPtOverpt.isAvailable(mu)) ? mujet_jetPtOverpt(mu)/mu.pt(): -99;
+
+  static::SG::AuxElement::Accessor<float> mujet_BDT("muon_BDT");
+  lep.mujet_BDT        = (mujet_BDT.isAvailable(mu)) ? mujet_BDT(mu): -99;
+
+
+
+  // trigger matching
+  if (m_runYear == 2015) {
+    lep.isTrigMatch = (mu.pt() > 21e3 && (
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else if (m_runYear == 2016) { // since period D4 on in 2016 data (high luminosity triggers)
+    lep.isTrigMatch = (mu.pt() > 27e3 && (
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu26_ivarmedium", (char) 0) ||
+					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else { // MC events with pileupEventWeight==0
+    lep.isTrigMatch = 0;
+  }
+  if (m_runYear == 2015) {
+    lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu18_mu8noL1"    , (char) 0)) ||
+			   (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_mu14", (char) 0)) );
+  }
+  else if (m_runYear == 2016) {
+    lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu22_mu8noL1"         , (char) 0)) ||
+                           (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)) );
+  } else {
+    lep.isTrigMatchDLT = 0;
+  }
+
+  /* //////// Different pT threshold for pre and post-ICHEP dataset
+  else if (m_runYear == 2016 && m_runNumber < 302900) { // period A to D3 in 2016 data
+    lep.isTrigMatch = (mu.pt() > 25e3 && (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu24_ivarmedium", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else if (m_runYear == 2016) { // since period D4 on in 2016 data (high luminosity triggers)
+    lep.isTrigMatch = (mu.pt() > 27e3 && (
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu26_ivarmedium", (char) 0) ||
+	    returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
+  } else { // MC events with pileupEventWeight==0
+    lep.isTrigMatch = 0;
+  }
+  */
+
+  // truth matching, fakes, QMisId
+  int TruthType = -99;
+  int TruthOrigin = -99;
+
+  if(m_isMC) {
+    static SG::AuxElement::Accessor<int> acc_mctt("truthType");
+    const xAOD::TrackParticle* mutrack = mu.primaryTrackParticle();
+    if (mutrack!=nullptr) {
+      if (acc_mctt.isAvailable(*mutrack)) TruthType = acc_mctt(*mutrack);
+    }
+
+    static SG::AuxElement::Accessor<int> acc_mcto("truthOrigin");
+    if (mutrack!=nullptr) {
+      if (acc_mcto.isAvailable(*mutrack)) TruthOrigin = acc_mcto(*mutrack);
+    }
+  }
+
+  // const xAOD::TruthParticle* matched_truth_muon=0;
+  // if(mu.isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+  //   ElementLink<xAOD::TruthParticleContainer> link = mu.auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+  //   if(link.isValid()){
+  //     matched_truth_muon = *link;
+  //     truthOrigin = matched_truth_muon->auxdata<int>("truthOrigin");
+  //   }
+  // }
+
+  // const xAOD::TrackParticle* idtp=0;
+  // ElementLink<xAOD::TrackParticleContainer> idtpLink = mu.inDetTrackParticleLink();
+  // if(idtpLink.isValid()){
+  //   idtp = *idtpLink;
+  //   if(m_isMC) truthType = idtp->auxdata<int>("truthType");
+  // }
+
+  if (TruthType == 2 || TruthType == 6)
+    lep.isPrompt = 1;
+  else
+    lep.isPrompt = 0;
+
+  static SG::AuxElement::Accessor<char> QMisID("isQMisID");
+  lep.isQMisID = ( QMisID.isAvailable(mu) ) ?  QMisID(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
+  lep.isConvPh = ( ConvPh.isAvailable(mu) ) ?  ConvPh(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
+  lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(mu) ) ?  ISR_FSR_Ph(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> isBrems("isBrems");
+  lep.isBrems = ( isBrems.isAvailable(mu) ) ? isBrems(mu) : -1;
+  //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
+  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
+
+  static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
+  lep.promptLeptonIso_sv1_jf_ntrkv = ( promptLeptonIso_sv1_jf_ntrkv.isAvailable(mu) ) ? promptLeptonIso_sv1_jf_ntrkv(mu) : -99;
+
+  static SG::AuxElement::Accessor<short> promptLeptonIso_TrackJetNTrack("PromptLeptonIso_TrackJetNTrack");
+  lep.promptLeptonIso_TrackJetNTrack = ( promptLeptonIso_TrackJetNTrack.isAvailable(mu) ) ? promptLeptonIso_TrackJetNTrack(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_ip2("PromptLeptonIso_ip2");
+  lep.promptLeptonIso_ip2 = ( promptLeptonIso_ip2.isAvailable(mu) ) ? promptLeptonIso_ip2(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_ip3("PromptLeptonIso_ip3");
+  lep.promptLeptonIso_ip3 = ( promptLeptonIso_ip3.isAvailable(mu) ) ? promptLeptonIso_ip3(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_DRlj("PromptLeptonIso_DRlj");
+  lep.promptLeptonIso_DRlj = ( promptLeptonIso_DRlj.isAvailable(mu) ) ? promptLeptonIso_DRlj(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_LepJetPtFrac("PromptLeptonIso_LepJetPtFrac");
+  lep.promptLeptonIso_LepJetPtFrac = ( promptLeptonIso_LepJetPtFrac.isAvailable(mu) ) ? promptLeptonIso_LepJetPtFrac(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLepton_TagWeight("PromptLepton_TagWeight");
+  lep.promptLepton_TagWeight = ( promptLepton_TagWeight.isAvailable(mu) ) ? promptLepton_TagWeight(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
+  lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(mu) ) ? promptLeptonNoIso_TagWeight(mu) : -99;
+
+  // Whatever is not a prompt or a QMisID, is a fake to us!
+  lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
+
+  static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
+  lep.isTruthMatched = ( isTruthMatched.isAvailable(mu) ) ? isTruthMatched(mu) : -1;
+
+  lep.truthOrigin = TruthOrigin;
+  lep.truthType = TruthType;
+
+  static SG::AuxElement::Accessor<int> truthPdgId("truthPdgId");
+  lep.truthPdgId = ( truthPdgId.isAvailable(mu) ) ? truthPdgId(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthStatus("truthStatus");
+  lep.truthStatus = ( truthStatus.isAvailable(mu) ) ? truthStatus(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentType("ancestorTruthType");
+  lep.truthParentType = ( truthParentType.isAvailable(mu) ) ? truthParentType(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentOrigin("ancestorTruthOrigin");
+  lep.truthParentOrigin = ( truthParentOrigin.isAvailable(mu) ) ? truthParentOrigin(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentPdgId("ancestorTruthPdgId");
+  lep.truthParentPdgId = ( truthParentPdgId.isAvailable(mu) ) ? truthParentPdgId(mu) : -1;
+
+  static SG::AuxElement::Accessor<int> truthParentStatus("ancestorTruthStatus");
+  lep.truthParentStatus = ( truthParentStatus.isAvailable(mu) ) ? truthParentStatus(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthPt("truthPt");
+  lep.truthPt = ( truthPt.isAvailable(mu) ) ? truthPt(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthEta("truthEta");
+  lep.truthEta = ( truthEta.isAvailable(mu) ) ? truthEta(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthPhi("truthPhi");
+  lep.truthPhi = ( truthPhi.isAvailable(mu) ) ? truthPhi(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthM("truthM");
+  lep.truthM = ( truthM.isAvailable(mu) ) ? truthM(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthE("truthE");
+  lep.truthE = ( truthE.isAvailable(mu) ) ? truthE(mu) : -1;
+
+  static SG::AuxElement::Accessor<float> truthRapidity("truthRapidity");
+  lep.truthRapidity = ( truthRapidity.isAvailable(mu) ) ? truthRapidity(mu) : -1;
+
+  // isolation variables
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone20); lep.ptVarcone20 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone30); lep.ptVarcone30 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::ptvarcone40); lep.ptVarcone40 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone20); lep.topoEtcone20 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone30); lep.topoEtcone30 = iso;}
+  {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
+
+  lep.nInnerPix = getNInnerPix(mu);
+/*
+  // scale factors
+  for (const auto& systvar : m_lep_sf_names) {
+    auto ivar = systvar.first;
+    if( !m_doSFSystematics && ivar != 0 ) continue;
+    // I know the loose/tight swap looks weird, but it's intentional
+    lep.SFIDLoose[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, false);
+    lep.SFIDTight[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, true);
+    lep.SFTrigLoose[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, false);
+    lep.SFTrigTight[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, true);
+    lep.SFIsoLoose[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, false);
+    lep.SFIsoTight[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, true);
+    lep.SFTTVA[ivar] = m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0;
+    lep.SFReco[ivar] = 1;
+    lep.EffTrigLoose[ivar] = muonEff_Trigger(mu, m_config->muonQuality(), ivar);
+    lep.EffTrigTight[ivar] = muonEff_Trigger(mu, m_config->muonQualityLoose(), ivar);
+  // Everything except trigger
+    lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFTTVA[ivar];
+    lep.SFObjTight[ivar] = lep.SFIDTight[ivar]*lep.SFIsoTight[ivar]*lep.SFTTVA[ivar];
+  }
+*/
+
 }
 void
 ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLTau) {

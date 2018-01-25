@@ -209,6 +209,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 
 
     m_ttHEvent = new ttHML::Variables();
+std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
 /*
   for (auto treeName : *config->systAllTTreeNames()) {
     std::cout << "INITIALIZING SYST TREES" << std::endl;
@@ -1589,6 +1590,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
     CopyTaus(*Taus);
+    CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
     m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
  xAOD::JetContainer* calibratedJets(nullptr);
