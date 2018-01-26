@@ -86,13 +86,6 @@ bool SelectElectrons::apply(const top::Event & event) const{
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_electrons,"Selected_Electrons"), "recording Selected_Electrons failed.");
 
 
-
-
-  //m_asgHelper->getElectronContainer(elname);
-  //tthevt->GetElectronContainer(elname);
-  //const xAOD::ElectronContainer* Electrons = m_asgHelper->RetrieveElectrons(m_electrons);
- // tthevt->onelep_type=3;
-std::cout<<"nelecafter= " <<nelec2<<std::endl;
   return true;
 
 }

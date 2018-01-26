@@ -99,7 +99,7 @@ bool DecorateTaus::apply(const top::Event & event) const{
     }
     else if( vtx->vertexType() == xAOD::VxType::PileUp ) m_puNumber++;
   }
-    decoratetau(event);
+    
     for (auto tauItr : event.m_tauJets) {
 
   //truth
@@ -162,9 +162,9 @@ bool DecorateTaus::apply(const top::Event & event) const{
 
 
 
-std::cout<<"ntaubefore= " <<ntaus<<std::endl;
+//std::cout<<"ntaubefore= " <<ntaus<<std::endl;
   return true;
-
+decoratetau(event);
 }
 
 void DecorateTaus::decoratetau(const top::Event& event)const{

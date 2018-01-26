@@ -303,6 +303,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
+  static SG::AuxElement::Accessor<int> AmbiguityType("AmbiguityType");
+  lep.AmbiguityType = ( AmbiguityType.isAvailable(el) ) ?  AmbiguityType(el) : -1;
 
   static SG::AuxElement::Accessor<char> QMisID("isQMisID");
   lep.isQMisID = ( QMisID.isAvailable(el) ) ?  QMisID(el) : -1;
@@ -320,7 +322,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   // Whatever is not a prompt or a QMisID, is a fake to us!
   lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
 
-  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
+  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("isovetPromptLeptonVeto_TagWeight");
   lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(el) ) ? promptLeptonIso_TagWeight(el) : -99;
 
   static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
@@ -843,8 +845,8 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
   MLTau.numTrack        = xTau.nTracks();
   MLTau.isHadronic      = xTau.auxdata<int>("IsHadronic");
-  MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
-  MLTau.fromPV          = xTau.auxdata<char>("fromPV");
+ // MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
+ // MLTau.fromPV          = xTau.auxdata<char>("fromPV");
   MLTau.passEleOLR      = xTau.auxdata<int>("passEleOLR");
   MLTau.passEleBDT      = xTau.auxdata<int>("passEleBDT");
   MLTau.passMuonOLR     = xTau.auxdata<int>("passMuonOLR");
@@ -862,15 +864,15 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
 }
 
 void
-ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& goodTaus) {
+ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& Taus) {
   memset(&m_taus, 0, sizeof(m_taus));
-  int totalTaus = goodTaus.size();
+  int totalTaus = Taus.size();
   m_ttHEvent->nTaus_OR_Pt25 = totalTaus;
 
 //  goodTaus.sort(top::descendingPtSorter);
 
   for(int i = 0; i < totalTaus && i < TAU_ARR_SIZE; ++i) {
-    CopyTau( *(goodTaus.at(i)) , m_taus[i] );
+    CopyTau( *(Taus.at(i)) , m_taus[i] );
   }
 }
 void
