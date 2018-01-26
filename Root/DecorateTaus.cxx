@@ -161,10 +161,10 @@ bool DecorateTaus::apply(const top::Event & event) const{
   }
 
 
-
+decoratetau(event);
 //std::cout<<"ntaubefore= " <<ntaus<<std::endl;
   return true;
-decoratetau(event);
+
 }
 
 void DecorateTaus::decoratetau(const top::Event& event)const{
