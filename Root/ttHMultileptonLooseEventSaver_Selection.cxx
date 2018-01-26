@@ -943,4 +943,30 @@ int ttHMultileptonLooseEventSaver::getNTruthJets(const xAOD::JetContainer jetCol
   }
   return nTruth;
 }
+/*
+void
+ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets,
+					      const xAOD::JetContainer& allJets) {
+  m_ttHEvent->selected_jets.clear();
+  m_ttHEvent->selected_jets_T.clear();
+  for (const auto jetItr : goodJets) {
+    if (!jetItr->template auxdataConst<char>("ttHpassOVR")) continue;
+    auto& goodp4 = jetItr->p4();
+    bool found = false;
+    for (size_t idx = 0; idx < allJets.size(); ++idx) {
+      if (goodp4 == allJets[idx]->p4()) {
+	found = true;
+	m_ttHEvent->selected_jets.push_back(idx);
+	if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) {
+	  m_ttHEvent->selected_jets_T.push_back(idx);
+	}
+	break;
+      }
+    }
+    if (!found) {
+      std::cerr << "Unable to find a jet match. Sad!" << std::endl;
+    }
+  }
+}*/
+
 

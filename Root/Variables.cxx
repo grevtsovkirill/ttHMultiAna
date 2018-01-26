@@ -297,7 +297,7 @@ void Variables::AssignOutput(ttHML::Variables* m_ttHEvent, std::shared_ptr<ttHML
 //    clearDecorations();
 //    m_reco=false;
   }
-
+void Variables::Clear() { memset(this, 0, sizeof(Variables)); }
 
 }
 

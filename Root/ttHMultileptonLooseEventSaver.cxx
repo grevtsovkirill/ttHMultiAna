@@ -1189,6 +1189,7 @@ ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
   ///-- saveEvent - run for every systematic and every event --///
   void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event) 
   {
+    m_ttHEvent->Clear();
     std::shared_ptr<ttHML::Variables> tthevt;
     if(event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
       tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
@@ -1203,11 +1204,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     return;
   }
 
-  if(!tthevt){
-    std::cout << "TTHbbLeptonicEventSaver: TTHbbEventVariables (TTHbb::Event*) object not found" << std::endl;
-    std::cout << "------> aborting :-( " << std::endl;
-    abort();
-  }
+ 
 /*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
     return;
@@ -1589,6 +1586,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     top::check( evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
+    //MakeJetIndices(*Jets,event.m_jets);
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();

@@ -45,8 +45,8 @@ namespace ttHML {
     std::shared_ptr<ttHML::EventData> m_info;
     void AssignOutput(ttHML::Variables* evt_one, std::shared_ptr<ttHML::Variables> evt_two);
     void clearReco();
-
-	int onelep_type;
+    void Clear();
+	  int onelep_type;
     int dilep_type;
     int trilep_type;
     int quadlep_type;
