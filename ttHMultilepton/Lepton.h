@@ -123,7 +123,7 @@ namespace ttHML {
     float   chargeIDBDTLoose;
     float   chargeIDBDTMedium;
     float   chargeIDBDTTight;
-    float   promptLeptonIso_TagWeight;
+    //float   promptLeptonIso_TagWeight;
     short   promptLeptonIso_sv1_jf_ntrkv;
     short   promptLeptonIso_TrackJetNTrack;
     float   promptLeptonIso_ip2;
@@ -132,7 +132,9 @@ namespace ttHML {
     float   promptLeptonIso_LepJetPtFrac;
     float   promptLepton_TagWeight;
     float   promptLeptonNoIso_TagWeight;
-    
+    float   promptLeptonIso_TagWeight;
+    float	promptLeptonVeto_TagWeight;    
+
     char    isTruthMatched;
 
 
