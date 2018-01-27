@@ -43,10 +43,9 @@ namespace ttHML {
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFSystematics);
     std::shared_ptr<ttHML::EventData> m_info;
-    void AssignOutput(ttHML::Variables* evt_one, std::shared_ptr<ttHML::Variables> evt_two);
     void clearReco();
-
-	int onelep_type;
+    void Clear();
+	  int onelep_type;
     int dilep_type;
     int trilep_type;
     int quadlep_type;
@@ -118,8 +117,8 @@ namespace ttHML {
     float lepSFObjTight[MAXSYST];
     float tauSFTight[MAXSYST];
     float tauSFLoose[MAXSYST];
-//    std::vector<short> selected_jets;
-//    std::vector<short> selected_jets_T;
+    std::vector<short> selected_jetsOR;
+    std::vector<short> selected_jets_TOR;
 
 
 

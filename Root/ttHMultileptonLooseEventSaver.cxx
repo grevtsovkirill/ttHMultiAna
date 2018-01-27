@@ -468,12 +468,15 @@ std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
     }
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
 
-    //non-prompt bdt vars
+    //non-prompt bdt vars - OLD VARIABLE, MAYBE SHOULD BE DELETED
+    /*
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
 	  float m_el_nonprompt_bdt = -99.;
 	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(ele)) m_el_nonprompt_bdt = AccessorNonPromptBDT(ele);
 	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
+		*/
+
 
     // electron QmisID
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
@@ -583,7 +586,7 @@ std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
 	float m_el_nonprompt_float = -99.;
         SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
         if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
-        return (float) m_el_nonprompt_float;}, *systematicTree, ("electron_isovet" + var).c_str());
+        return (float) m_el_nonprompt_float;}, *systematicTree, ("electron_" + var + "_TagWeight").c_str());
     }
 
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
@@ -768,12 +771,15 @@ std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
     }
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
 
-    //non-prompt bdt vars
+    //non-prompt bdt vars - OLD AND PROBABLY SHOULD BE DELETED
+    /*
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	  float m_mu_nonprompt_bdt = -99.;
 	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(mu)) m_mu_nonprompt_bdt = AccessorNonPromptBDT(mu);
 	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLeptonIso_TagWeight");
+*/
+
 
     // muon QmisID
     if(!m_doSystematics) {
@@ -904,6 +910,16 @@ std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
 	}
       }
     }
+
+	std::vector<std::string> R21_Mu_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+    for(std::string var: R21_Mu_PLI_vars){
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+    float m_mu_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
+        return (float) m_mu_nonprompt_float;}, *systematicTree, ("muon_" + var + "_TagWeight").c_str());
+    }
+
     //muon_D BDT
     if(!m_doSystematics) {
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_pt");}, *systematicTree, "muon_jet_pt");
@@ -1195,6 +1211,7 @@ ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
   ///-- saveEvent - run for every systematic and every event --///
   void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event) 
   {
+    m_ttHEvent->Clear();
     std::shared_ptr<ttHML::Variables> tthevt;
     if(event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
       tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
@@ -1209,11 +1226,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     return;
   }
 
-  if(!tthevt){
-    std::cout << "TTHbbLeptonicEventSaver: TTHbbEventVariables (TTHbb::Event*) object not found" << std::endl;
-    std::cout << "------> aborting :-( " << std::endl;
-    abort();
-  }
+ 
 /*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
     return;
@@ -1595,10 +1608,11 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     top::check( evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
+    MakeJetIndices(*Jets,event.m_jets);
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-    m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
+    //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
  xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
 

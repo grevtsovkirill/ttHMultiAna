@@ -62,6 +62,7 @@ extern TH1I* m_tauCutflow;
       virtual void saveEvent(const top::Event& event) override;
       void CopyLeptons(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons);
       void CopyJets(const xAOD::JetContainer& Jets);
+      void MakeJetIndices(const xAOD::JetContainer& goodJets,const xAOD::JetContainer& allJets);
       void CopyTaus(const xAOD::TauJetContainer& Taus);
       void CheckIsBlinded();
       void CopyHT(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::JetContainer& goodJets, const xAOD::TauJetContainer& goodTaus);

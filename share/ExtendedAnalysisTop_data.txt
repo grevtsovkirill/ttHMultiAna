@@ -1,6 +1,6 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-PRWConfigFiles dev/SUSYTools/mc16a_defaults_buggy.NotRecommended.prw.root
+PRWConfigFiles dev/SUSYTools/merged_prw_mc16a_latest.root
 #PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
 
 PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root 
@@ -8,16 +8,17 @@ PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_2
 GRLDir GoodRunsLists
 GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml
 
+EventInfoName EventInfo
 ElectronCollectionName Electrons
 MuonCollectionName Muons
 JetCollectionName AntiKt4EMTopoJets
 LargeJetCollectionName None
 LargeJetSubstructure None
-TauCollectionName None
+TauCollectionName TauJets
 PhotonCollectionName None
-METCollectionName MET_Reference_AntiKt4EMTopo
-TruthCollectionName TruthParticles
-TruthJetCollectionName AntiKt4TruthJets
+METCollectionName MET_RefFinal_AntiKt4EMTopo
+LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+
 
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
@@ -26,29 +27,50 @@ OutputFilename output.root
 OutputEvents SelectedEvents
 PerfStats No
 
+Systematics Nominal
+
 #Electron cuts
 ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
 ElectronIsolation Loose
-#ElectronIsolationLoose PromptLepton
+ElectronIsolationLoose PromptLepton
+
+#Muon cuts
+MuonQuality Loose
+MuonQualityLoose Loose
+MuonEta 2.7
+MuonPt 5000
+MuonIsolation Loose
+MuonIsolationLoose PromptLepton
+
+#Tau cuts
+#have been moved to ttHMultilepton/data/loose_tau_selection.conf
+#for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
+TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
+TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
+ApplyTauMVATES false
 
 
-# DoTight/DoLoose to activate the loose and tight trees
-# each should be one in: Data, MC, Both, False
-#DoTight Both
+
+#Jet cuts
+JetPt 25000.
+JetEta 2.5
+BTaggingWP FixedCutBEff_60 FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
+
+#Other cuts, overlaps, bkgs..
+FakesControlRegionDoLooseMC False
+ApplyElectronInJetSubtraction False
+OverlapRemovalLeptonDef Tight
+
 DoLoose False
 
 # Turn on MetaData to pull IsAFII from metadata
 #UseAodMetaData True
 IsAFII False
 
-NEvents 500
+NEvents 1000000
 Systematics Nominal
-
-FakesControlRegionDoLooseMC False
-ApplyElectronInJetSubtraction False
-OverlapRemovalLeptonDef Tight
 
 
 SELECTION triggers
@@ -63,6 +85,7 @@ INITIAL
 #GRL
 GOODCALO
 PRIVTX
+JETCLEAN LooseBad
 EVEN
 DECORATEEL
 DECORATETAUS
@@ -73,6 +96,6 @@ SELECTTAUS
 SELECTMUONS
 SELECT_OR
 NLEPTONPLUSTAU 10000 >= 1
-JETCLEAN LooseBad
+#JETCLEAN LooseBad
 SAVE
 

@@ -303,6 +303,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
+  static SG::AuxElement::Accessor<int> AmbiguityType("AmbiguityType");
+  lep.AmbiguityType = ( AmbiguityType.isAvailable(el) ) ?  AmbiguityType(el) : -1;
 
   static SG::AuxElement::Accessor<char> QMisID("isQMisID");
   lep.isQMisID = ( QMisID.isAvailable(el) ) ?  QMisID(el) : -1;
@@ -319,9 +321,6 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 
   // Whatever is not a prompt or a QMisID, is a fake to us!
   lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
-
-  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
-  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(el) ) ? promptLeptonIso_TagWeight(el) : -99;
 
   static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
   lep.promptLeptonIso_sv1_jf_ntrkv = ( promptLeptonIso_sv1_jf_ntrkv.isAvailable(el) ) ? promptLeptonIso_sv1_jf_ntrkv(el) : -99;
@@ -346,6 +345,16 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 
   static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
   lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(el) ) ? promptLeptonNoIso_TagWeight(el) : -99;
+
+
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
+  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(el) ) ? promptLeptonIso_TagWeight(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonVeto_TagWeight("PromptLeptonVeto");
+  lep.promptLeptonVeto_TagWeight = ( promptLeptonVeto_TagWeight.isAvailable(el) ) ? promptLeptonVeto_TagWeight(el) : -99;
+
+
 
   static SG::AuxElement::Accessor<float> chargeIDBDTLoose("chargeIDBDTLoose");
   lep.chargeIDBDTLoose = ( chargeIDBDTLoose.isAvailable(el) ) ? chargeIDBDTLoose(el) : -99;
@@ -726,8 +735,8 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   lep.isBrems = ( isBrems.isAvailable(mu) ) ? isBrems(mu) : -1;
   //std::cout << "Its Brems Elec and bkgMotherPdgId is " << bkgElMotherPdgID << " and type: " << bkgElType << " and origin: " << bkgElOrigin << std::endl;
 
-  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
-  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
+//  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
+//  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
 
   static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
   lep.promptLeptonIso_sv1_jf_ntrkv = ( promptLeptonIso_sv1_jf_ntrkv.isAvailable(mu) ) ? promptLeptonIso_sv1_jf_ntrkv(mu) : -99;
@@ -752,6 +761,16 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
 
   static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
   lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(mu) ) ? promptLeptonNoIso_TagWeight(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
+  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonVeto_TagWeight("PromptLeptonVeto");
+  lep.promptLeptonVeto_TagWeight = ( promptLeptonVeto_TagWeight.isAvailable(mu) ) ? promptLeptonVeto_TagWeight(mu) : -99;
+
+
+
+
 
   // Whatever is not a prompt or a QMisID, is a fake to us!
   lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
@@ -843,8 +862,8 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
   MLTau.numTrack        = xTau.nTracks();
   MLTau.isHadronic      = xTau.auxdata<int>("IsHadronic");
-  MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
-  MLTau.fromPV          = xTau.auxdata<char>("fromPV");
+ // MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
+ // MLTau.fromPV          = xTau.auxdata<char>("fromPV");
   MLTau.passEleOLR      = xTau.auxdata<int>("passEleOLR");
   MLTau.passEleBDT      = xTau.auxdata<int>("passEleBDT");
   MLTau.passMuonOLR     = xTau.auxdata<int>("passMuonOLR");
@@ -862,15 +881,15 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
 }
 
 void
-ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& goodTaus) {
+ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& Taus) {
   memset(&m_taus, 0, sizeof(m_taus));
-  int totalTaus = goodTaus.size();
+  int totalTaus = Taus.size();
   m_ttHEvent->nTaus_OR_Pt25 = totalTaus;
 
 //  goodTaus.sort(top::descendingPtSorter);
 
   for(int i = 0; i < totalTaus && i < TAU_ARR_SIZE; ++i) {
-    CopyTau( *(goodTaus.at(i)) , m_taus[i] );
+    CopyTau( *(Taus.at(i)) , m_taus[i] );
   }
 }
 void
@@ -941,4 +960,30 @@ int ttHMultileptonLooseEventSaver::getNTruthJets(const xAOD::JetContainer jetCol
   }
   return nTruth;
 }
+
+void
+ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets,
+					      const xAOD::JetContainer& allJets) {
+  m_ttHEvent->selected_jetsOR.clear();
+  m_ttHEvent->selected_jets_TOR.clear();
+  for (const auto jetItr : goodJets) {
+    if (!jetItr->template auxdataConst<char>("ttHpassOVR")) continue;
+    auto& goodp4 = jetItr->p4();
+    bool found = false;
+    for (size_t idx = 0; idx < allJets.size(); ++idx) {
+      if (goodp4 == allJets[idx]->p4()) {
+	found = true;
+	m_ttHEvent->selected_jetsOR.push_back(idx);
+	if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) {
+	  m_ttHEvent->selected_jets_TOR.push_back(idx);
+	}
+	break;
+      }
+    }
+    if (!found) {
+      std::cerr << "Unable to find a jet match. Sad!" << std::endl;
+    }
+  }
+}
+
 
