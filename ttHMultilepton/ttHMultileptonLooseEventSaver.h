@@ -38,6 +38,10 @@ using namespace xAOD;
 using CP::MuonSelectionTool;
 //using TauAnalysisTools::TauSelectionTool;
 
+extern TH1I* m_eleCutflow;
+extern TH1I* m_muCutflow;
+extern TH1I* m_jetCutflow;
+extern TH1I* m_tauCutflow;
 
   class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
     public:
@@ -67,6 +71,16 @@ using CP::MuonSelectionTool;
       int getNInnerPix(const xAOD::Electron& el);
       int getNInnerPix(const xAOD::Muon& mu);
 
+      //extern TH1I* m_eleCutflow;// = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //extern TH1I* m_muCutflow;// = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
+      //extern TH1I* m_jetCutflow;// = new TH1I("m_jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
+      //extern TH1I* m_tauCutflow;//  = new TH1I("m_tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
+
+      //std::shared_ptr<TH1I*> m_eleCutflow; // = new std::shared_ptr<TH1I*>("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //std::shared_ptr<TH1I*> m_muCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //std::shared_ptr<TH1I*> m_jetCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //std::shared_ptr<TH1I*> m_tauCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+
     private:
       ///-- Some additional custom variables for the output --///
   ///The file where everything goes
@@ -78,10 +92,10 @@ using CP::MuonSelectionTool;
       bool m_doSystematics;
       bool m_doSFSystematics;
 
-      TH1* m_eleCutflow;
-      TH1* m_muCutflow;
-      TH1* m_jetCutflow;
-      TH1* m_tauCutflow;
+      //TH1* m_eleCutflow;
+      //TH1* m_muCutflow;
+      //TH1* m_jetCutflow;
+      //TH1* m_tauCutflow;
 
   ///Scale factors
       std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;

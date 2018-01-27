@@ -8,6 +8,7 @@
 #include "TopEventSelectionTools/EventSelectorBase.h"
 #include "TopConfiguration/TopConfig.h"
 #include "ttHMultilepton/Variables.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "AsgTools/AsgTool.h"
 #include "AsgTools/ToolHandle.h"
 #include "ttHMultilepton/ttHMLAsgHelper.h"
@@ -31,7 +32,6 @@ class SelectTaus:public top::EventSelectorBase {
  // std::string name;
   std::string m_taus;
   std::string m_params;
-
 
 };
 

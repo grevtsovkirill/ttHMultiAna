@@ -11,6 +11,7 @@
 #include "AsgTools/AsgTool.h"
 #include "AsgTools/ToolHandle.h"
 #include "ttHMultilepton/ttHMLAsgHelper.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "xAODEgamma/ElectronContainer.h"
 #include <unordered_map>
 
