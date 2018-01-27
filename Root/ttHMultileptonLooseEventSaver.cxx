@@ -25,6 +25,11 @@
 
 #include <TRandom3.h>
 
+//Define global cutflow hists, so they can be accessed by selectors
+TH1I* m_eleCutflow; 
+TH1I* m_muCutflow; 
+TH1I* m_jetCutflow;
+TH1I* m_tauCutflow;
 
   ///-- Constrcutor --///
   ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
@@ -140,22 +145,23 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   }
 
   //Cutflow histograms
-  m_eleCutflow = new TH1I("eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+  m_eleCutflow = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+  std::cout << "setting bin names" << std::endl;
   int idx = 1;
   for (const auto& label : { "initial", "pt", "eta", "ident", "z0sinth", "d0sig", "iso", "e-#mu OR", "e-e OR"}) {
     m_eleCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-  m_muCutflow = new TH1I("muCutflow", "Muon cutflow", 10, 0.5, 10.5);
+  m_muCutflow = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
   idx = 1;
   for (const auto& label : { "initial", "eta/qual", "pt", "z0sinth", "d0sig", "iso", "#mu-jet OR"}) {
     m_muCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-  m_jetCutflow = new TH1I("jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
+  m_jetCutflow = new TH1I("m_jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
   idx = 1;
-  for (const auto& label : { "initial", "cleaning", "pt", "eta", "jvt", "jet-e OR", "jet-#tau OR"}) {
+  for (const auto& label : { "initial", "cleaning", "pt", "eta", "jvt", "pt-eta", "jet-e OR", "jet-#tau OR"}) {
     m_jetCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-  m_tauCutflow = new TH1I("tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
+  m_tauCutflow = new TH1I("m_tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
   idx = 1;
   for (const auto& label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "EleOLR", "#tau-e,#mu OR"}) {
     m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);

@@ -3,13 +3,14 @@
 */
 
 #include "ttHMultilepton/SelectMuons.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
 #include "TLorentzVector.h"
 #include <sstream>
 #include <algorithm>
 #include "xAODMuon/MuonContainer.h"
 #include "TopEvent/EventTools.h"
-
+#include "TH1.h"
 
 //#include <AthContainers/ConstDataVector.h>
 #include "AsgTools/AsgTool.h"
@@ -33,7 +34,6 @@ SelectMuons::SelectMuons(std::string params,std::shared_ptr<top::TopConfig> conf
    }
   m_params=params;
   m_Muons="SelectedMuons";
-
 }
 
 SelectMuons::~SelectMuons(){
@@ -55,19 +55,26 @@ bool SelectMuons::apply(const top::Event & event) const{
   std::shared_ptr<ttHML::Variables> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
 
   for (const auto muItr : event.m_muons) {
+    event.m_ttreeIndex == 0 && m_muCutflow->Fill(1);
     auto abseta = fabs(muItr->eta());
     if (!(abseta < 2.5 && muonSelection.getQuality(*muItr) <= xAOD::Muon::Loose && muonSelection.passedIDCuts(*muItr))) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_muCutflow->Fill(2);
     if (muItr->pt() < 10e3) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_muCutflow->Fill(3);
     if (fabs(muItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_muCutflow->Fill(4);
     if (fabs(muItr->auxdataConst<float>("d0sig")) > 10) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_muCutflow->Fill(5);
+    //old iso cut, maybe no longer necessary?
+    event.m_ttreeIndex == 0 && m_muCutflow->Fill(6);
     tthevt-> selected_muons->push_back(muItr);
   }
   std::sort (tthevt->selected_muons->begin(), tthevt->selected_muons->end(), ttHMLAsgHelper::pt_sort());

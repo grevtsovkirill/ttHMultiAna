@@ -3,13 +3,14 @@
 */
 
 #include "ttHMultilepton/SelectJets.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
 #include "TLorentzVector.h"
 #include <sstream>
 #include <algorithm>
 #include "xAODJet/JetContainer.h"
 #include "TopEvent/EventTools.h"
-
+#include "TH1.h"
 
 //#include <AthContainers/ConstDataVector.h>
 #include "AsgTools/AsgTool.h"
@@ -31,7 +32,6 @@ SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config
    }
   m_params=params;
   m_jets="SelectedJets";
-
 }
 
 SelectJets::~SelectJets(){
@@ -52,27 +52,32 @@ bool SelectJets::apply(const top::Event & event) const{
 
   std::shared_ptr<ttHML::Variables> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
 
-
-
   for (const auto jetItr : event.m_jets) {
+    event.m_ttreeIndex == 0 && m_jetCutflow->Fill(1);
     if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_jetCutflow->Fill(2);
     if (jetItr->pt() < 25e3) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_jetCutflow->Fill(3);
     if (fabs(jetItr->eta()) > 2.5) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_jetCutflow->Fill(4);
     if (jetItr->pt() < 60e3
       && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4)
       continue;
+    event.m_ttreeIndex == 0 && m_jetCutflow->Fill(5);
     if (jetItr->isAvailable<float>("AnalysisTop_JVT")) {
       if(jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59)
       continue;
     }
+    event.m_ttreeIndex == 0 && m_jetCutflow->Fill(6);
     tthevt->selected_jets->push_back(jetItr);
   }
+
   std::sort (tthevt->selected_jets->begin(), tthevt->selected_jets->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_jets,"Selected_jets"), "recording Selected_jets failed.");
 

@@ -3,13 +3,14 @@
 */
 
 #include "ttHMultilepton/SelectElectrons.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
 #include "TLorentzVector.h"
 #include <sstream>
 #include <algorithm>
 #include "xAODEgamma/ElectronContainer.h"
 #include "TopEvent/EventTools.h"
-
+#include "TH1.h"
 
 //#include <AthContainers/ConstDataVector.h>
 #include "AsgTools/AsgTool.h"
@@ -62,31 +63,37 @@ bool SelectElectrons::apply(const top::Event & event) const{
  // goodElectrons->SG::setStore(goodElectronsAux);
 
   for (const auto elItr : event.m_electrons) {
+    // Fill only for nominal tree
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(1);
     if (elItr->pt() < 10e3) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(2);
     auto abseta = fabs(elItr->caloCluster()->etaBE(2));
     if (!(abseta < 1.37 || (1.52 < abseta && abseta < 2.47))) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(3);
     if (!elItr->auxdataConst<int>("passLHLoose")) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(4);
     if (fabs(elItr->auxdataConst<float>("delta_z0_sintheta")) > 2) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(5);
     if (fabs(elItr->auxdataConst<float>("d0sig")) > 10) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(6);
+    //old iso cut, maybe no longer necessary?
+    event.m_ttreeIndex == 0 && m_eleCutflow->Fill(7);
     tthevt->selected_electrons->push_back(elItr);
   }
 
   std::sort (tthevt->selected_electrons->begin(), tthevt->selected_electrons->end(), ttHMLAsgHelper::pt_sort());
  // m_asgHelper->RecordElectrons(tthevt->selected_electrons,m_electrons);
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_electrons,"Selected_Electrons"), "recording Selected_Electrons failed.");
-
-
-
 
   //m_asgHelper->getElectronContainer(elname);
   //tthevt->GetElectronContainer(elname);

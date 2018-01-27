@@ -3,13 +3,14 @@
 */
 
 #include "ttHMultilepton/SelectTaus.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
 #include "TLorentzVector.h"
 #include <sstream>
 #include <algorithm>
 #include "xAODTau/TauJetContainer.h"
 #include "TopEvent/EventTools.h"
-
+#include "TH1.h"
 
 //#include <AthContainers/ConstDataVector.h>
 #include "AsgTools/AsgTool.h"
@@ -29,7 +30,7 @@ SelectTaus::SelectTaus(std::string params,std::shared_ptr<top::TopConfig> config
    }
   m_params=params;
   m_taus="SelectedTaus";
-
+  //m_evtSaver = new ttHMultileptonLooseEventSaver();
 }
 
 SelectTaus::~SelectTaus(){
@@ -49,28 +50,37 @@ bool SelectTaus::apply(const top::Event & event) const{
  }
 
   std::shared_ptr<ttHML::Variables> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
+  
   for (const auto tauItr : event.m_tauJets) {
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(1);
     if (abs(tauItr->charge()) != 1) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(2);
     if (!(tauItr->nTracks() == 1 || tauItr->nTracks() == 3)) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(3);
     auto abseta = fabs(tauItr->eta());
     if (!(abseta < 1.37 || (1.52 < abseta && abseta < 2.5))) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(4);
     if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(5);
     if (tauItr->pt() < 25e3) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(6);
     if ( !( tauItr->auxdata<int>("passEleBDT") ) ) {
       continue;
     }
+    event.m_ttreeIndex == 0 && m_tauCutflow->Fill(7);
     tthevt->selected_taus->push_back(tauItr);
   }
+  
   std::sort (tthevt->selected_taus->begin(), tthevt->selected_taus->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_taus,"Selected_taus"), "recording Selected_taus failed.");
 

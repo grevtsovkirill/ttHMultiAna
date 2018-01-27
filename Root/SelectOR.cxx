@@ -3,6 +3,7 @@
 */
 
 #include "ttHMultilepton/SelectOR.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 
 #include "TLorentzVector.h"
 #include <sstream>
@@ -16,11 +17,17 @@
 #include "AsgTools/ToolHandle.h"
 #include "ttHMultilepton/ttHMLAsgHelper.h"
 
-//ASG OR
-#include "AssociationUtils/OverlapRemovalInit.h"
-#include "xAODPFlow/PFO.h"
-#include "xAODPFlow/PFOContainer.h"
-#include "xAODPFlow/PFOAuxContainer.h"
+
+template<typename T> int CountPassOR(ConstDataVector<DataVector<T> >& vec, bool doTauOR = false) {
+  int rv = 0;
+  for (const auto iItr : vec) {
+    if (iItr->template auxdataConst<char>("ttHpassOVR") && (!doTauOR || iItr->template auxdataConst<char>("ttHpassTauOVR") ) ) {
+      rv++;
+    }
+  }
+  return rv;
+}
+
 
 SelectOR::SelectOR(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
@@ -60,10 +67,10 @@ bool SelectOR::apply(const top::Event & event) const{
   std::shared_ptr<ttHML::Variables> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
   //std::string elname = m_config->sgKeyOR();
 
-  auto goodEl = tthevt->selected_electrons; //event.m_electrons;
-  auto goodMu = tthevt->selected_muons; //event.m_muons;
-  auto goodJet = tthevt->selected_jets; //event.m_jets;
-  auto goodTau = tthevt->selected_taus; //event.m_tauJets;
+  auto goodEl = tthevt->selected_electrons;
+  auto goodMu = tthevt->selected_muons; 
+  auto goodJet = tthevt->selected_jets; 
+  auto goodTau = tthevt->selected_taus; 
 
   for (const auto elItr : *goodEl) {
     elItr->auxdecor<char>("ttHpassOVR") = 1;
@@ -89,7 +96,7 @@ bool SelectOR::apply(const top::Event & event) const{
       }
     }
   }
-  //fillCutflow &&m_eleCutflow->Fill(8, CountPassOR(*goodEl));
+  event.m_ttreeIndex == 0 && m_eleCutflow->Fill(8, CountPassOR(*goodEl));
 
   //If two electron candidates within 0.1 of each other: remove the one with lower pt 
   for (size_t i1 = 0; i1 < goodEl->size(); ++i1) {
@@ -113,7 +120,7 @@ bool SelectOR::apply(const top::Event & event) const{
     }
   }
   // now done later
-  //fillCutflow &&m_eleCutflow->Fill(9, CountPassOR(goodEl));
+  event.m_ttreeIndex == 0 && m_eleCutflow->Fill(9, CountPassOR(*goodEl));
 
   //if an electron and a jet are within 0.3 of each other: remove the jet 
   for (const auto jetItr : *goodJet) {
@@ -128,7 +135,7 @@ bool SelectOR::apply(const top::Event & event) const{
       }
     }
   }
-  //fillCutflow &&m_jetCutflow->Fill(6, CountPassOR(*goodJet));
+  event.m_ttreeIndex == 0 && m_jetCutflow->Fill(7, CountPassOR(*goodJet));
 
   //if a muon and a jet are within 0.04+10[GeV]/pT(muon) of each other: remove the muon
   /*for (const auto jetItr : *goodJet) {
@@ -163,7 +170,7 @@ bool SelectOR::apply(const top::Event & event) const{
   }
 
   // now done later
-  //fillCutflow &&m_muCutflow->Fill(7, CountPassOR(*goodMu));
+  event.m_ttreeIndex == 0 && m_muCutflow->Fill(7, CountPassOR(*goodMu));
 
   //if an electron and a tau are within 0.2 of each other: remove the tau
   for (const auto tauItr : *goodTau) {
@@ -197,8 +204,8 @@ bool SelectOR::apply(const top::Event & event) const{
       }
     }
   }
-  //fillCutflow &&m_tauCutflow->Fill(8, CountPassOR(*goodTau));
-  //fillCutflow &&m_jetCutflow->Fill(7, CountPassOR(*goodJet));
+  event.m_ttreeIndex == 0 && m_tauCutflow->Fill(8, CountPassOR(*goodTau));
+  event.m_ttreeIndex == 0 && m_jetCutflow->Fill(8, CountPassOR(*goodJet));
   
   for (const auto elItr : *goodEl) {
     if (elItr->auxdataConst<char>("ttHpassOVR")) {
@@ -227,11 +234,6 @@ jetItr->auxdataConst<char>("ttHpassTauOVR");
       
     }
   }
-
-  // m_eleCutflow->Fill(8, newGoodEl->size());
-  // m_muCutflow->Fill(7, newGoodMu->size());
-  // m_jetCutflow->Fill(6, newGoodJet->size());
-  // m_tauCutflow->Fill(8, newGoodTau->size());
 
   std::sort (tthevt->selected_OR_electrons->begin(), tthevt->selected_OR_electrons->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_OR_electrons, "SelectedORElectrons"),"Could not record Selected Electrons after overlap removal");

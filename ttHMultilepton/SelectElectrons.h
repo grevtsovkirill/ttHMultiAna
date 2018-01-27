@@ -11,6 +11,7 @@
 #include "AsgTools/AsgTool.h"
 #include "AsgTools/ToolHandle.h"
 #include "ttHMultilepton/ttHMLAsgHelper.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "xAODEgamma/ElectronContainer.h"
 #include <unordered_map>
 
@@ -32,7 +33,6 @@ class SelectElectrons:public top::EventSelectorBase {
   mutable int nelec2;
   std::string m_electrons;
   std::string m_params;
-
 
 };
 
