@@ -472,7 +472,7 @@ void
 ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
   // don't actually copy anything ATM, just give yields of jets & btags
   m_ttHEvent->nJets_OR = goodJets.size();
-//  m_ttHEvent->nJets_OR_T = CountPassOR(*goodJets, true);
+  m_ttHEvent->nJets_OR_T = CountPassOR(*goodJets, true);
   m_ttHEvent->nTruthJets_OR = this->getNTruthJets(goodJets);
 
 
