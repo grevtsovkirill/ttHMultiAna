@@ -101,6 +101,8 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
   tree->makeOutputVariable(sublead_jetE,"sublead_jetE");
   tree->makeOutputVariable(selected_jetsOR, "selected_jets");
   tree->makeOutputVariable(selected_jets_TOR, "selected_jets_T");
+  tree->makeOutputVariable(selected_jetsOR_mv2c10_Ordrd,"selected_jets_mv2c10_Ordrd");
+  tree->makeOutputVariable(selected_jets_TOR_mv2c10_Ordrd,"selected_jets_T_mv2c10_Ordrd");
 
   // scale factors
   //  tree->makeOutputVariable(lepSFIDLoose, "lepSFIDLoose");

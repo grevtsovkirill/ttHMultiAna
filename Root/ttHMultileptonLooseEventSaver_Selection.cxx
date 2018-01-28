@@ -605,6 +605,19 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
     m_ttHEvent->sublead_jetPhi = p4s[1]->Phi();
     m_ttHEvent->sublead_jetE	= p4s[1]->E();
   }
+  
+  /*typedef std::tuple<double,  int> bWtSortvec_t;
+  std::vector<bWtSortvec_t> bWtSorter;
+  idx = 0;
+  for (const auto jetItr : goodJets) {
+    double mv2c(0);  
+    jetItr->btagging()->MVx_discriminant("MV2c10", mv2c);
+    bWtSorter.push_back(std::make_tuple(mv2c, idx++));
+  }
+  std::sort(bWtSorter.begin(), bWtSorter.end(),
+	      [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
+
+   MakeJetIndices(*goodJets,event.m_jets);*/
 }
 void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Lepton& lep){
   CopyIParticle(mu, lep);
@@ -964,26 +977,47 @@ int ttHMultileptonLooseEventSaver::getNTruthJets(const xAOD::JetContainer jetCol
 void
 ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets,
 					      const xAOD::JetContainer& allJets) {
+  typedef std::tuple<double,  int> bWtSortvec_t;
+  std::vector<bWtSortvec_t> OR_bWtSorter;
+  std::vector<bWtSortvec_t> OR_T_bWtSorter;
+
   m_ttHEvent->selected_jetsOR.clear();
   m_ttHEvent->selected_jets_TOR.clear();
-  for (const auto jetItr : goodJets) {
-    if (!jetItr->template auxdataConst<char>("ttHpassOVR")) continue;
-    auto& goodp4 = jetItr->p4();
-    bool found = false;
-    for (size_t idx = 0; idx < allJets.size(); ++idx) {
-      if (goodp4 == allJets[idx]->p4()) {
-	found = true;
-	m_ttHEvent->selected_jetsOR.push_back(idx);
-	if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) {
-	  m_ttHEvent->selected_jets_TOR.push_back(idx);
-	}
-	break;
-      }
-    }
-    if (!found) {
-      std::cerr << "Unable to find a jet match. Sad!" << std::endl;
-    }
+
+  m_ttHEvent->selected_jetsOR_mv2c10_Ordrd.clear();
+  m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.clear();
+
+  for (const auto jetItr : goodJets) 
+  {
+     double mv2c(0);  
+     jetItr->btagging()->MVx_discriminant("MV2c10", mv2c);
+
+     if (!jetItr->template auxdataConst<char>("ttHpassOVR")) continue;
+
+     auto& goodp4 = jetItr->p4();
+     bool found = false;
+     for (size_t idx = 0; idx < allJets.size(); ++idx) {
+        if (goodp4 == allJets[idx]->p4()) {
+	   found = true;
+ 	   OR_bWtSorter.push_back(std::make_tuple(mv2c, idx));
+	   m_ttHEvent->selected_jetsOR.push_back(idx);
+	   if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) 
+	   {
+	      m_ttHEvent->selected_jets_TOR.push_back(idx);
+ 	      OR_T_bWtSorter.push_back(std::make_tuple(mv2c,idx));
+	   }
+	   break;
+         }
+       }
+       if (!found) {
+          std::cerr << "Unable to find a jet match. Sad!" << std::endl;
+       }
   }
+  std::sort(OR_bWtSorter.begin(), OR_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
+  std::sort(OR_T_bWtSorter.begin(), OR_T_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
+  
+  for(auto itr: OR_bWtSorter) { m_ttHEvent->selected_jetsOR_mv2c10_Ordrd.push_back( std::get<1>(itr));}
+  for(auto itr: OR_T_bWtSorter) { m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.push_back( std::get<1>(itr)); }
 }
 
 
