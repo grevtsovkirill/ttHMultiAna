@@ -1248,7 +1248,9 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  if (m_runNumber >= 290000) {
+  if (m_runNumber >= 320000) {
+    m_runYear = 2017;
+  } else if (m_runNumber >=290000) {
     m_runYear = 2016;
   } else if (m_runNumber > 0) {
     m_runYear = 2015;

@@ -182,7 +182,7 @@ if (totleptons >= 2) {
 	m_ttHEvent->DRll[idx1][idx2-1] = p4s[idx1]->DeltaR(*p4s[idx2]);
         m_ttHEvent->matchDLTll[idx1][idx2-1] = ( (int)m_leptons[idx1].isTrigMatchDLT && (int)m_leptons[idx2].isTrigMatchDLT
           && std::max(m_leptons[idx1].Pt, m_leptons[idx2].Pt)
-          > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016)*23e3) );
+          > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016||m_runYear==2017)*23e3) );
 	// min Mll variables
 	if (m_leptons[idx1].ID * m_leptons[idx2].ID < 0) {
 	  if (m_ttHEvent->minOSMll == 0 || 
