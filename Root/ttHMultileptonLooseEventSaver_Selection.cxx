@@ -182,7 +182,7 @@ if (totleptons >= 2) {
 	m_ttHEvent->DRll[idx1][idx2-1] = p4s[idx1]->DeltaR(*p4s[idx2]);
         m_ttHEvent->matchDLTll[idx1][idx2-1] = ( (int)m_leptons[idx1].isTrigMatchDLT && (int)m_leptons[idx2].isTrigMatchDLT
           && std::max(m_leptons[idx1].Pt, m_leptons[idx2].Pt)
-          > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016)*23e3) );
+          > (abs(m_leptons[idx1].ID*m_leptons[idx2].ID)==169)*((m_runYear==2015)*19e3+(m_runYear==2016||m_runYear==2017)*23e3) );
 	// min Mll variables
 	if (m_leptons[idx1].ID * m_leptons[idx2].ID < 0) {
 	  if (m_ttHEvent->minOSMll == 0 || 
@@ -415,7 +415,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)));
   }
-  else if (m_runYear == 2016) {
+  else if (m_runYear == 2016 || m_runYear == 2017) {
     lep.isTrigMatch = ( el.pt() > 27e3 && (
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e26_lhtight_nod0_ivarloose", (char) 0) ||
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
@@ -430,6 +430,11 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   else if (m_runYear == 2016) {
     lep.isTrigMatchDLT = ( el.pt() > 18e3 && (
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e17_lhvloose_nod0"   , (char) 0) ||
+                                              returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
+  }
+  else if (m_runYear == 2017) {
+    lep.isTrigMatchDLT = ( el.pt() > 18e3 && (
+                                              returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e17_lhvloose_nod0_L12EM15VHI"   , (char) 0) ||
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
   } else {
     lep.isTrigMatchDLT = 0;
@@ -665,7 +670,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     lep.isTrigMatch = (mu.pt() > 21e3 && (
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
-  } else if (m_runYear == 2016) { // since period D4 on in 2016 data (high luminosity triggers)
+  } else if (m_runYear == 2016 || m_runYear == 2017) { // since period D4 on in 2016 data (high luminosity triggers)
     lep.isTrigMatch = (mu.pt() > 27e3 && (
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu26_ivarmedium", (char) 0) ||
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
@@ -676,7 +681,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu18_mu8noL1"    , (char) 0)) ||
 			   (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_mu14", (char) 0)) );
   }
-  else if (m_runYear == 2016) {
+  else if (m_runYear == 2016 || m_runYear == 2017) {
     lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu22_mu8noL1"         , (char) 0)) ||
                            (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)) );
   } else {
