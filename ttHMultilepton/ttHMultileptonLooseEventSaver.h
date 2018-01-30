@@ -20,6 +20,9 @@
 
 #include "AssociationUtils/ToolBox.h"
 
+//Isolation
+#include "IsolationSelection/IsolationSelectionTool.h"
+
 //#include "ttHMultilepton/TreeAssist.h"
 //#include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
@@ -34,7 +37,7 @@
 
 using namespace ttHML;
 using namespace xAOD;
-//using CP::IsolationSelectionTool;
+using CP::IsolationSelectionTool;
 using CP::MuonSelectionTool;
 //using TauAnalysisTools::TauSelectionTool;
 
@@ -92,15 +95,16 @@ using CP::MuonSelectionTool;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
-  MuonSelectionTool                      muonSelection;
+      IsolationSelectionTool                 iso_1;
+      MuonSelectionTool                      muonSelection;
 //  IsolationSelectionTool                 iso_1;
 //  ttH::TruthSelector                     truthSelector;
 //  TauSelectionTool                       m_tauSelectionEleOLR;
 //  TauSelectionTool                       m_tauSelectionEleBDT;
 //  TauSelectionTool                       m_tauSelectionMuonOLR;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
-  ORUtils::ToolBox                       m_ORtoolBox[3];
-  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
+      ORUtils::ToolBox                       m_ORtoolBox[3];
+      asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
   
   //Trigger Scale Factors -- NEW -- 
   // --> Electrons

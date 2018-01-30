@@ -61,6 +61,7 @@
     m_beam_sigmaz(-999),  
     m_pv(nullptr),
     m_runYear(0),
+    iso_1( "iso_1" ),
     muonSelection("MuonSelection"),
 //    m_HF_Classification(0.),
 //    m_HF_ClassificationTop(0.),
@@ -120,7 +121,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   m_outputFile = file;
   m_extraBranches = extraBranches;
   m_selectionDecisions.resize(m_extraBranches.size());
-
+  
   m_config = config;
 
   // dont mix MC and data in the same job
@@ -178,7 +179,17 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
 
-  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
+  top::check( iso_1.initialize(),"IsolationTool fails to initialize");
+  auto isolation_WPs = {"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
+  for (auto wp : isolation_WPs) {
+    top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
+    top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
+  }
+  /// special case for FixedCutTight (el only)
+  top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
+
+
+    //auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
   top::check( m_purwtool.retrieve() , "Failed to retrieve PileupReweightingTool" );
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
 std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
@@ -461,6 +472,7 @@ std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("sharesTrk"); },  *systematicTree, "electron_sharesTrk");
     }
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
+
 
     //non-prompt bdt vars
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
