@@ -25,6 +25,12 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
   m_config(config)
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
+    auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
+    for (auto wp : isolation_WPs) {
+      top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
+    }
+
+
   top::check( m_electronChargeIDLoose.setProperty("TrainingFile", "ElectronPhotonSelectorTools/ChargeID/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDLoose: Failed to set training file." );
   top::check( m_electronChargeIDLoose.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDLoose: Failed to set output level." );
   top::check( m_electronChargeIDLoose.initialize(), "ElectronChargeIDLoose: Failed to initialize." );
