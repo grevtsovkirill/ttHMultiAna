@@ -23,6 +23,10 @@ DecorateMuons::DecorateMuons(std::string params,std::shared_ptr<top::TopConfig> 
   m_config(config)
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
+    auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
+    for (auto wp : isolation_WPs) {
+      top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
+    }
  
 
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
