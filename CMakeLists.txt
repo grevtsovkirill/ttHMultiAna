@@ -26,7 +26,6 @@ atlas_depends_on_subdirs( PUBLIC
 			  Event/xAOD/xAODTracking
 		  	  Event/xAOD/xAODTruth
 			  Event/xAOD/xAODPFlow
-			  IsolationSelection
                           AsgTools )
 
 # This package uses ROOT:
