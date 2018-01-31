@@ -66,14 +66,19 @@ bool SelectJets::apply(const top::Event & event) const{
       continue;
     }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(4);
-    if (jetItr->pt() < 60e3
-      && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4)
+    
+    if( jetItr->auxdataConst<char>("passJVT")==0 ){ continue;}
+    
+
+    /*if (jetItr->pt() < 60e3  && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4)
       continue;
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(5);
     if (jetItr->isAvailable<float>("AnalysisTop_JVT")) {
-      if(jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59)
+	  if(jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59)
       continue;
-    }
+    }*/
+    
+
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(6);
     tthevt->selected_jets->push_back(jetItr);
   }

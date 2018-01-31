@@ -56,13 +56,15 @@ void ttHMLAsgHelper::getJetContainer(std::string name) {
     if(fabs(jet->eta()) > 2.5){
     continue;
     }
-    if (jet->pt() < 60e3
+    
+	if( jet->auxdataConst<char>("passJVT")==0 ){ continue;}
+    /*if (jet->pt() < 60e3
       && fabs(jet->getAttribute<float>("DetectorEta")) < 2.4)
       continue;
     if (jet->isAvailable<float>("AnalysisTop_JVT")) {
       if(jet->auxdataConst<float>("AnalysisTop_JVT") < 0.59)
       continue;
-    }
+    }*/
 
   selected_jets->push_back(jet);
   }

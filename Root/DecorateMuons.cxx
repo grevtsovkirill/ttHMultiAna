@@ -102,14 +102,17 @@ bool DecorateMuons::apply(const top::Event & event) const{
         if (fabs(jetItr->eta()) > 2.5) {
           continue;
         }
-        if (jetItr->pt() < 60e3
+        if( jetItr->auxdataConst<char>("passJVT")==0 ){
+		   continue;
+   		}
+        /*if (jetItr->pt() < 60e3
           && fabs(jetItr->getAttribute<float>("DetectorEta")) < 2.4) {
           continue;
         }
         if (jetItr->isAvailable<float>("AnalysisTop_JVT")) {
           if(jetItr->auxdataConst<float>("AnalysisTop_JVT") < 0.59)
             continue;
-        }
+        }*/
         float muJetDr = jetItr->p4().DeltaR(muItr->p4());
         if(smallestDr > muJetDr)
         {
