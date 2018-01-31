@@ -88,9 +88,9 @@ bool SelectOR::apply(const top::Event & event) const{
 
   //if an electron and muon candidate are within 0.1 of each other: remove the electron 
   for (const auto elItr : *goodEl) {
-    auto p4 = elItr->p4();
+     auto p4 = elItr->p4();
     for (const auto muItr : *goodMu) {
-       if (p4.DeltaR(muItr->p4()) < 0.1) {
+     if (p4.DeltaR(muItr->p4()) < 0.1) {
   	elItr->auxdecor<char>("ttHpassOVR") = 0;
   	break;
       }
@@ -106,7 +106,7 @@ bool SelectOR::apply(const top::Event & event) const{
     }
     auto p4 = elItr->p4();
     for (size_t i2 = i1+1; i2 < goodEl->size(); ++i2) {
-      auto elItr2 = goodEl->at(i2);
+    auto elItr2 = goodEl->at(i2);
       if (! elItr2->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
@@ -126,7 +126,7 @@ bool SelectOR::apply(const top::Event & event) const{
   for (const auto jetItr : *goodJet) {
     auto p4 = jetItr->p4();
     for (const auto elItr : *goodEl) {
-      if (! elItr->auxdataConst<char>("ttHpassOVR")) {
+    if (! elItr->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
      if (p4.DeltaR(elItr->p4()) < 0.3) {
@@ -160,6 +160,7 @@ bool SelectOR::apply(const top::Event & event) const{
     }
     auto p4 = jetItr->p4();
     for (const auto muItr : *goodMu) {
+      
       if (! muItr->auxdataConst<char>("ttHpassOVR")) {
   	continue;
       }
@@ -176,7 +177,7 @@ bool SelectOR::apply(const top::Event & event) const{
   for (const auto tauItr : *goodTau) {
     auto p4 = tauItr->p4();
     for (const auto elItr : *goodEl) {
-      if (! elItr->auxdataConst<char>("ttHpassOVR")) {
+     if (! elItr->auxdataConst<char>("ttHpassOVR")) {
 	continue;
       }
       if (p4.DeltaR(elItr->p4()) < 0.2) {
@@ -197,7 +198,7 @@ bool SelectOR::apply(const top::Event & event) const{
     //if a tau and a jet are within 0.3 of each other: remove the jet 
     if (tauItr->auxdataConst<char>("ttHpassOVR")) {
       for (const auto jetItr : *goodJet) {
-	// don't need additional protection here...
+    // don't need additional protection here...
 	if (p4.DeltaR(jetItr->p4()) < 0.3) {
 	  jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
 	}
@@ -209,7 +210,7 @@ bool SelectOR::apply(const top::Event & event) const{
   
   for (const auto elItr : *goodEl) {
     if (elItr->auxdataConst<char>("ttHpassOVR")) {
-      tthevt->selected_OR_electrons->push_back(elItr);
+     tthevt->selected_OR_electrons->push_back(elItr);
     }
   }
   for (const auto muItr : *goodMu) {
@@ -223,16 +224,15 @@ bool SelectOR::apply(const top::Event & event) const{
     //jetItr->auxdecor<char>("ttHJetOVRStatus") = jetItr->auxdataConst<char>("ttHpassOVR") + 
 jetItr->auxdataConst<char>("ttHpassTauOVR");
     if (jetItr->auxdataConst<char>("ttHpassOVR")) {
-      tthevt->selected_OR_jets->push_back(jetItr);
+     tthevt->selected_OR_jets->push_back(jetItr);
     }
   }
   for (const auto tauItr : *goodTau) {
     if (tauItr->auxdataConst<char>("ttHpassOVR")) {
 //      auto newTau = new xAOD::TauJet();
 //      newTau->makePrivateStore(*tauItr);
-      tthevt->selected_OR_taus->push_back(tauItr);
-      
-    }
+     tthevt->selected_OR_taus->push_back(tauItr);
+   }    
   }
 
   std::sort (tthevt->selected_OR_electrons->begin(), tthevt->selected_OR_electrons->end(), ttHMLAsgHelper::pt_sort());
