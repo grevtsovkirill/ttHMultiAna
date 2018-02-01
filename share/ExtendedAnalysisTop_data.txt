@@ -3,10 +3,10 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMult
 PRWConfigFiles dev/SUSYTools/merged_prw_mc16a_latest.root
 #PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
 
-PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root 
+PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root GoodRunsLists/data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root  
 
 GRLDir GoodRunsLists
-GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml
+GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -22,7 +22,7 @@ LooseMETCollectionName MET_Reference_AntiKt4EMTopo
 
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.root
+OutputFilename /afs/cern.ch/user/r/rpolifka/ttHSummer18/GFW1/run/output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
