@@ -1647,9 +1647,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     if (m_ttHEvent->total_leptons == 1 && m_ttHEvent->nTaus_OR_Pt25 <= 1)
       return; // remove all 1l1tau events
   } else { // Data and Nominal
-    std::cout << "Albert in loop non-systematic" << std::endl;
     if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 == 0){
-      std::cout << "Albert in if non-systematic" << std::endl;
       return; // remove all events with neither leptons nor taus
     }
   }
