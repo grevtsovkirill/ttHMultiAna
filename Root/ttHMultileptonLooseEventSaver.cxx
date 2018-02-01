@@ -1629,7 +1629,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     top::check( evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
-    MakeJetIndices(*Jets,event.m_jets);
+    //MakeJetIndices(*Jets,event.m_jets);
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
@@ -1658,12 +1658,29 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 
 
   if(m_doSystematics) {
+   for(auto alljet : event.m_jets) {
+      for(auto goodjet : *Jets) {
+	if( goodjet->p4() == alljet->p4() ) {
+	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
+	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
+	}
+      }
+    }
+
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
-   // MakeJetIndices(goodJet, event.m_jets);
+    MakeJetIndices(*Jets, event.m_jets);
   }
   else {
+   for(auto alljet : *calibratedJets) {
+      for(auto goodjet : *Jets ) {
+	if( goodjet->p4() == alljet->p4() ) {
+	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
+	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
+	}
+      }
+    }
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
-  //  MakeJetIndices(goodJet, *calibratedJets);
+    MakeJetIndices(*Jets, *calibratedJets);
   }
 
   // xAOD::ElectronContainer* calibratedElectrons(nullptr);
@@ -1672,13 +1689,6 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   // vec_electron_wrappers[event.m_ttreeIndex].push_selected(*calibratedElectrons, elecSelector);
 
 
-  std::cout << "Saving Run# : " << event.m_info->runNumber() << "\tEvent# : " << event.m_info->eventNumber() << std::endl;
-  for(auto allel : event.m_electrons) {
-    std::cout << "Electrons: " << allel << std::endl;
-  }
-  for(auto allmu : event.m_muons) {
-    std::cout << "Muons: " << allmu << std::endl;
-  }
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
