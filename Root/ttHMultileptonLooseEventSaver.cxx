@@ -1226,7 +1226,6 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     return;
   }
 
- std::cout << "\nAlbert Run# : " << event.m_info->runNumber() << "\tEvent# : " << event.m_info->eventNumber() << std::endl;
  
 /*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
