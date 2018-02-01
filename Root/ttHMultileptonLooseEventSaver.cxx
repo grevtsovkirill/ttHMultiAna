@@ -1226,6 +1226,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     return;
   }
 
+ std::cout << "\nAlbert Run# : " << event.m_info->runNumber() << "\tEvent# : " << event.m_info->eventNumber() << std::endl;
  
 /*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
@@ -1595,6 +1596,24 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   if(!m_doSystematics){
     vec_vtx_wrappers[event.m_ttreeIndex].push_all(*m_vertices);
   }
+
+
+  // for skimming of Sys, Data and Nominal after overlap removal
+/*  if (m_doSystematics) { // Sys
+    if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 < 2)
+      return; // remove all events with less than 2 leptons (including taus)
+    if (m_ttHEvent->total_leptons == 2 && m_ttHEvent->total_charge == 0 && m_ttHEvent->nTaus_OR_Pt25 == 0)
+      return; // remove all 2l opposite sign 0 tau events
+    if (m_ttHEvent->total_leptons == 1 && m_ttHEvent->nTaus_OR_Pt25 <= 1)
+      return; // remove all 1l1tau events
+  } else { // Data and Nominal
+    std::cout << "Albert in loop non-systematic" << std::endl;
+ 	if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 == 0){
+      std::cout << "Albert in if non-systematic" << std::endl;
+      return; // remove all events with neither leptons nor taus
+    }
+  }
+*/
 //////////////////////////////////////////////////////
 
 
@@ -1618,6 +1637,26 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
  xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
 
+
+  // for skimming of Sys, Data and Nominal after overlap removal
+  if (m_doSystematics) { // Sys
+    if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 < 2)
+      return; // remove all events with less than 2 leptons (including taus)
+    if (m_ttHEvent->total_leptons == 2 && m_ttHEvent->total_charge == 0 && m_ttHEvent->nTaus_OR_Pt25 == 0)
+      return; // remove all 2l opposite sign 0 tau events
+    if (m_ttHEvent->total_leptons == 1 && m_ttHEvent->nTaus_OR_Pt25 <= 1)
+      return; // remove all 1l1tau events
+  } else { // Data and Nominal
+    std::cout << "Albert in loop non-systematic" << std::endl;
+    if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 == 0){
+      std::cout << "Albert in if non-systematic" << std::endl;
+      return; // remove all events with neither leptons nor taus
+    }
+  }
+
+
+
+
   if(m_doSystematics) {
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
    // MakeJetIndices(goodJet, event.m_jets);
@@ -1632,6 +1671,14 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   // std::function<bool(const xAOD::Electron&)>elecSelector = [](const xAOD::Electron& el){ return el.auxdataConst<int>("passLHLoose") && el.pt()>5e3 ; };
   // vec_electron_wrappers[event.m_ttreeIndex].push_selected(*calibratedElectrons, elecSelector);
 
+
+  std::cout << "Saving Run# : " << event.m_info->runNumber() << "\tEvent# : " << event.m_info->eventNumber() << std::endl;
+  for(auto allel : event.m_electrons) {
+    std::cout << "Electrons: " << allel << std::endl;
+  }
+  for(auto allmu : event.m_muons) {
+    std::cout << "Muons: " << allmu << std::endl;
+  }
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
