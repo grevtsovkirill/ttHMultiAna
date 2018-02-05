@@ -6,7 +6,7 @@
 
 #define MAXSYST 50
 
-namespace ttHMultilepton {
+namespace ttHML {
   enum LepType { ELECTRON, MUON, GENERIC };
   struct Lepton
   {
@@ -123,7 +123,7 @@ namespace ttHMultilepton {
     float   chargeIDBDTLoose;
     float   chargeIDBDTMedium;
     float   chargeIDBDTTight;
-    float   promptLeptonIso_TagWeight;
+    //float   promptLeptonIso_TagWeight;
     short   promptLeptonIso_sv1_jf_ntrkv;
     short   promptLeptonIso_TrackJetNTrack;
     float   promptLeptonIso_ip2;
@@ -132,7 +132,9 @@ namespace ttHMultilepton {
     float   promptLeptonIso_LepJetPtFrac;
     float   promptLepton_TagWeight;
     float   promptLeptonNoIso_TagWeight;
-    
+    float   promptLeptonIso_TagWeight;
+    float	promptLeptonVeto_TagWeight;    
+
     char    isTruthMatched;
 
 
@@ -169,7 +171,7 @@ namespace ttHMultilepton {
 
     float   EffTrigLoose[MAXSYST];
     float   EffTrigTight[MAXSYST];
-
+    int AmbiguityType;
     int nInnerPix;
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
@@ -181,3 +183,4 @@ namespace ttHMultilepton {
   };
 }
 #endif
+

@@ -6,7 +6,7 @@
 
 #define MAXSYST 50
 
-namespace ttHMultilepton {
+namespace ttHML {
 
   struct Tau {
     float pt;
@@ -36,3 +36,4 @@ namespace ttHMultilepton {
   };
 }
 #endif
+

@@ -1,16 +1,51 @@
-#ifndef ttHMultilepton_Variables
-#define ttHMultilepton_Variables 1
+
+#ifndef _EVENT_H_
+#define _EVENT_H_
+
+
+#include "AsgTools/AsgTool.h"
+#include "xAODJet/JetContainer.h"
+#include "xAODEgamma/ElectronContainer.h"
+#include "xAODMuon/MuonContainer.h"
+#include "xAODTau/TauJetContainer.h"
+#include "xAODEventInfo/EventInfo.h"
+#include "xAODTracking/VertexContainer.h"
+#include "xAODTruth/xAODTruthHelpers.h"
+
+
 #include "TopEventSelectionTools/TreeManager.h"
+#include "ttHMultilepton/EventData.h"
+#include <vector>
 #include <memory>
+
 #define LEPTON_ARR_SIZE 5
 #define TAU_ARR_SIZE 2
 #define MAXSYST 50
 
-class ttHMultileptonLooseEventSaver;
+namespace ttHML {
+    struct Variables {
+    public:
 
-namespace ttHMultilepton {
-  struct Variables {
-    int onelep_type;
+      Variables();
+      virtual ~Variables();
+    
+
+    ConstDataVector<xAOD::JetContainer> * selected_jets   =  new ConstDataVector<xAOD::JetContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::ElectronContainer> * selected_electrons = new ConstDataVector<xAOD::ElectronContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::MuonContainer> * selected_muons = new ConstDataVector<xAOD::MuonContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::TauJetContainer> * selected_taus = new ConstDataVector<xAOD::TauJetContainer>(SG::VIEW_ELEMENTS);
+
+    ConstDataVector<xAOD::JetContainer> * selected_OR_jets   =  new ConstDataVector<xAOD::JetContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::ElectronContainer> * selected_OR_electrons = new ConstDataVector<xAOD::ElectronContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::MuonContainer> * selected_OR_muons = new ConstDataVector<xAOD::MuonContainer>(SG::VIEW_ELEMENTS);
+    ConstDataVector<xAOD::TauJetContainer> * selected_OR_taus = new ConstDataVector<xAOD::TauJetContainer>(SG::VIEW_ELEMENTS);
+
+
+    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFSystematics);
+    std::shared_ptr<ttHML::EventData> m_info;
+    void clearReco();
+    void Clear();
+	  int onelep_type;
     int dilep_type;
     int trilep_type;
     int quadlep_type;
@@ -82,11 +117,18 @@ namespace ttHMultilepton {
     float lepSFObjTight[MAXSYST];
     float tauSFTight[MAXSYST];
     float tauSFLoose[MAXSYST];
-    std::vector<short> selected_jets;
-    std::vector<short> selected_jets_T;
-    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler, bool doSFSystematics);
-    void Clear() { memset(this, 0, sizeof(Variables)); }
-  };
+    std::vector<short> selected_jetsOR;
+    std::vector<short> selected_jets_TOR; 
+    std::vector<short> selected_jetsOR_mv2c10_Ordrd; 
+    std::vector<short> selected_jets_TOR_mv2c10_Ordrd;
+
+
+
+    private:
+
+};
+
 }
 
 #endif
+

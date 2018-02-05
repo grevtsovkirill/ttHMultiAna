@@ -1,207 +1,163 @@
-#ifndef TTHMULTILEPTONLOOSEEVENTSAVER_H_
-#define TTHMULTILEPTONLOOSEEVENTSAVER_H_
+/*
+  Copyright (C) 2002-2017 CERN for the benefit of the ATLAS collaboration
+*/
 
-// Trigger
-#include "TrigDecisionTool/TrigDecisionTool.h"
+#ifndef ttHMultilepton_ttHMultileptonLooseEventSaver_H
+#define ttHMultilepton_ttHMultileptonLooseEventSaver_H
 
-// CP tools
-#include "AsgTools/ToolHandle.h"
-#include "ElectronPhotonSelectorTools/AsgElectronChargeIDSelectorTool.h"
-#include "MuonSelectorTools/MuonSelectionTool.h"
-#include "JetInterface/IJetSelector.h"
-#include "PileupReweighting/PileupReweightingTool.h"
-#include "TauAnalysisTools/TauSelectionTool.h"
-#include "AssociationUtils/ToolBox.h"
-#include "AssociationUtils/IOverlapRemovalTool.h"
-
-// xAOD
-#include "xAODEgamma/EgammaxAODHelpers.h"
-#include "xAODTracking/VertexContainer.h"
-#include "xAODTruth/xAODTruthHelpers.h"
-#include "xAODEventInfo/EventInfo.h"
-#include "xAODJet/JetContainer.h"
-#include "xAODTau/TauJetContainer.h"
-#include "xAODRootAccess/Init.h"
-#include "xAODRootAccess/TEvent.h"
-#include "xAODRootAccess/TStore.h"
-
-//Isolation
-#include "IsolationSelection/IsolationSelectionTool.h"
-
-//Sherpa 2.2 reweight
-#include "PMGTools/PMGSherpa22VJetsWeightTool.h"
-
-// EDM include(s):
-#include "xAODEgamma/ElectronContainer.h"
-#include "xAODMuon/MuonContainer.h"
-#include "ElectronEfficiencyCorrection/IAsgElectronEfficiencyCorrectionTool.h"
-#include "PATCore/PATCoreEnums.h"
-#include "MuonEfficiencyCorrections/MuonTriggerScaleFactors.h"
-#include "AsgTools/AnaToolHandle.h"
-//#include "xAODCore/​ShallowCopy.h"
-
-// Trigger SF tool per Event:
-#include "TriggerAnalysisInterfaces/ITrigGlobalEfficiencyCorrectionTool.h"
-#include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
-
-
-// Local and Top analysis
+#include "TopAnalysis/EventSaverFlatNtuple.h"
+#include "ttHMultilepton/Variables.h"
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopCorrections/ScaleFactorRetriever.h"
 #include "TopDataPreparation/SampleXsection.h"
-#include "ttHMultilepton/TreeAssist.h"
-#include "ttHMultilepton/TruthSelector.h"
+#include "TrigDecisionTool/TrigDecisionTool.h"
+#include "PMGTools/PMGSherpa22VJetsWeightTool.h"
+#include "PileupReweighting/PileupReweightingTool.h"
+#include "MuonSelectorTools/MuonSelectionTool.h"
+#include "JetInterface/IJetSelector.h"
+
+#include "AssociationUtils/IOverlapRemovalTool.h"
+
+#include "AssociationUtils/ToolBox.h"
+
+//#include "ttHMultilepton/TreeAssist.h"
+//#include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
 #include "ttHMultilepton/Tau.h"
-#include "ttHMultilepton/Variables.h"
-#include "ttHMultilepton/TruthMatchAlgo.h"
-#include "ttHMultilepton/ClassifyHF.h"
-
-//root
+#include "ttHMultilepton/TreeAssist.h"
 #include <TH1F.h>
 #include <TString.h>
 #include <random>
 #include <algorithm>
 
+
+
+using namespace ttHML;
 using namespace xAOD;
-using namespace ttHMultilepton;
-using CP::IsolationSelectionTool;
+//using CP::IsolationSelectionTool;
 using CP::MuonSelectionTool;
-using TauAnalysisTools::TauSelectionTool;
+//using TauAnalysisTools::TauSelectionTool;
 
-class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
- friend class ttHMultilepton::Variables;
- friend class ttHMultilepton::ClassifyHF; // not working with p2879
- public:
-  //Default - so root can load based on a name
-  ttHMultileptonLooseEventSaver();
+extern TH1I* m_eleCutflow;
+extern TH1I* m_muCutflow;
+extern TH1I* m_jetCutflow;
+extern TH1I* m_tauCutflow;
 
-  //Default - so we can clean up
-  ~ttHMultileptonLooseEventSaver();
+  class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
+    public:
+      ///-- Default constrcutor with no arguments - needed for ROOT --///
+      ttHMultileptonLooseEventSaver();
+      ///-- Destructor does nothing --///
+      virtual ~ttHMultileptonLooseEventSaver(){}
+      
+      ///-- initialize function for top::EventSaverFlatNtuple --///
+      ///-- We will be setting up out custom variables here --///
+      virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) override;
+      
+      ///-- Keep the asg::AsgTool happy --///
+      virtual StatusCode initialize() override {return StatusCode::SUCCESS;}      
+      
+      ///-- saveEvent function for top::EventSaverFlatNtuple --///
+      ///-- We will be setting our custom variables on a per-event basis --///
+      virtual void saveEvent(const top::Event& event) override;
+      void CopyLeptons(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons);
+      void CopyJets(const xAOD::JetContainer& Jets);
+      void MakeJetIndices(const xAOD::JetContainer& goodJets,const xAOD::JetContainer& allJets);
+      void CopyTaus(const xAOD::TauJetContainer& Taus);
+      void CheckIsBlinded();
+      void CopyHT(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::JetContainer& goodJets, const xAOD::TauJetContainer& goodTaus);
+      void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
+      int getNTruthJets(const xAOD::JetContainer jetColl);
+      int getNInnerPix(const xAOD::Electron& el);
+      int getNInnerPix(const xAOD::Muon& mu);
 
-  //Run once at the start of the job
-  virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches);
+      //extern TH1I* m_eleCutflow;// = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //extern TH1I* m_muCutflow;// = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
+      //extern TH1I* m_jetCutflow;// = new TH1I("m_jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
+      //extern TH1I* m_tauCutflow;//  = new TH1I("m_tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
 
-  //Keep the asg::AsgTool happy
-  virtual StatusCode initialize(){return StatusCode::SUCCESS;}
+      //std::shared_ptr<TH1I*> m_eleCutflow; // = new std::shared_ptr<TH1I*>("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //std::shared_ptr<TH1I*> m_muCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //std::shared_ptr<TH1I*> m_jetCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+      //std::shared_ptr<TH1I*> m_tauCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
 
-  //Run for every event (in every systematic) that needs saving
-  void saveEvent(const top::Event& event);
-
-  void saveTruthEvent();
-
-  // IGNORE
-  void saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent);
-
-  void finalize();
-
-  void Decorate(const top::Event& event);
-  std::shared_ptr<xAOD::ElectronContainer> SelectElectrons(const top::Event& event);
-  std::shared_ptr<xAOD::MuonContainer> SelectMuons(const top::Event& event);
-  std::shared_ptr<xAOD::JetContainer> SelectJets(const top::Event& event);
-  std::shared_ptr<xAOD::TauJetContainer> SelectTaus(const top::Event& event);
-  void OverlapRemoval(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow);
-  // here we just remove the objects from the containers
-  void OverlapRemoval_ContOnly(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<JetContainer>& goodJet, std::shared_ptr<TauJetContainer>& goodTau, bool fillCutflow);
-  void CopyLeptons(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu);
-  void CopyJets(std::shared_ptr<xAOD::JetContainer>& goodJet);
-  void CopyTaus(std::shared_ptr<xAOD::TauJetContainer>& goodTau);
-  void CheckIsBlinded();
-  void CopyHT(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, std::shared_ptr<xAOD::JetContainer>& goodJet, std::shared_ptr<xAOD::TauJetContainer>& goodTau);
-  void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
-  std::string betterBtagNamedSyst (const std::string WP);
-  template <class T> T getattr_truthJet(const xAOD::Jet &jet, std::string  attr) {
-    T attr_value = -99;
-    if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink")
-        && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid()) {
-      const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
-      if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<T>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
-    }
-    return attr_value;
-  }
-
-  int getNTruthJets(std::shared_ptr<xAOD::JetContainer> jetColl);
-  int getNInnerPix(const xAOD::Electron& el);
-  int getNInnerPix(const xAOD::Muon& mu);
-
-  void DecorateTaus(const top::Event& event);
-
- private:
+    private:
+      ///-- Some additional custom variables for the output --///
   ///The file where everything goes
-  TFile* m_outputFile;
+      TFile* m_outputFile;
 
   //unique sys names for selected object containers
-  std::string m_sysName;
-  std::shared_ptr<top::TopConfig> m_config;
-  bool m_doSystematics;
-  bool m_doSFSystematics;
+      std::string m_sysName;
+      std::shared_ptr<top::TopConfig> m_config;
+      bool m_doSystematics;
+      bool m_doSFSystematics;
 
-  TH1* m_eleCutflow;
-  TH1* m_muCutflow;
-  TH1* m_jetCutflow;
-  TH1* m_tauCutflow;
+      //TH1* m_eleCutflow;
+      //TH1* m_muCutflow;
+      //TH1* m_jetCutflow;
+      //TH1* m_tauCutflow;
 
   ///Scale factors
-  std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
+      std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
 
-  ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
-  ToolHandle<CP::IPileupReweightingTool> m_purwtool;
-  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
-  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
-  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
-  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
+      ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
+      ToolHandle<CP::IPileupReweightingTool> m_purwtool;
+      ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
+//  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
+//  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
+//  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
   MuonSelectionTool                      muonSelection;
-  IsolationSelectionTool                 iso_1;
-  ttH::TruthSelector                     truthSelector;
-  TauSelectionTool                       m_tauSelectionEleOLR;
-  TauSelectionTool                       m_tauSelectionEleBDT;
-  TauSelectionTool                       m_tauSelectionMuonOLR;
+//  IsolationSelectionTool                 iso_1;
+//  ttH::TruthSelector                     truthSelector;
+//  TauSelectionTool                       m_tauSelectionEleOLR;
+//  TauSelectionTool                       m_tauSelectionEleBDT;
+//  TauSelectionTool                       m_tauSelectionMuonOLR;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
   ORUtils::ToolBox                       m_ORtoolBox[3];
   asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
   
   //Trigger Scale Factors -- NEW -- 
   // --> Electrons
-  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
-  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
-  std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
+//  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
+//  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
+//  std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
   // --> Muons
-  ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
-  std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
+//  ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
+//  std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
   //--> The Tool
   //asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>                  m_trigGlobEffCorr;
   //TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
-  std::vector<TrigGlobalEfficiencyCorrectionTool*>                 m_trigGlobEffCorr;
+//  std::vector<TrigGlobalEfficiencyCorrectionTool*>                 m_trigGlobEffCorr;
 
   //decorate all the things in all the sys
-  SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
-  SG::AuxElement::Decorator< char >* m_decor_ttHpassTauOVR;
+      SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
+      SG::AuxElement::Decorator< char >* m_decor_ttHpassTauOVR;
 
   //for convenience of use with Wrap stuff
-  const VertexContainer* m_vertices;
-  const EventInfo*       m_eventInfo;
+      const VertexContainer* m_vertices;
+     const EventInfo*       m_eventInfo;
 
   ///A simple way to write out branches, without having to worry about the type.
-  std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
+      std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
 
   ///names of the passed / failed branches.
-  std::vector<std::string> m_extraBranches;
+      std::vector<std::string> m_extraBranches;
 
   ///Decisions on if the event passed / failed a particular selection.
-  std::vector<int> m_selectionDecisions;
+      std::vector<int> m_selectionDecisions;
 
   // Method for recording selection pass/fail branches in saveEvent()
-  void recordSelectionDecision(const top::Event& event);
+      void recordSelectionDecision(const top::Event& event);
 
   // utility functions
-  void CopyElectron(xAOD::Electron&, ttHMultilepton::Lepton&);
-  void CopyMuon(    xAOD::Muon&,     ttHMultilepton::Lepton&);
-  void CopyTau(     xAOD::TauJet&,   ttHMultilepton::Tau&);
-  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
+  void CopyElectron(const xAOD::Electron&, ttHML::Lepton&);
+  void CopyMuon(const xAOD::Muon&,     ttHML::Lepton&);
+  void CopyTau( const xAOD::TauJet&,   ttHML::Tau&);
+/*  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
   void doEventSFs();
   double relativeSF(double variation, double nominal);
-  void setBtagSFs(const top::Event& event);
+  void setBtagSFs(const top::Event& event);*/
 
   //some event weights
   double m_mcWeight;
@@ -210,7 +166,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   double m_pileup_weight_UP;
   double m_pileup_weight_DOWN;
   //btag SF weights
-  std::string m_bTagSF_default;
+/*  std::string m_bTagSF_default;
   double m_bTagSF_weight;
   double m_bTagSF60_weight;
   double m_bTagSF70_weight;
@@ -228,7 +184,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   // JVT SF weights
   double m_JVT_weight;
   double m_JVT_weight_UP;
-  double m_JVT_weight_DOWN;
+  double m_JVT_weight_DOWN;*/
 
   //event info
   unsigned long long m_eventNumber;
@@ -251,7 +207,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   SampleXsection m_sampleXsection;
 
   // Truth matching
-  ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
+  //ttHMultilepton::TruthMatchAlgo* m_truthMatchAlgo;
 
   // Truth Matrix element photon
   char m_hasMEphoton;
@@ -294,16 +250,16 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   // leptons to save
   Lepton m_leptons[LEPTON_ARR_SIZE];
   Tau m_taus[TAU_ARR_SIZE];
-  ttHMultilepton::Variables* m_variables;
+ // ttHMultilepton::Variables* m_variables;
 
   // ttbar HF classification
-  ttHMultilepton::ClassifyHF* m_classifyttbarHF;
+ // ttHMultilepton::ClassifyHF* m_classifyttbarHF;
 
   //sherpa RW
   ToolHandle<PMGTools::PMGSherpa22VJetsWeightTool> m_sherpaRW;
 
   //MC
-  int   m_higgsMode;
+/*  int   m_higgsMode;
   const xAOD::TruthParticle* m_higgs;
   const xAOD::TruthParticle* m_top;
   const xAOD::TruthParticle* m_antitop;
@@ -340,19 +296,24 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   CP::SystematicSet dummy_mudo;
   CP::SystematicSet dummy_eleffup;
   CP::SystematicSet dummy_eleffdo;
+*/
+      float m_randomNumber;
+      float m_someOtherVariable;
 
-  // for names of lepton trigger SFs for multi-trigger tool
-  //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
-  std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{ 
-    { dummy_nom, "nominal" },
-    { dummy_elup, "EL_SF_Trigger_UP" },
-    { dummy_eldo, "EL_SF_Trigger_DOWN" },
-    { dummy_muup, "MU_SF_Trigger_STAT_UP" },
-    { dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
-    { dummy_eleffup, "EL_EFF_Trigger_UP" },
-    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
-  };
+      ttHML::Variables* m_ttHEvent;
 
+
+      // for names of lepton trigger SFs for multi-trigger tool
+      //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
+/*      std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{
+    	{ dummy_nom, "nominal" },
+    	{ dummy_elup, "EL_SF_Trigger_UP" },
+   		{ dummy_eldo, "EL_SF_Trigger_DOWN" },
+	    { dummy_muup, "MU_SF_Trigger_STAT_UP" },
+	    { dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
+	    { dummy_eleffup, "EL_EFF_Trigger_UP" },
+	    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
+	  }; */
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{
     { top::topSFSyst::nominal, "nominal" },
@@ -388,7 +349,7 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
     { top::topSFSyst::MU_SF_ID_SYST_LOWPT_DOWN, "MU_SF_ID_SYST_LOWPT_DOWN" },
   };
   // names tau SFs
-  std::map<top::topSFSyst, std::string> m_tau_sf_names{
+    std::map<top::topSFSyst, std::string> m_tau_sf_names{
       { top::topSFSyst::nominal, "nominal" },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN, "TAU_SF_ELEOLR_TOTAL_DOWN"},
@@ -415,9 +376,11 @@ class ttHMultileptonLooseEventSaver : public top::EventSaverFlatNtuple {
   std::vector<VectorWrapperCollection> vec_vtx_wrappers;
   #endif
 
-  ClassDef(ttHMultileptonLooseEventSaver, 0);
-};
-
+      
+      ///-- Tell RootCore to build a dictionary (we need this) --///
+      ClassDef(ttHMultileptonLooseEventSaver, 0);
+  };
 
 
 #endif
+

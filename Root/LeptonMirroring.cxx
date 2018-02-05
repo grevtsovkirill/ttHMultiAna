@@ -9,7 +9,7 @@ template<typename PTR> void CreateBranch(std::shared_ptr<top::TreeManager> tree,
   tree->makeOutputVariable(*addr, fmt1.str().c_str());
 }
 
-void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index) {
+void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index) {
   CreateBranch(tree, &ID,    "lep_ID_", index);
   CreateBranch(tree, &Index, "lep_Index_", index);
   CreateBranch(tree, &Pt,    "lep_Pt_", index);
@@ -67,7 +67,7 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &chargeIDBDTLoose, "lep_chargeIDBDTLoose_", index);
   CreateBranch(tree, &chargeIDBDTMedium, "lep_chargeIDBDTMedium_", index);
   CreateBranch(tree, &chargeIDBDTTight, "lep_chargeIDBDTTight_", index);
-  CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
+//  CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
   CreateBranch(tree, &promptLeptonIso_sv1_jf_ntrkv, "lep_promptLeptonIso_sv1_jf_ntrkv_", index);
   CreateBranch(tree, &promptLeptonIso_TrackJetNTrack, "lep_promptLeptonIso_TrackJetNTrack_", index);
   CreateBranch(tree, &promptLeptonIso_ip2, "lep_promptLeptonIso_ip2_", index);
@@ -76,6 +76,8 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &promptLeptonIso_LepJetPtFrac, "lep_promptLeptonIso_LepJetPtFrac_", index);
   CreateBranch(tree, &promptLepton_TagWeight, "lep_promptLepton_TagWeight_", index);
   CreateBranch(tree, &promptLeptonNoIso_TagWeight, "lep_promptLeptonNoIso_TagWeight_", index);
+  CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
+  CreateBranch(tree, &promptLeptonVeto_TagWeight, "lep_promptLeptonVeto_TagWeight_", index);
 
   CreateBranch(tree, &mujet_jetPt,"lep_jet_Pt_",index);
   CreateBranch(tree, &mujet_jetNTrk,"lep_jet_nTrk_",index);
@@ -101,7 +103,7 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &truthM,        "lep_truthM_", index);
   CreateBranch(tree, &truthE,        "lep_truthE_", index);
   CreateBranch(tree, &truthRapidity, "lep_truthRapidity_", index);
-
+  CreateBranch(tree, &AmbiguityType, "lep_AmbiguityType_", index);
   // SFs
   CreateBranch(tree, &SFIDLoose[0],   "lep_SFIDLoose_", index);
   CreateBranch(tree, &SFIDTight[0],   "lep_SFIDTight_", index);
@@ -117,3 +119,4 @@ void ttHMultilepton::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tre
   CreateBranch(tree, &SFObjTight[0],  "lep_SFObjTight_", index);
   CreateBranch(tree, &nInnerPix, "lep_nInnerPix_", index);
 }
+

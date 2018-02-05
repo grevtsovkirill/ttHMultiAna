@@ -1,71 +1,85 @@
-#include "ttHMultilepton/ttHMultileptonLooseObjectLoader.h"
+/*
+  Copyright (C) 2002-2017 CERN for the benefit of the ATLAS collaboration
+*/
 
-//So we can read stuff from the configuration text file at run time
+#include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
 
-//We need this to do our magic
 #include "TopObjectSelectionTools/TopObjectSelection.h"
-
-// for top::check
-#include "TopEvent/EventTools.h"
-
-//We'll need these so we can apply some cuts
-#include "ttHMultilepton/ElectronLikelihoodMC15.h"
 #include "TopObjectSelectionTools/ElectronLikelihoodMC15.h"
 #include "TopObjectSelectionTools/ElectronCutBasedMC15.h"
 #include "TopObjectSelectionTools/IsolationTools.h"
-#include "ttHMultilepton/MuonMC15.h"
 #include "TopObjectSelectionTools/MuonMC15.h"
-#include "TopObjectSelectionTools/JetMC15.h"
 #include "TopObjectSelectionTools/TauMC15.h"
-#include "ttHMultilepton/DummyOverlapRemoval.h"
+#include "TopObjectSelectionTools/JetMC15.h"
 #include "TopObjectSelectionTools/OverlapRemovalASG.h"
+#include "ttHMultilepton/DummyOverlapRemoval.h"
+///-- The custom object selections we have defined in this package --///
+#include "ttHMultilepton/ttHMultileptonLooseObjectLoader.h"
 
-//Run once at the start of the program to setup our object selection (and overlap removal)
-//top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(top::TopConfig* topConfig) {
-top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<top::TopConfig> topConfig) { 
-  //create our new object
-  top::TopObjectSelection* objectSelection = new top::TopObjectSelection(topConfig->objectSelectionName());
-  top::check(objectSelection->setProperty( "config" , topConfig ) , "Failed to setProperty for top::TopObjectSelection" );
-  top::check(objectSelection->initialize() , "Failed to initialize top::TopObjectSelection" ); 
- 
-  //configure the electrons, muons, jets, large-R jets
-  if (topConfig->electronID().find("LH") == std::string::npos && topConfig->electronIDLoose().find("LH") == std::string::npos) {
-    //both the tight and loose user settings do not contain LH -> cut based
-    objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), false, topConfig->electronID(), topConfig->electronIDLoose(), new top::StandardIsolation()));
-  } else if (topConfig->electronID().find("LH") != std::string::npos && topConfig->electronIDLoose().find("LH") != std::string::npos) {
-    //user wants likelihood electrons
-    //auto electronIsolation = new top::StandardIsolation( topConfig->electronIsolation(), topConfig->electronIsolationLoose() );
-    auto electronSelection = new top::ElectronLikelihoodMC15(topConfig->isPrimaryxAOD(),
-							     topConfig->electronPtcut(), 
-							     topConfig->electronVetoLArCrack(), 
-							     topConfig->electronID(), 
-							     topConfig->electronIDLoose(), 
-							     nullptr);
-    objectSelection->electronSelection( electronSelection );
-  } else {
-    std::cout << "\nHo hum\n";
-    std::cout << "Not sure it makes sense to use a mix of LH and cut-based electrons for the tight/loose definitions\n";
-    std::cout << "Tight electron definition is " << topConfig->electronID() << "\n";
-    std::cout << "Loose electron definition is " << topConfig->electronIDLoose() << "\n";
-    std::cout << "If it does make sense, feel free to fix this\n";
-    exit(1);
-  }
 
-  //auto muonIsolation = new top::StandardIsolation(topConfig->muonIsolation(), topConfig->muonIsolationLoose()  );
+top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<top::TopConfig> topConfig) 
+  {
+    top::TopObjectSelection* objectSelection = new top::TopObjectSelection(topConfig->objectSelectionName());
+    top::check(objectSelection->setProperty( "config" , topConfig ) , "Failed to setProperty for top::TopObjectSelection" );
+    top::check(objectSelection->initialize() , "Failed to initialize top::TopObjectSelection" );
+    
+    ///-- Electrons --///
+    if (topConfig->useElectrons()) {
+      if (topConfig->electronID().find("LH") == std::string::npos && topConfig->electronIDLoose().find("LH") == std::string::npos) {
+          //both the tight and loose user settings do not contain LH -> cut based
+        objectSelection->electronSelection(new top::ElectronCutBasedMC15(topConfig->electronPtcut(), 
+									 false, 
+									 topConfig->electronID(), 
+									 topConfig->electronIDLoose(), 
+									 new top::StandardIsolation()));
+        
+      } else if (topConfig->electronID().find("LH") != std::string::npos && topConfig->electronIDLoose().find("LH") != std::string::npos) {
+          //user wants likelihood electrons
+	objectSelection->electronSelection(new top::ElectronLikelihoodMC15(topConfig->isPrimaryxAOD(),
+									   topConfig->electronPtcut(), 
+									   topConfig->electronVetoLArCrack(), 
+									   topConfig->electronID(), 
+									   topConfig->electronIDLoose(), 
+									   new top::StandardIsolation()));
+          
+      } else {
+          std::cout << "\nHo hum\n";
+          std::cout << "Not sure it makes sense to use a mix of LH and cut-based electrons for the tight/loose definitions\n";
+          std::cout << "Tight electron definition is " << topConfig->electronID() << "\n";
+          std::cout << "Loose electron definition is " << topConfig->electronIDLoose() << "\n";
+          std::cout << "If it does make sense, feel free to fix this\n";
+          exit(1);
+      }
+    }
+    
+    ///-- Muons --///
+    if (topConfig->useMuons()) {
+     // objectSelection -> muonSelection(new top::CustomMuon(topConfig->muonPtcut(), new top::StandardIsolation()));
   auto muonSelection = new top::MuonMC15(topConfig->muonPtcut(), nullptr); 
   objectSelection->muonSelection( muonSelection );
-  objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut() ));
+    }
+    
+    ///-- Taus --///
+    if (topConfig->useTaus()) {
+      objectSelection->tauSelection(new top::TauMC15());
+    }
 
-  if(topConfig->useTaus()){
-    objectSelection->tauSelection( new top::TauMC15() );
+    ///-- Jets --///
+    if (topConfig->useJets()) {
+     // double ptMax(100000.);
+     // objectSelection -> jetSelection(new top::CustomJet(topConfig->jetPtcut(), ptMax, topConfig->jetEtacut(), true));
+  objectSelection->jetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut() ));
+    }
+    
+    ///-- Large R Jets --///
+    if (topConfig->useLargeRJets()) {
+      objectSelection -> largeJetSelection(new top::JetMC15(topConfig->jetPtcut(), topConfig->jetEtacut(), false));
+    }
+
+    ///-- Overlap removal --///
+//    objectSelection->overlapRemovalPostSelection(new top::OverlapRemovalASG());
+    objectSelection->overlapRemovalPostSelection(new DummyOverlapRemoval());
+    return objectSelection;
   }
-  
-  //and the overlap removal
-  //objectSelection->overlapRemovalPreSelection();
-  objectSelection->overlapRemovalPostSelection(new DummyOverlapRemoval());
-  //objectSelection->overlapRemovalPostSelection(new top::OverlapRemovalASG());
- 
-  //hand it back to the program
-  return objectSelection;
-}
+

@@ -1,16 +1,27 @@
-#ifndef TTHMULTILEPTONLOOSEOBJECTLOADER_H_
-#define TTHMULTILEPTONLOOSEOBJECTLOADER_H_
+/*
+  Copyright (C) 2002-2017 CERN for the benefit of the ATLAS collaboration
+*/
+
+#ifndef HOWTOEXTENDANALYSISTOP_ttHMultileptonLooseObjectLoader_H
+#define HOWTOEXTENDANALYSISTOP_ttHMultileptonLooseObjectLoader_H
 
 #include "TopAnalysis/ObjectLoaderBase.h"
 
-/*** A class that can be loaded by name at run time and creates our object selection*/
-class ttHMultileptonLooseObjectLoader : public top::ObjectLoaderBase {
- public:
-  //A method that creates a pointer to a TopObjectSelection tool which contains info on which cuts to enable and configure
-  //top::TopObjectSelection* init(top::TopConfig* topConfig);
-    top::TopObjectSelection* init(std::shared_ptr<top::TopConfig> topConfig);
-  //Clever root stuff
-    ClassDef(ttHMultileptonLooseObjectLoader, 0)
-};
+
+  class ttHMultileptonLooseObjectLoader : public top::ObjectLoaderBase {
+    public:
+
+      /**
+      * @brief Setup the cuts.  Probably easiest if you look at the code, no?
+      *
+      * @param topConfig The config that has been loaded.
+      * @return A fully configured object that can be used to control which
+      * objects (physics ones, not computer ones) are selected by the program.
+      */
+      top::TopObjectSelection* init(std::shared_ptr<top::TopConfig> topConfig);
+
+      ClassDef(ttHMultileptonLooseObjectLoader, 0);
+  };
+
 
 #endif

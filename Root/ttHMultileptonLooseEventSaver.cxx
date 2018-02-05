@@ -1,129 +1,101 @@
+/*
+  Copyright (C) 2002-2017 CERN for the benefit of the ATLAS collaboration
+*/
+
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
-
-#include "xAODMissingET/MissingETContainer.h"
-
-//Top
-#include "TopEvent/EventTools.h"
-#include "TopConfiguration/TopConfig.h"
-#include "TopConfiguration/ConfigurationSettings.h"
-#include "TopParticleLevel/ParticleLevelEvent.h"
-
-//ROOT
-#include "TFile.h"
-#include "TH1.h"
-#include "TTreeReader.h"
-#include "TTreeReaderValue.h"
-#include "TError.h"
-
-//ASG OR
+#include "TopEvent/Event.h"
+#include "TopEventSelectionTools/TreeManager.h"
+#include "ttHMultilepton/Variables.h"
 #include "AssociationUtils/OverlapRemovalInit.h"
 
-#include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
 
-ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
-  m_outputFile(nullptr),
-  m_doSystematics(false),
-  m_doSFSystematics(true),
-  m_sfRetriever(nullptr),
-  m_trigDecTool("Trig::TrigDecisionTool"),
-  m_purwtool("CP::PileupReweightingTool"),
-  m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
-  m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
-  m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
-  m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
-  muonSelection("MuonSelection"),
-  iso_1( "iso_1" ),
-  m_tauSelectionEleOLR("TauSelectionEleOLR"),
-  m_tauSelectionEleBDT("TauSelectionEleBDT"),
-  m_tauSelectionMuonOLR("TauSelectionMuonOLR"),
-  //m_electronEffToolsHandles("ElectronEffToolsHandles"),
-  //m_electronSFToolsHandles("ElectronSFToolsHandles"),
-  m_electronToolsFactory(0),
-  //m_muonToolsHandles("MuonToolsHandles"),
-  m_muonToolsFactory(0),
-  //m_trigGlobEffCorr(0),
-  m_mcWeight(1.),
-  m_pileup_weight(1.),
-  m_bTagSF_default("Continuous"),
-  m_bTagSF_weight(1.),
-  m_JVT_weight(1.),
-  m_eventNumber(0),
-  m_runNumber(0),
-  m_mcChannelNumber(0),
-  m_isAFII(0),
-  m_mu(0),
-  m_mu_unc(0),
-  m_mu_ac(0),
-  m_pu_hash(0),
-  m_pvNumber(0),
-  m_puNumber(0),
-  m_vertex_density(-999.),
-  m_beam_posz(-999),
-  m_beam_sigmaz(-999),  
-  m_pv(nullptr),
-  m_runYear(0),
-  m_HF_Classification(0.),
-  m_HF_ClassificationTop(0.),
-  m_DLF_Classification(0.),
-  //m_MLF_Classification(0.),
-  m_met_met(0.),
-  m_met_phi(0.),
-  m_met_sumet(0.),
-  MET_softTrk_et(-999.0),
-  MET_softTrk_phi(-999.0),
-  MET_softClus_et(-999.0),
-  MET_softClus_phi(-999.0),
-  m_truthMET_px(-999.0),
-  m_truthMET_py(-999.0),
-  m_truthMET_phi(-999.0),
-  m_truthMET_sumet(-1.0),
-  m_sherpaRW("PMGSherpa22VJetsWeightTool"),
-  m_higgs(nullptr),
-  m_top(nullptr),
-  m_antitop(nullptr),
-  dummy_nom("dummy"),
-  dummy_elup("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
-  dummy_eldo("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1down"),
-  dummy_muup("MUON_EFF_TrigStatUncertainty__1up"),
-  dummy_mudo("MUON_EFF_TrigStatUncertainty__1down"),
-  dummy_eleffup("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
-  dummy_eleffdo("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1down")
-{}
+#include "TopConfiguration/TopConfig.h"
 
-ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
+#include "TopConfiguration/ConfigurationSettings.h"
+#include "TopConfiguration/SelectionConfigurationData.h"
+#include "PathResolver/PathResolver.h"
+#include "xAODMissingET/MissingET.h"
+#include "xAODMissingET/MissingETContainer.h"
 
-// Dearest and most respected user
-// The following is black magic, don't worry too much about how it works
-// just know that you can store vectors of information like this
-// In the EventSaver class header, add a member variable to store the wrappers
-// (this is a vector because we have one for each tree to be written out)
-//
-// std::vector<VectorWrapperCollection> vec_electron_wrappers;
-//
-// In initialization, create a vector of "VectorWrapper*"
-//
-// std::vector<VectorWrapper*> elevec;
-//
-// then use Wrap2 to specify functions to compute all the variables you
-// want to store, e.g.
-//
-// Wrap2(elevec, [](const xAOD::Electron& ele) { return (float) ele.pt(); }, *systematicTree, "electron_pt");
-//
-// the second argument is a "lambda function" - a function that you create
-// just at this point, which takes the argument "ele".  (For those of you
-// who know details of C++11, only non-capturing lambdas ([]) can be used.)
-// The type of vector stored in the TTree will be automatically determined
-// based on the return value of the lambda function.
-// Fully initialize the VectorWrapperCollection vector
-//
-// vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
-//
-// Finally, in the actual event loop (saveEvent), push the vector of objects to
-// save through the relevant VectorWrapperCollection:
-//
-// vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
-//
+#include <TRandom3.h>
+#include <TLorentzVector.h>
+#include <TMath.h>
+#include <cmath>
+#include <algorithm>
 
+#include <TRandom3.h>
+
+//Define global cutflow hists, so they can be accessed by selectors
+TH1I* m_eleCutflow; 
+TH1I* m_muCutflow; 
+TH1I* m_jetCutflow;
+TH1I* m_tauCutflow;
+
+  ///-- Constrcutor --///
+  ttHMultileptonLooseEventSaver::ttHMultileptonLooseEventSaver() :
+    m_randomNumber(0.),
+    m_someOtherVariable(0.),
+    m_outputFile(nullptr),
+    m_doSystematics(false),
+    m_doSFSystematics(true),
+    m_sfRetriever(nullptr),
+    m_trigDecTool("Trig::TrigDecisionTool"),
+    m_purwtool("CP::PileupReweightingTool"),
+    m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
+//    m_electronToolsFactory(0),
+    //m_muonToolsHandles("MuonToolsHandles"),
+//    m_muonToolsFactory(0),
+    //m_trigGlobEffCorr(0),
+    m_mcWeight(1.),
+//    m_pileup_weight(1.),
+//    m_bTagSF_default("Continuous"),
+//    m_bTagSF_weight(1.),
+//    m_JVT_weight(1.),
+    m_eventNumber(0),
+    m_runNumber(0),
+    m_mcChannelNumber(0),
+    m_isAFII(0),
+    m_mu(0),
+    m_mu_unc(0),
+    m_mu_ac(0),
+    m_pu_hash(0),
+    m_pvNumber(0),
+    m_puNumber(0),
+    m_vertex_density(-999.),
+    m_beam_posz(-999),
+    m_beam_sigmaz(-999),  
+    m_pv(nullptr),
+    m_runYear(0),
+    muonSelection("MuonSelection"),
+//    m_HF_Classification(0.),
+//    m_HF_ClassificationTop(0.),
+//    m_DLF_Classification(0.),
+    //m_MLF_Classification(0.),
+    m_met_met(0.),
+    m_met_phi(0.),
+    m_met_sumet(0.),
+    MET_softTrk_et(-999.0),
+    MET_softTrk_phi(-999.0),
+    MET_softClus_et(-999.0),
+    MET_softClus_phi(-999.0),
+    m_truthMET_px(-999.0),
+    m_truthMET_py(-999.0),
+    m_truthMET_phi(-999.0),
+    m_truthMET_sumet(-1.0),
+    m_sherpaRW("PMGSherpa22VJetsWeightTool")
+//    m_higgs(nullptr),
+//    m_top(nullptr),
+//    m_antitop(nullptr),
+//    dummy_nom("dummy"),
+//    dummy_elup("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
+//    dummy_eldo("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1down"),
+//    dummy_muup("MUON_EFF_TrigStatUncertainty__1up"),
+//    dummy_mudo("MUON_EFF_TrigStatUncertainty__1down"),
+//    dummy_eleffup("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
+//    dummy_eleffdo("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1down")
+  
+  {}
+//  ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
 template<typename FCN>
 struct function_traits : public function_traits<decltype(&FCN::operator())>
 {};
@@ -145,9 +117,11 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   vec.push_back(new ScalarWrapper(static_cast<typename function_traits<FCN>::function>(lambda), systematicTree, branch));
 }
 
-void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) {
+  ///-- initialize - done once at the start of a job before the loop over events --///
+  void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches)
+  {
 
-  //EventSaverFlatNtuple::initialise(config, file, treeNames, extraBranches);
+    top::EventSaverFlatNtuple::initialize(config, file, extraBranches);
   m_outputFile = file;
   m_extraBranches = extraBranches;
   m_selectionDecisions.resize(m_extraBranches.size());
@@ -171,83 +145,49 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   }
 
   //Cutflow histograms
-  m_eleCutflow = new TH1I("eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+  m_eleCutflow = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
+  std::cout << "setting bin names" << std::endl;
   int idx = 1;
   for (const auto& label : { "initial", "pt", "eta", "ident", "z0sinth", "d0sig", "iso", "e-#mu OR", "e-e OR"}) {
     m_eleCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-  m_muCutflow = new TH1I("muCutflow", "Muon cutflow", 10, 0.5, 10.5);
+  m_muCutflow = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
   idx = 1;
   for (const auto& label : { "initial", "eta/qual", "pt", "z0sinth", "d0sig", "iso", "#mu-jet OR"}) {
     m_muCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-  m_jetCutflow = new TH1I("jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
+  m_jetCutflow = new TH1I("m_jetCutflow", "Jet cutflow", 10, 0.5, 10.5);
   idx = 1;
-  for (const auto& label : { "initial", "cleaning", "pt", "eta", "jvt", "jet-e OR", "jet-#tau OR"}) {
+  for (const auto& label : { "initial", "cleaning", "pt", "eta", "jvt", "pt-eta", "jet-e OR", "jet-#tau OR"}) {
     m_jetCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-  m_tauCutflow = new TH1I("tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
+  m_tauCutflow = new TH1I("m_tauCutflow", "Tau cutflow", 10, 0.5, 10.5);
   idx = 1;
   for (const auto& label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "EleOLR", "#tau-e,#mu OR"}) {
     m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
-
-  m_variables = new ttHMultilepton::Variables();
-
-  m_truthMatchAlgo  = new ttHMultilepton::TruthMatchAlgo();
-  m_truthMatchAlgo->msg().setLevel( MSG::INFO ); // DEBUG, VERBOSE, WARNING, INFO
-
-  m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
-
+//Tools
   if (m_isMC){
+    std::string tdpfile = PathResolverFindCalibFile("TopDataPreparation/XSection-MC15-13TeV.data"); 
     top::check( m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool" );
     top::check( m_sherpaRW->setProperty("TruthJetContainer", "AntiKt4TruthJets"),
 		"Failed to set TruthJetContainer of PMGSherpa22VJetsWeightTool" );
-    top::check( m_sampleXsection.readFromFile((std::string(getenv("ROOTCOREBIN"))+"/data/TopDataPreparation/XSection-MC15-13TeV.data").c_str()),
+    top::check( m_sampleXsection.readFromFile(tdpfile.c_str()),
 		"Failed to open AMI X-section file");
   }
+  std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
+  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
-  //prepare btag eigen vectors
-  if (m_isMC) {
-    m_weight_bTagSF_eigen_B_up      .resize(m_config->btagging_num_B_eigenvars(m_bTagSF_default) );
-    m_weight_bTagSF_eigen_B_down    .resize(m_config->btagging_num_B_eigenvars(m_bTagSF_default) );
-    m_weight_bTagSF_eigen_C_up      .resize(m_config->btagging_num_C_eigenvars(m_bTagSF_default) );
-    m_weight_bTagSF_eigen_C_down    .resize(m_config->btagging_num_C_eigenvars(m_bTagSF_default) );
-    m_weight_bTagSF_eigen_Light_up  .resize(m_config->btagging_num_Light_eigenvars(m_bTagSF_default) );
-    m_weight_bTagSF_eigen_Light_down.resize(m_config->btagging_num_Light_eigenvars(m_bTagSF_default) );
-  }
-  //init Tools
 
-  //Pileup Reweighting Tool from TopToolStore
+//Muon Tools
+  //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
+  top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
+  top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
+
+  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
   top::check( m_purwtool.retrieve() , "Failed to retrieve PileupReweightingTool" );
-
-  //Trigger Tool from TopToolStore
   top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
-
-  //////////// Trigger SF tool --NEW--
- 
-  // working with map0.txt
-  /*
-  std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
-    // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
-    //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "SignalCFT", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Tight", "FixedCutTight"}, 
-    // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
-    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseBLayer", ""}, 
-    // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "Tight", "FixedCutTight"}, 
-    //{"e17_lhvloose_nod0", "SignalCFT", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "Tight", "FixedCutTight"}, 
-    // dielectron trigger, only for untagged electrons, configured wrt loose WP:
-    {"e17_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "LooseBLayer", ""}, 
-    // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "Tight", "FixedCutTight"},  
-    //{"e17_lhloose_nod0", "SignalCFT", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "Tight", "FixedCutTight"},  
-    // e-mu trigger, only for untagged electrons, configured wrt loose WP:
-    {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseBLayer", ""}
-  };
- */
-  
-  std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
+std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
     // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "_isolFixedCutTight"}, 
     //{"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_isolLoose"},
@@ -265,243 +205,55 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
     {"e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "LooseAndBLayerLLH", ""}
   };
-  
-  int nTrig = -1;
 
-  m_trigGlobEffCorr.resize(m_lep_trigger_sf_names.size());
+ int nTrig = -1;
 
-  for (unsigned int t=0; t<m_trigGlobEffCorr.size(); ++t)
-    m_trigGlobEffCorr[t]=nullptr;
-  
+//  m_trigGlobEffCorr.resize(m_lep_trigger_sf_names.size());
 
-  for (const auto& systvar : m_lep_trigger_sf_names) {
-    std::cout << "INFO INFO: Doing: " << systvar.second << std::endl;
-    auto ivar = systvar.first;
-    ++nTrig;
-    std::map<std::string,std::string> legsPerTool;
-    std::map<std::string,std::string> tagsPerTool;
-    
-    //ToolHandleArray<IAsgElectronEfficiencyCorrectionTool> m_electronEffToolsHandles, m_electronSFToolsHandles;
-    //ToolHandleArray<CP::IMuonTriggerScaleFactors> m_muonToolsHandles;
-    
-    int nTools = -1;
-    m_electronEffToolsHandles.clear();
-    m_electronSFToolsHandles.clear();
-    m_muonToolsHandles.clear();
-    
-    for(auto& kv : triggerKeys) // electron tool instances for each trigger leg
-      for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
-	{
-	  auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff-"+std::to_string(++nTools)+systvar.second);
-	  //t->setProperty("MapFilePath","/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/map0.txt").ignore();
-	  //t->setProperty("TriggerKey",(j?"":"Eff_") + kv[2]).ignore();
-	  std::string filepath="ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v11" + kv[4] + ".root";
-	  if (kv[4]!="") filepath="ttHMultilepton/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_v11" + kv[4] + ".root";
-
-	  std::vector<std::string> inputFiles;
-	  inputFiles.push_back(filepath);
-	  t->setProperty("CorrectionFileNameList",inputFiles).ignore();
-	  //t->setProperty("IdKey",kv[3]).ignore();
-	  //t->setProperty("IsoKey",kv[4]).ignore();
-	  t->setProperty("CorrelationModel","TOTAL").ignore();
-	  t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
-	  top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
-	  // if (systvar.second=="EL_SF_Trigger_UP") {
-	  //   if(t->getHandle()->applySystematicVariation(systvar.first)  != CP::SystematicCode::Ok) 
-	  //     std::cout << "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to set Uncertainty!" << std::endl; 
-	  // }
-	  auto& handles = j? m_electronSFToolsHandles : m_electronEffToolsHandles;
-	  handles.push_back(t->getHandle());
-	  // Safer to retrieve the name from the final ToolHandle, it might be prefixed (by the parent tool name) when the handle is copied
-	  std::string name = handles[handles.size()-1].name();
-	  legsPerTool.emplace(name, kv[0]);
-	  if(kv[1]!="") tagsPerTool.emplace(name, kv[1]);
-	}
-
-    if (systvar.second=="EL_SF_Trigger_UP" || systvar.second=="EL_SF_Trigger_DOWN") {
-      for(auto& ettool : m_electronSFToolsHandles){
-	if(ettool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
-	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
-      }
-    }
-    else if (systvar.second=="EL_EFF_Trigger_UP" || systvar.second=="EL_EFF_Trigger_DOWN") {
-      for(auto& ettool : m_electronEffToolsHandles){
-	if(ettool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
-	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
-      }
-    }
-
-    for(int i=0;i<2;++i) // one muon tool instance per year
-      {
-	std::string year = std::to_string(i?2016:2015);
-	auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
-	ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
-	t->setName("MuonTrigEff-"+std::to_string(++nTools)+systvar.second);
-	t->setProperty("CalibrationRelease", "170209_Moriond").ignore();
-	t->setProperty("MuonQuality", "Loose").ignore();
-	t->setProperty("Isolation", "GradientLoose").ignore(); //isolation WPs are merged for muons!
-	t->setProperty("Year", year).ignore();     
-	top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
-	m_muonToolsHandles.push_back(t->getHandle());
-      }
-
-    if (systvar.second=="MU_SF_Trigger_STAT_UP" || systvar.second=="MU_SF_Trigger_STAT_DOWN") {
-      for(auto& mutool : m_muonToolsHandles){
-	if(mutool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
-	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
-      }
-    }
-    
-    // Configure the trigger SF tool: Nominal
-    std::string trigglobname = "TrigGlobalEfficiencyCorrectionTool"+systvar.second;
-    //m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
-    m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool(trigglobname);
-    m_trigGlobEffCorr[nTrig]->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("MuonTools",m_muonToolsHandles).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", "e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose || 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", "e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0 || 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
-    //m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,SignalCFT,Baseline").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
-    top::check( m_trigGlobEffCorr[nTrig]->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
-    ////////////////////////// end Trigger SF tool
-  }
- 
-
-  ////////////////////////////
-  //Isolation tools for leptons
-  ////////////////////////////
-  //    top::check( iso_1.setProperty("MuonWP","Loose"),"IsolationTool fails to set MuonWP" );
-  //    top::check( iso_1.setProperty("ElectronWP","Loose"),"IsolationTool fails to set ElectronWP");
-  top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-  auto isolation_WPs{"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
-  for (auto wp : isolation_WPs) {
-    top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
-    top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
-  }
-  /// special case for FixedCutTight (el only)
-  top::check( iso_1.addElectronWP("FixedCutTight"), "Error adding electron isolation WP" );
-
-  //Electron Charge Flip Tagger Tools
-  top::check( m_electronChargeIDLoose.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDLoose: Failed to set training file." );
-  top::check( m_electronChargeIDLoose.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDLoose: Failed to set output level." );
-  top::check( m_electronChargeIDLoose.initialize(), "ElectronChargeIDLoose: Failed to initialize." );
-  top::check( m_electronChargeIDMedium.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDMedium: Failed to set training file." );
-  top::check( m_electronChargeIDMedium.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDMedium: Failed to set output level." );
-  top::check( m_electronChargeIDMedium.initialize(), "ElectronChargeIDMedium: Failed to initialize." );
-  top::check( m_electronChargeIDTight.setProperty("TrainingFile", "ttHMultilepton/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDTight: Failed to set training file." );
-  top::check( m_electronChargeIDTight.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDTight: Failed to set output level." );
-  top::check( m_electronChargeIDTight.initialize(), "ElectronChargeIDTight: Failed to initialize." );
-
-  //Muon Tools
-  //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");
-  top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
-  top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
-
-  //Jet Tool from Top Tool Store
-  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
-
-  //Tau Tools
-  //m_tauSelectionEleOLR.msg().setLevel(MSG::VERBOSE);
-  top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", "ttHMultilepton/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
-  top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
-
-  top::check( m_tauSelectionEleBDT.setProperty("ConfigPath", "ttHMultilepton/EleBDT_tau_selection.conf" ), "TauSelectionEleBDT:Failed to set ConfigPath");
-  top::check( m_tauSelectionEleBDT.initialize(), "Failed to initialise TauSelectionTool for EleBDT" );
-
-  top::check( m_tauSelectionMuonOLR.setProperty("ConfigPath", "ttHMultilepton/MuonOLR_tau_selection.conf" ), "TauSelectionMuonOLR:Failed to set ConfigPath");
-  top::check( m_tauSelectionMuonOLR.initialize(), "Failed to initialise TauSelectionTool for MuonOLR" );
-
-  //define triggers
-  //Items and their PS
-  // defined in config files with TRIGDEC selectors
-  // "triggers" is the name of that dummy selection
-  std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
+//  for (unsigned int t=0; t<m_trigGlobEffCorr.size(); ++t)
+//    m_trigGlobEffCorr[t]=nullptr;
 
 
-  //make a tree for each systematic
+    m_ttHEvent = new ttHML::Variables();
+std::cout<<"aaaaaaaaaaaaaaaaaaaaaaaa"<<std::endl;
+/*
   for (auto treeName : *config->systAllTTreeNames()) {
     std::cout << "INITIALIZING SYST TREES" << std::endl;
     m_treeManagers.push_back(std::shared_ptr<top::TreeManager>( new top::TreeManager(treeName.second, file) ) );
     std::cout << m_treeManagers.size() << " " << treeName.second << std::endl;
-    }
+    }*/
 
-  for (auto systematicTree : m_treeManagers){
-    m_doSFSystematics = systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue());
-    if(!m_isMC) m_doSFSystematics = false;
+
+
+    ///-- Loop over the systematic TTrees and add the custom variables --///
+    for (auto systematicTree :treeManagers()) {
+      m_doSFSystematics = systematicTree->name() ==  m_config->systematicName(m_config->nominalHashValue());
+       if(!m_isMC) m_doSFSystematics = false;
+
 
     systematicTree->makeOutputVariable(m_mcWeight,      "mcWeightOrg");
     systematicTree->makeOutputVariable(m_lhe3weights,   "mcEventWeights");
-    systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
-    systematicTree->makeOutputVariable(m_bTagSF_weight,   ("bTagSF_weight_"+m_bTagSF_default).c_str());
-    systematicTree->makeOutputVariable(m_bTagSF60_weight, "MV2c10_60_EventWeight");
-    systematicTree->makeOutputVariable(m_bTagSF70_weight, "MV2c10_70_EventWeight");
-    systematicTree->makeOutputVariable(m_bTagSF77_weight, "MV2c10_77_EventWeight");
-    systematicTree->makeOutputVariable(m_bTagSF85_weight, "MV2c10_85_EventWeight");
-    systematicTree->makeOutputVariable(m_bTagSFContinuous_weight, "MV2c10_Continuous_EventWeight");
-    systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
+//    systematicTree->makeOutputVariable(m_pileup_weight, "pileupEventWeight_090");
+//    systematicTree->makeOutputVariable(m_bTagSF_weight,   ("bTagSF_weight_"+m_bTagSF_default).c_str());
+//    systematicTree->makeOutputVariable(m_bTagSF60_weight, "MV2c10_60_EventWeight");
+//    systematicTree->makeOutputVariable(m_bTagSF70_weight, "MV2c10_70_EventWeight");
+//    systematicTree->makeOutputVariable(m_bTagSF77_weight, "MV2c10_77_EventWeight");
+//    systematicTree->makeOutputVariable(m_bTagSF85_weight, "MV2c10_85_EventWeight");
+//    systematicTree->makeOutputVariable(m_bTagSFContinuous_weight, "MV2c10_Continuous_EventWeight");
+//    systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
 
-    if ( m_doSFSystematics ) {
+/*    if ( m_doSFSystematics ) {
 
       //pileup
       systematicTree->makeOutputVariable(m_pileup_weight_UP,   "pileupEventWeight_UP");
       systematicTree->makeOutputVariable(m_pileup_weight_DOWN, "pileupEventWeight_DOWN");
 
-      //btag
-      //B
-      for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
-	std::stringstream branchName; branchName << "bTagSF_weight_" << m_bTagSF_default << "_B" << i;
-	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
-	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
-
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_B_up.at(i),
-					   branchNameUp );
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_B_down.at(i),
-					   branchNameDown );
-      }
-      //C
-      for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(m_bTagSF_default); ++i) {
-	std::stringstream branchName; branchName << "bTagSF_weight_" << m_bTagSF_default << "_C" << i;
-	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
-	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
-
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_C_up.at(i),
-					   branchNameUp );
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_C_down.at(i),
-					   branchNameDown );
-      }
-      //Light
-      for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(m_bTagSF_default); ++i) {
-	std::stringstream branchName; branchName << "bTagSF_weight_" << m_bTagSF_default << "_Light" << i;
-	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
-	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
-
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_Light_up.at(i),
-					   branchNameUp );
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_Light_down.at(i),
-					   branchNameDown );
-      }
-      //Others (extrapolation)
-      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	std::stringstream branchName; branchName << "bTagSF_weight_" << m_bTagSF_default << "_" << betterBtagNamedSyst(name);
-	std::string branchNameUp  (branchName.str()); branchNameUp   += "_up";
-	std::string branchNameDown(branchName.str()); branchNameDown += "_down";
-
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_Others_up[name],
-					   branchNameUp );
-	systematicTree->makeOutputVariable(m_weight_bTagSF_eigen_Others_down[name],
-					   branchNameDown );
-      }
-
-
       //JVT
       systematicTree->makeOutputVariable(m_JVT_weight_UP,   "JVT_EventWeight_UP");
       systematicTree->makeOutputVariable(m_JVT_weight_DOWN, "JVT_EventWeight_DOWN");
-    }
+    }*/
 
-    if(!m_doSystematics) {
+/*    if(!m_doSystematics) {
       //truth information
       systematicTree->makeOutputVariable(m_mc_m,           "m_truth_m");
       systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
@@ -532,9 +284,11 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_PDFinfo_Q,         "m_mcevt_pdf_Q");
       systematicTree->makeOutputVariable(m_PDFinfo_XF1,       "m_mcevt_pdf_XF1");
       systematicTree->makeOutputVariable(m_PDFinfo_XF2,       "m_mcevt_pdf_XF2");
-    }
+    }*/
 
-    //event info
+
+
+          //event info
 
     //scalar aka once per event stuff
     std::vector<ScalarWrapper*> scalarvec;
@@ -557,7 +311,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	    return event.m_info->isAvailable<int>("TTHML_NTruthJetSherpa") ? event.m_info->auxdataConst<int>("TTHML_NTruthJetSherpa") : 0.0;
 	  }, *systematicTree, "nTruthJets_SherpaRwght");
 
-    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
+/*    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->phi()            : 0.0; }, *systematicTree, "higgs_phi");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->e()              : 0.0; }, *systematicTree, "higgs_E");
@@ -571,16 +325,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->eta()            : 0.0; }, *systematicTree, "antitop_eta");
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->phi()            : 0.0; }, *systematicTree, "antitop_phi");
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->e()              : 0.0; }, *systematicTree, "antitop_E");
-
+*/
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
-
-    // ttbar HF, DLF, MLF classification
-    systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
-    systematicTree->makeOutputVariable(m_HF_ClassificationTop, "HF_ClassificationTop");
-    systematicTree->makeOutputVariable(m_DLF_Classification, "DLF_Classification");
+// ttbar HF, DLF, MLF classification
+//    systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
+//    systematicTree->makeOutputVariable(m_HF_ClassificationTop, "HF_ClassificationTop");
+//    systematicTree->makeOutputVariable(m_DLF_Classification, "DLF_Classification");
     //systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
 
-    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
+//    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_isAFII, "mc_isAFII");
@@ -632,10 +385,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       systematicTree->makeOutputVariable(m_truthMET_sumet, "MET_Truth_sumet");
     }
 
-    for (auto trigger : triggernames) {
+/*    for (auto trigger : triggernames) {
       WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) m_trigDecTool->isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
       if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) m_trigDecTool->getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
-    }
+    }*/
     //END trigger
     vec_scalar_wrappers.push_back(scalarvec);
 
@@ -650,8 +403,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       // vertexType enum in xAODTracking/xAODTracking/TrackingPrimitives.h: 1 is Primary, 3 is PU
       vec_vtx_wrappers.push_back(VectorWrapperCollection(vtxvec));
     }
-
-    //leptons
+//leptons
     std::vector<VectorWrapper*> elevec;
     std::vector<VectorWrapper*> muvec;
 
@@ -716,12 +468,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "electron_passOR");
 
-    //non-prompt bdt vars
+    //non-prompt bdt vars - OLD VARIABLE, MAYBE SHOULD BE DELETED
+    /*
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
 	  float m_el_nonprompt_bdt = -99.;
 	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(ele)) m_el_nonprompt_bdt = AccessorNonPromptBDT(ele);
 	  return (float) m_el_nonprompt_bdt; }, *systematicTree, "electron_PromptLeptonIso_TagWeight");
+		*/
+
 
     // electron QmisID
     Wrap2(elevec, [=](const xAOD::Electron& ele) {
@@ -825,9 +580,52 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       }
     }
 
+    std::vector<std::string> R21_Ele_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+    for(std::string var: R21_Ele_PLI_vars){
+	Wrap2(elevec, [=](const xAOD::Electron& ele) { 
+	float m_el_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
+        return (float) m_el_nonprompt_float;}, *systematicTree, ("electron_" + var + "_TagWeight").c_str());
+    }
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+    	unsigned char m_el_ambigtype_int = -99;
+    	SG:AuxElement::Accessor<unsigned char> AccessorAmbigType("ambiguityType");
+	if(AccessorAmbigType.isAvailable(ele)) {
+		m_el_ambigtype_int = AccessorAmbigType(ele);}
+	return (unsigned char) m_el_ambigtype_int;}, *systematicTree, ("electron_ambiguityType"));
+    
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_numPixLayerHits("numberOfInnermostPixelLayerHits");
+	unsigned char m_el_numPixLayerHits=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		m_el_numPixLayerHits=1;}
+		//if (Accessor_numPixLayerHits.isAvailable(*eltrack)) m_el_numPixLayerHits=Accessor_numPixLayerHits(*eltrack);}
+	return (unsigned char) m_el_numPixLayerHits; }, *systematicTree, "electron_numberOfInnermostPixelLayerHits");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_numPixLayerOutliers("numberOfInnermostPixelLayerOutliers");
+	unsigned char m_el_numPixLayerOutliers=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		if (Accessor_numPixLayerOutliers.isAvailable(*eltrack)) m_el_numPixLayerOutliers=Accessor_numPixLayerOutliers(*eltrack);}
+	return (unsigned char) m_el_numPixLayerOutliers; }, *systematicTree, "electron_numberOfInnermostPixelLayerOutliers");
+
+    Wrap2(elevec, [=](const xAOD::Electron& ele) {
+	static SG::AuxElement::Accessor<unsigned char> Accessor_expectInnerPixelLayerHit("expectInnermostPixelLayerHit");
+	unsigned char m_el_expectInnerPixelLayerHit=-99;
+	const xAOD::TrackParticle* eltrack = ele.trackParticle(0);
+	if(eltrack!=nullptr){
+		if (Accessor_expectInnerPixelLayerHit.isAvailable(*eltrack)) m_el_expectInnerPixelLayerHit=Accessor_expectInnerPixelLayerHit(*eltrack);}
+	return (unsigned char) m_el_expectInnerPixelLayerHit; }, *systematicTree, "electron_expectInnerPixelLayerHit");
+
+
+
     vec_electron_wrappers.push_back(VectorWrapperCollection(elevec));
 
-    // Muons
+// Muons
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.pt(); },  *systematicTree, "muon_pt");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.eta(); }, *systematicTree, "muon_eta");
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.phi(); }, *systematicTree, "muon_phi");
@@ -973,12 +771,15 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     }
     Wrap2(muvec, [=](const xAOD::Muon& mu) { return mu.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, "muon_passOR");
 
-    //non-prompt bdt vars
+    //non-prompt bdt vars - OLD AND PROBABLY SHOULD BE DELETED
+    /*
     Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	  float m_mu_nonprompt_bdt = -99.;
 	  static SG::AuxElement::Accessor<float> AccessorNonPromptBDT("PromptLeptonIso_TagWeight");
 	  if(AccessorNonPromptBDT.isAvailable(mu)) m_mu_nonprompt_bdt = AccessorNonPromptBDT(mu);
 	  return (float) m_mu_nonprompt_bdt; }, *systematicTree, "muon_PromptLeptonIso_TagWeight");
+*/
+
 
     // muon QmisID
     if(!m_doSystematics) {
@@ -1109,6 +910,16 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
 	}
       }
     }
+
+	std::vector<std::string> R21_Mu_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+    for(std::string var: R21_Mu_PLI_vars){
+    Wrap2(muvec, [=](const xAOD::Muon& mu) {
+    float m_mu_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
+        return (float) m_mu_nonprompt_float;}, *systematicTree, ("muon_" + var + "_TagWeight").c_str());
+    }
+
     //muon_D BDT
     if(!m_doSystematics) {
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<float> ("jet_pt");}, *systematicTree, "muon_jet_pt");
@@ -1132,7 +943,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
-    if(!m_doSystematics) {
+ /*   if(!m_doSystematics) {
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"pt");},*systematicTree,"m_truth_jet_pt");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"eta");},*systematicTree,"m_truth_jet_eta");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"phi");},*systematicTree,"m_truth_jet_phi");
@@ -1142,7 +953,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostTQuarksFinalCount");},*systematicTree,"m_truth_jet_Tcount");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostWBosonsCount");},*systematicTree,"m_truth_jet_Wcount");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostZBosonsCount");},*systematicTree,"m_truth_jet_Zcount");
-    }
+    }*/
 
 
     if(!m_doSystematics) {
@@ -1202,7 +1013,7 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); },           *systematicTree, std::string(tauprefix+"E").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
+     // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
@@ -1256,13 +1067,6 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<float>("mTauEtaCalib"); },     *systematicTree, std::string(tauprefix+"mTauEtaCalib").c_str());
       
 
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
-	  int decayMode = 0;
-	  tau.panTauDetail(xAOD::TauJetParameters::PanTauDetails::pantau_CellBasedInput_DecayMode, decayMode);
-	  return decayMode;
-	}, *systematicTree, std::string(tauprefix+"PanTauDecayMode").c_str());
-
-
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipZ0SinThetaSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipZ0SinThetaSigLeadTrk").c_str());
       //Wrap2(tauvec, [](const xAOD::TauJet& tau) {float d = 1e6; tau.detail(xAOD::TauJetParameters::Detail::ipSigLeadTrk, d); return d;}, *systematicTree, std::string(tauprefix+"ipSigLeadTrk").c_str());
 
@@ -1308,6 +1112,8 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
         systematicTree->makeOutputVariable(m_selectionDecisions[index], branchName);
         ++index;
     }
+
+
     for (size_t idx = 0; idx < LEPTON_ARR_SIZE; ++idx) {
       m_leptons[idx].BootstrapTree(systematicTree, idx);
     }
@@ -1315,18 +1121,10 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
 
-    m_variables->BootstrapTree(systematicTree, this, m_doSFSystematics);
-  }
 
-  // Shall we do scale factors?
-  // apparently not a question anymore
-  m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
-
-
-  //tools for OR
-  // only el/mu for now
-
-  ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
+    m_ttHEvent->BootstrapTree(systematicTree,false);
+    }
+ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
 			    "passPreORSelection");
   OR_flags.doElectrons = m_config->useElectrons();
   OR_flags.doMuons     = m_config->useMuons();
@@ -1407,18 +1205,29 @@ void ttHMultileptonLooseEventSaver::initialize(std::shared_ptr<top::TopConfig> c
   m_decor_ttHpassTauOVR = new SG::AuxElement::Decorator< char >("ttHpassTauOVR");
 
 
-}
 
-void ttHMultileptonLooseEventSaver::recordSelectionDecision(const top::Event& event) {
-  int index(0);
-  for (const auto& branchName : m_extraBranches) {
-    m_selectionDecisions[index] = event.m_info->auxdecor<int>(branchName);
-    ++index;
   }
-}
+  
+  ///-- saveEvent - run for every systematic and every event --///
+  void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event) 
+  {
+    m_ttHEvent->Clear();
+    std::shared_ptr<ttHML::Variables> tthevt;
+    if(event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
+      tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
+    }
+if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
+    if(tthevt)tthevt->clearReco();
+    return;
+  }
+  if(!m_config->saveOnlySelectedEvents()){
+    top::EventSaverFlatNtuple::saveEvent(event);
+    if(tthevt)tthevt->clearReco();
+    return;
+  }
 
-void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
-  if (event.m_ttreeIndex >= m_treeManagers.size()) {
+ 
+/*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
     // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
     return;
   }
@@ -1426,7 +1235,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   // only save selected events
   if(!event.m_saveEvent) {
     return;
-  }
+  }*/
 
   //unique name for selected containers
   std::size_t sysHash = event.m_hashValue;
@@ -1449,35 +1258,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     // LHE3 weights
     //m_lhe3weights = (*event.m_truthEvent)[0]->weights();
     m_lhe3weights = event.m_info->mcEventWeights();
-    if(m_sfRetriever){
-      m_pileup_weight = m_sfRetriever->pileupSF(event);
-      m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
-      //btag moved to own function
-
-      //do sys weights only in "nominal" tree
-      if( m_doSFSystematics ){
-
-	m_pileup_weight_UP = m_sfRetriever->pileupSF( event, +1 ); // up variation
-	m_pileup_weight_DOWN = m_sfRetriever->pileupSF( event, -1 ); // down variation
-	//normalise
-	m_pileup_weight_UP    = relativeSF(m_pileup_weight_UP,   m_pileup_weight);
-	m_pileup_weight_DOWN  = relativeSF(m_pileup_weight_DOWN, m_pileup_weight);
-
-	//btag SFs moved
-	
-	// JVT SF
-	m_JVT_weight_UP = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_UP);
-	m_JVT_weight_DOWN = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_DOWN);
-
-	//normalise
-	m_JVT_weight_UP   = relativeSF(m_JVT_weight_UP,  m_JVT_weight);
-	m_JVT_weight_DOWN = relativeSF(m_JVT_weight_DOWN,m_JVT_weight);
-
-      } //end if isNominal
-    } //end if m_sfRetriever
   } //end if isSimulation
 
-  //event info
+ //event info
   m_eventNumber = event.m_info->eventNumber();
   if (top::isSimulation(event)) {
     m_runNumber = m_purwtool->getRandomRunNumber(*event.m_info);
@@ -1487,7 +1270,9 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  if (m_runNumber >= 290000) {
+  if (m_runNumber >= 320000) {
+    m_runYear = 2017;
+  } else if (m_runNumber >=290000) {
     m_runYear = 2016;
   } else if (m_runNumber > 0) {
     m_runYear = 2015;
@@ -1496,15 +1281,29 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   }
 
   // waiting for fix in TopCorrections
-  m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
+ // m_mu      = m_purwtool->getCorrectedMu( *event.m_info, false);
+  m_mu      = m_purwtool->getCorrectedAverageInteractionsPerCrossing( *event.m_info, false);
 
   if(top::isSimulation(event)){
     m_mu      = m_mu_unc;
     m_pu_hash = m_purwtool->getPRWHash( *event.m_info );
   }
+  m_met_met = event.m_met->met();
+  m_met_phi = event.m_met->phi();
+  m_met_sumet = event.m_met->sumet();
+  const xAOD::MissingETContainer *newMetContainer(nullptr);
+  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET container");
+
+  const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];
+  MET_softTrk_et = softTrkMet->met();
+  MET_softTrk_phi = softTrkMet->phi();
+
+  const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];
+  MET_softClus_et = softClusMet->met();
+  MET_softClus_phi = softClusMet->phi();
 
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
-
+/*
   // Truth Matrix element photon
   m_hasMEphoton = false;
   m_hasMEphoton_DRgt02_nonhad = false;
@@ -1520,9 +1319,10 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   m_MEphoton_mother_pt = -1.;
   m_MEphoton_mother_eta = 0.;
   m_MEphoton_mother_phi = 0.;
-  if (event.m_truth != nullptr) {
+  if (event.m_truth != nullptr ) {
     for (const auto& particle : *(event.m_truth)) {
       int pdgId = 22; // look at photons
+      if (particle!=nullptr && particle->parent(0)!=nullptr){
       if (fabs(particle->pdgId()) == pdgId
           && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
         int motherPdgId = 999;
@@ -1535,7 +1335,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
         }
         if (abs(motherPdgId) < 100 && particle->barcode() < 2e5 && particle->pt() > 0 && motherPt > 0) {
           m_hasMEphoton = true;
-          // std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
+           std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
           double dr = particle->p4().DeltaR(mother->p4()); // always look at DR
           if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18))
             m_hasMEphoton_DRgt02_nonhad = true; // in selection use with "(!m_hasMEphoton_DRgt02_nonhad)!=(mc_channel_number==410082)"
@@ -1563,6 +1363,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
           }
         }
       }
+     }
     }
   }
   if (!m_hasMEphoton)
@@ -1619,7 +1420,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   //ttbar DLF, MLF classification
   if (top::isSimulation(event)) {
-    m_DLF_Classification = truthSelector.CountTopWLeptons(event.m_truth);
+//    m_DLF_Classification = truthSelector.CountTopWLeptons(event.m_truth);
     //m_MLF_Classification = truthSelector.CountLightLeptons(event.m_truth, 10e3, 2.6);
   }
 
@@ -1758,7 +1559,7 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
 
   // for (const auto* const elPtr : event.m_electrons) {
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
-  // }
+  // }*/
 
   //Event info (for TrackingxAODHelpers)
   m_eventInfo = event.m_info;
@@ -1795,125 +1596,67 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     vec_vtx_wrappers[event.m_ttreeIndex].push_all(*m_vertices);
   }
 
-  m_variables->Clear();
-  Decorate(event);
-  DecorateTaus(event);
-  auto goodEl = SelectElectrons(event);
-  auto goodMu = SelectMuons(event);
-  auto goodJet = SelectJets(event);
-  auto goodTau = SelectTaus(event);
 
-  
-  //Fill nTruthJets
-  m_variables->nTruthJets =  this->getNTruthJets(goodJet);
-
-  bool useStandardOLR = true;
-  if (useStandardOLR) {
-    // Standard OLR aka Run-1 with modified jet-mu OLR
-    OverlapRemoval(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  } else {
-  // Alternative ASG OLR with mu-jet OLR (0.4, 0.04+10GeV/pt_mu)
-    top::check( m_overlapRemovalTool[1]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal OR" );
-    top::check( m_overlapRemovalTool[2]->removeOverlaps( goodEl.get(), goodMu.get(), goodJet.get(), goodTau.get() ) , "Failed to do nominal-but-tau OR" );
-    top::check( m_overlapRemovalTool[0]->removeOverlaps( &event.m_electrons, &event.m_muons, &event.m_jets ) , "Failed to remove el/mu overlaps" );
-    OverlapRemoval_ContOnly(goodEl, goodMu, goodJet, goodTau, event.m_ttreeIndex == 0);
-  }
-  CopyLeptons(goodEl, goodMu);
-  //MakeIndices(event.m_electrons);
-  //MakeIndices(event.m_muons);
-
-  //i dont care about your const, so so naughty
-  top::Event& nc_event = const_cast<top::Event&>(event);
-  xAOD::JetContainer orig_jets = event.m_jets;
-  xAOD::JetContainer tmp_jets(SG::VIEW_ELEMENTS);
-  xAOD::JetContainer tmp_jets_T(SG::VIEW_ELEMENTS);
-  
-  for(auto jetItr : *goodJet ) {
-    if(jetItr->auxdataConst<char>("ttHpassOVR"))
-      tmp_jets.push_back(jetItr);
-    if(jetItr->auxdataConst<char>("ttHpassOVR") and jetItr->auxdataConst<char>("ttHpassTauOVR") )
-      tmp_jets_T.push_back(jetItr);
-  }
-  tmp_jets.sort(top::descendingPtSorter);
-  tmp_jets_T.sort(top::descendingPtSorter);
-
-  if(m_variables->total_leptons == 1 or (m_variables->total_leptons == 2 and m_variables->total_charge == 0 ) or m_variables->total_leptons == 4)
-    nc_event.m_jets = tmp_jets;
-  else
-    nc_event.m_jets = tmp_jets_T;
-  
-  setBtagSFs(event);
-  nc_event.m_jets = tmp_jets;
-  
-  CopyJets(goodJet);
-  CopyTaus(goodTau);
-  CopyHT(goodEl, goodMu, goodJet, goodTau);
-  CheckIsBlinded();
-
-  doEventTrigSFs(goodEl, goodMu, event);
-  doEventSFs();
-
-  //blame David and the other vector people for this...
-  for(auto allel : event.m_electrons) {
-    (*m_decor_ttHpassOVR)(*allel) = 0;
-    //allel->auxdecor<char>("ttHpassOVR") = 0;
-    for(auto goodel : *goodEl ) {
-      if( goodel->p4() == allel->p4() ) {
-	(*m_decor_ttHpassOVR)(*allel) = (*m_decor_ttHpassOVR)(*goodel);
-	//allel->auxdecor<char>("ttHpassOVR")    = goodel->auxdecor<char>("ttHpassOVR");
-      }
+  // for skimming of Sys, Data and Nominal after overlap removal
+/*  if (m_doSystematics) { // Sys
+    if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 < 2)
+      return; // remove all events with less than 2 leptons (including taus)
+    if (m_ttHEvent->total_leptons == 2 && m_ttHEvent->total_charge == 0 && m_ttHEvent->nTaus_OR_Pt25 == 0)
+      return; // remove all 2l opposite sign 0 tau events
+    if (m_ttHEvent->total_leptons == 1 && m_ttHEvent->nTaus_OR_Pt25 <= 1)
+      return; // remove all 1l1tau events
+  } else { // Data and Nominal
+    std::cout << "Albert in loop non-systematic" << std::endl;
+ 	if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 == 0){
+      std::cout << "Albert in if non-systematic" << std::endl;
+      return; // remove all events with neither leptons nor taus
     }
   }
+*/
+//////////////////////////////////////////////////////
 
-  for(auto allmu : event.m_muons) {
-    //allmu->auxdecor<char>("ttHpassOVR") = 0;
-    (*m_decor_ttHpassOVR)(*allmu) = 0;
-    for(auto goodmu : *goodMu ) {
-      if( goodmu->p4() == allmu->p4() ) {
-	(*m_decor_ttHpassOVR)(*allmu) = (*m_decor_ttHpassOVR)(*goodmu);
-	//allmu->auxdecor<char>("ttHpassOVR")    = goodmu->auxdecor<char>("ttHpassOVR");
-      }
-    }
-  }
 
-  for(auto alltau : event.m_tauJets) {
-    //alltau->auxdecor<char>("ttHpassTauOVR") = 0;
-    (*m_decor_ttHpassTauOVR)(*alltau) = 0;
-    for(auto goodtau : *goodTau ) {
-      if( goodtau->p4() == alltau->p4() )
-	(*m_decor_ttHpassTauOVR)(*alltau) = (*m_decor_ttHpassTauOVR)(*goodtau);
-      //alltau->auxdecor<char>("ttHpassTauOVR") = goodtau->auxdecor<char>("ttHpassTauOVR");
-    }
-  }
+
+
+    const xAOD::ElectronContainer* Electrons(nullptr);
+    const xAOD::MuonContainer* Muons(nullptr);
+    const xAOD::JetContainer* Jets(nullptr);
+    const xAOD::TauJetContainer* Taus(nullptr);
+    top::check( evtStore()->retrieve(Electrons,"SelectedORElectrons"),"Failed to retrieve Electrons");
+    top::check( evtStore()->retrieve(Muons,"SelectedORMuons"),"Failed to retrieve Muons");
+    top::check( evtStore()->retrieve(Jets,"SelectedORJets"),"Failed to retrieve JEts");
+    top::check( evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
+    CopyLeptons(*Electrons,*Muons);
+    CopyJets(*Jets);
+    //MakeJetIndices(*Jets,event.m_jets);
+    CopyTaus(*Taus);
+    CopyHT(*Electrons,*Muons,*Jets,*Taus);
+    CheckIsBlinded();
+    //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
+ xAOD::JetContainer* calibratedJets(nullptr);
+  top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
+
 
   // for skimming of Sys, Data and Nominal after overlap removal
   if (m_doSystematics) { // Sys
-    if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 < 2)
+    if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 < 2)
       return; // remove all events with less than 2 leptons (including taus)
-    if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 == 0)
+    if (m_ttHEvent->total_leptons == 2 && m_ttHEvent->total_charge == 0 && m_ttHEvent->nTaus_OR_Pt25 == 0)
       return; // remove all 2l opposite sign 0 tau events
-    if (m_variables->total_leptons == 1 && m_variables->nTaus_OR_Pt25 <= 1)
+    if (m_ttHEvent->total_leptons == 1 && m_ttHEvent->nTaus_OR_Pt25 <= 1)
       return; // remove all 1l1tau events
   } else { // Data and Nominal
-    if (m_variables->total_leptons + m_variables->nTaus_OR_Pt25 == 0)
+    if (m_ttHEvent->total_leptons + m_ttHEvent->nTaus_OR_Pt25 == 0){
       return; // remove all events with neither leptons nor taus
+    }
   }
 
-  // for skimming of events for promptLepton isolation WP (only MC):
-  // 2l for PromptLeptonCFT, 1l, 3l and 4l for PromptLepton
-  //if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLeptonCFT" && m_variables->total_leptons != 2)
-  //  return; // remove all 1l, 3l and 4l events
-  //if (m_config->isMC() && m_config->electronIsolationLoose() == "promptLepton" && m_variables->total_leptons == 2)
-  //  return; // remove all 2l events
 
-  //save ALL jets
-  xAOD::JetContainer* calibratedJets(nullptr);
-  top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
+
 
   if(m_doSystematics) {
-    //only selected jets
-    for(auto alljet : event.m_jets) {
-      for(auto goodjet : *goodJet ) {
+   for(auto alljet : event.m_jets) {
+      for(auto goodjet : *Jets) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
@@ -1922,21 +1665,19 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
     }
 
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
-    MakeJetIndices(goodJet, event.m_jets);
+    MakeJetIndices(*Jets, event.m_jets);
   }
   else {
-    //all jets
-    for(auto alljet : *calibratedJets) {
-      for(auto goodjet : *goodJet ) {
+   for(auto alljet : *calibratedJets) {
+      for(auto goodjet : *Jets ) {
 	if( goodjet->p4() == alljet->p4() ) {
 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
 	}
       }
     }
-
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
-    MakeJetIndices(goodJet, *calibratedJets);
+    MakeJetIndices(*Jets, *calibratedJets);
   }
 
   // xAOD::ElectronContainer* calibratedElectrons(nullptr);
@@ -1944,270 +1685,29 @@ void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event){
   // std::function<bool(const xAOD::Electron&)>elecSelector = [](const xAOD::Electron& el){ return el.auxdataConst<int>("passLHLoose") && el.pt()>5e3 ; };
   // vec_electron_wrappers[event.m_ttreeIndex].push_selected(*calibratedElectrons, elecSelector);
 
+
   vec_electron_wrappers[event.m_ttreeIndex].push_all(event.m_electrons);
   vec_scalar_wrappers[event.m_ttreeIndex].push_all(event);
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
   vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
 
 
-  //std::cout << m_eventNumber << " " << event.m_ttreeIndex << " " << m_treeManagers[event.m_ttreeIndex] << std::endl;
 
-  m_treeManagers[event.m_ttreeIndex]->fill();
+
+
+
+  /// other variables not in TTHbb::Event decoration
+  // if(event.m_info->isAvailable<int>("nJets"))
+  //   m_nJets                  = event.m_info->auxdecor<int>("nJets");
+
+  top::EventSaverFlatNtuple::saveEvent(event);
+  tthevt->clearReco();
+
+
+
+
+    ///-- Let the base class do all the hard work --///
+  //  top::EventSaverFlatNtuple::saveEvent(event);
+  }
   
-}
 
-void ttHMultileptonLooseEventSaver::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent) {
-  //jets
-  unsigned int i = 0;
-  m_trjet_pt.resize(plEvent.m_jets->size());
-  m_trjet_eta.resize(plEvent.m_jets->size());
-  m_trjet_phi.resize(plEvent.m_jets->size());
-  m_trjet_e.resize(plEvent.m_jets->size());
-  m_trjet_Hcount.resize(plEvent.m_jets->size());
-  m_trjet_Tcount.resize(plEvent.m_jets->size());
-  m_trjet_Wcount.resize(plEvent.m_jets->size());
-  m_trjet_Zcount.resize(plEvent.m_jets->size());
-  for (const auto & jetPtr : * plEvent.m_jets) {
-    m_trjet_pt[i] = jetPtr->pt();
-    m_trjet_eta[i] = jetPtr->eta();
-    m_trjet_phi[i] = jetPtr->phi();
-    m_trjet_e[i] = jetPtr->e();
-    m_trjet_Hcount[i] = jetPtr->getAttribute<int>("GhostHBosonsCount");
-    m_trjet_Tcount[i] = jetPtr->getAttribute<int>("GhostTQuarksFinalCount");
-    m_trjet_Wcount[i] = jetPtr->getAttribute<int>("GhostWBosonsCount");
-    m_trjet_Zcount[i] = jetPtr->getAttribute<int>("GhostZBosonsCount");
-    ++i;
-  }
-}
-
-//nothing happens in this method, but it needs to be defined because otherwise we have a crash
-void ttHMultileptonLooseEventSaver::saveTruthEvent() {
-}
-
-void ttHMultileptonLooseEventSaver::finalize() {
-  //Count histogram
-  auto Count = static_cast<TH1D*>(m_outputFile->Get("loose/Count"));
-
-  // copy number of events before event cleaning for data
-  // and before PRIVTX for mc
-  double totalEventsProcessed = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(1);
-  Count->SetBinContent(3,totalEventsProcessed);
-
-  //overwrite Count histogram with values from CutBookkeepers
-  //only for skimmed MC
-  if(m_isMC) {
-    TTreeReader sumWeightsReader("sumWeights", m_outputFile);
-    TTreeReaderValue<unsigned long long> totalEvents(sumWeightsReader, "totalEvents");
-    TTreeReaderValue<Float_t> totalEventsWeighted(sumWeightsReader, "totalEventsWeighted");
-    double totalEventsUnskimmed         = 0;
-    double totalEventsWeightedUnskimmed = 0;
-
-    if(m_config->doMCGeneratorWeights()) {
-      TTreeReaderValue<std::vector<float> > totalEventsWeighted_lhe(sumWeightsReader,
-								    "totalEventsWeighted_mc_generator_weights");
-      TTreeReaderValue<std::vector<std::string> > names_lhe(sumWeightsReader,
-							    "names_mc_generator_weights");
-
-      //create Count_LHE
-      sumWeightsReader.Next(); //get first entry, so names_lhe is filled
-      m_outputFile->cd("loose");
-      TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", names_lhe->size(), -0.5, names_lhe->size() - 0.5);
-      m_outputFile->cd();
-
-      //fill Count_LHE
-      sumWeightsReader.SetEntry(-1); // restart
-      while(sumWeightsReader.Next()) {
-	for(unsigned int i=0; i<names_lhe->size(); ++i) {
-	  int ibin = i+1;
-	  count_histo_lhe_weights->GetXaxis()->SetBinLabel(ibin,names_lhe->at(i).c_str());
-	  count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
-	}
-      }
-      sumWeightsReader.SetEntry(-1); //restart again
-    }//end if generatorweights
-    
-    while(sumWeightsReader.Next()) {
-      totalEventsUnskimmed         += *totalEvents;
-      totalEventsWeightedUnskimmed += *totalEventsWeighted;
-    }
-    double totalEventsSkimmed = Count->GetBinContent(3);
-    if(totalEventsUnskimmed != totalEventsSkimmed) {
-      Count->SetBinContent(1,totalEventsUnskimmed);
-      Count->SetBinContent(2,totalEventsWeightedUnskimmed);
-    }    
-  }//end if MC
-
-
-  
-  m_outputFile->WriteTObject(m_eleCutflow);
-  m_outputFile->WriteTObject(m_muCutflow);
-  m_outputFile->WriteTObject(m_jetCutflow);
-  m_outputFile->WriteTObject(m_tauCutflow);
-  m_outputFile->Write();
-
-  //delete m_trigGlobEffCorr;
-
-}
-
-void ttHMultileptonLooseEventSaver::doEventSFs_Helper(int ilep, bool tightIsLoose) {
-  m_variables->lepSFIDLoose *= m_leptons[ilep].SFIDLoose[0];
-  m_variables->lepSFIDTight *= (tightIsLoose ? m_leptons[ilep].SFIDLoose[0] : m_leptons[ilep].SFIDTight[0]);
-  m_variables->lepSFIsoLoose *= m_leptons[ilep].SFIsoLoose[0];
-  m_variables->lepSFIsoTight *= (tightIsLoose ? m_leptons[ilep].SFIsoLoose[0] : m_leptons[ilep].SFIsoTight[0]);
-  m_variables->lepSFReco *= m_leptons[ilep].SFReco[0];
-  m_variables->lepSFTTVA *= m_leptons[ilep].SFTTVA[0];
-  for (const auto& systvar : m_lep_sf_names) {
-    auto ivar = systvar.first;
-    m_variables->lepSFObjLoose[ivar] *= m_leptons[ilep].SFObjLoose[ivar];
-    m_variables->lepSFObjTight[ivar] *= (tightIsLoose ? m_leptons[ilep].SFObjLoose[ivar] : m_leptons[ilep].SFObjTight[ivar]);
-  }
-}
-
-void ttHMultileptonLooseEventSaver::doEventSFs() {
-  // logic: for 3l Tight = Loose * Tight * Tight
-  // otherwise = Product of corresponding SF
-  m_variables->lepSFIDLoose = 1;
-  m_variables->lepSFIDTight = 1;
-  m_variables->lepSFIsoLoose = 1;
-  m_variables->lepSFIsoTight = 1;
-  m_variables->lepSFReco = 1;
-  m_variables->lepSFTTVA = 1;
-  for (const auto& systvar : m_lep_sf_names) {
-    auto ivar = systvar.first;
-    m_variables->lepSFObjLoose[ivar] = 1;
-    m_variables->lepSFObjTight[ivar] = 1;
-  }
-  for (const auto& systvar : m_tau_sf_names ) {
-    auto ivar = systvar.first;
-    m_variables->tauSFTight[ivar] = 1;
-    m_variables->tauSFLoose[ivar] = 1;
-  }
-
-  if (m_variables->total_leptons == 2 && m_variables->total_charge == 0 && m_variables->nTaus_OR_Pt25 != 0) {
-    // for 2los1tau tight = loose*loose
-    doEventSFs_Helper(0, true);
-    doEventSFs_Helper(1, true);
-  } else if (m_variables->total_leptons == 3) {
-    // for 3l0tau and 3l1tau tight = loose*tight*tight
-    doEventSFs_Helper(0, true);
-    doEventSFs_Helper(1, false);
-    doEventSFs_Helper(2, false);
-  } else if (m_variables->total_leptons == 4) {
-    // for 4l tight = loose*loose*tight*tight
-    doEventSFs_Helper(0, true);
-    doEventSFs_Helper(1, true);
-    doEventSFs_Helper(2, false);
-    doEventSFs_Helper(3, false);
-  } else {
-    for (int ilep = 0; ilep < m_variables->total_leptons; ++ilep) {
-      doEventSFs_Helper(ilep, false);
-    }
-  }
-
-  for (const auto& systvar : m_lep_sf_names) {
-    const auto ivar = systvar.first;
-    if (ivar == top::topSFSyst::nominal) continue;
-    m_variables->lepSFObjLoose[ivar] /= m_variables->lepSFObjLoose[0];
-    m_variables->lepSFObjTight[ivar] /= m_variables->lepSFObjTight[0];
-  }
-
-
-  //taus
-  for ( int itau = 0; itau<m_variables->nTaus_OR_Pt25; ++itau) {
-    for ( auto syst : m_tau_sf_names ) {
-      auto ivar = syst.first;
-      m_variables->tauSFTight[ivar] *= m_taus[itau].SFTight[ivar];
-      m_variables->tauSFLoose[ivar] *= m_taus[itau].SFLoose[ivar];
-    }
-  }
-
-  //normalise variations
-  for ( auto syst : m_tau_sf_names ) {
-      auto ivar = syst.first;
-      if( ivar == top::topSFSyst::nominal ) continue;
-      m_variables->tauSFTight[ivar] /= m_variables->tauSFTight[top::topSFSyst::nominal];
-      m_variables->tauSFLoose[ivar] /= m_variables->tauSFLoose[top::topSFSyst::nominal];
-
-      if( m_variables->tauSFTight[ivar] != m_variables->tauSFTight[ivar] ) m_variables->tauSFTight[ivar] = 1;
-      if( m_variables->tauSFLoose[ivar] != m_variables->tauSFLoose[ivar] ) m_variables->tauSFLoose[ivar] = 1;
-    }
-
-  
-}
-
-double ttHMultileptonLooseEventSaver::relativeSF(double variation, double nominal) {
-  if (nominal == 0) return 0;
-  else return variation/nominal;
-}
-
-// remove "FT_EFF_", spaces, and "-" in named systematics
-std::string ttHMultileptonLooseEventSaver::betterBtagNamedSyst (const std::string name) {
-  std::string str = "FT_EFF_";
-  std::string out = name;
-  if (out.find(str) != std::string::npos) {
-    out.replace(out.find(str),str.length(),"");
-  }
-  str = " ";
-  while (out.find(str) != std::string::npos) {
-    out.replace(out.find(str),str.length(),"_");
-  }
-  str = "-";
-  while (out.find(str) != std::string::npos) {
-    out.replace(out.find(str),str.length(),"_");
-  }
-  return out;
-}
-
-void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
-  //do sys weights only in "nominal" tree
-  if(     top::isSimulation(event) and m_sfRetriever ){
-
-    m_bTagSF_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,m_bTagSF_default,false);
-    m_bTagSF60_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_60",false);
-    m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_70",false);
-    m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_77",false);
-    m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"FixedCutBEff_85",false);
-    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
-    //btag
-    if(m_doSFSystematics) {
-      m_sfRetriever->btagSF_eigen_vars(event,
-				       top::topSFSyst::BTAG_SF_EIGEN_B,
-				       m_weight_bTagSF_eigen_B_up,
-				       m_weight_bTagSF_eigen_B_down, m_bTagSF_default);
-      m_sfRetriever->btagSF_eigen_vars(event,
-				       top::topSFSyst::BTAG_SF_EIGEN_C,
-				       m_weight_bTagSF_eigen_C_up,
-				       m_weight_bTagSF_eigen_C_down, m_bTagSF_default);
-      m_sfRetriever->btagSF_eigen_vars(event,
-				       top::topSFSyst::BTAG_SF_EIGEN_LIGHT,
-				       m_weight_bTagSF_eigen_Light_up,
-				       m_weight_bTagSF_eigen_Light_down, m_bTagSF_default);
-
-      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	m_weight_bTagSF_eigen_Others_up[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_UP, m_bTagSF_default, false, name );
-	m_weight_bTagSF_eigen_Others_down[name] = m_sfRetriever->btagSF( event, top::topSFSyst::BTAG_SF_NAMED_DOWN, m_bTagSF_default, false, name );
-      }
-
-
-
-      //normalise
-      for( unsigned int i=0; i<m_config->btagging_num_B_eigenvars(m_bTagSF_default); ++i) {
-	m_weight_bTagSF_eigen_B_up.at(i)   /= m_bTagSF_weight;
-	m_weight_bTagSF_eigen_B_down.at(i) /= m_bTagSF_weight;
-      }
-      for( unsigned int i=0; i<m_config->btagging_num_C_eigenvars(m_bTagSF_default); ++i) {
-	m_weight_bTagSF_eigen_C_up.at(i)   /= m_bTagSF_weight;
-	m_weight_bTagSF_eigen_C_down.at(i) /= m_bTagSF_weight;
-      }
-      for( unsigned int i=0; i<m_config->btagging_num_Light_eigenvars(m_bTagSF_default); ++i) {
-	m_weight_bTagSF_eigen_Light_up.at(i)   /= m_bTagSF_weight;
-	m_weight_bTagSF_eigen_Light_down.at(i) /= m_bTagSF_weight;
-      }
-      for (auto name : m_config->btagging_namedSysts(m_bTagSF_default)) {
-	m_weight_bTagSF_eigen_Others_up[name]   /= m_bTagSF_weight;
-	m_weight_bTagSF_eigen_Others_down[name] /= m_bTagSF_weight;
-      }
-
-    }//endif sys
-  }//endif nom
-}

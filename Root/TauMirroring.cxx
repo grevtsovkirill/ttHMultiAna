@@ -9,7 +9,7 @@ template<typename PTR> void CreateBranch(std::shared_ptr<top::TreeManager> tree,
   tree->makeOutputVariable(*addr, fmt1.str().c_str());
 }
 
-void ttHMultilepton::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index) {
+void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index) {
   CreateBranch(tree, &pt,              "tau_pt_",               index);
   CreateBranch(tree, &eta,             "tau_eta_",              index);
   CreateBranch(tree, &phi,             "tau_phi_",              index);
@@ -34,3 +34,4 @@ void ttHMultilepton::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, 
   CreateBranch(tree, &truthType,       "tau_truthType_",        index);
   CreateBranch(tree, &truthJetFlavour, "tau_truthJetFlavour_",  index);
 }
+

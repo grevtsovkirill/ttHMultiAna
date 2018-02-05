@@ -1,10 +1,31 @@
+
 #include "ttHMultilepton/Variables.h"
-#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "boost/format.hpp"
+#include "ttHMultilepton/ttHMLAsgHelper.h"
+#include "TopEvent/EventTools.h"
+#include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
+
+#include "xAODJet/JetContainer.h"
+#include "xAODEgamma/ElectronContainer.h"
+#include "xAODMuon/MuonContainer.h"
+#include "xAODTau/TauJetContainer.h"
+#include "xAODEventInfo/EventInfo.h"
+#include "xAODTracking/VertexContainer.h"
+#include "xAODTruth/xAODTruthHelpers.h"
 
 using boost::format;
 
-void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver* ntupler, bool doSFSystematics) {
+namespace ttHML{
+
+Variables::Variables()
+{
+
+}
+
+Variables::~Variables(){
+}
+
+void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFSystematics){
   tree->makeOutputVariable(onelep_type,   "onelep_type");
   tree->makeOutputVariable(dilep_type,    "dilep_type");
   tree->makeOutputVariable(trilep_type,   "trilep_type");
@@ -16,7 +37,7 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(isLepFromPhEvent, "isLepFromPhEvent");
 
   //tree->makeOutputVariable(Mll01, "Mll01");
-  format XXmn("%1%%2%%3%"), XXmno("%1%%2%%3%%4%"), XXmnop("%1%%2%%3%%4%%5%");
+    format XXmn("%1%%2%%3%"), XXmno("%1%%2%%3%%4%"), XXmnop("%1%%2%%3%%4%%5%");
   for (size_t idx1 = 0; idx1 < LEPTON_ARR_SIZE-1; ++idx1) {
     for (size_t idx2 = idx1+1; idx2 < LEPTON_ARR_SIZE; ++idx2) {
       XXmn % "Mll" % idx1 % idx2;
@@ -28,15 +49,16 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       XXmn % "matchDLTll" % idx1 % idx2;
       tree->makeOutputVariable(matchDLTll[idx1][idx2-1], XXmn.str().c_str());
       for (size_t idx3 = idx2+1; idx3 < LEPTON_ARR_SIZE; ++idx3) {
-	XXmno % "Mlll" % idx1 % idx2 % idx3;
-	tree->makeOutputVariable(Mlll[idx1][idx2-1][idx3-2], XXmno.str().c_str());
-	for (size_t idx4 = idx3+1; idx4 < LEPTON_ARR_SIZE; ++idx4) {
-	  XXmnop % "Mllll" % idx1 % idx2 % idx3 % idx4;
-	  tree->makeOutputVariable(Mllll[idx1][idx2-1][idx3-2][idx4-3], XXmnop.str().c_str());
-	}
+    	XXmno % "Mlll" % idx1 % idx2 % idx3;
+    	tree->makeOutputVariable(Mlll[idx1][idx2-1][idx3-2], XXmno.str().c_str());
+        for (size_t idx4 = idx3+1; idx4 < LEPTON_ARR_SIZE; ++idx4) {
+          XXmnop % "Mllll" % idx1 % idx2 % idx3 % idx4;
+      	  tree->makeOutputVariable(Mllll[idx1][idx2-1][idx3-2][idx4-3], XXmnop.str().c_str());
+        }
       }
     }
   }
+
   tree->makeOutputVariable(best_Z_Mll, "best_Z_Mll");
   tree->makeOutputVariable(best_Z_other_MtLepMet, "best_Z_other_MtLepMet");
   tree->makeOutputVariable(best_Z_other_Mll, "best_Z_other_Mll");
@@ -77,8 +99,11 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(sublead_jetEta, "sublead_jetEta");
   tree->makeOutputVariable(sublead_jetPhi, "sublead_jetPhi");
   tree->makeOutputVariable(sublead_jetE,"sublead_jetE");
-  tree->makeOutputVariable(selected_jets, "selected_jets");
-  tree->makeOutputVariable(selected_jets_T, "selected_jets_T");
+  tree->makeOutputVariable(selected_jetsOR, "selected_jets");
+  tree->makeOutputVariable(selected_jets_TOR, "selected_jets_T");
+  tree->makeOutputVariable(selected_jetsOR_mv2c10_Ordrd,"selected_jets_mv2c10_Ordrd");
+  tree->makeOutputVariable(selected_jets_TOR_mv2c10_Ordrd,"selected_jets_T_mv2c10_Ordrd");
+
   // scale factors
   //  tree->makeOutputVariable(lepSFIDLoose, "lepSFIDLoose");
   //  tree->makeOutputVariable(lepSFIDTight, "lepSFIDTight");
@@ -104,7 +129,7 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
   tree->makeOutputVariable(tauSFLoose    [top::topSFSyst::nominal], "tauSFLoose");
 
   //additional loop for trig SFs uncertainties with multiTrigger tool
-  if(doSFSystematics) {
+/*  if(doSFSystematics) {
     int nTrig = -1;
     for (const auto systvar : ntupler->m_lep_trigger_sf_names) {
       ++nTrig;
@@ -124,8 +149,7 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       tree->makeOutputVariable(lepDataEffTrigLooseTight[nTrig], "lepDataEffTrigLooseTight" + thisname);
     }
   }
-
-  if(doSFSystematics) {
+    if(doSFSystematics) {
     for (const auto systvar : ntupler->m_lep_sf_names) {
       if( systvar.first == top::topSFSyst::nominal ) continue; //nominal is done outside loop
       std::string thisname = "_" + systvar.second;
@@ -133,26 +157,26 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       bool doobj = false;
 
       if (
-	  (top::topSFSyst::EL_SF_Trigger_UP <= systvar.first &&
-	   systvar.first <= top::topSFSyst::EL_SF_Trigger_DOWN)
-	  ||
-	  (top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
-	   systvar.first <= top::topSFSyst::MU_SF_Trigger_SYST_DOWN)
-	  ) {
-	if (!(top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
-	      systvar.first <= top::topSFSyst::MU_SF_Trigger_DOWN)) {
-	  dotrig = true;
-	}
+      (top::topSFSyst::EL_SF_Trigger_UP <= systvar.first &&
+       systvar.first <= top::topSFSyst::EL_SF_Trigger_DOWN)
+      ||
+      (top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
+       systvar.first <= top::topSFSyst::MU_SF_Trigger_SYST_DOWN)
+      ) {
+    if (!(top::topSFSyst::MU_SF_Trigger_UP <= systvar.first &&
+          systvar.first <= top::topSFSyst::MU_SF_Trigger_DOWN)) {
+      dotrig = true;
+    }
       } else {
-	doobj = true;
+    doobj = true;
       }
       // if (dotrig && onelep_type>0) { //done above
-      // 	tree->makeOutputVariable(lepSFTrigLoose[systvar.first], "lepSFTrigLoose" + thisname);
-      // 	tree->makeOutputVariable(lepSFTrigTight[systvar.first], "lepSFTrigTight" + thisname);
+      //    tree->makeOutputVariable(lepSFTrigLoose[systvar.first], "lepSFTrigLoose" + thisname);
+      //    tree->makeOutputVariable(lepSFTrigTight[systvar.first], "lepSFTrigTight" + thisname);
       // }
       if (doobj) {
-	tree->makeOutputVariable(lepSFObjLoose[systvar.first], "lepSFObjLoose" + thisname);
-	tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);
+    tree->makeOutputVariable(lepSFObjLoose[systvar.first], "lepSFObjLoose" + thisname);
+    tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);
       }
     }
     for ( auto systvar : ntupler->m_tau_sf_names) {
@@ -161,6 +185,22 @@ void ttHMultilepton::Variables::BootstrapTree(std::shared_ptr<top::TreeManager> 
       tree->makeOutputVariable(tauSFTight[systvar.first], "tauSFTight" + thisname);
       tree->makeOutputVariable(tauSFLoose[systvar.first], "tauSFLoose" + thisname);
     }
-
-  }// endif doSFSystematics
+  }// endif doSFSystematics */
 }
+
+  void Variables::clearReco(){
+    selected_jets->clear();
+    selected_electrons->clear();
+    selected_muons->clear();
+    selected_taus->clear();
+    selected_OR_jets->clear();
+    selected_OR_electrons->clear();
+    selected_OR_muons->clear();
+    selected_OR_taus->clear();
+//    clearDecorations();
+//    m_reco=false;
+  }
+void Variables::Clear() { memset(this, 0, sizeof(Variables)); }
+
+}
+
