@@ -15,6 +15,7 @@
 #include "ttHMultilepton/DecorateMuons.h"
 #include "ttHMultilepton/SelectOR.h"
 #include "ttHMultilepton/NLeptonPlusTauSelector.h"
+#include "ttHMultilepton/SignalRegionPreselection.h"
 #include <iostream>
 #include "TFile.h"
 
@@ -51,6 +52,8 @@
         return new SelectOR(param, config);
     if(toolname == "NLEPTONPLUSTAU")
         return new NLeptonPlusTauSelector(param);
+	if(toolname == "SRPRESKIM")
+		return new SignalRegionPreselection(param, config); 
 //    if(toolname == "FILLVARIABLES")
 //        return new FillVariables(param, config);
     //else if (toolname.find("OTHER_TOOL") == 0)
