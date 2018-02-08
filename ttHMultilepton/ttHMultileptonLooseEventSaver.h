@@ -57,6 +57,7 @@ extern TH1I* m_tauCutflow;
       ///-- Keep the asg::AsgTool happy --///
       virtual StatusCode initialize() override {return StatusCode::SUCCESS;}      
       
+      void finalize();
       ///-- saveEvent function for top::EventSaverFlatNtuple --///
       ///-- We will be setting our custom variables on a per-event basis --///
       virtual void saveEvent(const top::Event& event) override;
