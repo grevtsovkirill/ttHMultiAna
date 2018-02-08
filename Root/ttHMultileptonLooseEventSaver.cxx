@@ -254,7 +254,6 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
     systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
 
     if ( m_doSFSystematics ) {
-std::cout<<"aaaaaaaaaaaaaaaaa"<<std::endl;
       //pileup
       systematicTree->makeOutputVariable(m_pileup_weight_UP,   "pileupEventWeight_UP");
       systematicTree->makeOutputVariable(m_pileup_weight_DOWN, "pileupEventWeight_DOWN");
