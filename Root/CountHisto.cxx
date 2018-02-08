@@ -40,13 +40,13 @@ bool CountHisto::apply(const top::Event& event) const {
 
   double eventWeight = 1.;
   double pileUpWeight = 1.;
-  if (top::isSimulation(event)) {
+  /*if (top::isSimulation(event)) {
     eventWeight = event.m_info->mcEventWeight();
     //pileup weight needs pileup reweighting tool to have run
     if (top::ScaleFactorRetriever::hasPileupSF(event)) {
       pileUpWeight = top::ScaleFactorRetriever::pileupSF(event);
     }
-  }
+  }*/
 
   m_hists.hist("Count")->Fill( 0. ,eventWeight);
   m_hists.hist("Count")->Fill( 1. ,eventWeight*pileUpWeight);
