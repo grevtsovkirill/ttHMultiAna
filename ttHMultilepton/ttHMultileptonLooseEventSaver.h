@@ -156,8 +156,9 @@ extern TH1I* m_tauCutflow;
 /*  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
   void doEventSFs();
-  double relativeSF(double variation, double nominal);
-  void setBtagSFs(const top::Event& event);*/
+  double relativeSF(double variation, double nominal);*/
+  std::string betterBtagNamedSyst (const std::string WP);
+  void setBtagSFs(const top::Event& event);
 
   //some event weights
   double m_mcWeight;
@@ -166,7 +167,7 @@ extern TH1I* m_tauCutflow;
   double m_pileup_weight_UP;
   double m_pileup_weight_DOWN;
   //btag SF weights
-/*  std::string m_bTagSF_default;
+  std::string m_bTagSF_default;
   double m_bTagSF_weight;
   double m_bTagSF60_weight;
   double m_bTagSF70_weight;
@@ -184,7 +185,7 @@ extern TH1I* m_tauCutflow;
   // JVT SF weights
   double m_JVT_weight;
   double m_JVT_weight_UP;
-  double m_JVT_weight_DOWN;*/
+  double m_JVT_weight_DOWN;
 
   //event info
   unsigned long long m_eventNumber;
