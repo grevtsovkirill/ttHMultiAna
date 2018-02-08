@@ -22,6 +22,8 @@
 #include <TMath.h>
 #include <cmath>
 #include <algorithm>
+#include <TTreeReader.h>
+#include <TTreeReaderValue.h>
 
 #include <TRandom3.h>
 
@@ -1817,4 +1819,57 @@ void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
   }//endif nom
 }
 
+void ttHMultileptonLooseEventSaver::finalize()
+{
+  auto Count = static_cast<TH1D*>(m_outputFile->Get("loose/Count"));
+  
+  double totalEventsProcessed = static_cast<TH1D*>(m_outputFile->Get("loose/cutflow"))->GetBinContent(1);
+  Count->SetBinContent(3,totalEventsProcessed);
+  
+  //overwrite Count histogram with values from CutBookkeepers
+  //only for skimmed MC
+  if(m_isMC)
+  {
+    TTreeReader sumWeightsReader("sumWeights", m_outputFile);
+    TTreeReaderValue<unsigned long long> totalEvents(sumWeightsReader, "totalEvents");
+    TTreeReaderValue<Float_t> totalEventsWeighted(sumWeightsReader, "totalEventsWeighted");
+    double totalEventsUnskimmed         = 0;
+    double totalEventsWeightedUnskimmed = 0;
+
+    if(m_config->doMCGeneratorWeights()) {
+      TTreeReaderValue<std::vector<float> > totalEventsWeighted_lhe(sumWeightsReader,
+	  "totalEventsWeighted_mc_generator_weights");
+      TTreeReaderValue<std::vector<std::string> > names_lhe(sumWeightsReader,
+	  "names_mc_generator_weights");
+
+      //create Count_LHE
+      sumWeightsReader.Next(); //get first entry, so names_lhe is filled
+      m_outputFile->cd("loose");
+      TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", names_lhe->size(), -0.5, names_lhe->size() - 0.5);
+      m_outputFile->cd();
+
+      //fill Count_LHE
+      sumWeightsReader.SetEntry(-1); // restart
+      while(sumWeightsReader.Next()) {
+	for(unsigned int i=0; i<names_lhe->size(); ++i) {
+	  int ibin = i+1;
+	  count_histo_lhe_weights->GetXaxis()->SetBinLabel(ibin,names_lhe->at(i).c_str());
+	  count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
+	}
+      }
+      sumWeightsReader.SetEntry(-1); //restart again
+    }//end if generatorweights
+
+    while(sumWeightsReader.Next()) {
+      totalEventsUnskimmed         += *totalEvents;
+      totalEventsWeightedUnskimmed += *totalEventsWeighted;
+    }
+    double totalEventsSkimmed = Count->GetBinContent(3);
+    if(totalEventsUnskimmed != totalEventsSkimmed) {
+      Count->SetBinContent(1,totalEventsUnskimmed);
+      Count->SetBinContent(2,totalEventsWeightedUnskimmed);
+    }    
+  }//end if MC
+  m_outputFile->Write();
+}
 
