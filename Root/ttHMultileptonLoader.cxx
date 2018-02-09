@@ -15,18 +15,22 @@
 #include "ttHMultilepton/DecorateMuons.h"
 #include "ttHMultilepton/SelectOR.h"
 #include "ttHMultilepton/NLeptonPlusTauSelector.h"
+#include "ttHMultilepton/CountHisto.h"
 #include "ttHMultilepton/SignalRegionPreselection.h"
 #include "ttHMultilepton/CalculateSF.h"
 #include <iostream>
 #include "TFile.h"
 
 
-  top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& /*name*/, const std::string& line, TFile* /*outputFile*/, std::shared_ptr<top::TopConfig> config,EL::Worker* /*wk*/)
+  top::EventSelectorBase* ttHMultileptonLoader::initTool(const std::string& name, const std::string& line, TFile* outputFile, std::shared_ptr<top::TopConfig> config,EL::Worker* wk)
   {
     //get the first bit of the string and store it in toolname
     std::istringstream iss(line);
     std::string toolname;
     getline(iss, toolname, ' ');
+
+    if (line.find("COUNTHISTO")==0)
+       return new CountHisto(name,outputFile,wk);
 
     //any parameters?
     std::string param;
