@@ -889,6 +889,11 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.truthType       = xTau.auxdata<int>("tauTruthType");
   MLTau.truthJetFlavour = xTau.auxdata<int>("truthJetFlavour");
 
+  static SG::AuxElement::Accessor<float> promptTauVeto("PromptTauVeto");
+  MLTau.promptTauVeto = (promptTauVeto.isAvailable(xTau)) ? promptTauVeto(xTau) : -99;
+
+
+
 /*  for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;

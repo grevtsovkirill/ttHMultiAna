@@ -109,6 +109,14 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
   //  tree->makeOutputVariable(lepSFIDTight, "lepSFIDTight");
   //  tree->makeOutputVariable(lepSFTrigLoose, "lepSFTrigLoose");
   //  tree->makeOutputVariable(lepSFTrigTight, "lepSFTrigTight");
+  tree->makeOutputVariable(lepSFIDLoose, "lepSFIDLoose");
+  tree->makeOutputVariable(lepSFIDTight, "lepSFIDTight");
+  tree->makeOutputVariable(lepSFIsoLoose, "lepSFIsoLoose");
+  tree->makeOutputVariable(lepSFIsoTight, "lepSFIsoTight");
+  tree->makeOutputVariable(lepSFReco, "lepSFReco");
+  tree->makeOutputVariable(lepSFTTVA, "lepSFTTVA");
+
+
 
   //nominal weights
   tree->makeOutputVariable(lepSFTrigLoose[0], "lepSFTrigLoose");

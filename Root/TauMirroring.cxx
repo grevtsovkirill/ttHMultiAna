@@ -33,5 +33,7 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &truthOrigin,     "tau_truthOrigin_",      index);
   CreateBranch(tree, &truthType,       "tau_truthType_",        index);
   CreateBranch(tree, &truthJetFlavour, "tau_truthJetFlavour_",  index);
+
+  CreateBranch(tree, &promptTauVeto, "tau_promptTauVeto_",      index);
 }
 
