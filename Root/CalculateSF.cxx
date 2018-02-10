@@ -48,7 +48,6 @@ bool CalculateSF::apply(const top::Event& event) const {
 	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons"),"Failed to retrieve Muons");
 	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus"); 
 
-
 	typedef std::tuple<const TLorentzVector*, int, std::string> sorttype_t;
 	std::vector<sorttype_t> sorter;
 	int idx = 0;
@@ -122,7 +121,7 @@ bool CalculateSF::apply(const top::Event& event) const {
 	  tightIsLoose.push_back( true);
 	  tightIsLoose.push_back( false);
 	  tightIsLoose.push_back( false);
-	} else {
+	} else {	
 	  for (int ilep = 0; ilep < tthevt->totalLeptons; ++ilep) {
 	    tightIsLoose.push_back( false);
 	  }
@@ -194,7 +193,18 @@ bool CalculateSF::apply(const top::Event& event) const {
 		tthevt->tauSFTight[ivar] /= tthevt->tauSFTight[top::topSFSyst::nominal];
 		tthevt->tauSFLoose[ivar] /= tthevt->tauSFLoose[top::topSFSyst::nominal];
 	}
-       
+/*
+	std::cout << " lepSFIDLoose: " << tthevt->lepSFIDLoose << std::endl;
+	std::cout << "lepSFIDTight: " << tthevt->lepSFIDTight << std::endl;
+	std::cout << "lepSFIsoLoose: " << tthevt->lepSFIsoLoose << std::endl;
+	std::cout << "lepSFIsoTight: " << tthevt->lepSFIsoTight << std::endl;
+    std::cout << "lepSFReco: " << tthevt->lepSFReco << std::endl;
+    std::cout << "lepSFTTVA: " << tthevt->lepSFTTVA << std::endl;	
+std::cout << " lepSFObjLoose: " << tthevt->lepSFObjLoose[top::topSFSyst::nominal] << std::endl;
+	std::cout << " lepSFObjTight: " << tthevt->lepSFObjTight[top::topSFSyst::nominal] << std::endl;
+	std::cout << " tauSFTight: " << tthevt->tauSFTight[top::topSFSyst::nominal] << std::endl;
+*/
+
 
 	sorter.clear();
 	tightIsLoose.clear();
@@ -218,9 +228,15 @@ void CalculateSF::doEventSFs_Helper(const xAOD::Electron_v1& el, bool tightIsLoo
 	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->electronSF_Trigger(el, ivar, !tightIsLoose);
 	  if(m_SF.lepSFTrigLoose[ivar] == 0) m_SF.lepSFTrigLoose[ivar] = 1;
 	  if(m_SF.lepSFTrigTight[ivar] == 0) m_SF.lepSFTrigTight[ivar] = 1;
-	  
-	  m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFReco[ivar];
-	  m_SF.lepSFObjTight[ivar] *= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] :  m_SF.lepSFIDTight[ivar]*m_SF.lepSFIsoTight[ivar]*m_SF.lepSFReco[ivar] );
+	 
+
+
+	  m_SF.lepSFObjLoose[ivar]*= m_sfRetriever->electronSF_ID(el, ivar, false) * m_sfRetriever->electronSF_Isol(el, ivar, false) * m_SF.lepSFReco[ivar] * m_sfRetriever->electronSF_Reco(el, ivar);
+
+	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose) *  m_SF.lepSFIsoTight[ivar] * m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose) * m_sfRetriever->electronSF_Reco(el, ivar));
+ 
+	  //m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFReco[ivar];
+	  //m_SF.lepSFObjTight[ivar] *= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] :  m_SF.lepSFIDTight[ivar]*m_SF.lepSFIsoTight[ivar]*m_SF.lepSFReco[ivar] );
 	}
 }
 void CalculateSF::doEventSFs_Helper(const  xAOD::Muon_v1& mu, bool tightIsLoose, std::map<top::topSFSyst, std::string> m_lep_sf_names) const {
@@ -240,9 +256,14 @@ void CalculateSF::doEventSFs_Helper(const  xAOD::Muon_v1& mu, bool tightIsLoose,
 	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->muonSF_Trigger(mu, ivar, !tightIsLoose);
 	  if(m_SF.lepSFTrigLoose[ivar] == 0) m_SF.lepSFTrigLoose[ivar] = 1;
 	  if(m_SF.lepSFTrigTight[ivar] == 0) m_SF.lepSFTrigTight[ivar] = 1;
+
+	  m_SF.lepSFObjLoose[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, false) * m_sfRetriever->muonSF_Isol(mu, ivar, false) * ( m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0) ;
+
+	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->muonSF_ID(mu, ivar, !tightIsLoose) * m_sfRetriever->muonSF_Isol(mu, ivar, !tightIsLoose) * (m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0));
+
 	  
-	  m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFReco[ivar];
-	  m_SF.lepSFObjTight[ivar] *= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] :  m_SF.lepSFIDTight[ivar]*m_SF.lepSFIsoTight[ivar]*m_SF.lepSFReco[ivar] );
+//	  m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFTTVA[ivar];
+//	  m_SF.lepSFObjTight[ivar] *= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] :  m_SF.lepSFIDTight[ivar]*m_SF.lepSFIsoTight[ivar]*m_SF.lepSFTTVA[ivar] );
 	}
 
 }
