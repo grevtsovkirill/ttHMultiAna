@@ -129,7 +129,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   m_selectionDecisions.resize(m_extraBranches.size());
 
   m_config = config;
-
+  //m_classifyttbarHF = new ttHMultilepton::ClassifyHF("AntiKt4TruthJets");
   // dont mix MC and data in the same job
   m_isMC = config->isMC();
 
@@ -1293,16 +1293,6 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     return;
   }
 
- 
-/*  if (event.m_ttreeIndex >= m_treeManagers.size()) {
-    // this is some forced loose tree nonsense : just ignore it, it's non-diagetic
-    return;
-  }
-
-  // only save selected events
-  if(!event.m_saveEvent) {
-    return;
-  }*/
 
   //unique name for selected containers
   std::size_t sysHash = event.m_hashValue;
@@ -1325,6 +1315,29 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     // LHE3 weights
     //m_lhe3weights = (*event.m_truthEvent)[0]->weights();
     m_lhe3weights = event.m_info->mcEventWeights();
+    if(m_sfRetriever){
+      m_pileup_weight = m_sfRetriever->pileupSF(event);
+      m_JVT_weight = m_sfRetriever->jvtSF(event,top::topSFSyst::nominal);
+      //btag moved to own function
+
+      //do sys weights only in "nominal" tree
+      if( m_doSFSystematics ){
+
+	      m_pileup_weight_UP = m_sfRetriever->pileupSF( event, +1 ); // up variation
+	      m_pileup_weight_DOWN = m_sfRetriever->pileupSF( event, -1 ); // down variation
+	      //normalise
+	      m_pileup_weight_UP    = relativeSF(m_pileup_weight_UP,   m_pileup_weight);
+	      m_pileup_weight_DOWN  = relativeSF(m_pileup_weight_DOWN, m_pileup_weight);
+	      // JVT SF
+	      m_JVT_weight_UP = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_UP);
+      	m_JVT_weight_DOWN = m_sfRetriever->jvtSF(event,top::topSFSyst::JVT_DOWN);
+
+	      //normalise
+	      m_JVT_weight_UP   = relativeSF(m_JVT_weight_UP,  m_JVT_weight);
+	      m_JVT_weight_DOWN = relativeSF(m_JVT_weight_DOWN,m_JVT_weight);
+
+      } //end if isNominal
+    } //end if m_sfRetriever
   } //end if isSimulation
 
  //event info
@@ -1370,7 +1383,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   MET_softClus_phi = softClusMet->phi();
 
   //if (event.m_info->eventFlags(EventInfo::EventFlagSubDet::Background) &(1<<17)) std::cout << "Background flag is HaloMuon Segment" << std::endl;
-/*
+
   // Truth Matrix element photon
   m_hasMEphoton = false;
   m_hasMEphoton_DRgt02_nonhad = false;
@@ -1402,7 +1415,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
         }
         if (abs(motherPdgId) < 100 && particle->barcode() < 2e5 && particle->pt() > 0 && motherPt > 0) {
           m_hasMEphoton = true;
-           std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
+           //std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
           double dr = particle->p4().DeltaR(mother->p4()); // always look at DR
           if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18))
             m_hasMEphoton_DRgt02_nonhad = true; // in selection use with "(!m_hasMEphoton_DRgt02_nonhad)!=(mc_channel_number==410082)"
@@ -1437,10 +1450,10 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     m_MEphoton_OLtty_keepEvent = true;
 
   // Truth Matching
-  if ( top::isSimulation(event) ) {
-    top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
-  }
-
+//  if ( top::isSimulation(event) ) {
+//    top::check( m_truthMatchAlgo->executeTruthMatching(event), "Failed to execute executeTruthMatching(). Aborting");
+//  }
+/*
   //ttbar HF classification
   std::set<unsigned int> ttHF_samples =
   {
@@ -1483,7 +1496,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   }
   if(event.m_info->isAvailable<int>("TopHeavyFlavorFilterFlag")) {
     m_HF_ClassificationTop = event.m_info->auxdata<int>("TopHeavyFlavorFilterFlag");
-  }
+  }*/
 
   //ttbar DLF, MLF classification
   if (top::isSimulation(event)) {
@@ -1505,24 +1518,9 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   }
 
   //Event selection variable for each event selection region (pass/fail)
-  recordSelectionDecision(event);
+ // recordSelectionDecision(event);
 
-  //met
-  m_met_met = event.m_met->met();
-  m_met_phi = event.m_met->phi();
-  m_met_sumet = event.m_met->sumet();
-
-  const xAOD::MissingETContainer *newMetContainer(nullptr);
-  top::check( evtStore()->retrieve(newMetContainer, "MET_nominal"),"Failed to retrieve MET container");
-
-  const xAOD::MissingET *softTrkMet = (*newMetContainer)["PVSoftTrk"];
-  MET_softTrk_et = softTrkMet->met();
-  MET_softTrk_phi = softTrkMet->phi();
-
-  const xAOD::MissingET *softClusMet = (*newMetContainer)["SoftClus"];
-  MET_softClus_et = softClusMet->met();
-  MET_softClus_phi = softClusMet->phi();
-
+/*
   if(top::isSimulation(event) and !m_doSystematics) {
     // MET Truth
     const xAOD::MissingETContainer* truthMETCont(nullptr);
@@ -1899,5 +1897,9 @@ void ttHMultileptonLooseEventSaver::finalize()
     }    
   }//end if MC
   m_outputFile->Write();
+}
+double ttHMultileptonLooseEventSaver::relativeSF(double variation, double nominal) {
+  if (nominal == 0) return 0;
+  else return variation/nominal;
 }
 
