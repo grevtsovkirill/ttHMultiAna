@@ -2,7 +2,10 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMult
 
 PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16c.v1/prw.merged.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.v1/prw.merged.root
 
-PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root GoodRunsLists/data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root  
+#PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root GoodRunsLists/data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root  
+
+##FOR MC16A CANT USE data17GRL
+PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
 
 GRLDir GoodRunsLists
 GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.xml
@@ -56,8 +59,8 @@ MuonIsolationLoose PromptLepton
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-TauJetConfigFile ttHMultilepton/loose_tau_selection.conf
-TauJetConfigFileLoose ttHMultilepton/tight_tau_selection.conf
+TauJetConfigFile data/loose_tau_selection.conf
+TauJetConfigFileLoose data/tight_tau_selection.conf
 ApplyTauMVATES false
 
 #Jet cuts
@@ -77,7 +80,7 @@ DoLoose False
 IsAFII False
 
 #NEvents 1000000
-NEvents 100
+NEvents 10000
 Systematics Nominal
 #TruthBlockInfo True
 
@@ -104,8 +107,9 @@ SELECTTAUS
 SELECTMUONS
 SELECT_OR
 SRPRESKIM LEPTONS
-NLEPTONPLUSTAU 10000 >= 1
+#NLEPTONPLUSTAU 10000 >= 1
 SRPRESKIM LEPTONS
 #JETCLEAN LooseBad
+CALCULATESF
 SAVE
 

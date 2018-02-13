@@ -1153,6 +1153,16 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 
     }
 
+	  Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+	  float m_tau_PTV_float = -99.;
+		SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptTauVeto");
+		if(AccessorNonPrompt.isAvailable(tau)) m_tau_PTV_float = AccessorNonPrompt(tau);
+		return (float) m_tau_PTV_float;}, *systematicTree, std::string(tauprefix+"PromptTauVeto").c_str());
+
+
+
+
+
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
     //Truth jets
@@ -1730,7 +1740,25 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   vec_muon_wrappers[event.m_ttreeIndex].push_all(event.m_muons);
   vec_tau_wrappers[event.m_ttreeIndex].push_all(event.m_tauJets);
 
+    //Assigning SFs to output
+    m_ttHEvent->lepSFIDLoose = tthevt->lepSFIDLoose;
+    m_ttHEvent->lepSFIDTight = tthevt->lepSFIDTight;
+    m_ttHEvent->lepSFIsoLoose = tthevt->lepSFIsoLoose;
+    m_ttHEvent->lepSFIsoTight = tthevt->lepSFIsoTight;
+    m_ttHEvent->lepSFReco = tthevt->lepSFReco;
+    m_ttHEvent->lepSFTTVA = tthevt->lepSFTTVA;
 
+    for (const auto& systvar: tthevt->m_lep_sf_names){
+      auto ivar = systvar.first;
+      m_ttHEvent->lepSFObjLoose[ivar] = tthevt->lepSFObjLoose[ivar];
+      m_ttHEvent->lepSFObjTight[ivar] = tthevt->lepSFObjTight[ivar];
+    }
+
+    for (const auto& systvar : tthevt->m_tau_sf_names){
+        auto ivar = systvar.first;
+        m_ttHEvent->tauSFLoose[ivar] = tthevt->tauSFLoose[ivar];
+        m_ttHEvent->tauSFTight[ivar] = tthevt->tauSFTight[ivar];
+    }
 
 
 

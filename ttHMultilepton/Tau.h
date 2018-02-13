@@ -25,6 +25,8 @@ namespace ttHML {
     float SFTight[MAXSYST];
     float SFLoose[MAXSYST];
 
+  float promptTauVeto;
+
     int passEleOLR, passEleBDT, passMuonOLR;
     int truthOrigin, truthType, truthJetFlavour;
 

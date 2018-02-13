@@ -47,7 +47,12 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
 	int totalCharge = 0;
 	for (const auto elItr : *Electrons) { totalCharge += elItr->charge(); }
 	for (const auto muItr : *Muons) { totalCharge += muItr->charge(); }
+	tthevt->totalLeptons = totalLeptons;
+	tthevt->totalTaus = totalTaus;
+	tthevt->totalCharge = totalCharge;
 	
+
+
 
 	//Set as if false for now, should make this configurable from config file
 	if(m_params == "SRONLY"){
