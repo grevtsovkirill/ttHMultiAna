@@ -156,8 +156,8 @@ extern TH1I* m_tauCutflow;
   void CopyTau( const xAOD::TauJet&,   ttHML::Tau&);
 /*  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
-  void doEventSFs();
-  double relativeSF(double variation, double nominal);*/
+  void doEventSFs();*/
+  double relativeSF(double variation, double nominal);
   std::string betterBtagNamedSyst (const std::string WP);
   void setBtagSFs(const top::Event& event);
 

@@ -41,7 +41,7 @@ top::TopObjectSelection* ttHMultileptonLooseObjectLoader::init(std::shared_ptr<t
 									   topConfig->electronVetoLArCrack(), 
 									   topConfig->electronID(), 
 									   topConfig->electronIDLoose(), 
-									   new top::StandardIsolation()));
+									  new top::StandardIsolation("None","None")));
           
       } else {
           std::cout << "\nHo hum\n";

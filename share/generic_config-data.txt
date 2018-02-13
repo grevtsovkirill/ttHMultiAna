@@ -2,10 +2,7 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMult
 
 PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16c.v1/prw.merged.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.v1/prw.merged.root
 
-#PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root GoodRunsLists/data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root  
-
-##FOR MC16A CANT USE data17GRL
-PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
+PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root GoodRunsLists/data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root  
 
 GRLDir GoodRunsLists
 GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.xml
@@ -21,16 +18,6 @@ PhotonCollectionName None
 METCollectionName MET_RefFinal_AntiKt4EMTopo
 LooseMETCollectionName MET_Reference_AntiKt4EMTopo
 
-TruthCollectionName TruthParticles
-TruthJetCollectionName AntiKt4TruthJets
-TopPartonHistory ttbar
-#TopParticleLevel True
-TruthElectronCollectionName None
-TruthMuonCollectionName None
-PDFInfo True
-IsAFII False
-
-MCGeneratorWeights True
 
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
@@ -46,7 +33,7 @@ ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
 ElectronIsolation Loose
-#ElectronIsolationLoose PromptLepton
+ElectronIsolationLoose PromptLepton
 
 #Muon cuts
 MuonQuality Loose
@@ -62,6 +49,8 @@ MuonIsolationLoose PromptLepton
 TauJetConfigFile data/loose_tau_selection.conf
 TauJetConfigFileLoose data/tight_tau_selection.conf
 ApplyTauMVATES false
+
+
 
 #Jet cuts
 JetPt 25000.
@@ -79,16 +68,16 @@ DoLoose False
 #UseAodMetaData True
 IsAFII False
 
-#NEvents 1000000
-NEvents 10000
+NEvents 1000000
 Systematics Nominal
-#TruthBlockInfo True
+
 
 SELECTION triggers
-#GRL
-#GOODCALO
+GRL
+GOODCALO
 PRIVTX
 TRIGDEC HLT_e5_lhloose HLT_e5_loose HLT_e12_lhloose HLT_e12_loose HLT_e17_lhloose HLT_e17_loose HLT_e24_lhmedium_L1EM18VH HLT_e24_lhmedium_L1EM20VH HLT_e24_lhmedium_iloose_L1EM18VH HLT_e24_lhmedium_nod0_L1EM20VH HLT_e24_lhtight_iloose HLT_e24_lhtight_iloose_L1EM20VH HLT_e24_lhtight_ivarloose HLT_e24_lhtight_nod0_ivarloose HLT_e24_tight_iloose HLT_e24_tight_iloose_L1EM20VH HLT_e26_lhtight_iloose HLT_e26_lhtight_nod0_ivarloose HLT_e26_tight_iloose HLT_e60_lhmedium HLT_e60_lhmedium_nod0 HLT_e60_medium HLT_e120_lhloose HLT_e140_lhloose HLT_e140_lhloose_nod0 HLT_e140_loose HLT_e300_etcut HLT_mu10 HLT_mu14 HLT_mu18 HLT_mu20_iloose_L1MU15 HLT_mu24 HLT_mu24_iloose HLT_mu24_imedium HLT_mu24_ivarloose HLT_mu24_ivarmedium HLT_mu26_imedium HLT_mu26_ivarmedium HLT_mu40 HLT_mu50 HLT_2e12_lhloose_L12EM10VH HLT_2e12_lhvloose_nod0_L12EM10VH HLT_2e12_loose_L12EM10VH HLT_2e15_lhvloose_nod0_L12EM13VH HLT_2e17_lhvloose_nod0 HLT_e17_lhloose_2e9_lhloose HLT_2mu10 HLT_2mu14 HLT_mu18_mu8noL1 HLT_mu20_mu8noL1 HLT_mu22_mu8noL1 HLT_e7_lhmedium_mu24 HLT_e7_lhmedium_nod0_mu24 HLT_e7_medium_mu24 HLT_e17_lhloose_mu14 HLT_e17_loose_mu14 HLT_e17_lhloose_nod0_mu14 HLT_e24_medium_L1EM20VHI_mu8noL1 HLT_e24_lhmedium_nod0_L1EM20VHI_mu8noL1 HLT_e26_lhmedium_nod0_L1EM22VHI_mu8noL1 HLT_e17_lhmedium_tau25_medium1_tracktwo HLT_e17_lhmedium_nod0_tau25_medium1_tracktwo HLT_e17_lhmedium_nod0_ivarloose_tau25_medium1_tracktwo HLT_mu14_tau25_medium1_tracktwo HLT_mu14_ivarloose_tau25_medium1_tracktwo HLT_2e17_lhvloose_nod0_L12EM15VHI 
+
 
 SELECTION loose
 INITIAL
@@ -107,9 +96,7 @@ SELECTTAUS
 SELECTMUONS
 SELECT_OR
 SRPRESKIM LEPTONS
-#NLEPTONPLUSTAU 10000 >= 1
+NLEPTONPLUSTAU 10000 >= 1
 SRPRESKIM LEPTONS
-#JETCLEAN LooseBad
-CALCULATESF
 SAVE
 
