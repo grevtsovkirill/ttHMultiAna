@@ -77,7 +77,7 @@ DoLoose False
 IsAFII False
 
 #NEvents 1000000
-NEvents 10000
+#NEvents 1000
 Systematics Nominal
 #TruthBlockInfo True
 
