@@ -157,11 +157,10 @@ bool DecorateTaus::apply(const top::Event & event) const{
     }
     
     tauItr->auxdecor<int>("truthJetFlavour") = truthJetFlavour;
-
+    tauItr->auxdecor<int>("tagWeightBin") =-99;
+    tauItr->auxdecor<char>("fromPV")=-99;
   }
-
-
-decoratetau(event);
+  decoratetau(event);
 //std::cout<<"ntaubefore= " <<ntaus<<std::endl;
   return true;
 
