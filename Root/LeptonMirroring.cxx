@@ -103,7 +103,7 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &truthM,        "lep_truthM_", index);
   CreateBranch(tree, &truthE,        "lep_truthE_", index);
   CreateBranch(tree, &truthRapidity, "lep_truthRapidity_", index);
-  CreateBranch(tree, &AmbiguityType, "lep_AmbiguityType_", index);
+  CreateBranch(tree, &ambiguityType, "lep_ambiguityType_", index);
   // SFs
   CreateBranch(tree, &SFIDLoose[0],   "lep_SFIDLoose_", index);
   CreateBranch(tree, &SFIDTight[0],   "lep_SFIDTight_", index);

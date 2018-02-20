@@ -419,7 +419,8 @@ if __name__ == '__main__':
 
 def checkForShowerAlgorithm(Samples):
     noShowerDatasets = []
-    tdpFile = ROOT.PathResolver.find_file("TopDataPreparation/XSection-MC15-13TeV.data", "DATAPATH", ROOT.PathResolver.RecursiveSearch)
+#    tdpFile = ROOT.PathResolver.find_file("TopDataPreparation/XSection-MC15-13TeV.data", "DATAPATH", ROOT.PathResolver.RecursiveSearch)
+    tdpFile = ROOT.PathResolver.find_file("/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data", "DATAPATH", ROOT.PathResolver.RecursiveSearch)
     tdp = analysis.TopDataPreparation(tdpFile)
     for TopSample in availableDatasets.values():
         for List in Samples:
