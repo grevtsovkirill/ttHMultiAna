@@ -50,7 +50,7 @@ TH1I* m_tauCutflow;
     //m_trigGlobEffCorr(0),
     m_mcWeight(1.),
 //    m_pileup_weight(1.),
-    m_bTagSF_default("MV2c10_FixedCutBEff_70"),
+    m_bTagSF_default("MV2c10_Continuous"),
     m_bTagSF_weight(1.),
     m_JVT_weight(1.),
     m_eventNumber(0),
@@ -170,7 +170,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   }
 //Tools
   if (m_isMC){
-    std::string tdpfile = PathResolverFindCalibFile("TopDataPreparation/XSection-MC15-13TeV.data"); 
+    std::string tdpfile = PathResolverFindCalibFile("/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"); 
     top::check( m_sherpaRW.retrieve(), "Failed to retrieve PMGSherpa22VJetsWeightTool" );
     top::check( m_sherpaRW->setProperty("TruthJetContainer", "AntiKt4TruthJets"),
 		"Failed to set TruthJetContainer of PMGSherpa22VJetsWeightTool" );
@@ -252,7 +252,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
     systematicTree->makeOutputVariable(m_bTagSF70_weight, "MV2c10_70_EventWeight");
     systematicTree->makeOutputVariable(m_bTagSF77_weight, "MV2c10_77_EventWeight");
     systematicTree->makeOutputVariable(m_bTagSF85_weight, "MV2c10_85_EventWeight");
-//    systematicTree->makeOutputVariable(m_bTagSFContinuous_weight, "MV2c10_Continuous_EventWeight");
+    systematicTree->makeOutputVariable(m_bTagSFContinuous_weight, "MV2c10_Continuous_EventWeight");
     systematicTree->makeOutputVariable(m_JVT_weight,    "JVT_EventWeight");
 
     if ( m_doSFSystematics ) {
@@ -1800,7 +1800,7 @@ void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
     m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_FixedCutBEff_70",false);
     m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_FixedCutBEff_77",false);
     m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_FixedCutBEff_85",false);
-   // m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"Continuous",false);
+    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_Continuous",false);
     //btag
     if(m_doSFSystematics) {
       m_sfRetriever->btagSF_eigen_vars(event,

@@ -880,8 +880,8 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
   MLTau.numTrack        = xTau.nTracks();
   MLTau.isHadronic      = xTau.auxdata<int>("IsHadronic");
- // MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
- // MLTau.fromPV          = xTau.auxdata<char>("fromPV");
+  MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
+  MLTau.fromPV          = xTau.auxdata<char>("fromPV");
   MLTau.passEleOLR      = xTau.auxdata<int>("passEleOLR");
   MLTau.passEleBDT      = xTau.auxdata<int>("passEleBDT");
   MLTau.passMuonOLR     = xTau.auxdata<int>("passMuonOLR");
