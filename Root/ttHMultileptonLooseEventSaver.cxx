@@ -96,7 +96,9 @@ TH1I* m_tauCutflow;
 //    dummy_eleffup("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
 //    dummy_eleffdo("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1down")
   
-  {}
+  {
+    branchFilters().push_back(std::bind(&getBranchStatus, std::placeholders::_1, std::placeholders::_2));
+}
 //  ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
 template<typename FCN>
 struct function_traits : public function_traits<decltype(&FCN::operator())>
@@ -1901,5 +1903,15 @@ void ttHMultileptonLooseEventSaver::finalize()
 double ttHMultileptonLooseEventSaver::relativeSF(double variation, double nominal) {
   if (nominal == 0) return 0;
   else return variation/nominal;
+}
+/** remove branches from output n-tuple using pattern matching */
+int ttHMultileptonLooseEventSaver::getBranchStatus(top::TreeManager const * treeManager, std::string const & variableName) {
+  //we can use the treeManager to remove these branches only for some of the TTrees
+  // e.g. add a condition like if (m_config->systematicName(treeManager->name() != "nominal")
+  //if (variableName == "jet_ip3dsv1" || variableName == "jet_mv2c00") return 0;
+  if (variableName.find("weight_")==0|| variableName.find("jet_")==0|| variableName.find("el_")==0 ||variableName.find("mu_")==0||variableName.find("ph_")==0 )
+    return 0;
+  //if (variableName.find("tau_")!=std::string::npos || variableName.find("weight_tau") != std::string::npos) return 0;
+  return -1;
 }
 

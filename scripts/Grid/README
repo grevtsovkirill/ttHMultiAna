@@ -1,0 +1,9 @@
+To use Grid Submission, Copy this directory to the run directory,
+then edit 01SubmitToGrid_Simple.py to include your grid nickname,
+config file, etc...
+
+To setup a production role, run the following lines:
+setupATLAS
+export RUCIO_ACCOUNT=phys-higgs
+lsetup rucio panda pyami
+voms-proxy-init -voms atlas:/atlas/phys-higgs/Role=production

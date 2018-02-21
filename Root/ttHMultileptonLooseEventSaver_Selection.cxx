@@ -303,8 +303,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
     lep.isPrompt = 1;
   else
     lep.isPrompt = 0;
-  static SG::AuxElement::Accessor<int> AmbiguityType("AmbiguityType");
-  lep.AmbiguityType = ( AmbiguityType.isAvailable(el) ) ?  AmbiguityType(el) : -1;
+  static SG::AuxElement::Accessor<unsigned char> AmbiguityType("ambiguityType");
+  lep.ambiguityType = ( AmbiguityType.isAvailable(el) ) ?  AmbiguityType(el) : -99;
 
   static SG::AuxElement::Accessor<char> QMisID("isQMisID");
   lep.isQMisID = ( QMisID.isAvailable(el) ) ?  QMisID(el) : -1;
@@ -638,6 +638,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   lep.d0 = mu.primaryTrackParticle()->d0();
   lep.z0 = mu.primaryTrackParticle()->z0();
   lep.vz = mu.primaryTrackParticle()->vz();
+
 
   static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
   lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
