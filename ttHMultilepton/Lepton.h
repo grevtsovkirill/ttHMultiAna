@@ -171,7 +171,7 @@ namespace ttHML {
 
     float   EffTrigLoose[MAXSYST];
     float   EffTrigTight[MAXSYST];
-    int AmbiguityType;
+    unsigned char ambiguityType;
     int nInnerPix;
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
