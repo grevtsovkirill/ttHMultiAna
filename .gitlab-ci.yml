@@ -7,19 +7,17 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
-  SRC_DIR: source
   BUILD_DIR: build
   SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
 
 .analysis_image: &image
-  image: atlas/analysistop:21.2.18
+  image: lukasheinrich/recast_cvmfs_assisted
   tags:
     - cvmfs
   before_script:
     - pwd
     - ls
-    - cp CMakeLists.txt $CI_PROJECT_DIR
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
@@ -34,6 +32,9 @@ build:
   script:
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
+    - setupATLAS
+    - lsetup 'asetup AnalysisTop,21.2.19,here'
+    - cp CMakeLists.txt $CI_PROJECT_DIR
     - cmake $CI_PROJECT_DIR
     - cmake --build ./
     - cd ../
