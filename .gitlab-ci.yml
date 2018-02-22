@@ -35,8 +35,8 @@ build:
     - cd myBuild
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,21.2.19,here
-    - cp CMakeLists.txt $CI_PROJECT_DIR
-    - cmake $CI_PROJECT_DIR
+    - cp CMakeLists.txt $CI_PROJECT_DIR/../
+    - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
     - cd ../
   artifacts:
