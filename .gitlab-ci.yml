@@ -19,7 +19,7 @@ variables:
   before_script:
     - pwd
     - ls
-    - CMakeLists.txt $CI_PROJECT_DIR
+    - cp CMakeLists.txt $CI_PROJECT_DIR
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
