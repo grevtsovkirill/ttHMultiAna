@@ -11,6 +11,9 @@
 
 #include "TopConfiguration/TopConfig.h"
 
+#include "xAODCutFlow/CutBookkeeper.h"
+#include "xAODCutFlow/CutBookkeeperContainer.h"
+
 #include "TopConfiguration/ConfigurationSettings.h"
 #include "TopConfiguration/SelectionConfigurationData.h"
 #include "PathResolver/PathResolver.h"
@@ -1853,15 +1856,10 @@ void ttHMultileptonLooseEventSaver::finalize()
   Count->SetBinContent(3,totalEventsProcessed);
   
   //overwrite Count histogram with values from CutBookkeepers
-  //only for skimmed MC
   if(m_isMC)
   {
     TTreeReader sumWeightsReader("sumWeights", m_outputFile);
-    TTreeReaderValue<unsigned long long> totalEvents(sumWeightsReader, "totalEvents");
-    TTreeReaderValue<Float_t> totalEventsWeighted(sumWeightsReader, "totalEventsWeighted");
-    double totalEventsUnskimmed         = 0;
-    double totalEventsWeightedUnskimmed = 0;
-
+   
     if(m_config->doMCGeneratorWeights()) {
       TTreeReaderValue<std::vector<float> > totalEventsWeighted_lhe(sumWeightsReader,
 	  "totalEventsWeighted_mc_generator_weights");
@@ -1883,14 +1881,23 @@ void ttHMultileptonLooseEventSaver::finalize()
 	  count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
 	}
       }
-      sumWeightsReader.SetEntry(-1); //restart again
     }//end if generatorweights
 
-    while(sumWeightsReader.Next()) {
-      totalEventsUnskimmed         += *totalEvents;
-      totalEventsWeightedUnskimmed += *totalEventsWeighted;
+    double totalEventsUnskimmed         = 0;
+    double totalEventsWeightedUnskimmed = 0;
+    TTree *myTree = (TTree*)m_outputFile->Get("sumWeights");
+    unsigned long long totalEvents = 0;
+    float totalEventsWeighted =  0;
+    myTree->SetBranchAddress("totalEvents",&totalEvents);
+    myTree->SetBranchAddress("totalEventsWeighted",&totalEventsWeighted);
+    for (int i = 0 ; i  < myTree->GetEntriesFast(); ++i)
+    { 
+	myTree->GetEntry(i);
+        totalEventsUnskimmed +=totalEvents;
+        totalEventsWeightedUnskimmed += totalEventsWeighted;
     }
-    double totalEventsSkimmed = Count->GetBinContent(3);
+ 
+    double totalEventsSkimmed = Count->GetBinContent(3);  
     if(totalEventsUnskimmed != totalEventsSkimmed) {
       Count->SetBinContent(1,totalEventsUnskimmed);
       Count->SetBinContent(2,totalEventsWeightedUnskimmed);
