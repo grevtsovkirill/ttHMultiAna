@@ -4,6 +4,7 @@ stages:
   - test
 
 variables:
+  ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
@@ -23,6 +24,7 @@ variables:
     - echo "      Directory Name ${SRC_DIR}"
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
+    - source /home/atlas/release_setup.sh
 #    - echo $SERVICE_PASS | kinit $CERN_USER
     
 build:
@@ -31,8 +33,8 @@ build:
   script:
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
-    - setupATLAS
-    - lsetup 'asetup AnalysisTop,21.2.19,here'
+    - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+    - asetup AnalysisTop,21.2.19,here
     - cp CMakeLists.txt $CI_PROJECT_DIR
     - cmake $CI_PROJECT_DIR
     - cmake --build ./
