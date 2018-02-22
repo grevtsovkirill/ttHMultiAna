@@ -8,7 +8,6 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
-  BUILD_DIR: build
   SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
 
@@ -30,9 +29,10 @@ build:
   <<: *image
   stage: build
   script:
-    - mkdir $BUILD_DIR
+    - cd 
+    - mkdir myBuild
     - set +e
-    - cd $BUILD_DIR
+    - cd myBuild
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,21.2.19,here
     - cp CMakeLists.txt $CI_PROJECT_DIR
