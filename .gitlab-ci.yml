@@ -7,7 +7,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
-  SRC_DIR: src
+  SRC_DIR: source
   BUILD_DIR: build
   SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
@@ -33,7 +33,7 @@ build:
   script:
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
-    - cmake $SRC_DIR_ABS
+    - cmake $CI_PROJECT_DIR
     - cmake --build ./
     - cd ../
   artifacts:
