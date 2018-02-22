@@ -9,7 +9,8 @@ variables:
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
   SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
-  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
+  BUILD_DIR: myBuild
+  RUN_DIR: myRun
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -30,15 +31,14 @@ build:
   stage: build
   script:
     - cd 
-    - mkdir myBuild
+    - mkdir $BUILD_DIR
     - set +e
-    - cd myBuild
+    - cd $BUILD_DIR
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,21.2.19,here
     - cp CMakeLists.txt $CI_PROJECT_DIR/../
     - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
-    - cd ../
   artifacts:
     paths:
       - $BUILD_DIR
@@ -47,5 +47,17 @@ build:
   tags:
     - cvmfs
     
+run: 
+  <<: *image
+  stage: run
+  script:
+    - cd 
+    - set +e
+    - source ${BUILD_DIR}/*/setup.sh
+    - mkdir $RUN_DIR
+    - cd $RUN_DIR
+    - cp $CI_PROJECT_DIR/../ttHMultiAna/share/generic_config_mc16c.txt . 
+    - echo xrdfs root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.12726347._001270.pool.root.1 > infile_tth.txt 
+    - top-xaod generic_config_mc16c.txt infile_htop.txt
 
 
