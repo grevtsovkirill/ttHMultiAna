@@ -16,7 +16,7 @@ grid.Add("highPriority_mc16c").datasets=[
     "mc16_13TeV.410219.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r9781_r9778_p3371",
     ###410389 do not have a showering algorithm defined in TopDataPreparation and will fail on the grid. Please ask for this to be fixed in TopDataPreparation!
-	#"mc16_13TeV.410389.MadGraphPythia8EvtGen_A14NNPDF23_ttgamma_nonallhadronic.deriv.DAOD_HIGG8D1.e6155_e5984_s3126_r9781_r9778_p3371",
+    "mc16_13TeV.410389.MadGraphPythia8EvtGen_A14NNPDF23_ttgamma_nonallhadronic.deriv.DAOD_HIGG8D1.e6155_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.345672.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.345673.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_semilep.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.345674.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_dilep.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9781_r9778_p3371",
@@ -27,8 +27,24 @@ grid.Add("highPriority_mc16c").datasets=[
     "mc16_13TeV.410503.PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e5475_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.410156.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZnunu.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.410157.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttZqq.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r9781_r9778_p3371",
-
-
+    "mc16_13TeV.410080.MadGraphPythia8EvtGen_A14NNPDF23_4topSM.merge.AOD.e4111_e5984_s3126_r9781_r9778", 
+    "mc16_13TeV.410081.MadGraphPythia8EvtGen_A14NNPDF23_ttbarWW.merge.AOD.e4111_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.364250.Sherpa_222_NNPDF30NNLO_llll.merge.AOD.e5894_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.364253.Sherpa_222_NNPDF30NNLO_lllv.merge.AOD.e5916_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.364254.Sherpa_222_NNPDF30NNLO_llvv.merge.AOD.e5916_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.364255.Sherpa_222_NNPDF30NNLO_lvvv.merge.AOD.e5916_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.363355.Sherpa_221_NNPDF30NNLO_ZqqZvv.merge.AOD.e5525_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.363356.Sherpa_221_NNPDF30NNLO_ZqqZll.merge.AOD.e5525_s3126_r9781_r9778",
+    "mc16_13TeV.363357.Sherpa_221_NNPDF30NNLO_WqqZvv.merge.AOD.e5525_e5984_s3126_r9781_r9778",
+    "mc16_13TeV.363358.Sherpa_221_NNPDF30NNLO_WqqZll.merge.AOD.e5525_s3126_r9781_r9778", 
+    "mc16_13TeV.363358.Sherpa_221_NNPDF30NNLO_WqqZll.merge.AOD.e5525_e5984_s3126_r9781_r9778", 
+    "mc16_13TeV.363359.Sherpa_221_NNPDF30NNLO_WpqqWmlv.merge.AOD.e5583_s3126_r9781_r9778", 
+    "mc16_13TeV.363359.Sherpa_221_NNPDF30NNLO_WpqqWmlv.merge.AOD.e5583_e5984_s3126_r9781_r9778", 
+    "mc16_13TeV.363360.Sherpa_221_NNPDF30NNLO_WplvWmqq.merge.AOD.e5583_s3126_r9781_r9778", 
+    "mc16_13TeV.363360.Sherpa_221_NNPDF30NNLO_WplvWmqq.merge.AOD.e5983_e5984_s3126_r9781_r9778", 
+    "mc16_13TeV.363489.Sherpa_221_NNPDF30NNLO_WlvZqq.merge.AOD.e5525_s3126_r9781_r9778", 
+    # Listed on the twiki, but not found
+    #"mc16_13TeV.363489.Sherpa_221_NNPDF30NNLO_WlvZqq.merge.AOD.e5525_e5984_s3126_r9781_r977",
 ]
 
 ##ALL MC16A R21 Samples
