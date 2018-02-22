@@ -35,7 +35,6 @@ SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config
 }
 
 SelectJets::~SelectJets(){
-
 }
 
 bool SelectJets::apply(const top::Event & event) const{
@@ -82,9 +81,13 @@ bool SelectJets::apply(const top::Event & event) const{
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(6);
     tthevt->selected_jets->push_back(jetItr);
   }
-
   std::sort (tthevt->selected_jets->begin(), tthevt->selected_jets->end(), ttHMLAsgHelper::pt_sort());
-  top::check(m_asgHelper->evtStore()->record(tthevt->selected_jets,"Selected_jets"), "recording Selected_jets failed.");
+  std::string m_jets1;
+  m_jets1 = m_jets;
+  if(m_config->systematicName(event.m_hashValue)!="nominal"){
+    m_jets1 = m_jets + "_"+ m_config->systematicName(event.m_hashValue) ;
+  }
+  top::check(m_asgHelper->evtStore()->record(tthevt->selected_jets,m_jets1), "recording Selected_jets failed.");
 
   //std::string jetname = m_config->sgKeyJets();
   //std::string retjet="SelectedJets";
