@@ -25,7 +25,7 @@ variables:
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
     - source /home/atlas/release_setup.sh
-    - echo $SERVICE_PASS | kinit $CERN_USER
+#    - echo $SERVICE_PASS | kinit $CERN_USER
     
 build:
   <<: *image
