@@ -1,0 +1,48 @@
+stages:
+  - build
+  - run
+  - test
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SSL_NO_VERIFY: "true"
+  PACKAGE_NAME: ttHMultiAna
+  SRC_DIR: src
+  BUILD_DIR: build
+  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
+  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
+
+.analysis_image: &image
+  image: atlas/analysistop:21.2.19
+  tags:
+    - cvmfs
+  before_script:
+    - pwd
+    - ls
+    - echo "Project Directory    ${CI_PROJECT_DIR}"
+    - echo "Source Directory     ${SRC_DIR_ABS}"
+    - echo "      Directory Name ${SRC_DIR}"
+    - echo "Build Directory      ${BUILD_DIR_ABS}"
+    - echo "      Directory Name ${BUILD_DIR}"
+    - source /home/atlas/release_setup.sh
+    - echo $SERVICE_PASS | kinit $CERN_USER
+    
+build:
+  <<: *image
+  stage: build
+  script:
+    - mkdir $BUILD_DIR
+    - cd $BUILD_DIR
+    - cmake $SRC_DIR_ABS
+    - cmake --build ./
+    - cd ../
+  artifacts:
+    paths:
+      - $BUILD_DIR
+    name: "${BUILD_DIR}_${CI_JOB_NAME}"
+    expire_in: 1d
+  tags:
+    - cvmfs
+    
+
+
