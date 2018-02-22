@@ -31,6 +31,7 @@ build:
   stage: build
   script:
     - mkdir $BUILD_DIR
+    - set +e
     - cd $BUILD_DIR
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,21.2.19,here
