@@ -13,7 +13,7 @@ variables:
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
 
 .analysis_image: &image
-  image: lukasheinrich/recast_cvmfs_assisted
+  image: lukasheinrich/recast_cvmfs_assisted:20161231
   tags:
     - cvmfs
   before_script:
