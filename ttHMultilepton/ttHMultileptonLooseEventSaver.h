@@ -107,15 +107,15 @@ extern TH1I* m_tauCutflow;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
-  MuonSelectionTool                      muonSelection;
+      MuonSelectionTool                      muonSelection;
 //  IsolationSelectionTool                 iso_1;
 //  ttH::TruthSelector                     truthSelector;
 //  TauSelectionTool                       m_tauSelectionEleOLR;
 //  TauSelectionTool                       m_tauSelectionEleBDT;
 //  TauSelectionTool                       m_tauSelectionMuonOLR;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
-  ORUtils::ToolBox                       m_ORtoolBox[3];
-  asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
+      ORUtils::ToolBox                       m_ORtoolBox[3];
+      asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
   
   //Trigger Scale Factors -- NEW -- 
   // --> Electrons
@@ -136,7 +136,7 @@ extern TH1I* m_tauCutflow;
 
   //for convenience of use with Wrap stuff
       const VertexContainer* m_vertices;
-     const EventInfo*       m_eventInfo;
+      const EventInfo*       m_eventInfo;
 
   ///A simple way to write out branches, without having to worry about the type.
       std::vector<std::shared_ptr<top::TreeManager>> m_treeManagers;
@@ -149,6 +149,8 @@ extern TH1I* m_tauCutflow;
 
   // Method for recording selection pass/fail branches in saveEvent()
       void recordSelectionDecision(const top::Event& event);
+    // static function that prevents the unwanted creation of branches in any eventsaver using the tree manager
+      static int getBranchStatus(top::TreeManager const *, std::string const & variableName);
 
   // utility functions
   void CopyElectron(const xAOD::Electron&, ttHML::Lepton&);
