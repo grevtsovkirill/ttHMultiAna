@@ -13,7 +13,7 @@ variables:
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
 
 .analysis_image: &image
-  image: atlas/analysistop:21.2.19
+  image: atlas/analysistop:21.2.18
   tags:
     - cvmfs
   before_script:
