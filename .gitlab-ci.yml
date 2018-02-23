@@ -4,6 +4,7 @@ stages:
   - test
 
 variables:
+  ANALYSIS_TOP_VERSION: 21.2.19
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
@@ -33,12 +34,15 @@ variables:
     - cd 
     - ls
     - set +e
+    - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+    - asetup AnalysisTop,${ANALYSISTOP_VERSION},here
     - source ${BUILD_DIR}/*/setup.sh
     - mkdir $RUN_DIR
     - cd $RUN_DIR
+    - ls
     - cp $CI_PROJECT_DIR/../ttHMultiAna/share/{config_file} . 
     - echo xrdfs ${eos_file} > infile_tth.txt 
-    - top-xaod ${config_file}  infile_htop.txt
+    - top-xaod ${config_file}  infile_tth.txt
 
     
 build:
@@ -50,7 +54,7 @@ build:
     - set +e
     - cd $BUILD_DIR
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-    - asetup AnalysisTop,21.2.19,here
+    - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - cp CMakeLists.txt $CI_PROJECT_DIR/../
     - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
