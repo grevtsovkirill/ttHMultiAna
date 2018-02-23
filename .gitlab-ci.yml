@@ -35,6 +35,7 @@ variables:
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
+    - ls ${BUILD_DIR}/
     - source ${BUILD_DIR}/*/setup.sh
     - mkdir $RUN_DIR
     - cd $RUN_DIR
