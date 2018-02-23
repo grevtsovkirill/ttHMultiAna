@@ -40,7 +40,7 @@ variables:
     - mkdir $RUN_DIR
     - cd $RUN_DIR
     - ls
-    - cp $CI_PROJECT_DIR/../ttHMultiAna/share/{config_file} . 
+    - cp $CI_PROJECT_DIR/share/{config_file} . 
     - echo xrdfs ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_tth.txt
 
