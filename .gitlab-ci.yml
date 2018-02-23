@@ -61,7 +61,7 @@ build:
     - cd 
   artifacts:
     paths:
-      - $BUILD_DIR
+      - ${CI_PROJECT_DIR}/../../$BUILD_DIR
     expire_in: 2h
   tags:
     - cvmfs
