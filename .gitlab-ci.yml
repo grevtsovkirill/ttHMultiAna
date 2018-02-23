@@ -21,16 +21,15 @@ variables:
     - pwd
     - ls
     - echo "Project Directory    ${CI_PROJECT_DIR}"
-    - echo "Source Directory     ${SRC_DIR_ABS}"
-    - echo "      Directory Name ${SRC_DIR}"
-    - echo "Build Directory      ${BUILD_DIR_ABS}"
-    - echo "      Directory Name ${BUILD_DIR}"
+    - echo "Build Directory      ${BUILD_DIR}"
+    - echo "Run Directory        ${RUN_DIR}"
 #    - echo $SERVICE_PASS | kinit $CERN_USER
 .run_template: &run
   <<: *image
   stage: run
   dependencies: [build]
   script:
+    - pwd
     - cd 
     - ls
     - set +e
@@ -76,7 +75,7 @@ run_data:
   <<: *run
   variables:
     eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/data_17_13TeV:DAOD_HIGG8D1.12825536._000052.pool.root.1
-    config_file: generic_config_data.txt
+    config_file: generic_config-data.txt
     
 
 
