@@ -58,6 +58,7 @@ build:
     - cp CMakeLists.txt $CI_PROJECT_DIR/../
     - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
+    - cd 
   artifacts:
     paths:
       - $BUILD_DIR
