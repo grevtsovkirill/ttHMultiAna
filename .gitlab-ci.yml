@@ -31,11 +31,12 @@ variables:
   dependencies: [build]
   script:
     - cd 
+    - ls
     - set +e
     - source ${BUILD_DIR}/*/setup.sh
     - mkdir $RUN_DIR
     - cd $RUN_DIR
-    - cp $CI_PROJECT_DIR/../ttHMultiAna/share/generic_config* . 
+    - cp $CI_PROJECT_DIR/../ttHMultiAna/share/{config_file} . 
     - echo xrdfs ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_htop.txt
 
