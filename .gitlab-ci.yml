@@ -30,13 +30,13 @@ variables:
   dependencies: [build]
   script:
     - pwd
-    - cd 
     - ls
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - ls ${BUILD_DIR}/
     - source ${BUILD_DIR}/*/setup.sh
+    - cd
     - mkdir $RUN_DIR
     - cd $RUN_DIR
     - ls
@@ -61,8 +61,7 @@ build:
   artifacts:
     paths:
       - $BUILD_DIR
-    name: "${BUILD_DIR}_${CI_JOB_NAME}"
-    expire_in: 1d
+    expire_in: 2h
   tags:
     - cvmfs
     
