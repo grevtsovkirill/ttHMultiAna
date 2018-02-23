@@ -25,6 +25,20 @@ variables:
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
 #    - echo $SERVICE_PASS | kinit $CERN_USER
+.run_template: &run
+  <<: *image
+  stage: run
+  dependencies: [build]
+  script:
+    - cd 
+    - set +e
+    - source ${BUILD_DIR}/*/setup.sh
+    - mkdir $RUN_DIR
+    - cd $RUN_DIR
+    - cp $CI_PROJECT_DIR/../ttHMultiAna/share/generic_config* . 
+    - echo xrdfs ${eos_file} > infile_tth.txt 
+    - top-xaod ${config_file}  infile_htop.txt
+
     
 build:
   <<: *image
@@ -47,18 +61,17 @@ build:
   tags:
     - cvmfs
     
-.run_template: &run
-  <<: *image
-  stage: run
-  dependencies: [build]
-  script:
-    - cd 
-    - set +e
-    - source ${BUILD_DIR}/*/setup.sh
-    - mkdir $RUN_DIR
-    - cd $RUN_DIR
-    - cp $CI_PROJECT_DIR/../ttHMultiAna/share/generic_config_mc16c.txt . 
-    - echo xrdfs root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.12726347._001270.pool.root.1 > infile_tth.txt 
-    - top-xaod generic_config_mc16c.txt infile_htop.txt
+run_ttbar:
+  <<: *run
+  variables: 
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.12726347._001270.pool.root.1
+    config_file: generic_config_mc16c.txt
+    
+run_data:
+  <<: *run
+  variables:
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/data_17_13TeV:DAOD_HIGG8D1.12825536._000052.pool.root.1
+    config_file: generic_config_data.txt
+    
 
 
