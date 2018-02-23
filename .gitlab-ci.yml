@@ -47,9 +47,10 @@ build:
   tags:
     - cvmfs
     
-run: 
+.run_template: &run
   <<: *image
   stage: run
+  dependencies: [build]
   script:
     - cd 
     - set +e
