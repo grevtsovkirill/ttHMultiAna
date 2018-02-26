@@ -68,14 +68,30 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &chargeIDBDTMedium, "lep_chargeIDBDTMedium_", index);
   CreateBranch(tree, &chargeIDBDTTight, "lep_chargeIDBDTTight_", index);
 //  CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
-  CreateBranch(tree, &promptLeptonIso_sv1_jf_ntrkv, "lep_promptLeptonIso_sv1_jf_ntrkv_", index);
-  CreateBranch(tree, &promptLeptonIso_TrackJetNTrack, "lep_promptLeptonIso_TrackJetNTrack_", index);
-  CreateBranch(tree, &promptLeptonIso_ip2, "lep_promptLeptonIso_ip2_", index);
-  CreateBranch(tree, &promptLeptonIso_ip3, "lep_promptLeptonIso_ip3_", index);
-  CreateBranch(tree, &promptLeptonIso_DRlj, "lep_promptLeptonIso_DRlj_", index);
-  CreateBranch(tree, &promptLeptonIso_LepJetPtFrac, "lep_promptLeptonIso_LepJetPtFrac_", index);
-  CreateBranch(tree, &promptLepton_TagWeight, "lep_promptLepton_TagWeight_", index);
-  CreateBranch(tree, &promptLeptonNoIso_TagWeight, "lep_promptLeptonNoIso_TagWeight_", index);
+//  CreateBranch(tree, &promptLeptonIso_sv1_jf_ntrkv, "lep_promptLeptonIso_sv1_jf_ntrkv_", index);
+//  CreateBranch(tree, &promptLeptonIso_TrackJetNTrack, "lep_promptLeptonIso_TrackJetNTrack_", index);
+//  CreateBranch(tree, &promptLeptonIso_ip2, "lep_promptLeptonIso_ip2_", index);
+//  CreateBranch(tree, &promptLeptonIso_ip3, "lep_promptLeptonIso_ip3_", index);
+//  CreateBranch(tree, &promptLeptonIso_DRlj, "lep_promptLeptonIso_DRlj_", index);
+//  CreateBranch(tree, &promptLeptonIso_LepJetPtFrac, "lep_promptLeptonIso_LepJetPtFrac_", index);
+//  CreateBranch(tree, &promptLepton_TagWeight, "lep_promptLepton_TagWeight_", index);
+//  CreateBranch(tree, &promptLeptonNoIso_TagWeight, "lep_promptLeptonNoIso_TagWeight_", index);
+
+  CreateBranch(tree, &promptLeptonInput_sv1_jf_ntrkv, "lep_promptLeptonInput_sv1_jf_ntrkv_", index);
+  CreateBranch(tree, &promptLeptonInput_TrackJetNTrack, "lep_promptLeptonInput_TrackJetNTrack_", index);
+  CreateBranch(tree, &promptLeptonInput_DL1mu, "lep_promptLeptonInput_DL1mu_", index);
+  CreateBranch(tree, &promptLeptonInput_DRlj, "lep_promptLeptonInput_DRlj_", index);
+  CreateBranch(tree, &promptLeptonInput_LepJetPtFrac, "lep_promptLeptonInput_LepJetPtFrac_", index);
+  CreateBranch(tree, &promptLeptonInput_PtFrac, "lep_promptLeptonInput_PtFrac_", index);
+  CreateBranch(tree, &promptLeptonInput_PtRel, "lep_promptLeptonInput_PtRel_", index);
+  CreateBranch(tree, &promptLeptonInput_ip2, "lep_promptLeptonInput_ip2_", index);
+  CreateBranch(tree, &promptLeptonInput_ip3, "lep_promptLeptonInput_ip3_", index);
+  CreateBranch(tree, &promptLeptonInput_rnnip, "lep_promptLeptonInput_rnnip_", index);
+  CreateBranch(tree, &promptLeptonInput_TopoEtCone30Rel, "lep_promptLeptonInput_TopoEtCone30Rel_", index);
+  CreateBranch(tree, &promptLeptonInput_PtVarCone30Rel, "lep_promptLeptonInput_PtVarCone30Rel_", index);
+
+
+
   CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
   CreateBranch(tree, &promptLeptonVeto_TagWeight, "lep_promptLeptonVeto_TagWeight_", index);
 

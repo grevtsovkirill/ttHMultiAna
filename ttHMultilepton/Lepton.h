@@ -124,14 +124,30 @@ namespace ttHML {
     float   chargeIDBDTMedium;
     float   chargeIDBDTTight;
     //float   promptLeptonIso_TagWeight;
-    short   promptLeptonIso_sv1_jf_ntrkv;
-    short   promptLeptonIso_TrackJetNTrack;
-    float   promptLeptonIso_ip2;
-    float   promptLeptonIso_ip3;
-    float   promptLeptonIso_DRlj;
-    float   promptLeptonIso_LepJetPtFrac;
+//    short   promptLeptonIso_sv1_jf_ntrkv;
+//    short   promptLeptonIso_TrackJetNTrack;
+//    float   promptLeptonIso_ip2;
+//    float   promptLeptonIso_ip3;
+//    float   promptLeptonIso_DRlj;
+//    float   promptLeptonIso_LepJetPtFrac;
+
+    short   promptLeptonInput_sv1_jf_ntrkv;
+    short   promptLeptonInput_TrackJetNTrack;
+    float   promptLeptonInput_DL1mu;
+    float   promptLeptonInput_DRlj;
+    float   promptLeptonInput_LepJetPtFrac;
+    float   promptLeptonInput_PtFrac;
+    float   promptLeptonInput_PtRel;
+    float   promptLeptonInput_ip2;
+    float   promptLeptonInput_ip3;
+    float   promptLeptonInput_rnnip;
+    float   promptLeptonInput_TopoEtCone30Rel;
+    float   promptLeptonInput_PtVarCone30Rel;
+
+
     float   promptLepton_TagWeight;
     float   promptLeptonNoIso_TagWeight;
+
     float   promptLeptonIso_TagWeight;
     float	promptLeptonVeto_TagWeight;    
 

@@ -25,6 +25,17 @@ namespace ttHML {
     float SFTight[MAXSYST];
     float SFLoose[MAXSYST];
 
+    short   promptTauInput_TrackJetNTrack;
+    float   promptTauInput_JetF;
+    float   promptTauInput_DRlj;
+    float   promptTauInput_LepJetPtFrac;
+    float   promptTauInput_SV1;
+    float   promptTauInput_MV2c10rnn;
+    float   promptTauInput_ip2;
+    float   promptTauInput_ip3;
+    float   promptTauInput_rnnip;
+
+
   float promptTauVeto;
 
     int passEleOLR, passEleBDT, passMuonOLR;
