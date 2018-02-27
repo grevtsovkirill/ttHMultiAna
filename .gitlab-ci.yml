@@ -35,7 +35,7 @@ variables:
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - ls ${BUILD_DIR}/
-    - source ${BUILD_DIR}/*/setup.sh
+    - source ${BUILD_DIR}/${AnalysisTop_PLATFORM}/setup.sh
     - cd
     - mkdir $RUN_DIR
     - cd $RUN_DIR
@@ -58,10 +58,10 @@ build:
     - cp CMakeLists.txt $CI_PROJECT_DIR/../
     - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
-    - cd ../ 
+    - cd ../
+    - source $BUILD_DIR/${AnalysisTop_PLATFORM}/setup.sh
     - pwd 
     - ls 
-    - tree
   artifacts:
     paths:
       - $BUILD_DIR
