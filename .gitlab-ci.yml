@@ -12,6 +12,7 @@ variables:
   SRC_DIR: source
   BUILD_DIR: build
   RUN_DIR: run
+  TEST_DIR: test
   SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
   RUN_DIR_ABS: "${CI_PROJECT_DIR}/${RUN_DIR}"
@@ -48,7 +49,22 @@ variables:
     - cp ${CI_PROJECT_DIR}/share/${config_file} . 
     - echo  ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_tth.txt
-
+  artifacts:
+    paths:
+      - $RUN_DIR
+    name: "${RUN_DIR}_${CI_JOB_NAME}"
+    expire_in: 10 days
+    
+.test_template: &test
+  <<: *image
+  stage: test
+  script:
+   - python script/run_test.py
+  artifacts:
+   paths:
+     - $TEST_DIR
+   name: ${TEST_DIR}_${CI_JOB_NAME}
+    
     
 build:
   <<: *image
