@@ -60,6 +60,8 @@ build:
     - cmake --build ./
     - cd ../ 
     - pwd 
+    - ls 
+    - tree
   artifacts:
     paths:
       - $BUILD_DIR
