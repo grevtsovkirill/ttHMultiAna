@@ -51,7 +51,7 @@ variables:
     - cd $RUN_DIR_ABS
     - ls
     - cp ${SRC_DIR_ABS}/${PACKAGE_NAME}/share/${config_file} . 
-    - echo xrdfs ${eos_file} > infile_tth.txt 
+    - echo  ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_tth.txt
 
     
