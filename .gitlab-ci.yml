@@ -12,7 +12,7 @@ variables:
   SRC_DIR: source
   BUILD_DIR: build
   RUN_DIR: run
-  BASE: $(dirname $CI_PROJECT_DIR)
+  BASE:  "${CI_PROJECT_DIR}../"
   SRC_DIR_ABS: "${BASE}/${SRC_DIR}"
   BUILD_DIR_ABS: "${BASE}/${BUILD_DIR}"
   RUN_DIR_ABS: "${BASE}/${RUN_DIR}"
@@ -23,7 +23,7 @@ variables:
     - cvmfs
   before_script:
     - pwd
-    - ls
+    - ls $CI_PROJECT_DIR
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
