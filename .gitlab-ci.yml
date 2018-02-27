@@ -9,13 +9,13 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
-  SRC_DIR: src
+  SRC_DIR: source
   BUILD_DIR: build
   RUN_DIR: run
-  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
+  SRC_DIR_ABS: "${CI_PROJECT_DIR}/../${SRC_DIR}"
   clone_folder: "${SRC_DIR_ABS}""
-  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
-  RUN_DIR_ABS: "${CI_PROJECT_DIR}/${RUN_DIR}"
+  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/../${BUILD_DIR}"
+  RUN_DIR_ABS: "${CI_PROJECT_DIR}/../${RUN_DIR}"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -30,6 +30,8 @@ variables:
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
+    - mkdir -p $SRCDIR_ABS
+    - mv $CI_PROJECT_DIR/* $SRCDIR_ABS
     
 .run_template: &run
   <<: *image
