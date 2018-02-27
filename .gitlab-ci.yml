@@ -13,8 +13,8 @@ variables:
   SRC_DIR: source
   BUILD_DIR: myBuild
   SRC_DIR_ABS: "${CI_PROJECT_DIR}"
-  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/../${BUILD_DIR}"
-  RUN_DIR_ABS: "${CI_PROJECT_DIR}/../${RUN_DIR}"
+  BUILD_DIR_ABS: "$(readlink -f ${CI_PROJECT_DIR}/../${BUILD_DIR})"
+  RUN_DIR_ABS: "$(readlink -f ${CI_PROJECT_DIR}/../${RUN_DIR})"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -40,7 +40,7 @@ variables:
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - ls ${BUILD_DIR}/
-    - source ${BUILD_DIR}/${AnalysisTop_PLATFORM}/setup.sh
+    - source ${BUILD_DIR_ABS}/${AnalysisTop_PLATFORM}/setup.sh
     - cd
     - mkdir $RUN_DIR_ABS
     - cd $RUN_DIR_ABS
