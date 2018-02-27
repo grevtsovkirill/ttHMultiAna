@@ -13,7 +13,7 @@ variables:
   BUILD_DIR: build
   RUN_DIR: run
   SRC_DIR_ABS: "${CI_PROJECT_DIR}/../${SRC_DIR}"
-  clone_folder: "${SRC_DIR_ABS}""
+  clone_folder: "${SRC_DIR_ABS}"
   BUILD_DIR_ABS: "${CI_PROJECT_DIR}/../${BUILD_DIR}"
   RUN_DIR_ABS: "${CI_PROJECT_DIR}/../${RUN_DIR}"
 
