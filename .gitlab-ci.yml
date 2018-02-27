@@ -10,11 +10,11 @@ variables:
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
   RUN_DIR: myRun
-  SRC_DIR: source
-  BUILD_DIR: myBuild
-  SRC_DIR_ABS: "${CI_PROJECT_DIR}"
-  BUILD_DIR_ABS: $readlink -f "${CI_PROJECT_DIR}/../${BUILD_DIR}")
-  RUN_DIR_ABS:  $(readlink -f "${CI_PROJECT_DIR}/../${RUN_DIR}")
+  SRC_DIR: src
+  BUILD_DIR: build
+  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
+  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
+  RUN_DIR_ABS:"${CI_PROJECT_DIR}/${RUN_DIR}"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -69,7 +69,7 @@ build:
     - ls 
   artifacts:
     paths:
-      - $BUILD_DIR_ABS
+      - $BUILD_DIR
     expire_in: 2h
   tags:
     - cvmfs
