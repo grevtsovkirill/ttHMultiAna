@@ -26,6 +26,7 @@ variables:
     - mv $PACKAGE_NAME /tmp/$PACKAGE_NAME 
     - mkdir -p $SRC_DIR_ABS
     - mv /tmp/$PACKAGE_NAME $SRC_DIR_ABS #Need to reorganize the source
+    - mv $SRC_DIR_ABS/$BUILD_DIR $BUILD_DIR_ABS
     - ls $SRC_DIR_ABS
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
