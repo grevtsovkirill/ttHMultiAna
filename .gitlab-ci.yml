@@ -45,12 +45,12 @@ variables:
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - ls ${BUILD_DIR}/
-    - source ${BUILD_DIR_ABS}/${AnalysisTop_PLATFORM}/setup.sh
+    - source ${SRC_DIR_ABS}/${PACKAGE_NAME}/${BUILD_DIR}/${AnalysisTop_PLATFORM}/setup.sh #this is wierd build artifacts are restored in the SRC_DIR
     - cd
     - mkdir $RUN_DIR_ABS
     - cd $RUN_DIR_ABS
     - ls
-    - cp ${SRC_DIR_ABS}/share/${config_file} . 
+    - cp ${SRC_DIR_ABS}${PACKAGE_NAME}/share/${config_file} . 
     - echo xrdfs ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_tth.txt
 
