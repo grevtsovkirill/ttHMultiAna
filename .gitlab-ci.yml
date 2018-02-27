@@ -58,10 +58,10 @@ build:
     - cp CMakeLists.txt $CI_PROJECT_DIR/../
     - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
-    - cd 
+    - cd ../ 
   artifacts:
     paths:
-      - /root/$BUILD_DIR
+      - $BUILD_DIR
     expire_in: 2h
   tags:
     - cvmfs
