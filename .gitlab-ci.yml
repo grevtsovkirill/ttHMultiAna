@@ -59,6 +59,7 @@ build:
     - cmake $CI_PROJECT_DIR/../
     - cmake --build ./
     - cd ../ 
+    - pwd 
   artifacts:
     paths:
       - $BUILD_DIR
