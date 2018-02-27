@@ -23,7 +23,7 @@ variables:
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Build Directory      ${BUILD_DIR}"
     - echo "Run Directory        ${RUN_DIR}"
-#    - echo $SERVICE_PASS | kinit $CERN_USER
+    - echo $TTHML_PASSWD | kinit $TTHML_USER 
 .run_template: &run
   <<: *image
   stage: run
