@@ -9,9 +9,12 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttHMultiAna
-  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
-  BUILD_DIR: myBuild
   RUN_DIR: myRun
+  SRC_DIR: source
+  BUILD_DIR: myBuild
+  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
+  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
+  RUN_DIR_ABS: "${CI_PROJECT_DIR}/${RUN_DIR}"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -21,8 +24,10 @@ variables:
     - pwd
     - ls
     - echo "Project Directory    ${CI_PROJECT_DIR}"
-    - echo "Build Directory      ${BUILD_DIR}"
-    - echo "Run Directory        ${RUN_DIR}"
+    - echo "Source Directory     ${SRC_DIR_ABS}"
+    - echo "      Directory Name ${SRC_DIR}"
+    - echo "Build Directory      ${BUILD_DIR_ABS}"
+    - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
 .run_template: &run
   <<: *image
@@ -37,10 +42,10 @@ variables:
     - ls ${BUILD_DIR}/
     - source ${BUILD_DIR}/${AnalysisTop_PLATFORM}/setup.sh
     - cd
-    - mkdir $RUN_DIR
-    - cd $RUN_DIR
+    - mkdir $RUN_DIR_ABS
+    - cd $RUN_DIR_ABS
     - ls
-    - cp $CI_PROJECT_DIR/share/${config_file} . 
+    - cp ${SRC_DIR_ABS}/share/${config_file} . 
     - echo xrdfs ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_tth.txt
 
@@ -50,21 +55,21 @@ build:
   stage: build
   script:
     - cd 
-    - mkdir $BUILD_DIR
+    - mkdir $BUILD_DIR_ABS
     - set +e
-    - cd $BUILD_DIR
+    - cd $BUILD_DIR_ABS
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
-    - cp CMakeLists.txt $CI_PROJECT_DIR/../
-    - cmake $CI_PROJECT_DIR/../
+    - cp CMakeLists.txt $SRC_DIR_ABS
+    - cmake $SRC_DIR_ABS
     - cmake --build ./
     - cd ../
-    - source $BUILD_DIR/${AnalysisTop_PLATFORM}/setup.sh
+    - source $BUILD_DIR_ABS/${AnalysisTop_PLATFORM}/setup.sh
     - pwd 
     - ls 
   artifacts:
     paths:
-      - $BUILD_DIR
+      - $BUILD_DIR_ABS
     expire_in: 2h
   tags:
     - cvmfs
