@@ -22,11 +22,7 @@ variables:
     - cvmfs
   before_script:
     - pwd
-    - cd ../
-    - mv $PACKAGE_NAME /tmp/$PACKAGE_NAME 
-    - mkdir -p $SRC_DIR_ABS
-    - mv /tmp/$PACKAGE_NAME $SRC_DIR_ABS #Need to reorganize the source
-    - ls $SRC_DIR_ABS
+    - mkdir -p $BUILD_DIR_ABS
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
@@ -45,14 +41,11 @@ variables:
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - ls ${BUILD_DIR}/
-    - source ${SRC_DIR_ABS}/${PACKAGE_NAME}/${BUILD_DIR}/${AnalysisTop_PLATFORM}/setup.sh #this is wierd build artifacts are restored in the SRC_DIR
-    - cd
-    - rsync -avz $SRC_DIR_ABS/${PACKAGE_NAME}/$BUILD_DIR $BUILD_DIR_ABS 
-    - ls $BUILD_DIR_ABS
+    - source ${BUILD_DIR_ABS}/${AnalysisTop_PLATFORM}/setup.sh
     - mkdir $RUN_DIR_ABS
     - cd $RUN_DIR_ABS
     - ls
-    - cp ${SRC_DIR_ABS}/${PACKAGE_NAME}/share/${config_file} . 
+    - cp ${CI_PROJECT_DIR}/share/${config_file} . 
     - echo  ${eos_file} > infile_tth.txt 
     - top-xaod ${config_file}  infile_tth.txt
 
@@ -61,13 +54,12 @@ build:
   <<: *image
   stage: build
   script:
-    - mkdir $BUILD_DIR_ABS
     - set +e
     - cd $BUILD_DIR_ABS
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
-    - cp CMakeLists.txt $SRC_DIR_ABS
-    - cmake $SRC_DIR_ABS
+    - mv CMakeLists.txt ../../
+    - cmake ../../
     - cmake --build ./
     - cd ../
     - source $BUILD_DIR_ABS/${AnalysisTop_PLATFORM}/setup.sh
