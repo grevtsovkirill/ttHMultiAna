@@ -13,8 +13,8 @@ variables:
   SRC_DIR: source
   BUILD_DIR: myBuild
   SRC_DIR_ABS: "${CI_PROJECT_DIR}"
-  BUILD_DIR_ABS: "$(readlink -f ${CI_PROJECT_DIR}/../${BUILD_DIR})"
-  RUN_DIR_ABS: "$(readlink -f ${CI_PROJECT_DIR}/../${RUN_DIR})"
+  BUILD_DIR_ABS: $readlink -f "${CI_PROJECT_DIR}/../${BUILD_DIR}")
+  RUN_DIR_ABS:  $(readlink -f "${CI_PROJECT_DIR}/../${RUN_DIR}")
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
