@@ -8,14 +8,13 @@ variables:
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
-  PACKAGE_NAME: source/ttHMultiAna
+  PACKAGE_NAME: ttHMultiAna
   SRC_DIR: source
   BUILD_DIR: build
   RUN_DIR: run
-  BASE:  "${CI_PROJECT_DIR}/../"
-  SRC_DIR_ABS: "${BASE}/${SRC_DIR}"
-  BUILD_DIR_ABS: "${BASE}/${BUILD_DIR}"
-  RUN_DIR_ABS: "${BASE}/${RUN_DIR}"
+  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
+  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
+  RUN_DIR_ABS: "${CI_PROJECT_DIR}/${RUN_DIR}"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -23,15 +22,15 @@ variables:
     - cvmfs
   before_script:
     - pwd
-    - ls $CI_PROJECT_DIR
+    - mkdir -p $SRC_DIR_ABS
+    - mv $PACKAGE_NAME $SRC_DIR_ABS #Need to reorganize the source
+    - ls $SRC_DIR_ABS
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
-    - mkdir -p $SRC_DIR_ABS
-    - mv $CI_PROJECT_DIR $SRC_DIR_ABS
     
 .run_template: &run
   <<: *image
