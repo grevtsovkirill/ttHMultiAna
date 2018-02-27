@@ -12,10 +12,10 @@ variables:
   SRC_DIR: source
   BUILD_DIR: build
   RUN_DIR: run
-  SRC_DIR_ABS: "${CI_PROJECT_DIR}/../${SRC_DIR}"
-  clone_folder: "${SRC_DIR_ABS}"
-  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/../${BUILD_DIR}"
-  RUN_DIR_ABS: "${CI_PROJECT_DIR}/../${RUN_DIR}"
+  BASE: "dirname ${CI_PROJECT_DIR}"
+  SRC_DIR_ABS: "${BASE}/${SRC_DIR}"
+  BUILD_DIR_ABS: "${BASE}/${BUILD_DIR}"
+  RUN_DIR_ABS: "${BASE}/${RUN_DIR}"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
@@ -31,7 +31,7 @@ variables:
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
     - mkdir -p $SRC_DIR_ABS
-    - mv $CI_PROJECT_DIR/* $SRC_DIR_ABS
+    - mv $BASE/$PACKAGE_NAME $SRC_DIR_ABS
     
 .run_template: &run
   <<: *image
@@ -58,7 +58,6 @@ build:
   <<: *image
   stage: build
   script:
-    - cd 
     - mkdir $BUILD_DIR_ABS
     - set +e
     - cd $BUILD_DIR_ABS
