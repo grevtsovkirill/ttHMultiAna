@@ -22,8 +22,10 @@ variables:
     - cvmfs
   before_script:
     - pwd
+    - cd ../
+    - mv $PACKAGE_NAME /tmp/$PACKAGE_NAME 
     - mkdir -p $SRC_DIR_ABS
-    - mv $PACKAGE_NAME $SRC_DIR_ABS #Need to reorganize the source
+    - mv /tmp/$PACKAGE_NAME $SRC_DIR_ABS #Need to reorganize the source
     - ls $SRC_DIR_ABS
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
