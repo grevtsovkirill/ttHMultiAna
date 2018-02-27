@@ -31,7 +31,7 @@ variables:
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
     - mkdir -p $SRC_DIR_ABS
-    - mv $CI_PROJET_DIR $SRC_DIR_ABS
+    - mv $CI_PROJECT_DIR $SRC_DIR_ABS
     
 .run_template: &run
   <<: *image
