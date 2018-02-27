@@ -12,7 +12,7 @@ variables:
   SRC_DIR: source
   BUILD_DIR: build
   RUN_DIR: run
-  BASE: "dirname ${CI_PROJECT_DIR}"
+  BASE: $(dirname $CI_PROJECT_DIR)
   SRC_DIR_ABS: "${BASE}/${SRC_DIR}"
   BUILD_DIR_ABS: "${BASE}/${BUILD_DIR}"
   RUN_DIR_ABS: "${BASE}/${RUN_DIR}"
