@@ -12,9 +12,9 @@ variables:
   RUN_DIR: myRun
   SRC_DIR: source
   BUILD_DIR: myBuild
-  SRC_DIR_ABS: "${CI_PROJECT_DIR}/${SRC_DIR}"
-  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/${BUILD_DIR}"
-  RUN_DIR_ABS: "${CI_PROJECT_DIR}/${RUN_DIR}"
+  SRC_DIR_ABS: "${CI_PROJECT_DIR}"
+  BUILD_DIR_ABS: "${CI_PROJECT_DIR}/../${BUILD_DIR}"
+  RUN_DIR_ABS: "${CI_PROJECT_DIR}/../${RUN_DIR}"
 
 .analysis_image: &image
   image: lukasheinrich/recast_cvmfs_assisted:20161231
