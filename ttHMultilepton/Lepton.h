@@ -141,9 +141,6 @@ namespace ttHML {
     float   promptLeptonInput_ip2;
     float   promptLeptonInput_ip3;
     float   promptLeptonInput_rnnip;
-    float   promptLeptonInput_TopoEtCone30Rel;
-    float   promptLeptonInput_PtVarCone30Rel;
-
 
     float   promptLepton_TagWeight;
     float   promptLeptonNoIso_TagWeight;

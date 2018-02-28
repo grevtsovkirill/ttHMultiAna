@@ -377,13 +377,6 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   static SG::AuxElement::Accessor<float> promptLeptonInput_rnnip("PromptLeptonInput_rnnip");
   lep.promptLeptonInput_rnnip = ( promptLeptonInput_rnnip.isAvailable(el) ) ? promptLeptonInput_rnnip(el) : -99;
 
-  static SG::AuxElement::Accessor<float> promptLeptonInput_TopoEtCone30Rel("PromptLeptonInput_TopoEtCone30Rel");
-  lep.promptLeptonInput_TopoEtCone30Rel = ( promptLeptonInput_TopoEtCone30Rel.isAvailable(el) ) ? promptLeptonInput_TopoEtCone30Rel(el) : -99;
-
-  static SG::AuxElement::Accessor<float> promptLeptonInput_PtVarCone30Rel("PromptLeptonInput_PtVarCone30Rel");
-  lep.promptLeptonInput_PtVarCone30Rel = ( promptLeptonInput_PtVarCone30Rel.isAvailable(el) ) ? promptLeptonInput_PtVarCone30Rel(el) : -99;
-
-
   static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
   lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(el) ) ? promptLeptonIso_TagWeight(el) : -99;
 
@@ -847,17 +840,6 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
 
   static SG::AuxElement::Accessor<float> promptLeptonInput_rnnip("PromptLeptonInput_rnnip");
   lep.promptLeptonInput_rnnip = ( promptLeptonInput_rnnip.isAvailable(mu) ) ? promptLeptonInput_rnnip(mu) : -99;
-
-  static SG::AuxElement::Accessor<float> promptLeptonInput_TopoEtCone30Rel("PromptLeptonInput_TopoEtCone30Rel");
-  lep.promptLeptonInput_TopoEtCone30Rel = ( promptLeptonInput_TopoEtCone30Rel.isAvailable(mu) ) ? promptLeptonInput_TopoEtCone30Rel(mu) : -99;
-
-  static SG::AuxElement::Accessor<float> promptLeptonInput_PtVarCone30Rel("PromptLeptonInput_PtVarCone30Rel");
-  lep.promptLeptonInput_PtVarCone30Rel = ( promptLeptonInput_PtVarCone30Rel.isAvailable(mu) ) ? promptLeptonInput_PtVarCone30Rel(mu) : -99;
-
-
-
-
-
 
    static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
   lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;

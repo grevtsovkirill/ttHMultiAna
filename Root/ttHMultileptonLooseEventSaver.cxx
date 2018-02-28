@@ -656,7 +656,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
  
     std::vector<std::string> float_vars = {"PromptLeptonInput_DL1mu", "PromptLeptonInput_DRlj", "PromptLeptonInput_LepJetPtFrac",
 				"PromptLeptonInput_PtFrac", "PromptLeptonInput_PtRel", "PromptLeptonInput_ip2", "PromptLeptonInput_ip3",
-				"PromptLeptonInput_rnnip", "PromptLeptonInput_TopoEtCone30Rel", "PromptLeptonInput_PtVarCone30Rel"};
+				"PromptLeptonInput_rnnip"};
 	for(std::string var: float_vars) {
 		Wrap2(elevec, [=](const xAOD::Electron& ele){
 		float m_el_nonprompt_float = -99.;
@@ -1010,7 +1010,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 
     std::vector<std::string> float_mu_vars = {"PromptLeptonInput_DL1mu", "PromptLeptonInput_DRlj", "PromptLeptonInput_LepJetPtFrac",
                 "PromptLeptonInput_PtFrac", "PromptLeptonInput_PtRel", "PromptLeptonInput_ip2", "PromptLeptonInput_ip3",
-                "PromptLeptonInput_rnnip", "PromptLeptonInput_TopoEtCone30Rel", "PromptLeptonInput_PtVarCone30Rel"};
+                "PromptLeptonInput_rnnip"};
     for(std::string var: float_mu_vars) {
         Wrap2(muvec, [=](const xAOD::Muon& mu){
         float m_mu_nonprompt_float = -99.;

@@ -87,10 +87,6 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &promptLeptonInput_ip2, "lep_promptLeptonInput_ip2_", index);
   CreateBranch(tree, &promptLeptonInput_ip3, "lep_promptLeptonInput_ip3_", index);
   CreateBranch(tree, &promptLeptonInput_rnnip, "lep_promptLeptonInput_rnnip_", index);
-  CreateBranch(tree, &promptLeptonInput_TopoEtCone30Rel, "lep_promptLeptonInput_TopoEtCone30Rel_", index);
-  CreateBranch(tree, &promptLeptonInput_PtVarCone30Rel, "lep_promptLeptonInput_PtVarCone30Rel_", index);
-
-
 
   CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
   CreateBranch(tree, &promptLeptonVeto_TagWeight, "lep_promptLeptonVeto_TagWeight_", index);
