@@ -1215,7 +1215,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
         short m_tau_nonprompt_short = -99;
         SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
         if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_short = AccessorNonPrompt(tau);
-        return (short) m_tau_nonprompt_short; }, *systematicTree, ("tau_" + var).c_str());
+        return (short) m_tau_nonprompt_short; }, *systematicTree, (tauprefix + var).c_str());
     }
 
 
@@ -1227,7 +1227,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
         float m_tau_nonprompt_float = -99.;
         SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
         if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_float = AccessorNonPrompt(tau);
-        return (float) m_tau_nonprompt_float;}, *systematicTree, ("tau_" + var).c_str());
+        return (float) m_tau_nonprompt_float;}, *systematicTree, (tauprefix + var).c_str());
     }	
 
 
