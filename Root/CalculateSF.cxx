@@ -162,23 +162,25 @@ bool CalculateSF::apply(const top::Event& event) const {
     //taus
     bool m_isMC = m_config->isMC();
     for ( int itau = 0; itau<tthevt->totalTaus; ++itau) {
-		for ( auto syst : tthevt->m_tau_sf_names ) {
-        	auto ivar = syst.first;
-        	m_SF.tauSFLoose[ivar] *= m_isMC ? m_sfRetriever->tauSF(*(*Taus).at(itau), ivar, false) : 1.0;
-        	m_SF.tauSFTight[ivar] *= m_isMC ? m_sfRetriever->tauSF(*(*Taus).at(itau), ivar, true)  : 1.0;
-    	}
-	}
-	for (const auto& systvar : tthevt->m_tau_sf_names){
-		auto ivar = systvar.first;
-		tthevt->tauSFLoose[ivar] = m_SF.tauSFLoose[ivar];
-        tthevt->tauSFTight[ivar] = m_SF.tauSFTight[ivar];
- 	}
- 	
+      for ( auto syst : tthevt->m_tau_sf_names ) {
+	auto ivar = syst.first;
+	m_SF.tauSFLoose[ivar] *= m_isMC ? m_sfRetriever->tauSF(*(*Taus).at(itau), ivar, false) : 1.0;
+	m_SF.tauSFTight[ivar] *= m_isMC ? m_sfRetriever->tauSF(*(*Taus).at(itau), ivar, true)  : 1.0;
+	if (event.m_hashValue != m_config->nominalHashValue()) break;
+      }
+    }
+    for (const auto& systvar : tthevt->m_tau_sf_names){
+      auto ivar = systvar.first;
+      tthevt->tauSFLoose[ivar] = m_SF.tauSFLoose[ivar];
+      tthevt->tauSFTight[ivar] = m_SF.tauSFTight[ivar];
+      if (event.m_hashValue != m_config->nominalHashValue()) break;
+    }
+    
 
-
-
-
-	//normalise variations
+    
+    
+    
+    //normalise variations
     for (const auto& systvar : tthevt->m_lep_sf_names) {
       const auto ivar = systvar.first;
       if (ivar == top::topSFSyst::nominal) continue;

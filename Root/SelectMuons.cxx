@@ -78,7 +78,14 @@ bool SelectMuons::apply(const top::Event & event) const{
     tthevt-> selected_muons->push_back(muItr);
   }
   std::sort (tthevt->selected_muons->begin(), tthevt->selected_muons->end(), ttHMLAsgHelper::pt_sort());
-  top::check(m_asgHelper->evtStore()->record(tthevt->selected_muons,"Selected_muons"), "recording Selected_muons failed.");
+
+  std::string m_Muons1;
+  m_Muons1 = m_Muons;
+  if(m_config->systematicName(event.m_hashValue)!="nominal"){
+    m_Muons1 = m_Muons + "_"+ m_config->systematicName(event.m_hashValue) ;
+  }
+
+  top::check(m_asgHelper->evtStore()->record(tthevt->selected_muons,m_Muons1), "recording Selected_muons failed.");
 
   //std::string elname = m_config->sgKeyMuons();
   //m_asgHelper->getMuonContainer(m_config->sgKeyMuons());
