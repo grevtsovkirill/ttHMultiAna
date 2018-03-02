@@ -1869,8 +1869,6 @@ void ttHMultileptonLooseEventSaver::finalize()
       myTree->SetBranchAddress("totalEventsWeighted_mc_generator_weights",&totalEventsWeighted_lhe);
       myTree->SetBranchAddress("names_mc_generator_weights",&names_lhe);
 
-
-
       //m_outputFile->cd();
       myTree->GetEntry(0); // This populates names_lhe. Can use this for booking histograms and adding bin labels
       m_outputFile->cd("loose");
