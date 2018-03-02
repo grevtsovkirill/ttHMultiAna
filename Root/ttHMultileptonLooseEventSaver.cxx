@@ -1866,26 +1866,26 @@ void ttHMultileptonLooseEventSaver::finalize()
       std::vector<float> *totalEventsWeighted_lhe;
       std::vector<std::string> *names_lhe;
 
-      sumTree->SetBranchAddress("totalEventsWeighted_mc_generator_weights",&totalEventsWeighted_lhe);
-      sumTree->SetBranchAddress("names_mc_generator_weights",&names_lhe);
+      myTree->SetBranchAddress("totalEventsWeighted_mc_generator_weights",&totalEventsWeighted_lhe);
+      myTree->SetBranchAddress("names_mc_generator_weights",&names_lhe);
 
 
 
       //m_outputFile->cd();
 
       myTree->GetEntry(0) // This populates names_lhe. Can use this for booking histograms and adding bin labels
- 
+
       m_outputFile->cd("loose");
       TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", names_lhe->size(), -0.5, names_lhe->size() - 0.5);
       for (size_t i = 0; i <names_lhe->size(); i++)
       {
         count_histo_lhe_weights->GetXaxis()->SetBinLabel(i+1,names_lhe->at(i).c_str());
-
-      for (int i = 0; i < myTree->GetEntriesFast(); ++i)
-      {
-        for (size_t j = 0; j < names_lhe->size(); i++)
+        for (int i = 0; i < myTree->GetEntriesFast(); ++i)
         {
-          count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
+          for (size_t j = 0; j < names_lhe->size(); i++)
+          {
+            count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
+          }
         }
       }
     }//end if generatorweights
