@@ -1934,45 +1934,50 @@ void ttHMultileptonLooseEventSaver::finalize()
   //overwrite Count histogram with values from CutBookkeepers
   if(m_isMC)
   {
-    TTreeReader sumWeightsReader("sumWeights", m_outputFile);
-   
-    if(m_config->doMCGeneratorWeights()) {
-      TTreeReaderValue<std::vector<float> > totalEventsWeighted_lhe(sumWeightsReader,
-	  "totalEventsWeighted_mc_generator_weights");
-      TTreeReaderValue<std::vector<std::string> > names_lhe(sumWeightsReader,
-	  "names_mc_generator_weights");
+    TTree *myTree = (TTree*)m_outputFile->Get("sumWeights");
+    double totalEventsUnskimmed         	= 0;
+    double totalEventsWeightedUnskimmed 	= 0;
+    unsigned long long totalEvents 		= 0;
+    float totalEventsWeighted		 	= 0;
+    std::vector<float>* totalEventsWeighted_lhe	= 0;
+    std::vector<std::string> *names_lhe		= 0;
 
-      //create Count_LHE
-      sumWeightsReader.Next(); //get first entry, so names_lhe is filled
+    myTree->SetBranchAddress("totalEventsWeighted_mc_generator_weights",&totalEventsWeighted_lhe);
+    myTree->SetBranchAddress("names_mc_generator_weights",&names_lhe);
+    myTree->SetBranchAddress("totalEvents",&totalEvents);
+    myTree->SetBranchAddress("totalEventsWeighted",&totalEventsWeighted);
+
+
+    if(m_config->doMCGeneratorWeights()) 
+    {
+       
+      m_outputFile->cd();
+      myTree->GetEntry(0);
+
       m_outputFile->cd("loose");
       TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", names_lhe->size(), -0.5, names_lhe->size() - 0.5);
-      m_outputFile->cd();
 
-      //fill Count_LHE
-      sumWeightsReader.SetEntry(-1); // restart
-      while(sumWeightsReader.Next()) {
-	for(unsigned int i=0; i<names_lhe->size(); ++i) {
-	  int ibin = i+1;
-	  count_histo_lhe_weights->GetXaxis()->SetBinLabel(ibin,names_lhe->at(i).c_str());
-	  count_histo_lhe_weights->Fill(i,totalEventsWeighted_lhe->at(i));
+      for(size_t i =0;i <names_lhe->size(); ++i)
+      {
+	count_histo_lhe_weights->GetXaxis()->SetBinLabel(i+1,names_lhe->at(i).c_str());
+      }
+      for (int i = 0; i < myTree->GetEntriesFast(); ++i)
+      {
+	myTree->GetEntry(i);
+	for (size_t j = 0; j < names_lhe->size(); j++)
+	{
+	  count_histo_lhe_weights->Fill(j,totalEventsWeighted_lhe->at(j));
 	}
       }
     }//end if generatorweights
 
-    double totalEventsUnskimmed         = 0;
-    double totalEventsWeightedUnskimmed = 0;
-    TTree *myTree = (TTree*)m_outputFile->Get("sumWeights");
-    unsigned long long totalEvents = 0;
-    float totalEventsWeighted =  0;
-    myTree->SetBranchAddress("totalEvents",&totalEvents);
-    myTree->SetBranchAddress("totalEventsWeighted",&totalEventsWeighted);
     for (int i = 0 ; i  < myTree->GetEntriesFast(); ++i)
     { 
-	myTree->GetEntry(i);
-        totalEventsUnskimmed +=totalEvents;
-        totalEventsWeightedUnskimmed += totalEventsWeighted;
+      myTree->GetEntry(i);
+      totalEventsUnskimmed +=totalEvents;
+      totalEventsWeightedUnskimmed += totalEventsWeighted;
     }
- 
+
     double totalEventsSkimmed = Count->GetBinContent(3);  
     if(totalEventsUnskimmed != totalEventsSkimmed) {
       Count->SetBinContent(1,totalEventsUnskimmed);
