@@ -617,7 +617,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       // Add non-prompt electron vars
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
 
-      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
+  /*    std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
       for(std::string var: short_vars) {
 	Wrap2(elevec, [=](const xAOD::Electron& ele) {
 	    short m_el_nonprompt_short = -99;
@@ -640,9 +640,33 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 	      return (float) m_el_nonprompt_float; }, *systematicTree, ("electron_" + var).c_str());
 	}
       }
+*/
     }
 
-    std::vector<std::string> R21_Ele_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
+
+	std::vector<std::string> short_vars = {"PromptLeptonInput_sv1_jf_ntrkv", "PromptLeptonInput_TrackJetNTrack"};
+	for(std::string var: short_vars) {
+		Wrap2(elevec, [=](const xAOD::Electron& ele) {
+        short m_el_nonprompt_short = -99;
+        SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_short = AccessorNonPrompt(ele);
+        return (short) m_el_nonprompt_short; }, *systematicTree, ("electron_" + var).c_str());
+    }
+
+ 
+    std::vector<std::string> float_vars = {"PromptLeptonInput_DL1mu", "PromptLeptonInput_DRlj", "PromptLeptonInput_LepJetPtFrac",
+				"PromptLeptonInput_PtFrac", "PromptLeptonInput_PtRel", "PromptLeptonInput_ip2", "PromptLeptonInput_ip3",
+				"PromptLeptonInput_rnnip"};
+	for(std::string var: float_vars) {
+		Wrap2(elevec, [=](const xAOD::Electron& ele){
+		float m_el_nonprompt_float = -99.;
+		SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(ele)) m_el_nonprompt_float = AccessorNonPrompt(ele);
+		return (float) m_el_nonprompt_float;}, *systematicTree, ("electron_" + var).c_str());
+	}
+
+
+   std::vector<std::string> R21_Ele_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
     for(std::string var: R21_Ele_PLI_vars){
 	Wrap2(elevec, [=](const xAOD::Electron& ele) { 
 	float m_el_nonprompt_float = -99.;
@@ -948,7 +972,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       // Add non-prompt muon vars
       Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "muon_jetFitterComb");
 
-      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
+/*      std::vector<std::string> short_vars = {"PromptLeptonIso_sv1_jf_ntrkv", "PromptLeptonIso_TrackJetNTrack"};
       for(std::string &var: short_vars) {
 	Wrap2(muvec, [=](const xAOD::Muon& mu) {
 	    short m_mu_nonprompt_short = -99;
@@ -971,7 +995,34 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 	      return (float) m_mu_nonprompt_float; }, *systematicTree, ("muon_" + var).c_str());
 	}
       }
+ */   }
+
+
+    std::vector<std::string> short_mu_vars = {"PromptLeptonInput_sv1_jf_ntrkv", "PromptLeptonInput_TrackJetNTrack"};
+    for(std::string var: short_mu_vars) {
+        Wrap2(muvec, [=](const xAOD::Muon& mu) {
+        short m_mu_nonprompt_short = -99;
+        SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_short = AccessorNonPrompt(mu);
+        return (short) m_mu_nonprompt_short; }, *systematicTree, ("muon_" + var).c_str());
     }
+
+
+    std::vector<std::string> float_mu_vars = {"PromptLeptonInput_DL1mu", "PromptLeptonInput_DRlj", "PromptLeptonInput_LepJetPtFrac",
+                "PromptLeptonInput_PtFrac", "PromptLeptonInput_PtRel", "PromptLeptonInput_ip2", "PromptLeptonInput_ip3",
+                "PromptLeptonInput_rnnip"};
+    for(std::string var: float_mu_vars) {
+        Wrap2(muvec, [=](const xAOD::Muon& mu){
+        float m_mu_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(mu)) m_mu_nonprompt_float = AccessorNonPrompt(mu);
+        return (float) m_mu_nonprompt_float;}, *systematicTree, ("muon_" + var).c_str());
+    }
+
+
+
+
+
 
 	std::vector<std::string> R21_Mu_PLI_vars = {"PromptLeptonIso", "PromptLeptonVeto"};
     for(std::string var: R21_Mu_PLI_vars){
@@ -1157,6 +1208,29 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 	}, *systematicTree, std::string(tauprefix+"ele_match_lhscore").c_str());
 
     }
+
+    std::vector<std::string> short_tau_vars = {"PromptTauInput_TrackJetNTrack"};
+    for(std::string var: short_tau_vars) {
+        Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+        short m_tau_nonprompt_short = -99;
+        SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_short = AccessorNonPrompt(tau);
+        return (short) m_tau_nonprompt_short; }, *systematicTree, (tauprefix + var).c_str());
+    }
+
+
+    std::vector<std::string> float_tau_vars = {"PromptTauInput_DRlj","PromptTauInput_JetF", "PromptTauInput_LepJetPtFrac",
+                "PromptTauInput_MV2c10rnn", "PromptTauInput_SV1", "PromptTauInput_ip2", "PromptTauInput_ip3",
+                "PromptTauInput_rnnip"};
+    for(std::string var: float_tau_vars) {
+        Wrap2(tauvec, [=](const xAOD::TauJet& tau){
+        float m_tau_nonprompt_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt(var);
+        if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_float = AccessorNonPrompt(tau);
+        return (float) m_tau_nonprompt_float;}, *systematicTree, (tauprefix + var).c_str());
+    }	
+
+
 
 	  Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
 	  float m_tau_PTV_float = -99.;

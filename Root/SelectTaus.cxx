@@ -82,7 +82,13 @@ bool SelectTaus::apply(const top::Event & event) const{
   }
   
   std::sort (tthevt->selected_taus->begin(), tthevt->selected_taus->end(), ttHMLAsgHelper::pt_sort());
-  top::check(m_asgHelper->evtStore()->record(tthevt->selected_taus,"Selected_taus"), "recording Selected_taus failed.");
+
+  std::string m_taus1;
+  m_taus1 = m_taus;
+  if(m_config->systematicName(event.m_hashValue)!="nominal"){
+    m_taus1 = m_taus + "_"+ m_config->systematicName(event.m_hashValue) ;
+  }
+  top::check(m_asgHelper->evtStore()->record(tthevt->selected_taus,m_taus1), "recording Selected_taus failed.");
 
  // std::string tauname = m_config->sgKeyTaus();
   //tthevt->GetTauContainer(tauname);

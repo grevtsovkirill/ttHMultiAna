@@ -322,7 +322,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   // Whatever is not a prompt or a QMisID, is a fake to us!
   lep.isFakeLep = ( !( lep.isPrompt == 1 ) && !( lep.isQMisID == 1 ) );
 
-  static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
+/*  static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
   lep.promptLeptonIso_sv1_jf_ntrkv = ( promptLeptonIso_sv1_jf_ntrkv.isAvailable(el) ) ? promptLeptonIso_sv1_jf_ntrkv(el) : -99;
 
   static SG::AuxElement::Accessor<short> promptLeptonIso_TrackJetNTrack("PromptLeptonIso_TrackJetNTrack");
@@ -345,8 +345,37 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 
   static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
   lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(el) ) ? promptLeptonNoIso_TagWeight(el) : -99;
+*/
 
+  static SG::AuxElement::Accessor<short> promptLeptonInput_sv1_jf_ntrkv("PromptLeptonInput_sv1_jf_ntrkv");
+  lep.promptLeptonInput_sv1_jf_ntrkv = ( promptLeptonInput_sv1_jf_ntrkv.isAvailable(el) ) ? promptLeptonInput_sv1_jf_ntrkv(el) : -99;
 
+  static SG::AuxElement::Accessor<short> promptLeptonInput_TrackJetNTrack("PromptLeptonInput_TrackJetNTrack");
+  lep.promptLeptonInput_TrackJetNTrack = ( promptLeptonInput_TrackJetNTrack.isAvailable(el) ) ? promptLeptonInput_TrackJetNTrack(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_DL1mu("PromptLeptonInput_DL1mu");
+  lep.promptLeptonInput_DL1mu = ( promptLeptonInput_DL1mu.isAvailable(el) ) ? promptLeptonInput_DL1mu(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_DRlj("PromptLeptonInput_DRlj");
+  lep.promptLeptonInput_DRlj = ( promptLeptonInput_DRlj.isAvailable(el) ) ? promptLeptonInput_DRlj(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_LepJetPtFrac("PromptLeptonInput_LepJetPtFrac");
+  lep.promptLeptonInput_LepJetPtFrac = ( promptLeptonInput_LepJetPtFrac.isAvailable(el) ) ? promptLeptonInput_LepJetPtFrac(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_PtFrac("PromptLeptonInput_PtFrac");
+  lep.promptLeptonInput_PtFrac = ( promptLeptonInput_PtFrac.isAvailable(el) ) ? promptLeptonInput_PtFrac(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_PtRel("PromptLeptonInput_PtRel");
+  lep.promptLeptonInput_PtRel = ( promptLeptonInput_PtRel.isAvailable(el) ) ? promptLeptonInput_PtRel(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_ip2("PromptLeptonInput_ip2");
+  lep.promptLeptonInput_ip2 = ( promptLeptonInput_ip2.isAvailable(el) ) ? promptLeptonInput_ip2(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_ip3("PromptLeptonInput_ip3");
+  lep.promptLeptonInput_ip3 = ( promptLeptonInput_ip3.isAvailable(el) ) ? promptLeptonInput_ip3(el) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_rnnip("PromptLeptonInput_rnnip");
+  lep.promptLeptonInput_rnnip = ( promptLeptonInput_rnnip.isAvailable(el) ) ? promptLeptonInput_rnnip(el) : -99;
 
   static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
   lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(el) ) ? promptLeptonIso_TagWeight(el) : -99;
@@ -757,7 +786,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
 //  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso_TagWeight");
 //  lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
 
-  static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
+/*  static SG::AuxElement::Accessor<short> promptLeptonIso_sv1_jf_ntrkv("PromptLeptonIso_sv1_jf_ntrkv");
   lep.promptLeptonIso_sv1_jf_ntrkv = ( promptLeptonIso_sv1_jf_ntrkv.isAvailable(mu) ) ? promptLeptonIso_sv1_jf_ntrkv(mu) : -99;
 
   static SG::AuxElement::Accessor<short> promptLeptonIso_TrackJetNTrack("PromptLeptonIso_TrackJetNTrack");
@@ -780,8 +809,39 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
 
   static SG::AuxElement::Accessor<float> promptLeptonNoIso_TagWeight("PromptLeptonNoIso_TagWeight");
   lep.promptLeptonNoIso_TagWeight = ( promptLeptonNoIso_TagWeight.isAvailable(mu) ) ? promptLeptonNoIso_TagWeight(mu) : -99;
+*/
+ 
+  static SG::AuxElement::Accessor<short> promptLeptonInput_sv1_jf_ntrkv("PromptLeptonInput_sv1_jf_ntrkv");
+  lep.promptLeptonInput_sv1_jf_ntrkv = ( promptLeptonInput_sv1_jf_ntrkv.isAvailable(mu) ) ? promptLeptonInput_sv1_jf_ntrkv(mu) : -99;
 
-  static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
+  static SG::AuxElement::Accessor<short> promptLeptonInput_TrackJetNTrack("PromptLeptonInput_TrackJetNTrack");
+  lep.promptLeptonInput_TrackJetNTrack = ( promptLeptonInput_TrackJetNTrack.isAvailable(mu) ) ? promptLeptonInput_TrackJetNTrack(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_DL1mu("PromptLeptonInput_DL1mu");
+  lep.promptLeptonInput_DL1mu = ( promptLeptonInput_DL1mu.isAvailable(mu) ) ? promptLeptonInput_DL1mu(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_DRlj("PromptLeptonInput_DRlj");
+  lep.promptLeptonInput_DRlj = ( promptLeptonInput_DRlj.isAvailable(mu) ) ? promptLeptonInput_DRlj(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_LepJetPtFrac("PromptLeptonInput_LepJetPtFrac");
+  lep.promptLeptonInput_LepJetPtFrac = ( promptLeptonInput_LepJetPtFrac.isAvailable(mu) ) ? promptLeptonInput_LepJetPtFrac(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_PtFrac("PromptLeptonInput_PtFrac");
+  lep.promptLeptonInput_PtFrac = ( promptLeptonInput_PtFrac.isAvailable(mu) ) ? promptLeptonInput_PtFrac(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_PtRel("PromptLeptonInput_PtRel");
+  lep.promptLeptonInput_PtRel = ( promptLeptonInput_PtRel.isAvailable(mu) ) ? promptLeptonInput_PtRel(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_ip2("PromptLeptonInput_ip2");
+  lep.promptLeptonInput_ip2 = ( promptLeptonInput_ip2.isAvailable(mu) ) ? promptLeptonInput_ip2(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_ip3("PromptLeptonInput_ip3");
+  lep.promptLeptonInput_ip3 = ( promptLeptonInput_ip3.isAvailable(mu) ) ? promptLeptonInput_ip3(mu) : -99;
+
+  static SG::AuxElement::Accessor<float> promptLeptonInput_rnnip("PromptLeptonInput_rnnip");
+  lep.promptLeptonInput_rnnip = ( promptLeptonInput_rnnip.isAvailable(mu) ) ? promptLeptonInput_rnnip(mu) : -99;
+
+   static SG::AuxElement::Accessor<float> promptLeptonIso_TagWeight("PromptLeptonIso");
   lep.promptLeptonIso_TagWeight = ( promptLeptonIso_TagWeight.isAvailable(mu) ) ? promptLeptonIso_TagWeight(mu) : -99;
 
   static SG::AuxElement::Accessor<float> promptLeptonVeto_TagWeight("PromptLeptonVeto");
@@ -889,6 +949,35 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.truthOrigin     = xTau.auxdata<int>("tauTruthOrigin");
   MLTau.truthType       = xTau.auxdata<int>("tauTruthType");
   MLTau.truthJetFlavour = xTau.auxdata<int>("truthJetFlavour");
+
+
+  static SG::AuxElement::Accessor<short> promptTauInput_TrackJetNTrack("PromptTauInput_TrackJetNTrack");
+  MLTau.promptTauInput_TrackJetNTrack = ( promptTauInput_TrackJetNTrack.isAvailable(xTau) ) ? promptTauInput_TrackJetNTrack(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_DRlj("PromptTauInput_DRlj");
+  MLTau.promptTauInput_DRlj = ( promptTauInput_DRlj.isAvailable(xTau) ) ? promptTauInput_DRlj(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_LepJetPtFrac("PromptTauInput_LepJetPtFrac");
+  MLTau.promptTauInput_LepJetPtFrac = ( promptTauInput_LepJetPtFrac.isAvailable(xTau) ) ? promptTauInput_LepJetPtFrac(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_JetF("PromptTauInput_JetF");
+  MLTau.promptTauInput_JetF = ( promptTauInput_JetF.isAvailable(xTau) ) ? promptTauInput_JetF(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_SV1("PromptTauInput_SV1");
+  MLTau.promptTauInput_SV1 = ( promptTauInput_SV1.isAvailable(xTau) ) ? promptTauInput_SV1(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_MV2c10rnn("PromptTauInput_MV2c10rnn");
+  MLTau.promptTauInput_MV2c10rnn = ( promptTauInput_MV2c10rnn.isAvailable(xTau) ) ? promptTauInput_MV2c10rnn(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_ip2("PromptTauInput_ip2");
+  MLTau.promptTauInput_ip2 = ( promptTauInput_ip2.isAvailable(xTau) ) ? promptTauInput_ip2(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_ip3("PromptTauInput_ip3");
+  MLTau.promptTauInput_ip3 = ( promptTauInput_ip3.isAvailable(xTau) ) ? promptTauInput_ip3(xTau) : -99;
+
+  static SG::AuxElement::Accessor<float> promptTauInput_rnnip("PromptTauInput_rnnip");
+  MLTau.promptTauInput_rnnip = ( promptTauInput_rnnip.isAvailable(xTau) ) ? promptTauInput_rnnip(xTau) : -99;
+
 
   static SG::AuxElement::Accessor<float> promptTauVeto("PromptTauVeto");
   MLTau.promptTauVeto = (promptTauVeto.isAvailable(xTau)) ? promptTauVeto(xTau) : -99;

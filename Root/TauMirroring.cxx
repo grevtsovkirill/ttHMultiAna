@@ -34,6 +34,17 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &truthType,       "tau_truthType_",        index);
   CreateBranch(tree, &truthJetFlavour, "tau_truthJetFlavour_",  index);
 
+  CreateBranch(tree, &promptTauInput_TrackJetNTrack, "tau_promptTauInput_TrackJetNTrack_", index);
+  CreateBranch(tree, &promptTauInput_JetF, "tau_promptTauInput_JetF_", index);
+  CreateBranch(tree, &promptTauInput_DRlj, "tau_promptTauInput_DRlj_", index);
+  CreateBranch(tree, &promptTauInput_LepJetPtFrac, "tau_promptTauInput_LepJetPtFrac_", index);
+  CreateBranch(tree, &promptTauInput_SV1, "tau_promptTauInput_SV1_", index);
+  CreateBranch(tree, &promptTauInput_MV2c10rnn, "tau_promptTauInput_MV2c10rnn_", index);
+  CreateBranch(tree, &promptTauInput_ip2, "tau_promptTauInput_ip2_", index);
+  CreateBranch(tree, &promptTauInput_ip3, "tau_promptTauInput_ip3_", index);
+  CreateBranch(tree, &promptTauInput_rnnip, "tau_promptTauInput_rnnip_", index);
+
+
   CreateBranch(tree, &promptTauVeto, "tau_promptTauVeto_",      index);
 }
 

@@ -1,6 +1,6 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16a_prw_missing.root
+PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v1/prw.merged.root #$WorkDir_DIR/data/ttHMultilepton/data/mc16a_prw_missing.root
 
 ##FOR MC16A CANT USE data17GRL
 PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20170605/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-008.root
@@ -32,12 +32,10 @@ MCGeneratorWeights True
 
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.root
+OutputFilename syst_output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
-
-Systematics Nominal
 
 #Electron cuts
 ElectronID LooseAndBLayerLH
@@ -78,9 +76,20 @@ DoLoose False
 IsAFII False
 
 #NEvents 1000000
-#NEvents 1000
-Systematics Nominal
+NEvents 100
 #TruthBlockInfo True
+
+##GK:
+#Systematics Nominal
+Systematics All
+DynamicKeys DoSystematics
+# enables skimming and slimming
+DoSystematics True
+
+
+#QGF - missing
+#JetUncertainties_QGFracFile ttHMultiAna/is2LSS0Tau_FlavourComposition.root
+#JetUncertainties_QGFracFile ttHMultiAna/is2LSS0Tau_FlavourComposition_detailed.root
 
 SELECTION triggers
 #GRL
