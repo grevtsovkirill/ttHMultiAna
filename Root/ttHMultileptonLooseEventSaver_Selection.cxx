@@ -265,6 +265,61 @@ if (totleptons >= 2) {
 
 }
 
+float muonEff_Trigger(const xAOD::Muon& x,const std::string& id,const top::topSFSyst SFSyst)
+{
+  float sf(1.);
+  if (x.isAvailable<float>("MU_EFF_Trigger_"+id)) {
+    sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id);
+  }
+
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_UP) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_STAT_UP")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_STAT_UP");
+    }
+  }
+
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_STAT_DOWN) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_STAT_DOWN")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_STAT_DOWN");
+    }
+  }
+
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_SYST_UP) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_SYST_UP")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_SYST_UP");
+    }
+  }
+
+  if (SFSyst == top::topSFSyst::MU_SF_Trigger_SYST_DOWN) {
+    if (x.isAvailable<float>("MU_EFF_Trigger_"+id+"_SYST_DOWN")) {
+      sf = x.auxdataConst<float>("MU_EFF_Trigger_"+id+"_SYST_DOWN");
+    }
+  }
+  return sf;
+}
+
+float electronEff_Trigger(const xAOD::Electron& x,const std::string& id,const top::topSFSyst SFSyst)
+{
+  float sf(1.);
+  if (x.isAvailable<float>("EL_EFF_Trigger_"+id)) {
+    sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id);
+  }
+
+  if (SFSyst == top::topSFSyst::EL_SF_Trigger_UP) {
+    if (x.isAvailable<float>("EL_EFF_Trigger_"+id+"_UP")) {
+      sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id+"_UP");
+    }
+  }
+
+  if (SFSyst == top::topSFSyst::EL_SF_Trigger_DOWN) {
+    if (x.isAvailable<float>("EL_EFF_Trigger_"+id+"_DOWN")) {
+      sf = x.auxdataConst<float>("EL_EFF_Trigger_"+id+"_DOWN");
+    }
+  }
+
+  return sf;
+}
+
 void ttHMultileptonLooseEventSaver::
 CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.EtaBE2 = el.caloCluster()->etaBE(2);
@@ -481,7 +536,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.nInnerPix = getNInnerPix(el);
 
   // scale factors
-/*  for (const auto& systvar : m_lep_sf_names) {
+  for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue; // break after doing nominal
     lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false);
@@ -500,7 +555,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
     // Everything except trigger
     lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFReco[ivar];
     lep.SFObjTight[ivar] = lep.SFIDTight[ivar]*lep.SFIsoTight[ivar]*lep.SFReco[ivar];
-  }*/
+  }
 }
 void
 ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
@@ -905,7 +960,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   {float iso = 1e6; mu.isolation(iso, xAOD::Iso::topoetcone40); lep.topoEtcone40 = iso;}
 
   lep.nInnerPix = getNInnerPix(mu);
-/*
+
   // scale factors
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
@@ -925,7 +980,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFTTVA[ivar];
     lep.SFObjTight[ivar] = lep.SFIDTight[ivar]*lep.SFIsoTight[ivar]*lep.SFTTVA[ivar];
   }
-*/
+
 
 }
 void
