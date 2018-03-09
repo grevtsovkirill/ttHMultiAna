@@ -56,8 +56,8 @@ MuonIsolationLoose PromptLepton
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-TauJetConfigFile data/loose_tau_selection.conf
-TauJetConfigFileLoose data/tight_tau_selection.conf
+TauJetConfigFile ttHMultilepton/data/loose_tau_selection.conf
+TauJetConfigFileLoose ttHMultilepton/data/tight_tau_selection.conf
 ApplyTauMVATES false
 
 #Jet cuts
