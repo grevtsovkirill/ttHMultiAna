@@ -216,16 +216,18 @@ extern TH1I* m_tauCutflow;
   // Truth Matrix element photon
   char m_hasMEphoton;
   char m_hasMEphoton_DRgt02_nonhad;
-  char m_MEphoton_OLtty_keepEvent;
-  char m_MEphoton_OLtty_cat1;
-  char m_MEphoton_OLtty_cat2;
-  char m_MEphoton_OLtty_cat3;
-  char m_MEphoton_OLtty_cat4;
+  /* char m_MEphoton_OLtty_keepEvent; */
+  /* char m_MEphoton_OLtty_cat1; */
+  /* char m_MEphoton_OLtty_cat2; */
+  /* char m_MEphoton_OLtty_cat3; */
+  /* char m_MEphoton_OLtty_cat4; */
+  float m_MEphoton_e;
   float m_MEphoton_pt;
   float m_MEphoton_eta;
   float m_MEphoton_phi;
-  int m_MEphoton_mother_pdgId;
+  int m_MEphoton_mother_pdgId;  
   float m_MEphoton_mother_pt;
+  float m_MEphoton_mother_e;
   float m_MEphoton_mother_eta;
   float m_MEphoton_mother_phi;
 

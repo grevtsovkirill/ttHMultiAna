@@ -418,15 +418,17 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
     // Truth Matrix element photon
     systematicTree->makeOutputVariable(m_hasMEphoton, "m_hasMEphoton");
     systematicTree->makeOutputVariable(m_hasMEphoton_DRgt02_nonhad, "m_hasMEphoton_DRgt02_nonhad");
-    systematicTree->makeOutputVariable(m_MEphoton_OLtty_keepEvent, "m_MEphoton_OLtty_keepEvent");
-    systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat1, "m_MEphoton_OLtty_cat1");
-    systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat2, "m_MEphoton_OLtty_cat2");
-    systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat3, "m_MEphoton_OLtty_cat3");
-    systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat4, "m_MEphoton_OLtty_cat4");
+    // systematicTree->makeOutputVariable(m_MEphoton_OLtty_keepEvent, "m_MEphoton_OLtty_keepEvent");
+    // systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat1, "m_MEphoton_OLtty_cat1");
+    // systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat2, "m_MEphoton_OLtty_cat2");
+    // systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat3, "m_MEphoton_OLtty_cat3");
+    // systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat4, "m_MEphoton_OLtty_cat4");
+    systematicTree->makeOutputVariable(m_MEphoton_e, "m_MEphoton_e");
     systematicTree->makeOutputVariable(m_MEphoton_pt, "m_MEphoton_pt");
     systematicTree->makeOutputVariable(m_MEphoton_eta, "m_MEphoton_eta");
     systematicTree->makeOutputVariable(m_MEphoton_phi, "m_MEphoton_phi");
     systematicTree->makeOutputVariable(m_MEphoton_mother_pdgId, "m_MEphoton_mother_pdgId");
+    systematicTree->makeOutputVariable(m_MEphoton_mother_e, "m_MEphoton_mother_e");
     systematicTree->makeOutputVariable(m_MEphoton_mother_pt, "m_MEphoton_mother_pt");
     systematicTree->makeOutputVariable(m_MEphoton_mother_eta, "m_MEphoton_mother_eta");
     systematicTree->makeOutputVariable(m_MEphoton_mother_phi, "m_MEphoton_mother_phi");
@@ -1466,18 +1468,20 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   // Truth Matrix element photon
   m_hasMEphoton = false;
   m_hasMEphoton_DRgt02_nonhad = false;
-  m_MEphoton_OLtty_keepEvent = false;
-  m_MEphoton_OLtty_cat1 = false;
-  m_MEphoton_OLtty_cat2 = false;
-  m_MEphoton_OLtty_cat3 = false;
-  m_MEphoton_OLtty_cat4 = false;
-  m_MEphoton_pt = -1.;
-  m_MEphoton_eta = 0.;
-  m_MEphoton_phi = 0.;
+  // m_MEphoton_OLtty_keepEvent = false;
+  // m_MEphoton_OLtty_cat1 = false;
+  // m_MEphoton_OLtty_cat2 = false;
+  // m_MEphoton_OLtty_cat3 = false;
+  // m_MEphoton_OLtty_cat4 = false;
+  m_MEphoton_e = -10.;
+  m_MEphoton_pt = -10.;
+  m_MEphoton_eta = -10.;
+  m_MEphoton_phi = -10.;
   m_MEphoton_mother_pdgId = 0;
-  m_MEphoton_mother_pt = -1.;
-  m_MEphoton_mother_eta = 0.;
-  m_MEphoton_mother_phi = 0.;
+  m_MEphoton_mother_e = -10.;
+  m_MEphoton_mother_pt = -10.;
+  m_MEphoton_mother_eta = -10.;
+  m_MEphoton_mother_phi = -10.;
   if (event.m_truth != nullptr ) {
     for (const auto& particle : *(event.m_truth)) {
       int pdgId = 22; // look at photons
@@ -1495,38 +1499,45 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
         if (abs(motherPdgId) < 100 && particle->barcode() < 2e5 && particle->pt() > 0 && motherPt > 0) {
           m_hasMEphoton = true;
            //std::cout << motherPdgId << " " << particle->barcode() << " " << particle->p4().DeltaR(mother->p4()) << " " << particle->pt() << std::endl;
-          double dr = particle->p4().DeltaR(mother->p4()); // always look at DR
-          if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18))
-            m_hasMEphoton_DRgt02_nonhad = true; // in selection use with "(!m_hasMEphoton_DRgt02_nonhad)!=(mc_channel_number==410082)"
-          if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18) && m_mcChannelNumber == 410082) {
-            m_MEphoton_OLtty_cat1 = true;
-            m_MEphoton_OLtty_keepEvent = true;  // this is tty - top left cell of the tty table, > 15 GeV
-          } else if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) >= 11 && abs(motherPdgId) <= 18) && m_mcChannelNumber != 410082) {
-            m_MEphoton_OLtty_cat2 = true;
-            m_MEphoton_OLtty_keepEvent = true;  // this is ttbar - top right cell of the ttbar table
-          } else if (dr < 0.2  && particle->pt() > 15e3 && m_mcChannelNumber != 410082) {
-            m_MEphoton_OLtty_cat3 = true;
-            m_MEphoton_OLtty_keepEvent = true;  // this is ttbar, dr < 0.2 row from the ttbar table
-          } else if (particle->pt() < 15e3 && m_mcChannelNumber != 410082) {
-            m_MEphoton_OLtty_cat4 = true;
-            m_MEphoton_OLtty_keepEvent = true;  // this is ttbar, ME photon pT < 15000 regardless the DR
-          }
+	  //          double dr = particle->p4().DeltaR(mother->p4()); // always look at DR
+	  //          if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18))
+          // if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) < 11 || abs(motherPdgId) > 18) && m_mcChannelNumber == 410082) {
+          //   m_MEphoton_OLtty_cat1 = true;
+          //   m_MEphoton_OLtty_keepEvent = true;  // this is tty - top left cell of the tty table, > 15 GeV
+          // } else if (dr > 0.2 && particle->pt() > 15e3 && (abs(motherPdgId) >= 11 && abs(motherPdgId) <= 18) && m_mcChannelNumber != 410082) {
+          //   m_MEphoton_OLtty_cat2 = true;
+          //   m_MEphoton_OLtty_keepEvent = true;  // this is ttbar - top right cell of the ttbar table
+          // } else if (dr < 0.2  && particle->pt() > 15e3 && m_mcChannelNumber != 410082) {
+          //   m_MEphoton_OLtty_cat3 = true;
+          //   m_MEphoton_OLtty_keepEvent = true;  // this is ttbar, dr < 0.2 row from the ttbar table
+          // } else if (particle->pt() < 15e3 && m_mcChannelNumber != 410082) {
+           //   m_MEphoton_OLtty_cat4 = true;
+          //   m_MEphoton_OLtty_keepEvent = true;  // this is ttbar, ME photon pT < 15000 regardless the DR
+          // }
           if(particle->pt() > m_MEphoton_pt) {
+            m_MEphoton_e = particle->e();
             m_MEphoton_pt = particle->pt();
             m_MEphoton_eta = particle->eta();
             m_MEphoton_phi = particle->phi();
             m_MEphoton_mother_pdgId = motherPdgId;
             m_MEphoton_mother_pt = motherPt;
+            m_MEphoton_mother_e = mother->e();
             m_MEphoton_mother_eta = mother->eta();
             m_MEphoton_mother_phi = mother->phi();
+
+	    // we want this for the highest pT only 
+	    if (particle->pt() > 15e3 && (abs(motherPdgId) == 24 || abs(motherPdgId) == 6))
+	      m_hasMEphoton_DRgt02_nonhad = true;// in selection use with "ttbar && !m_hasMEphoton_DRgt02_nonhad" or "tty && m_hasMEphoton_DRgt02_nonhad" 
+	    else
+	      m_hasMEphoton_DRgt02_nonhad = false;// in selection use with "ttbar && !m_hasMEphoton_DRgt02_nonhad" or "tty && m_hasMEphoton_DRgt02_nonhad" 
           }
         }
       }
      }
     }
   }
-  if (!m_hasMEphoton)
-    m_MEphoton_OLtty_keepEvent = true;
+  // if (!m_hasMEphoton)
+  //   m_MEphoton_OLtty_keepEvent = true;
 
   // Truth Matching
 //  if ( top::isSimulation(event) ) {
