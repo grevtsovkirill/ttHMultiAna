@@ -18,6 +18,7 @@
 #include "ttHMultilepton/CountHisto.h"
 #include "ttHMultilepton/SignalRegionPreselection.h"
 #include "ttHMultilepton/CalculateSF.h"
+#include "ttHMultilepton/SelectTruthParticles.h"
 #include <iostream>
 #include "TFile.h"
 
@@ -60,6 +61,8 @@
     if(toolname == "SRPRESKIM")
 	    return new SignalRegionPreselection(param, config); 
     if(toolname == "CALCULATESF"){	    return new CalculateSF(param, config);}
+    if(toolname == "SELECTTRUTHPARTICLES")
+        return new SelectTruthParticles(param, config);
 
 
 //    if(toolname == "FILLVARIABLES")
