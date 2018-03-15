@@ -1004,7 +1004,17 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.truthOrigin     = xTau.auxdata<int>("tauTruthOrigin");
   MLTau.truthType       = xTau.auxdata<int>("tauTruthType");
   MLTau.truthJetFlavour = xTau.auxdata<int>("truthJetFlavour");
+  
 
+  static SG::AuxElement::Accessor<float> BDTEleScoreSigTrans("BDTEleScoreSigTrans");
+  MLTau.BDTEleScoreSigTrans = ( BDTEleScoreSigTrans.isAvailable(xTau) ) ? BDTEleScoreSigTrans(xTau) : -2;
+
+  static SG::AuxElement::Accessor<float> BDTJetScoreSigTrans("BDTJetScoreSigTrans");
+  MLTau.BDTJetScoreSigTrans = ( BDTJetScoreSigTrans.isAvailable(xTau) ) ? BDTJetScoreSigTrans(xTau) : -2;
+
+
+  static SG::AuxElement::Accessor<float> tau_mv2c10("MV2c10");
+  MLTau.MV2c10 = ( tau_mv2c10.isAvailable(xTau) ) ? tau_mv2c10(xTau) : -2;
 
   static SG::AuxElement::Accessor<short> promptTauInput_TrackJetNTrack("PromptTauInput_TrackJetNTrack");
   MLTau.promptTauInput_TrackJetNTrack = ( promptTauInput_TrackJetNTrack.isAvailable(xTau) ) ? promptTauInput_TrackJetNTrack(xTau) : -99;

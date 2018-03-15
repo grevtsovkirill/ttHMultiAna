@@ -280,7 +280,7 @@ extern TH1I* m_tauCutflow;
 
   std::vector<std::vector<int> >  m_mc_parents;
   std::vector<std::vector<int> >  m_mc_children;
-/*
+
   std::vector<float> m_PDFinfo_X1;
   std::vector<float> m_PDFinfo_X2;
   std::vector<int> m_PDFinfo_PDGID1;
@@ -288,7 +288,7 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_PDFinfo_Q;
   std::vector<float> m_PDFinfo_XF1;
   std::vector<float> m_PDFinfo_XF2;
-
+/*
   std::vector<float> m_trjet_pt;
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;

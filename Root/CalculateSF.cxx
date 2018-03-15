@@ -233,9 +233,9 @@ void CalculateSF::doEventSFs_Helper(const xAOD::Electron_v1& el, bool tightIsLoo
 	 
 
 
-	  m_SF.lepSFObjLoose[ivar]*= m_sfRetriever->electronSF_ID(el, ivar, false) * m_sfRetriever->electronSF_Isol(el, ivar, false) * m_SF.lepSFReco[ivar] * m_sfRetriever->electronSF_Reco(el, ivar);
+	  m_SF.lepSFObjLoose[ivar]*= m_sfRetriever->electronSF_ID(el, ivar, false) * m_sfRetriever->electronSF_Isol(el, ivar, false) * m_sfRetriever->electronSF_Reco(el, ivar);
 
-	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose) *  m_SF.lepSFIsoTight[ivar] * m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose) * m_sfRetriever->electronSF_Reco(el, ivar));
+	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose) * m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose) * m_sfRetriever->electronSF_Reco(el, ivar));
  
 	  //m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFReco[ivar];
 	  //m_SF.lepSFObjTight[ivar] *= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] :  m_SF.lepSFIDTight[ivar]*m_SF.lepSFIsoTight[ivar]*m_SF.lepSFReco[ivar] );
