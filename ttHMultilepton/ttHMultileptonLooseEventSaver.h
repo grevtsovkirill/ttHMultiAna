@@ -21,7 +21,7 @@
 #include "AssociationUtils/ToolBox.h"
 
 //#include "ttHMultilepton/TreeAssist.h"
-//#include "ttHMultilepton/TruthSelector.h"
+#include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
 #include "ttHMultilepton/Tau.h"
 #include "ttHMultilepton/TreeAssist.h"
@@ -109,7 +109,7 @@ extern TH1I* m_tauCutflow;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
       MuonSelectionTool                      muonSelection;
 //  IsolationSelectionTool                 iso_1;
-//  ttH::TruthSelector                     truthSelector;
+    ttH::TruthSelector                     truthSelector;
 //  TauSelectionTool                       m_tauSelectionEleOLR;
 //  TauSelectionTool                       m_tauSelectionEleBDT;
 //  TauSelectionTool                       m_tauSelectionMuonOLR;
@@ -263,7 +263,7 @@ extern TH1I* m_tauCutflow;
   ToolHandle<PMGTools::PMGSherpa22VJetsWeightTool> m_sherpaRW;
 
   //MC
-/*  int   m_higgsMode;
+  int   m_higgsMode;
   const xAOD::TruthParticle* m_higgs;
   const xAOD::TruthParticle* m_top;
   const xAOD::TruthParticle* m_antitop;
@@ -286,7 +286,7 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_PDFinfo_Q;
   std::vector<float> m_PDFinfo_XF1;
   std::vector<float> m_PDFinfo_XF2;
-
+/*
   std::vector<float> m_trjet_pt;
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;

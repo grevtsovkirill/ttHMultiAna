@@ -87,10 +87,10 @@ TH1I* m_tauCutflow;
     m_truthMET_py(-999.0),
     m_truthMET_phi(-999.0),
     m_truthMET_sumet(-1.0),
-    m_sherpaRW("PMGSherpa22VJetsWeightTool")
-//    m_higgs(nullptr),
-//    m_top(nullptr),
-//    m_antitop(nullptr),
+    m_sherpaRW("PMGSherpa22VJetsWeightTool"),
+    m_higgs(nullptr),
+    m_top(nullptr),
+    m_antitop(nullptr)
 //    dummy_nom("dummy"),
 //    dummy_elup("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
 //    dummy_eldo("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1down"),
@@ -315,7 +315,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       systematicTree->makeOutputVariable(m_JVT_weight_DOWN, "JVT_EventWeight_DOWN");
     }
 
-/*    if(!m_doSystematics) {
+    if(!m_doSystematics) {
       //truth information
       systematicTree->makeOutputVariable(m_mc_m,           "m_truth_m");
       systematicTree->makeOutputVariable(m_mc_pt,          "m_truth_pt");
@@ -346,7 +346,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       systematicTree->makeOutputVariable(m_PDFinfo_Q,         "m_mcevt_pdf_Q");
       systematicTree->makeOutputVariable(m_PDFinfo_XF1,       "m_mcevt_pdf_XF1");
       systematicTree->makeOutputVariable(m_PDFinfo_XF2,       "m_mcevt_pdf_XF2");
-    }*/
+    }
 
 
 
@@ -373,7 +373,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 	    return event.m_info->isAvailable<int>("TTHML_NTruthJetSherpa") ? event.m_info->auxdataConst<int>("TTHML_NTruthJetSherpa") : 0.0;
 	  }, *systematicTree, "nTruthJets_SherpaRwght");
 
-/*    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
+    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->phi()            : 0.0; }, *systematicTree, "higgs_phi");
     WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->e()              : 0.0; }, *systematicTree, "higgs_E");
@@ -387,7 +387,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->eta()            : 0.0; }, *systematicTree, "antitop_eta");
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->phi()            : 0.0; }, *systematicTree, "antitop_phi");
     WrapS(scalarvec, [&](const top::Event&){ return m_antitop ? m_antitop->e()              : 0.0; }, *systematicTree, "antitop_E");
-*/
+
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 // ttbar HF, DLF, MLF classification
 //    systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
@@ -395,7 +395,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 //    systematicTree->makeOutputVariable(m_DLF_Classification, "DLF_Classification");
     //systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
 
-//    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
+    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_isAFII, "mc_isAFII");
@@ -1614,7 +1614,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     m_truthMET_phi = truthMET->phi();
     m_truthMET_sumet = truthMET->sumet();
   }
-
+*/
   //MC particle
   if (event.m_truth != nullptr) {
     m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
@@ -1637,8 +1637,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
       m_mc_status  .clear();
       m_mc_barcode .clear();
 
-      const std::vector<ttH::TruthPart> selected_truths = truthSelector.SelectTruth(event.m_truth);
-
+      //const std::vector<ttH::TruthPart> selected_truths = truthSelector.SelectTruth(event.m_truth);
+        const std::vector<ttH::TruthPart> selected_truths = event.m_info->auxdata<std::vector<ttH::TruthPart> >("ttHMLEventVariablesT");
       for (const ttH::TruthPart &truth : selected_truths) {
 
 	m_mc_m       .push_back(truth.m);
