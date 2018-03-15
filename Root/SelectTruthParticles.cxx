@@ -20,13 +20,13 @@ SelectTruthParticles::SelectTruthParticles(std::string params,std::shared_ptr<to
   m_event(0),
   m_config(config)
 {
-   if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
+/*   if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
    } 
    else {
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
-   }
+   }*/
   m_params=params;
   m_truthMatchAlgo  = new ttHMultilepton::TruthMatchAlgo();
   m_truthMatchAlgo->msg().setLevel( MSG::INFO ); 
