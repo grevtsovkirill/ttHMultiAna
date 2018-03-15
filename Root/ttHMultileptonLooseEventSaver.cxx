@@ -327,18 +327,18 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       systematicTree->makeOutputVariable(m_mc_barcode,     "m_truth_barcode");
       systematicTree->makeOutputVariable(m_mc_parents,     "m_truth_parents");
       systematicTree->makeOutputVariable(m_mc_children,    "m_truth_children");
-}
+
 /*
       //truth jets
       //systematicTree->makeOutputVariable(m_trjet_pt,  "m_truth_jet_pt");
       //systematicTree->makeOutputVariable(m_trjet_eta, "m_truth_jet_eta");
       //systematicTree->makeOutputVariable(m_trjet_phi, "m_truth_jet_phi");
-      //systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
+      systematicTree->makeOutputVariable(m_trjet_e,   "m_truth_jet_e");
       //systematicTree->makeOutputVariable(m_trjet_Wcount,   "m_truth_jet_Wcount");
       //systematicTree->makeOutputVariable(m_trjet_Zcount,   "m_truth_jet_Zcount");
       //systematicTree->makeOutputVariable(m_trjet_Hcount,   "m_truth_jet_Hcount");
       //systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
-
+*/
       //truthEvent information
       systematicTree->makeOutputVariable(m_PDFinfo_X1,        "m_mcevt_pdf_X1");
       systematicTree->makeOutputVariable(m_PDFinfo_X2,        "m_mcevt_pdf_X2");
@@ -347,7 +347,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       systematicTree->makeOutputVariable(m_PDFinfo_Q,         "m_mcevt_pdf_Q");
       systematicTree->makeOutputVariable(m_PDFinfo_XF1,       "m_mcevt_pdf_XF1");
       systematicTree->makeOutputVariable(m_PDFinfo_XF2,       "m_mcevt_pdf_XF2");
-    }*/
+    }
 
 
 
@@ -1173,6 +1173,14 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
       }, *systematicTree, std::string(tauprefix+"fromPV").c_str());
     }
 
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+        return tau.auxdata<float>("BDTEleScoreSigTrans");
+    }, *systematicTree, std::string(tauprefix+"BDTEleScoreSigTrans").c_str());
+
+	Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+		return tau.auxdata<float>("BDTJetScoreSigTrans");
+	}, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
+
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       //substructure
@@ -1666,7 +1674,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     }
 
   }
-/*
+
   //TruthEvent info here (pdf, MC weights, etc)
   if (event.m_truthEvent != nullptr and m_doSFSystematics ) {
     unsigned int i(0);
@@ -1714,7 +1722,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 
   // for (const auto* const elPtr : event.m_electrons) {
   //   std::cout << "Passes?" << elPtr->auxdataConst< char >("passPreORSelection") << std::endl;
-  // }*/
+  // }
 
   //Event info (for TrackingxAODHelpers)
   m_eventInfo = event.m_info;

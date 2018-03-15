@@ -25,7 +25,11 @@ namespace ttHML {
     float SFTight[MAXSYST];
     float SFLoose[MAXSYST];
 
-    short   promptTauInput_TrackJetNTrack;
+	float MV2c10;
+	float BDTEleScoreSigTrans;
+	float BDTJetScoreSigTrans;
+    
+	short   promptTauInput_TrackJetNTrack;
     float   promptTauInput_JetF;
     float   promptTauInput_DRlj;
     float   promptTauInput_LepJetPtFrac;
