@@ -31,7 +31,7 @@ MCGeneratorWeights True
 
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
-OutputFilename output.root
+OutputFilename syst_output.root
 #OutputEvents AllEvents
 OutputEvents SelectedEvents
 PerfStats No
@@ -74,10 +74,17 @@ DoLoose False
 #UseAodMetaData True
 IsAFII False
 
-#NEvents 1000000
-#NEvents 1000
-Systematics Nominal
+#NEvents 10000
 #TruthBlockInfo True
+
+Systematics All
+DynamicKeys DoSystematics
+# enables skimming and slimming
+DoSystematics True
+
+
+#QGF - still missing 
+#JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root
 
 SELECTION triggers
 #GRL
