@@ -38,9 +38,14 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
     const xAOD::ElectronContainer* Electrons(nullptr);
     const xAOD::MuonContainer* Muons(nullptr);
     const xAOD::TauJetContainer* Taus(nullptr);
-    top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons"),"Failed to retrieve Electrons");
-    top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons"),"Failed to retrieve Muons");
-    top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
+
+    if(!m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons")|| !m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons") || !m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus")){
+      std::cout<< "Failed to retrieve leptons, skip event" << std::endl;
+
+      std::cout << "-----> more info: <params: " << m_params
+                << "> <systname: " << m_config->systematicName(event.m_hashValue) << ">" << std::endl;
+      return false;
+    }
 
 	const int totalLeptons = Electrons->size() +  Muons->size();
 	int totalTaus = Taus->size();
