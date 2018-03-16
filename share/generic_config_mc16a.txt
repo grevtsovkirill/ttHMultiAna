@@ -37,8 +37,6 @@ OutputFilename output.root
 OutputEvents SelectedEvents
 PerfStats No
 
-Systematics Nominal
-
 #Electron cuts
 ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
