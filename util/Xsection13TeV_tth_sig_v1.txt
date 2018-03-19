@@ -1,0 +1,45 @@
+-##############################################################################################################################################
+##Format                                                                                                                                 ##
+#DatasetID : Xsection(pb) : K-factor : Filtering Efficiency : Uncertainty :   Mass : Sample Priority :  Generator : ProcessInfo :Simulation ##
+##############################################################################################################################################
+
+ 341177          0.05343               1         1.0    --     125   2     aMC@NLO+Herwig++                            ttH->ll+H  Full  
+ 341270          0.22276               1         1.0    --     125   2     aMC@NLO+Herwig++                         ttH->ljets+H  Full  
+ 341271          0.23082               1         1.0    --     125   2     aMC@NLO+Herwig++                        ttH->allhad+H  Full  
+
+ 345672          0.18552               1         1.0    --     125   1        PowhegPythia8                        ttH125_allhad  Full  
+ 345673         0.238652               1         1.0    --     125   1        PowhegPythia8                       ttH125_semilep  Full  
+ 345674         0.058239               1         1.0    --     125   1        PowhegPythia8                         ttH125_dilep  Full  
+
+ 342561       6.0137e-05               1         1.0    --     125   1     aMC@NLO+Herwig++                              ttH->4l  Full  
+
+ 342170           0.0536          0.0632         1.0    --     125   2     aMC@NLO+Herwig++                      ttH->ll+Htautau  Full  
+ 342171           0.2234          0.0632         1.0    --     125   2     aMC@NLO+Herwig++                   ttH->ljets+Htautau  Full  
+ 342172           0.2315          0.0632         1.0    --     125   2     aMC@NLO+Herwig++                  ttH->allhad+Htautau  Full  
+
+ 343365          0.05343               1         1.0    --     125   2      aMc@Nlo+Pythia8                         ttH125_dilep  Full  
+ 343366          0.22276               1         1.0    --     125   2      aMc@Nlo+Pythia8                       ttH125_semilep  Full  
+ 343367          0.23082               1         1.0    --     125   2      aMc@Nlo+Pythia8                        ttH125_allhad  Full  
+ 343436        0.0010405               1         1.0    --     125   2      aMc@Nlo+Pythia8                        ttH125_gamgam  Full  
+
+#ggH VBF
+ 341471        0.0081266               1         1.0    --     125   2              pythia8                        ggH125_ZZ4lep  Fast  
+ 341488         0.001031               1         1.0    --     125   2              pythia8                       VBFH125_ZZ4lep  Fast  
+
+# doubly charged Higgs
+ 344096          0.06458          0.2858         1.0    --    -999   2          CalcPythia8                     HppHmm_200GeV_4W  Full  
+ 344097          0.01334          0.3031         1.0    --    -999   2          CalcPythia8                     HppHmm_300GeV_4W  Full  
+ 344098         0.003998          0.3198         1.0    --    -999   2          CalcPythia8                     HppHmm_400GeV_4W  Full  
+
+# other Higgs  - see ANALYSISTO-136
+ 344133         0.025226               1         1.0    --    -999   2     aMcAtNloHerwigpp                          hh_4w_wplep  Full  
+ 344134         0.025226               1         1.0    --    -999   2     aMcAtNloHerwigpp                          hh_4w_wmlep  Full  
+
+ 344364         0.001466          0.3264         1.0    --    -999   2       CalcHepPythia8                     HppHmm_500GeV_4W  Fast  
+ 344365          0.00061          0.3362         1.0    --    -999   2       CalcHepPythia8                     HppHmm_600GeV_4W  Fast  
+ 344366         0.000276          0.3451         1.0    --    -999   2       CalcHepPythia8                     HppHmm_700GeV_4W  Fast  
+ 344367            0.109            0.26         1.0    --    -999   2       CalcHepPythia8                      HppmmHmp_200GeV  Fast  
+ 344368           0.0231           0.324         1.0    --    -999   2       CalcHepPythia8                      HppmmHmp_300GeV  Fast  
+ 344369          0.00687           0.342         1.0    --    -999   2       CalcHepPythia8                      HppmmHmp_400GeV  Fast  
+
+
