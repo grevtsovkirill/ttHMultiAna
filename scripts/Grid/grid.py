@@ -108,6 +108,7 @@ class Config:
     destSE = ''
     memory = '2000' #in MB
     maxNFilesPerJob = ''
+    nGBPerJob = ''
     extFile=''
     otherOptions = ''
     nameShortener = basicInDSNameShortener # default shortener function
@@ -131,9 +132,10 @@ class Config:
         print ' -maxFileSize    ', self.maxFileSize
         print ' -MergeType:     ', self.mergeType, 'out of (None, Default, xAOD)'
         print ' -memory:        ', self.memory, 'in MB'
-        print ' -maxNFilesPerJob', self.maxNFilesPerJob        
-        print ' -extFile'        , self.extFile        
-        print ' -OtherOptions:  ', self.otherOptions 
+        print ' -maxNFilesPerJob', self.maxNFilesPerJob
+        print ' -nGBPerJob'      , self.nGBPerJob    
+        print ' -extFile'        , self.extFile   
+        print ' -OtherOptions:  ', self.otherOptions
         print ' -nameShortener: ', self.nameShortener
 
         txt = self.destSE
@@ -334,6 +336,9 @@ def submit(config, allSamples):
      #how many files
      if len(config.maxNFilesPerJob) > 0:
          cmd += '--maxNFilesPerJob=%s \\\n' % config.maxNFilesPerJob
+
+     if len(config.nGBPerJob) > 0:
+         cmd += '--nGBPerJob=\"%s\" \\\n' % config.nGBPerJob
 
      if len(config.extFile) > 0:
          cmd += '--extFile=\"%s\" \\\n' % config.extFile
