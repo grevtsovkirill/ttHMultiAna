@@ -213,7 +213,7 @@ def getDoneSamplesOnGRID():
     return samples
 
 #============================================================================
-def createJobScript(outDir,sample,eosMGM,eosPath):
+def createJobScript(outDir,sample,eosMGM,eosPath,grid_user):
 
     jobScript = '%s_%s' % (productionName, sample.dsid)
     if sample.outDS.find('_a766') > 0:
@@ -237,7 +237,7 @@ def createJobScript(outDir,sample,eosMGM,eosPath):
     file.write('date                                                                               \n')
     file.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh        \n')
     #file.write('setupATLAS                                                                         \n')
-    file.write('RUCIO_ACCOUNT=acasha                                                                \n')
+    file.write('RUCIO_ACCOUNT=%s                                                                \n'%(grid_user))
     file.write('lsetup rucio -f                                               \n')
     file.write('echo X509_USER_PROXY                                                \n')
     file.write('pwd                                                                                \n')
@@ -277,7 +277,7 @@ if __name__ == '__main__':
     parsed = parser.parse_args()
     
     if parsed.trailPattern =="" and parsed.nickname=="":
-        sys.exit("ERROR: grid nickname or trailPattern misisng. Check the usage of the tool)
+        sys.exit("ERROR: grid nickname or trailPattern misisng. Check the usage of the tool")
     
     try:
         os.environ['X509_USER_PROXY']
@@ -347,7 +347,7 @@ if __name__ == '__main__':
             outDir = productionName+'/'+copySample.dsid+'_jobdir'
             if not os.path.isdir(outDir):
                 os.makedirs(outDir)
-            jobScript = createJobScript(outDir, copySample, eosMGM, eosPath)
+            jobScript = createJobScript(outDir, copySample, eosMGM, eosPath,gridNickName)
             job = BJob(outDir, jobScript)
             if copySample.size > 10e9:
                 job.setQ('1nd')
