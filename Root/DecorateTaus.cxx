@@ -181,7 +181,7 @@ void DecorateTaus::decoratetau(const top::Event& event)const{
 
       tau->auxdecor<char>("passJVT") =	
 	jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
-
+	}
       try {
         tau->auxdecor<char>("fromPV") =
           (tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
@@ -189,7 +189,7 @@ void DecorateTaus::decoratetau(const top::Event& event)const{
       catch(std::exception& e) {
         tau->auxdecor<char>("fromPV") = 1;
       }
-    }
+    
   }
 
 
