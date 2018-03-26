@@ -213,7 +213,7 @@ def getDoneSamplesOnGRID():
     return samples
 
 #============================================================================
-def createJobScript(outDir,sample,eosMGM,eosPath):
+def createJobScript(outDir,sample,eosMGM,eosPath,grid_user):
 
     jobScript = '%s_%s' % (productionName, sample.dsid)
     if sample.outDS.find('_a766') > 0:
@@ -237,7 +237,7 @@ def createJobScript(outDir,sample,eosMGM,eosPath):
     file.write('date                                                                               \n')
     file.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh        \n')
     #file.write('setupATLAS                                                                         \n')
-    file.write('RUCIO_ACCOUNT=acasha                                                                \n')
+    file.write('RUCIO_ACCOUNT=%s                                                                \n'%(grid_user))
     file.write('lsetup rucio -f                                               \n')
     file.write('echo X509_USER_PROXY                                                \n')
     file.write('pwd                                                                                \n')
@@ -267,9 +267,18 @@ def SampleHasRunningBJob(jobName, runningBJobs):
 #============================================================================
 #============================================================================
 if __name__ == '__main__':
-    import os, sys
+    import os, sys,argparse
     import subprocess
-
+    
+    argparse.add_argument("--trailPattern",default="",
+        help="rucio container trailing patterns. Eg: if container name is user.awesomenickname.etag.ptag.rtag.myid you may use 'rtag.myid' as pattern")
+    argparse.add_argument("--nickname",default="",help="your grid NickName")
+        
+    parsed = parser.parse_args()
+    
+    if parsed.trailPattern =="" and parsed.nickname=="":
+        sys.exit("ERROR: grid nickname or trailPattern misisng. Check the usage of the tool")
+    
     try:
         os.environ['X509_USER_PROXY']
     except KeyError:
@@ -308,11 +317,11 @@ if __name__ == '__main__':
     eosPath = '/eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_Run2_Summer18/GN1/data16_v1'
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
-    gridNickName = 'acasha'
+    gridNickName = parsed.nickname
     #productionName = '18.08.16.Data-04'
     #productionName = '2017-05-13.Sys_v28_1l3l4l'
     #productionName = '2017-05-13.Sys_v28_2l'
-    productionName = '2017-02-03-01'
+    productionName = parsed.trailPattern
     #productionName = '17.07.16.Sys.x'
 
     userenv = 'RUCIO_ACCOUNT' if 'RUCIO_ACCOUNT' in os.environ else 'USER'
@@ -338,7 +347,7 @@ if __name__ == '__main__':
             outDir = productionName+'/'+copySample.dsid+'_jobdir'
             if not os.path.isdir(outDir):
                 os.makedirs(outDir)
-            jobScript = createJobScript(outDir, copySample, eosMGM, eosPath)
+            jobScript = createJobScript(outDir, copySample, eosMGM, eosPath,gridNickName)
             job = BJob(outDir, jobScript)
             if copySample.size > 10e9:
                 job.setQ('1nd')
