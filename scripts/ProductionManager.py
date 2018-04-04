@@ -269,14 +269,16 @@ def SampleHasRunningBJob(jobName, runningBJobs):
 if __name__ == '__main__':
     import os, sys,argparse
     import subprocess
-    
-    argparse.add_argument("--trailPattern",default="",
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--trailPattern",default="",
         help="rucio container trailing patterns. Eg: if container name is user.awesomenickname.etag.ptag.rtag.myid you may use 'rtag.myid' as pattern")
-    argparse.add_argument("--nickname",default="",help="your grid NickName")
+    parser.add_argument("--nickname",default="",help="your grid NickName")
+
+    parser.add_argument("--eosOutput",default="",help="output eos path; eg /eos/atlas/user/n/narayan/myDir; Note the directory must exist")
         
     parsed = parser.parse_args()
     
-    if parsed.trailPattern =="" and parsed.nickname=="":
+    if parsed.trailPattern =="" or parsed.nickname=="" or parsed.eosOutput=="":
         sys.exit("ERROR: grid nickname or trailPattern misisng. Check the usage of the tool")
     
     try:
@@ -314,7 +316,7 @@ if __name__ == '__main__':
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v20/04/Data'
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_1l3l4l'
     #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_2l'
-    eosPath = '/eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_Run2_Summer18/GN1/data16_v1'
+    eosPath =  parsed.eosOutput
     samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
     
     gridNickName = parsed.nickname
