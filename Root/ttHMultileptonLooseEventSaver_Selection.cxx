@@ -594,34 +594,22 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
   typedef std::tuple<const TLorentzVector*, int> sortvec_t;
   std::vector<sortvec_t> sorter_jets;
   size_t idx = 0;
+
+
   for (const auto jetItr : goodJets) {
     sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
 
     auto btagging = jetItr->btagging();
     if (btagging) {
       double mv2c;
-      if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
-	if (mv2c > 0.0206) {
-	  m_ttHEvent->nJets_OR_MV2c20_85++;
-	  if (mv2c > 0.4803) {
-	    m_ttHEvent->nJets_OR_MV2c20_77++;
-	    if (mv2c > 0.7110) {
-	      m_ttHEvent->nJets_OR_MV2c20_70++;
-	      if (mv2c > 0.8867) {
-		m_ttHEvent->nJets_OR_MV2c20_60++;
-	      }
-	    }
-	  }
-	}
-      }
       if( btagging->MVx_discriminant("MV2c10", mv2c) ) {
-	if (mv2c > 0.1758) {
+	if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85")) {
 	  m_ttHEvent->nJets_OR_MV2c10_85++;
-	  if (mv2c > 0.6459) {
+	  if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_77")) {
 	    m_ttHEvent->nJets_OR_MV2c10_77++;
-	    if (mv2c > 0.8244) {
+	    if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_70")) {
 	      m_ttHEvent->nJets_OR_MV2c10_70++;
-	      if (mv2c > 0.9349) {
+	      if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_60")) {
 		m_ttHEvent->nJets_OR_MV2c10_60++;
 	      }
 	    }
@@ -638,28 +626,14 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
       auto btagging = jetItr->btagging();
       if (btagging) {
 	double mv2c;
-	if( btagging->MVx_discriminant("MV2c20", mv2c) ) {
-	  if (mv2c > 0.0206) {
-	    m_ttHEvent->nJets_OR_T_MV2c20_85++;
-	    if (mv2c > 0.4803) {
-	      m_ttHEvent->nJets_OR_T_MV2c20_77++;
-	      if (mv2c > 0.7110) {
-		m_ttHEvent->nJets_OR_T_MV2c20_70++;
-		if (mv2c > 0.8867) {
-		  m_ttHEvent->nJets_OR_T_MV2c20_60++;
-		}
-	      }
-	    }
-	  }
-	}
 	if( btagging->MVx_discriminant("MV2c10", mv2c) ) {
-	  if (mv2c > 0.1758) {
+	  if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85")) {
 	    m_ttHEvent->nJets_OR_T_MV2c10_85++;
-	    if (mv2c > 0.6459) {
+	    if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_77")) {
 	      m_ttHEvent->nJets_OR_T_MV2c10_77++;
-	      if (mv2c > 0.8244) {
+	      if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_70")) {
 		m_ttHEvent->nJets_OR_T_MV2c10_70++;
-		if (mv2c > 0.9349) {
+		if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_70")) {
 		  m_ttHEvent->nJets_OR_T_MV2c10_60++;
 		}
 	      }
