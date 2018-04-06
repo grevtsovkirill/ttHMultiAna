@@ -46,8 +46,9 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &promptTauInput_ip2, "tau_promptTauInput_ip2_", index);
   CreateBranch(tree, &promptTauInput_ip3, "tau_promptTauInput_ip3_", index);
   CreateBranch(tree, &promptTauInput_rnnip, "tau_promptTauInput_rnnip_", index);
-
+  CreateBranch(tree, &promptTauInput_MV2c10, "tau_promptTauInput_MV2c10_", index);
 
   CreateBranch(tree, &promptTauVeto, "tau_promptTauVeto_",      index);
+  CreateBranch(tree, &promptTauIso,  "tau_promptTauIso_",		index);
 }
 

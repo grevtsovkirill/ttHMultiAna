@@ -1017,10 +1017,15 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> promptTauInput_rnnip("PromptTauInput_rnnip");
   MLTau.promptTauInput_rnnip = ( promptTauInput_rnnip.isAvailable(xTau) ) ? promptTauInput_rnnip(xTau) : -99;
 
+  static SG::AuxElement::Accessor<float> promptTauInput_MV2c10("PromptTauInput_MV2c10");
+  MLTau.promptTauInput_MV2c10 = ( promptTauInput_MV2c10.isAvailable(xTau) ) ? promptTauInput_MV2c10(xTau) : -99;
+
 
   static SG::AuxElement::Accessor<float> promptTauVeto("PromptTauVeto");
   MLTau.promptTauVeto = (promptTauVeto.isAvailable(xTau)) ? promptTauVeto(xTau) : -99;
 
+  static SG::AuxElement::Accessor<float> promptTauIso("PromptTauIso");
+  MLTau.promptTauIso = (promptTauIso.isAvailable(xTau)) ? promptTauIso(xTau) : -99;
 
 
 /*  for( auto syst : m_tau_sf_names ) {
