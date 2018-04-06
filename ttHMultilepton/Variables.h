@@ -67,14 +67,6 @@ namespace ttHML {
     int nTruthJets;
     int nTruthJets_OR;
     int nJets_OR;
-    int nJets_OR_T_MV2c20_60;
-    int nJets_OR_T_MV2c20_70;
-    int nJets_OR_T_MV2c20_77;
-    int nJets_OR_T_MV2c20_85;
-    int nJets_OR_MV2c20_60;
-    int nJets_OR_MV2c20_77;
-    int nJets_OR_MV2c20_70;
-    int nJets_OR_MV2c20_85;
     int nJets_OR_T_MV2c10_60;
     int nJets_OR_T_MV2c10_70;
     int nJets_OR_T_MV2c10_77;

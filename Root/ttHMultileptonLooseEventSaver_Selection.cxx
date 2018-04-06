@@ -565,14 +565,6 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
   m_ttHEvent->nTruthJets_OR = this->getNTruthJets(goodJets);
 
 
-  m_ttHEvent->nJets_OR_MV2c20_85   = 0;
-  m_ttHEvent->nJets_OR_MV2c20_70   = 0;
-  m_ttHEvent->nJets_OR_MV2c20_77   = 0;
-  m_ttHEvent->nJets_OR_MV2c20_60   = 0;
-  m_ttHEvent->nJets_OR_T_MV2c20_85 = 0;
-  m_ttHEvent->nJets_OR_T_MV2c20_70 = 0;
-  m_ttHEvent->nJets_OR_T_MV2c20_77 = 0;
-  m_ttHEvent->nJets_OR_T_MV2c20_60 = 0;
   m_ttHEvent->nJets_OR_MV2c10_85   = 0;
   m_ttHEvent->nJets_OR_MV2c10_70   = 0;
   m_ttHEvent->nJets_OR_MV2c10_77   = 0;
