@@ -1232,7 +1232,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 
     std::vector<std::string> float_tau_vars = {"PromptTauInput_DRlj","PromptTauInput_JetF", "PromptTauInput_LepJetPtFrac",
                 "PromptTauInput_MV2c10rnn", "PromptTauInput_SV1", "PromptTauInput_ip2", "PromptTauInput_ip3",
-                "PromptTauInput_rnnip"};
+                "PromptTauInput_rnnip", "PromptTauInput_MV2c10"};
     for(std::string var: float_tau_vars) {
         Wrap2(tauvec, [=](const xAOD::TauJet& tau){
         float m_tau_nonprompt_float = -99.;
@@ -1249,7 +1249,11 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
 		if(AccessorNonPrompt.isAvailable(tau)) m_tau_PTV_float = AccessorNonPrompt(tau);
 		return (float) m_tau_PTV_float;}, *systematicTree, std::string(tauprefix+"PromptTauVeto").c_str());
 
-
+      Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+      float m_tau_PTI_float = -99.;
+        SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptTauIso");
+        if(AccessorNonPrompt.isAvailable(tau)) m_tau_PTI_float = AccessorNonPrompt(tau);
+        return (float) m_tau_PTI_float;}, *systematicTree, std::string(tauprefix+"PromptTauIso").c_str());
 
 
 

@@ -70,14 +70,6 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
   tree->makeOutputVariable(nJets_OR, "nJets_OR");
   tree->makeOutputVariable(nTruthJets,"nTruthJets");
   tree->makeOutputVariable(nTruthJets_OR,"nTruthJets_OR");
-  tree->makeOutputVariable(nJets_OR_T_MV2c20_60, "nJets_OR_T_MV2c20_60");
-  tree->makeOutputVariable(nJets_OR_T_MV2c20_70, "nJets_OR_T_MV2c20_70");
-  tree->makeOutputVariable(nJets_OR_T_MV2c20_77, "nJets_OR_T_MV2c20_77");
-  tree->makeOutputVariable(nJets_OR_T_MV2c20_85, "nJets_OR_T_MV2c20_85");
-  tree->makeOutputVariable(nJets_OR_MV2c20_85, "nJets_OR_MV2c20_85");
-  tree->makeOutputVariable(nJets_OR_MV2c20_60, "nJets_OR_MV2c20_60");
-  tree->makeOutputVariable(nJets_OR_MV2c20_77, "nJets_OR_MV2c20_77");
-  tree->makeOutputVariable(nJets_OR_MV2c20_70, "nJets_OR_MV2c20_70");
   tree->makeOutputVariable(nJets_OR_T_MV2c10_60, "nJets_OR_T_MV2c10_60");
   tree->makeOutputVariable(nJets_OR_T_MV2c10_70, "nJets_OR_T_MV2c10_70");
   tree->makeOutputVariable(nJets_OR_T_MV2c10_77, "nJets_OR_T_MV2c10_77");

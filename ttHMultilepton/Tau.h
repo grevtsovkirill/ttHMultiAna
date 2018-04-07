@@ -38,10 +38,10 @@ namespace ttHML {
     float   promptTauInput_ip2;
     float   promptTauInput_ip3;
     float   promptTauInput_rnnip;
-
+	float	promptTauInput_MV2c10;
 
   float promptTauVeto;
-
+  float promptTauIso;
     int passEleOLR, passEleBDT, passMuonOLR;
     int truthOrigin, truthType, truthJetFlavour;
 
