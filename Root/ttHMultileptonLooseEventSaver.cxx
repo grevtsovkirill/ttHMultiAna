@@ -1098,7 +1098,7 @@ std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list
     }
     //Continous b-tag
     //https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingCalibrationDataInterface#Example_for_continuous_tagging
-    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin")) ?jet.auxdataConst<int>("tagWeightBin") : -2;},
+    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous")) ?jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;},
       *systematicTree,"m_jet_tagWeightBin");
 
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");

@@ -177,7 +177,7 @@ void DecorateTaus::decoratetau(const top::Event& event)const{
       tau->auxdecor<float>("MV2c10") = rv;
 
       tau->auxdecor<int>("tagWeightBin") =
-	jet.isAvailable<int>("tagWeightBin") ? jet.auxdataConst<int>("tagWeightBin") : -2;
+	jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous") ? jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;
 
       tau->auxdecor<char>("passJVT") =	
 	jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
