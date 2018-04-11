@@ -138,7 +138,7 @@ bool DecorateMuons::apply(const top::Event & event) const{
        auto btagging = closestJet->btagging();
        double rv(0);
        muItr->auxdecor<float> ("MV2c10_weight") = btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0. ;
-       muItr->auxdecor<float>("jet_tagWeightBin") = ( closestJet->isAvailable<int>("tagWeightBin")) ?closestJet->auxdataConst<int>("tagWeightBin") : -2;
+       muItr->auxdecor<float>("jet_tagWeightBin") = ( closestJet->isAvailable<int>("tagWeightBin_MV2c10_Continuous")) ?closestJet->auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;
 
        float theta= muItr->p4().Vect().Angle(closestJet->p4().Vect());
        muItr->auxdecor<float>("jet_ptRel") = TMath::Sin(theta) * muItr->pt();
