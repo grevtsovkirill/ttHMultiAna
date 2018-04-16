@@ -2,6 +2,67 @@
 # Date: 15.1.2016
 # Script that can download grid jobs from a running production that are already done.
 
+def makeHadd(outFname):
+    outFile=open(outFname,'w')
+    outFile.write('#!/bin/bash                              \n')
+    outFile.write('start=`date +%s`                       \n\n')
+    outFile.write('function cleanExit {                     \n')
+    outFile.write('    end=`date +%s`                       \n')
+    outFile.write('    runtime=$((end-start))               \n')
+    outFile.write('    echo runtime $runtime seconds      \n\n')
+    outFile.write('    rm -rf $RUNDIR/$outDS                \n')
+    outFile.write('    echo exit $1                         \n')
+    outFile.write('    exit $1                              \n')
+    outFile.write('}                                        \n')
+    outFile.write('outDS=$1                                 \n')
+    outFile.write('eosPath=$2                               \n')
+    outFile.write('DSID=$3                                  \n')
+    outFile.write('if echo $outDS | grep -q "_a766"         \n')
+    outFile.write('then                                     \n')
+    outFile.write('  fileName=${DSID}_AFII.root             \n')
+    outFile.write('else                                     \n')
+    outFile.write('  fileName=${DSID}.root                  \n')
+    outFile.write('fi                                       \n')
+    outFile.write('inDS=$4                                \n\n')
+    outFile.write('echo "Job Info"                          \n')
+    outFile.write('echo "Download from: $outDS"             \n')
+    outFile.write('echo "Upload to    : $eosPath/$fileName" \n')
+    outFile.write('echo                                   \n\n')
+    outFile.write('#cd $TMPDIR                              \n')
+    outFile.write('#echo $TMPDIR                            \n')
+    outFile.write('#echo $pwd                               \n')
+    outFile.write('RUNDIR=$(pwd)                            \n')
+    outFile.write('mkdir $outDS                             \n')
+    outFile.write('cd $outDS                              \n\n')
+    outFile.write('echo "Will download $outDS"              \n')
+    outFile.write('rucio download $outDS|tee rucio.log      \n')
+    outFile.write('rucioExit=$?                             \n')
+    outFile.write('echo "rucio exit $rucioExit"             \n')
+    outFile.write('grep -q "Files that cannot be downloaded :             0" rucio.log\n')
+    outFile.write('rucioFail=$?                             \n')
+    outFile.write('echo "rucio failed to download? $rucioFail"\n')
+    outFile.write('echo                                         \n')
+    outFile.write('([ $rucioExit -eq 0 ] && [ $rucioFail -eq 0 ]) || ( echo $inDS >> ${LSB_OUTDIR}/../rucio.fail; cleanExit 1 )\n\n')
+    outFile.write('cd $outDS                                \n')
+    outFile.write('echo ls -l                               \n')
+    outFile.write('ls -l                                    \n')
+    outFile.write('echo                                   \n\n')
+    outFile.write('echo "Will hadd $(ls -1 *.root*|wc -l) files"\n')
+    outFile.write('hadd -n 5 $fileName *.root*              \n')
+    outFile.write('haddExit=$?                              \n')
+    outFile.write('echo "hadd exit $haddExit"               \n')
+    outFile.write('[ $haddExit -eq 0 ] || cleanExit 2     \n\n')
+    outFile.write('ls -l $fileName                          \n\n')
+    outFile.write('echo xrdcp -f -np $fileName $eosPath/$fileName\n')
+    outFile.write('xrdcp -f -np $fileName $eosPath/$fileName\n')
+    outFile.write('eoscpExit=$?                             \n')
+    outFile.write('echo "eos cp exit $haddExit"             \n')
+    outFile.write('[ $eoscpExit -eq 0 ] || cleanExit 3    \n\n')
+    outFile.write('echo "alles goed"                      \n\n')
+    outFile.write('cleanExit 0                              \n')
+    outFile.close()
+    
+
 #============================================================================
 def printOut(target, value):
     if len(value.strip()):
@@ -107,6 +168,7 @@ def getSamplesOnEOS(eosMGM,eosPath):
     #output is of form path/filename
     eosFindOutput = subprocess.Popen(eosFindCmd.split(' '),stdout=subprocess.PIPE)
     eosFilesList = eosFindOutput.communicate()[0].splitlines()
+    print eosFilesList
     samples = []
     for f in eosFilesList:
         filename = f.split('/')[-1]
@@ -124,7 +186,10 @@ def getSamplesOnEOS(eosMGM,eosPath):
 def getDSSize(DSName):
     totalSize = 0
     client = rucioCLI.Client()
+    '''strip trailing /'''
+    DSName = DSName.strip("/")
     for f in client.list_files('user.'+gridNickName,DSName):
+    #for f in client.list_files('user.narayan','user.narayan.364212.Sherpa.DAOD_HIGG8D1.e5421_s3126_r9364_r9315_p3371.tthml_gn2_first.2018-03-20_output.root'):
         totalSize += int(f['bytes'])
     return totalSize
 
@@ -220,8 +285,10 @@ def createJobScript(outDir,sample,eosMGM,eosPath,grid_user):
         jobScript += '_AFII'
     jobScript += '.sh'
 
-    copyPath = eosMGM+eosPath
-    runScript = 'hadd.sh'
+    copyPath    = eosMGM+eosPath
+    makeHadd('hadd.sh')
+    runScript   = 'hadd.sh'
+    runScript   = os.popen('readlink -f hadd.sh','r').read().strip('\n')
     
     if sample.size > 100e9:
         eosMkdirCmd = 'eos '+eosMGM+' mkdir -p '+eosPath+'/'+sample.dsid
@@ -242,7 +309,7 @@ def createJobScript(outDir,sample,eosMGM,eosPath,grid_user):
     file.write('echo X509_USER_PROXY                                                \n')
     file.write('pwd                                                                                \n')
     file.write('which root                                                                         \n')
-    txt  = 'source /afs/cern.ch/work/a/acasha/TTH_ML/Albert_Dev_Branch_MC/source/ttHMultilepton/scripts/%s \\\n' % runScript
+    txt  = 'source %s \\\n' % runScript
     txt += '%s \\\n' % sample.outDS
     txt += '%s \\\n' % copyPath
     txt += '%s \\\n' % sample.dsid
@@ -269,14 +336,16 @@ def SampleHasRunningBJob(jobName, runningBJobs):
 if __name__ == '__main__':
     import os, sys,argparse
     import subprocess
-    
-    argparse.add_argument("--trailPattern",default="",
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--trailPattern",default="",
         help="rucio container trailing patterns. Eg: if container name is user.awesomenickname.etag.ptag.rtag.myid you may use 'rtag.myid' as pattern")
-    argparse.add_argument("--nickname",default="",help="your grid NickName")
+    parser.add_argument("--nickname",default="",help="your grid NickName")
+    parser.add_argument("--eosOutput",default="",help="output eos path; eg /eos/atlas/user/n/narayan/myDir; Note the directory must exist")
+    parser.add_argument("--eosMGM",default="root://eosatlas.cern.ch/",help="defaults to root://eosatlas.cern.ch/. Leave untouched if you are using CERN eos")
         
     parsed = parser.parse_args()
     
-    if parsed.trailPattern =="" and parsed.nickname=="":
+    if parsed.trailPattern =="" or parsed.nickname=="" or parsed.eosOutput=="":
         sys.exit("ERROR: grid nickname or trailPattern misisng. Check the usage of the tool")
     
     try:
@@ -310,19 +379,13 @@ if __name__ == '__main__':
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    eosMGM = 'root://eosatlas.cern.ch/'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v20/04/Data'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_1l3l4l'
-    #eosPath = '/eos/escience/UniTexas/HSG8/multileptons_ntuple_run2/25ns_v28/01/Sys_2l'
-    eosPath = '/eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_Run2_Summer18/GN1/data16_v1'
-    samplesOnEOS = getSamplesOnEOS(eosMGM,eosPath)
+    eosMGM          = parsed.eosMGM
+    eosPath         = parsed.eosOutput
+    samplesOnEOS    = getSamplesOnEOS(eosMGM,eosPath)
     
-    gridNickName = parsed.nickname
-    #productionName = '18.08.16.Data-04'
-    #productionName = '2017-05-13.Sys_v28_1l3l4l'
+    gridNickName    = parsed.nickname
     #productionName = '2017-05-13.Sys_v28_2l'
     productionName = parsed.trailPattern
-    #productionName = '17.07.16.Sys.x'
 
     userenv = 'RUCIO_ACCOUNT' if 'RUCIO_ACCOUNT' in os.environ else 'USER'
     #doneSamplesOnGRID = getDoneSamplesOnGRID()
