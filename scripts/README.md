@@ -6,7 +6,7 @@ Use a new shell
 
 `lsetup panda rucio`
 
-
+```
 usage: ProductionManager.py [-h] [--trailPattern TRAILPATTERN]
                             [--nickname NICKNAME] [--eosOutput EOSOUTPUT]
                             [--eosMGM EOSMGM]
@@ -23,6 +23,7 @@ optional arguments:
                         Note the directory must exist
   --eosMGM EOSMGM       defaults to root://eosatlas.cern.ch/. Leave untouched
                         if you are using CERN eos
+```
 
 # 2. GRID Proxy by Stolen from Chris Lester ;)
 ...You need to get a grid certificate that is not located on your tmp directory, which is the usual case, but available somewhere through afs. This will allow all the batch nodes you submit to have grid access in order to rucio get your jobs.
