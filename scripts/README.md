@@ -2,11 +2,28 @@ TO SUBMIT:
 
 # 1. Setup
 ..* Panda and Rucio:
+Use a new shell 
+
 `lsetup panda rucio`
 
-...Edit gridNickName in ProductionManager.py
-...Edit the path of the hadding script in createJobScript
-...Do this in a clean shell aka not where you have RootCore setup already.
+```
+usage: ProductionManager.py [-h] [--trailPattern TRAILPATTERN]
+                            [--nickname NICKNAME] [--eosOutput EOSOUTPUT]
+                            [--eosMGM EOSMGM]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --trailPattern TRAILPATTERN
+                        rucio container trailing patterns. Eg: if container
+                        name is user.awesomenickname.etag.ptag.rtag.myid you
+                        may use 'rtag.myid' as pattern
+  --nickname NICKNAME   your grid NickName
+  --eosOutput EOSOUTPUT
+                        output eos path; eg /eos/atlas/user/n/narayan/myDir;
+                        Note the directory must exist
+  --eosMGM EOSMGM       defaults to root://eosatlas.cern.ch/. Leave untouched
+                        if you are using CERN eos
+```
 
 # 2. GRID Proxy by Stolen from Chris Lester ;)
 ...You need to get a grid certificate that is not located on your tmp directory, which is the usual case, but available somewhere through afs. This will allow all the batch nodes you submit to have grid access in order to rucio get your jobs.
