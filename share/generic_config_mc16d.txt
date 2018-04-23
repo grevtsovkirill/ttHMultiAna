@@ -1,8 +1,9 @@
+
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16d_prw.root
+PRWConfigFiles GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16d_prw.root
 
-PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root 
+PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root 
 
 GRLDir GoodRunsLists
 GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.xml
