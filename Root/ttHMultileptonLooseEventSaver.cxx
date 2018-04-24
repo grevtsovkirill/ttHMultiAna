@@ -1787,10 +1787,10 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     const xAOD::MuonContainer* Muons(nullptr);
     const xAOD::JetContainer* Jets(nullptr);
     const xAOD::TauJetContainer* Taus(nullptr);
-    top::check( evtStore()->retrieve(Electrons,"SelectedORElectrons"),"Failed to retrieve Electrons");
-    top::check( evtStore()->retrieve(Muons,"SelectedORMuons"),"Failed to retrieve Muons");
-    top::check( evtStore()->retrieve(Jets,"SelectedORJets"),"Failed to retrieve JEts");
-    top::check( evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus");
+    top::check( evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue) ),"Failed to retrieve Electrons");
+    top::check( evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue) ),"Failed to retrieve Muons");
+    top::check( evtStore()->retrieve(Jets,"SelectedORJets_"+m_config->systematicName(event.m_hashValue) ),"Failed to retrieve JEts");
+    top::check( evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue) ),"Failed to retrieve Taus");
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
     //MakeJetIndices(*Jets,event.m_jets);
