@@ -44,9 +44,12 @@ bool CalculateSF::apply(const top::Event& event) const {
 	const xAOD::ElectronContainer* Electrons(nullptr);
 	const xAOD::MuonContainer* Muons(nullptr);
 	const xAOD::TauJetContainer* Taus(nullptr);
-	top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons"),"Failed to retrieve Electrons");
-	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons"),"Failed to retrieve Muons");
-	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus"),"Failed to retrieve Taus"); 
+	
+    top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Electrons");
+	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Muons");
+	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Taus"); 
+
+
 
 	typedef std::tuple<const TLorentzVector*, int, std::string> sorttype_t;
 	std::vector<sorttype_t> sorter;
