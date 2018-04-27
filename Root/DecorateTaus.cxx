@@ -50,13 +50,13 @@ DecorateTaus::DecorateTaus(std::string params,std::shared_ptr<top::TopConfig> co
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
     char* const rc = getenv("WorkDir_DIR");
 
-   top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", std::string(rc)+"/data/ttHMultilepton/data/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
+  top::check( m_tauSelectionEleOLR.setProperty("ConfigPath", std::string(rc)+"/data/ttHMultilepton/data/EleOLR_tau_selection.conf" ), "TauSelectionEleOLR:Failed to set ConfigPath");
   top::check( m_tauSelectionEleOLR.initialize(), "Failed to initialise TauSelectionTool for EleOLR" );
 
-  top::check( m_tauSelectionEleBDT.setProperty("ConfigPath", std::string(rc)+"/data/ttHMultilepton/data/EleOLR_tau_selection.conf" ), "TauSelectionEleBDT:Failed to set ConfigPath");
+  top::check( m_tauSelectionEleBDT.setProperty("ConfigPath", std::string(rc)+"/data/ttHMultilepton/data/EleBDT_tau_selection.conf" ), "TauSelectionEleBDT:Failed to set ConfigPath");
   top::check( m_tauSelectionEleBDT.initialize(), "Failed to initialise TauSelectionTool for EleBDT" );
 
-  top::check( m_tauSelectionMuonOLR.setProperty("ConfigPath", std::string(rc)+"/data/ttHMultilepton/data/EleOLR_tau_selection.conf" ), "TauSelectionMuonOLR:Failed to set ConfigPath");
+  top::check( m_tauSelectionMuonOLR.setProperty("ConfigPath", std::string(rc)+"/data/ttHMultilepton/data/MuonOLR_tau_selection.conf" ), "TauSelectionMuonOLR:Failed to set ConfigPath");
   top::check( m_tauSelectionMuonOLR.initialize(), "Failed to initialise TauSelectionTool for MuonOLR" );
 
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
