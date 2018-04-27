@@ -1,4 +1,3 @@
-
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
 PRWConfigFiles GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16d_prw.root
@@ -55,7 +54,7 @@ MuonIsolation Loose
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
-TauJetConfigFile ttHMultilepton/data/loose_tau_selection.conf
+TauJetConfigFile ttHMultilepton/data/medium_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/data/tight_tau_selection.conf
 ApplyTauMVATES false
 
