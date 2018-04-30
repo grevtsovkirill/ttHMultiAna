@@ -75,6 +75,14 @@ namespace ttHML {
     int nJets_OR_MV2c10_77;
     int nJets_OR_MV2c10_70;
     int nJets_OR_MV2c10_85;
+    int nJets_OR_T_DL1_60;
+    int nJets_OR_T_DL1_70;
+    int nJets_OR_T_DL1_77;
+    int nJets_OR_T_DL1_85;
+    int nJets_OR_DL1_60;
+    int nJets_OR_DL1_77;
+    int nJets_OR_DL1_70;
+    int nJets_OR_DL1_85;
     int nTaus_OR_Pt25;
     bool isBlinded;
     float HT;

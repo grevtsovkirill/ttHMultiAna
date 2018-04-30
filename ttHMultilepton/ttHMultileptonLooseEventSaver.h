@@ -19,7 +19,15 @@
 #include "AssociationUtils/IOverlapRemovalTool.h"
 
 #include "AssociationUtils/ToolBox.h"
-
+//TriggerTools///
+#include "ElectronEfficiencyCorrection/IAsgElectronEfficiencyCorrectionTool.h"
+#include "MuonEfficiencyCorrections/MuonTriggerScaleFactors.h"
+//#include "TriggerAnalysisInterfaces/ITrigGlobalEfficiencyCorrectionTool.h"
+#include "TriggerAnalysisInterfaces/ITrigGlobalEfficiencyCorrectionTool.h"
+#include "TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h"
+#include "MuonAnalysisInterfaces/IMuonTriggerScaleFactors.h"
+#include "PATCore/PATCoreEnums.h"
+//////
 //#include "ttHMultilepton/TreeAssist.h"
 #include "ttHMultilepton/TruthSelector.h"
 #include "ttHMultilepton/Lepton.h"
@@ -119,16 +127,16 @@ extern TH1I* m_tauCutflow;
   
   //Trigger Scale Factors -- NEW -- 
   // --> Electrons
-//  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
-//  ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
-//  std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
-  // --> Muons
-//  ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
-//  std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
+      ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
+      ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
+      std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
+ // --> Muons
+      ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
+      std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
   //--> The Tool
-  //asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>                  m_trigGlobEffCorr;
-  //TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
-//  std::vector<TrigGlobalEfficiencyCorrectionTool*>                 m_trigGlobEffCorr;
+    //asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>                  m_trigGlobEffCorr;
+    //TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
+      std::vector<TrigGlobalEfficiencyCorrectionTool*>                 m_trigGlobEffCorr;
 
   //decorate all the things in all the sys
       SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
@@ -156,11 +164,13 @@ extern TH1I* m_tauCutflow;
   void CopyElectron(const xAOD::Electron&, ttHML::Lepton&);
   void CopyMuon(const xAOD::Muon&,     ttHML::Lepton&);
   void CopyTau( const xAOD::TauJet&,   ttHML::Tau&);
+  void doEventTrigSFs(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons, const top::Event& event);
 /*  void doEventTrigSFs(std::shared_ptr<xAOD::ElectronContainer>& goodEl, std::shared_ptr<xAOD::MuonContainer>& goodMu, const top::Event& event);
   void doEventSFs_Helper(int ilep, bool tightIsLoose = false);
   void doEventSFs();*/
   double relativeSF(double variation, double nominal);
   std::string betterBtagNamedSyst (const std::string WP);
+  void setBtagSFs_ForDL1(const top::Event& event);
   void setBtagSFs(const top::Event& event);
 
   //some event weights
@@ -185,6 +195,21 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_weight_bTagSF_eigen_Light_down;
   std::unordered_map<std::string, float> m_weight_bTagSF_eigen_Others_up;
   std::unordered_map<std::string, float> m_weight_bTagSF_eigen_Others_down;
+  std::string m_bTagSF_DL1;
+  double m_bTagSF_weight_DL1;
+  double m_bTagSF60_weight_DL1;
+  double m_bTagSF70_weight_DL1;
+  double m_bTagSF77_weight_DL1;
+  double m_bTagSF85_weight_DL1;
+  double m_bTagSFContinuous_weight_DL1;
+  std::vector<float> m_weight_bTagSF_eigen_B_up_DL1;
+  std::vector<float> m_weight_bTagSF_eigen_B_down_DL1;
+  std::vector<float> m_weight_bTagSF_eigen_C_up_DL1;
+  std::vector<float> m_weight_bTagSF_eigen_C_down_DL1;
+  std::vector<float> m_weight_bTagSF_eigen_Light_up_DL1;
+  std::vector<float> m_weight_bTagSF_eigen_Light_down_DL1;
+  std::unordered_map<std::string, float> m_weight_bTagSF_eigen_Others_up_DL1;
+  std::unordered_map<std::string, float> m_weight_bTagSF_eigen_Others_down_DL1;
   // JVT SF weights
   double m_JVT_weight;
   double m_JVT_weight_UP;
@@ -294,7 +319,7 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_trjet_phi;
   std::vector<float> m_trjet_e;
   std::vector<int>   m_trjet_Wcount, m_trjet_Zcount, m_trjet_Hcount, m_trjet_Tcount;
-
+*/
   CP::SystematicSet dummy_nom;
   CP::SystematicSet dummy_elup;
   CP::SystematicSet dummy_eldo;
@@ -302,7 +327,7 @@ extern TH1I* m_tauCutflow;
   CP::SystematicSet dummy_mudo;
   CP::SystematicSet dummy_eleffup;
   CP::SystematicSet dummy_eleffdo;
-*/
+
       float m_randomNumber;
       float m_someOtherVariable;
 
@@ -311,7 +336,7 @@ extern TH1I* m_tauCutflow;
 
       // for names of lepton trigger SFs for multi-trigger tool
       //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
-/*      std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{
+      std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{
     	{ dummy_nom, "nominal" },
     	{ dummy_elup, "EL_SF_Trigger_UP" },
    		{ dummy_eldo, "EL_SF_Trigger_DOWN" },
@@ -319,7 +344,7 @@ extern TH1I* m_tauCutflow;
 	    { dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
 	    { dummy_eleffup, "EL_EFF_Trigger_UP" },
 	    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
-	  }; */
+	  }; 
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{
     { top::topSFSyst::nominal, "nominal" },

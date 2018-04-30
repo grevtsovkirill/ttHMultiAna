@@ -78,6 +78,14 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
   tree->makeOutputVariable(nJets_OR_MV2c10_60, "nJets_OR_MV2c10_60");
   tree->makeOutputVariable(nJets_OR_MV2c10_77, "nJets_OR_MV2c10_77");
   tree->makeOutputVariable(nJets_OR_MV2c10_70, "nJets_OR_MV2c10_70");
+  tree->makeOutputVariable(nJets_OR_T_DL1_60, "nJets_OR_T_DL1_60");
+  tree->makeOutputVariable(nJets_OR_T_DL1_70, "nJets_OR_T_DL1_70");
+  tree->makeOutputVariable(nJets_OR_T_DL1_77, "nJets_OR_T_DL1_77");
+  tree->makeOutputVariable(nJets_OR_T_DL1_85, "nJets_OR_T_DL1_85");
+  tree->makeOutputVariable(nJets_OR_DL1_85, "nJets_OR_DL1_85");
+  tree->makeOutputVariable(nJets_OR_DL1_60, "nJets_OR_DL1_60");
+  tree->makeOutputVariable(nJets_OR_DL1_77, "nJets_OR_DL1_77");
+  tree->makeOutputVariable(nJets_OR_DL1_70, "nJets_OR_DL1_70");
   tree->makeOutputVariable(nTaus_OR_Pt25, "nTaus_OR_Pt25");
   tree->makeOutputVariable(isBlinded, "isBlinded");
   tree->makeOutputVariable(HT, "HT");
