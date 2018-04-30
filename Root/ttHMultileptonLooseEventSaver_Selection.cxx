@@ -1020,13 +1020,13 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.promptTauIso = (promptTauIso.isAvailable(xTau)) ? promptTauIso(xTau) : -99;
 
 
-/*  for( auto syst : m_tau_sf_names ) {
+  for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // AnalysisTop tight/loose and our tight/loose are reversed
     MLTau.SFTight[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar,  true) : 1.0;
     MLTau.SFLoose[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar, false)               : 1.0;
-  }*/
+  }
 }
 
 void
