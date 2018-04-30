@@ -1,71 +1,47 @@
-# Auto-generated on: 2017-11-24 15:14:15.262411
+# Copyright (C) 2002-2017 CERN for the benefit of the ATLAS collaboration
+#
+# This is a template for a CMakeLists.txt file that can be used in a client
+# project (work area) to set up building ATLAS packages against the configured
+# release.
+#
+
+# Set the minimum required CMake version:
 cmake_minimum_required( VERSION 3.2 FATAL_ERROR )
-# Declare the name of this package:
-atlas_subdir( ttHMultilepton None )
 
-# This package depends on other packages:
-atlas_depends_on_subdirs( PUBLIC
-                          TopObjectSelectionTools
-                          TopEventSelectionTools
-                          TopEvent
-                          TopConfiguration
-                          TopAnalysis
-                          JetJvtEfficiency
-                          TopDataPreparation
-                          xAODCaloEvent
-                          xAODBase
-                          xAODTruth 
-			  xAOD/xAODCore
-			  Event/xAOD/xAODEgamma
-		 	  Event/xAOD/xAODEventInfo
-    			  Event/xAOD/xAODJet
-			  Event/xAOD/xAODMissingET
-			  Event/xAOD/xAODTrigMissingE
-			  Event/xAOD/xAODMuon
-			  Event/xAOD/xAODTau
-			  Event/xAOD/xAODTracking
-		  	  Event/xAOD/xAODTruth
-			  Event/xAOD/xAODPFlow
-			  IsolationSelection
-                          AsgTools )
+# If there's a directory called AtlasCMake in the project,
+# and the user didn't specify AtlasCMake_DIR yet, then let's
+# give it a default value.
+if( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/Build/AtlasCMake AND
+      NOT AtlasCMake_DIR AND NOT ENV{AtlasCMake_DIR} )
+   set( AtlasCMake_DIR ${CMAKE_SOURCE_DIR}/Build/AtlasCMake )
+endif()
 
-# This package uses ROOT:
-find_package( ROOT REQUIRED COMPONENTS Core Gpad Tree Hist RIO MathCore Graf Physics )
+# If there's a directory called AtlasLCG in the project,
+# and the user didn't specify LCG_DIR yet, then let's
+# give it a default value.
+if( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/Build/AtlasLCG AND
+      NOT LCG_DIR AND NOT ENV{LCG_DIR} )
+   set( LCG_DIR ${CMAKE_SOURCE_DIR}/Build/AtlasLCG )
+endif()
 
-# Generate a CINT dictionary source file:
-atlas_add_root_dictionary( ttHMultilepton _cintDictSource
-                           ROOT_HEADERS Root/LinkDef.h
-                           EXTERNAL_PACKAGES ROOT )
+# Pick up a local version of the AtlasCMake code if it exists:
+find_package( AtlasCMake QUIET )
 
-# Build a library that other components can link against:
-atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
-                   ttHMultilepton/*.h ttHMultilepton/*.icc ttHMultilepton/*/*.h
-                   ttHMultilepton/*/*.icc ${_cintDictSource} 
-                   PUBLIC_HEADERS ttHMultilepton
-                   LINK_LIBRARIES TopObjectSelectionTools
-                                  TopEventSelectionTools
-                                  TopEvent
-                                  TopConfiguration
-                                  TopAnalysis
-                          	  TopDataPreparation
-                                  JetJvtEfficiencyLib
-                                  AsgTools
-                                  xAODCaloEvent
-                                  xAODBase
-                                  xAODTruth
-                                  xAODCore
-			  xAODEgamma
-		 	  xAODEventInfo
-    		xAODJet
-			  xAODMuon
-			  xAODTau
-			  xAODTracking
-		  	xAODTruth
-			  xAODPFlow
-                                  ${ROOT_LIBRARIES}
-                   INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
+# Find the project that we depend on:
+find_package( AnalysisTop )
 
-# Install data files from the package:
-atlas_install_data( DIRECTORY share )
-atlas_install_data(DIRECTORY data )
+# Set up CTest:
+atlas_ctest_setup()
 
+# Set up a work directory project:
+atlas_project( WorkDir 21.2.26
+   USE AnalysisTop 21.2.26
+    )
+
+# Set up the runtime environment setup script(s):
+lcg_generate_env( SH_FILE ${CMAKE_BINARY_DIR}/${ATLAS_PLATFORM}/env_setup.sh )
+install( FILES ${CMAKE_BINARY_DIR}/${ATLAS_PLATFORM}/env_setup.sh
+   DESTINATION . )
+
+# Set up CPack:
+atlas_cpack_setup()
