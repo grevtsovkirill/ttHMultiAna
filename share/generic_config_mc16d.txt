@@ -61,7 +61,7 @@ ApplyTauMVATES false
 #Jet cuts
 JetPt 25000.
 JetEta 2.5
-BTaggingWP FixedCutBEff_60 FixedCutBEff_70 FixedCutBEff_77 FixedCutBEff_85 Continuous
+BTaggingWP MV2c10:FixedCutBEff_60 MV2c10:FixedCutBEff_70 MV2c10:FixedCutBEff_77 MV2c10:FixedCutBEff_85 MV2c10:Continuous DL1:FixedCutBEff_60 DL1:FixedCutBEff_70 DL1:FixedCutBEff_77 DL1:FixedCutBEff_85 DL1:Continuous
 
 #Other cuts, overlaps, bkgs..
 FakesControlRegionDoLooseMC False
@@ -75,7 +75,7 @@ DoLoose False
 IsAFII False
 
 #NEvents 1000000
-NEvents 1000
+#NEvents 1000
 Systematics Nominal
 #TruthBlockInfo True
 
