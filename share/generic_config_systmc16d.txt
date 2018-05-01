@@ -1,11 +1,11 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16c.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16c_prw_missing.root
+PRWConfigFiles GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16d_prw.root
 
-PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-001.root 
+PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root 
 
 GRLDir GoodRunsLists
-GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml data17_13TeV/20171130/physics_25ns_Triggerno17e33prim.xml
+GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20170605/physics_25ns_21.0.19.xml data17_13TeV/20180309/physics_25ns_Triggerno17e33prim.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -36,6 +36,7 @@ OutputEvents SelectedEvents
 OutputFileNEventAutoFlush 1000
 OutputFileBasketSizePrimitive 4096
 OutputFileBasketSizeVector 40960
+OutputEvents SelectedEvents
 PerfStats No
 
 #Electron cuts
@@ -76,16 +77,13 @@ DoLoose False
 #UseAodMetaData True
 IsAFII False
 
-#NEvents 10000
-#TruthBlockInfo True
-
+#NEvents 1000000
+#NEvents 1000
 Systematics All
 DynamicKeys DoSystematics
-# enables skimming and slimming
 DoSystematics True
 
-
-#QGF - still missing 
+#QGF - replace JFC file with corresponding process
 #JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root
 
 SELECTION triggers
