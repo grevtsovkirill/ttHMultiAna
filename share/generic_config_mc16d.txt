@@ -40,7 +40,7 @@ PerfStats No
 ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
-ElectronIsolation Loose
+ElectronIsolation FixedCutLoose
 #ElectronIsolationLoose PromptLepton
 
 #Muon cuts
@@ -48,7 +48,7 @@ MuonQuality Loose
 MuonQualityLoose Loose
 MuonEta 2.7
 MuonPt 5000
-MuonIsolation Loose
+MuonIsolation FixedCutLoose
 #MuonIsolationLoose PromptLepton
 
 #Tau cuts
