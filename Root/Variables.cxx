@@ -25,7 +25,7 @@ Variables::Variables()
 Variables::~Variables(){
 }
 
-void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFSystematics){
+void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMultileptonLooseEventSaver *ntupler, bool doSFSystematics){
   tree->makeOutputVariable(onelep_type,   "onelep_type");
   tree->makeOutputVariable(dilep_type,    "dilep_type");
   tree->makeOutputVariable(trilep_type,   "trilep_type");
@@ -137,7 +137,8 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
   tree->makeOutputVariable(tauSFLoose    [top::topSFSyst::nominal], "tauSFLoose");
 
   //additional loop for trig SFs uncertainties with multiTrigger tool
-/*  if(doSFSystematics) {
+  doSFSystematics = true;
+  if(doSFSystematics) {
     int nTrig = -1;
     for (const auto systvar : ntupler->m_lep_trigger_sf_names) {
       ++nTrig;
@@ -158,7 +159,7 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
     }
   }
     if(doSFSystematics) {
-    for (const auto systvar : ntupler->m_lep_sf_names) {
+    for (const auto systvar :ntupler-> m_lep_sf_names) {
       if( systvar.first == top::topSFSyst::nominal ) continue; //nominal is done outside loop
       std::string thisname = "_" + systvar.second;
       bool dotrig = false;
@@ -187,13 +188,13 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFS
     tree->makeOutputVariable(lepSFObjTight[systvar.first], "lepSFObjTight" + thisname);
       }
     }
-    for ( auto systvar : ntupler->m_tau_sf_names) {
+    for ( auto systvar : m_tau_sf_names) {
       if( systvar.first == top::topSFSyst::nominal ) continue; //nominal is done outside loop
       std::string thisname = "_" + systvar.second;
       tree->makeOutputVariable(tauSFTight[systvar.first], "tauSFTight" + thisname);
       tree->makeOutputVariable(tauSFLoose[systvar.first], "tauSFLoose" + thisname);
     }
-  }// endif doSFSystematics */
+  }// endif doSFSystematics 
 }
 
   void Variables::clearReco(){

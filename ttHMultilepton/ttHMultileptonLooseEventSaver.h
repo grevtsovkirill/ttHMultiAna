@@ -90,7 +90,7 @@ extern TH1I* m_tauCutflow;
       //std::shared_ptr<TH1I*> m_jetCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
       //std::shared_ptr<TH1I*> m_tauCutflow; // = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
 
-    private:
+    //private:
       ///-- Some additional custom variables for the output --///
   ///The file where everything goes
       TFile* m_outputFile;

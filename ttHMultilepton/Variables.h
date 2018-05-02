@@ -23,6 +23,8 @@
 #define TAU_ARR_SIZE 2
 #define MAXSYST 50
 
+class ttHMultileptonLooseEventSaver;
+
 namespace ttHML {
     struct Variables {
     public:
@@ -42,7 +44,7 @@ namespace ttHML {
     ConstDataVector<xAOD::TauJetContainer> * selected_OR_taus = new ConstDataVector<xAOD::TauJetContainer>(SG::VIEW_ELEMENTS);
 
 
-    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, bool doSFSystematics);
+    void BootstrapTree(std::shared_ptr<top::TreeManager> tree, const ttHMultileptonLooseEventSaver*,  bool doSFSystematics);
     std::shared_ptr<ttHML::EventData> m_info;
     void clearReco();
     void Clear();

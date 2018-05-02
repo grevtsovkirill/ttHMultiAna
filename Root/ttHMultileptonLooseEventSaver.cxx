@@ -1429,8 +1429,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
 
-
-    m_ttHEvent->BootstrapTree(systematicTree,false);
+    m_ttHEvent->BootstrapTree(systematicTree,this,false);
     }
 ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
 			    "passPreORSelection");
