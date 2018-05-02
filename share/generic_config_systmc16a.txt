@@ -33,7 +33,9 @@ MCGeneratorWeights True
 ObjectSelectionName ttHMultileptonLooseObjectLoader
 OutputFormat ttHMultileptonLooseEventSaver
 OutputFilename syst_output.root
-#OutputEvents AllEvents
+OutputFileNEventAutoFlush 1000
+OutputFileBasketSizePrimitive 4096
+OutputFileBasketSizeVector 40960
 OutputEvents SelectedEvents
 PerfStats No
 
@@ -80,11 +82,9 @@ IsAFII False
 
 Systematics All
 DynamicKeys DoSystematics
-# enables skimming and slimming
 DoSystematics True
 
-
-#QGF - still missing 
+#QGF - replace JFC file with corresponding process
 #JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root
 
 SELECTION triggers
@@ -114,6 +114,5 @@ SRPRESKIM LEPTONS
 NLEPTONPLUSTAU 10000 >= 1
 SRPRESKIM LEPTONS
 CALCULATESF
-JETFLAVORPLOTS detailed nJetsMax:20 pt:25:30:35:50:75:100:150:2500 abseta:0.:0.6:1.2:1.8:2.5
 SAVE
 
