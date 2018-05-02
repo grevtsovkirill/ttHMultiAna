@@ -106,15 +106,7 @@ TH1I* m_tauCutflow;
   ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){
     delete m_decor_ttHpassOVR;
     delete m_decor_ttHpassTauOVR;
-    delete m_eleCutflow; 
-    delete m_muCutflow; 
-    delete m_jetCutflow;
-    delete m_tauCutflow;
-    //delete m_sfRetriever;
-    delete m_trigGlobEffCorr[m_lep_trigger_sf_names.size()];  //
-    delete m_ttHEvent;
-    //delete count_histo_lhe_weights;
-    delete m_outputFile;
+    for (unsigned int t=0; t<m_lep_trigger_sf_names.size(); ++t) delete m_trigGlobEffCorr[t]; 
 }
 
 template<typename FCN>
