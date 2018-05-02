@@ -608,18 +608,18 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	  }
 	}
       }
-	if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_85")) {
-	  m_ttHEvent->nJets_OR_DL1_85++;
-	  if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_77")) {
-	    m_ttHEvent->nJets_OR_DL1_77++;
-	    if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_70")) {
-	      m_ttHEvent->nJets_OR_DL1_70++;
-	      if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_60")) {
-		      m_ttHEvent->nJets_OR_DL1_60++;
-	      }
-	    }
-	  }
-	}
+	// if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_85")) {
+	//   m_ttHEvent->nJets_OR_DL1_85++;
+	//   if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_77")) {
+	//     m_ttHEvent->nJets_OR_DL1_77++;
+	//     if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_70")) {
+	//       m_ttHEvent->nJets_OR_DL1_70++;
+	//       if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_60")) {
+	// 	      m_ttHEvent->nJets_OR_DL1_60++;
+	//       }
+	//     }
+	//   }
+	// }
     }
   }
 
@@ -644,18 +644,18 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	    }
 	  }
 	}
-	if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_85")) {
-	  m_ttHEvent->nJets_OR_T_DL1_85++;
-	  if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_77")) {
-	    m_ttHEvent->nJets_OR_T_DL1_77++;
-	    if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_70")) {
-	      m_ttHEvent->nJets_OR_T_DL1_70++;
-	      if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_60")) {
-		      m_ttHEvent->nJets_OR_T_DL1_60++;
-	      }
-	    }
-	  }
-	}
+	// if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_85")) {
+	//   m_ttHEvent->nJets_OR_T_DL1_85++;
+	//   if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_77")) {
+	//     m_ttHEvent->nJets_OR_T_DL1_77++;
+	//     if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_70")) {
+	//       m_ttHEvent->nJets_OR_T_DL1_70++;
+	//       if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_60")) {
+	// 	      m_ttHEvent->nJets_OR_T_DL1_60++;
+	//       }
+	//     }
+	//   }
+	// }
       }
     }
   }
