@@ -233,17 +233,17 @@ m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFacto
   };
 */
   std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
-    {"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_2016", "TightLLH", "_PLIso_CFT_isolLoose"}, 
+    {"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "isolFixedCutTight"}, 
     // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
-    {"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseAndBLayerLLH", ""}, 
+    {"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseAndBLayerLLH", "isolFixedCutLoose"}, 
     // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"}, 
+    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "isolFixedCutTightTrackOnly"}, 
     // dielectron trigger, only for untagged electrons, configured wrt loose WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", ""}, 
+    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFixedCutLoose"}, 
     // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0", "TightLLH", "_PLIso_CFT_isolLoose"},  
+    {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "TightLLH", "isolFixedCutTightTrackOnly"},  
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
-    {"e17_lhloose, e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "LooseAndBLayerLLH", ""}
+    {"e17_lhloose, e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "LooseAndBLayerLLH", "isolFixedCutLoose"}
   };
  int nTrig = -1;
 
@@ -268,9 +268,9 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
 	{
 	  auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff_"+std::to_string(++nTools)+systvar.second);
-    std::string filepath="ElectronEfficiencyCorrection/2015_2017/rel21.2/Moriond_February2018_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13" + kv[4] + ".root";
+    std::string filepath="ElectronEfficiencyCorrection/2015_2017/rel21.2/Moriond_February2018_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13_" + kv[4] + ".root";
 	  //std::string filepath="ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v11" + kv[4] + ".root";
-	  if (kv[4]!="") filepath="ttHMultilepton/data/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_v11" + kv[4] + ".root";
+	  //if (kv[4]!="") filepath="ttHMultilepton/data/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_v11" + kv[4] + ".root";
 
 	  std::vector<std::string> inputFiles;
 	  inputFiles.push_back(filepath);
@@ -318,7 +318,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     std::string trigglobname = "TrigGlobalEfficiencyCorrectionTool"+systvar.second;
     //m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
     m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool(trigglobname);
-    m_trigGlobEffCorr[nTrig]->setProperty("OutputLevel", MSG::ERROR).ignore();
+    //m_trigGlobEffCorr[nTrig]->setProperty("OutputLevel", MSG::ERROR).ignore();
+    //m_trigGlobEffCorr[nTrig]->setProperty("OutputLevel", MSG::ERROR).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("MuonTools",m_muonToolsHandles).ignore();
