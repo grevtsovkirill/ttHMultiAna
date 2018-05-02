@@ -56,7 +56,7 @@ extern TH1I* m_tauCutflow;
       ///-- Default constrcutor with no arguments - needed for ROOT --///
       ttHMultileptonLooseEventSaver();
       ///-- Destructor does nothing --///
-      virtual ~ttHMultileptonLooseEventSaver(){}
+      ~ttHMultileptonLooseEventSaver();
       
       ///-- initialize function for top::EventSaverFlatNtuple --///
       ///-- We will be setting up out custom variables here --///
@@ -409,7 +409,7 @@ extern TH1I* m_tauCutflow;
 
       
       ///-- Tell RootCore to build a dictionary (we need this) --///
-      ClassDef(ttHMultileptonLooseEventSaver, 0);
+      //ClassDef(ttHMultileptonLooseEventSaver, 0);
   };
 
 
