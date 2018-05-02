@@ -318,6 +318,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     std::string trigglobname = "TrigGlobalEfficiencyCorrectionTool"+systvar.second;
     //m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
     m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool(trigglobname);
+    m_trigGlobEffCorr[nTrig]->setProperty("OutputLevel", MSG::ERROR).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ElectronEfficiencyTools",m_electronEffToolsHandles).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ElectronScaleFactorTools",m_electronSFToolsHandles).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("MuonTools",m_muonToolsHandles).ignore();
