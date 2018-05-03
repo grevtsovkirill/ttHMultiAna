@@ -39,6 +39,11 @@ grid.Add("highPriority_mc16a").datasets=[
     "mc16_13TeV.410501.PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e5458_s3126_r9364_r9315_p3480",
     "mc16_13TeV.410503.PowhegPythia8EvtGen_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e5475_s3126_r9364_r9315_p3480",
     # missing 345674
+    "mc16_13TeV.364285.Sherpa_222_NNPDF30NNLO_llvvjj_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r9364_r9315_p3480",
+    "mc16_13TeV.364284.Sherpa_222_NNPDF30NNLO_lllvjj_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r9364_r9315_p3480",
+    "mc16_13TeV.364283.Sherpa_222_NNPDF30NNLO_lllljj_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r9364_r9315_p3480",
+    "mc16_13TeV.364286.Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW4.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r9364_r9315_p3480",
+    "mc16_13TeV.364287.Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r9364_r9315_p3480"
 ]
 
 ##ALL MC16A R21 Samples
