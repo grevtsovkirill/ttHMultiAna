@@ -57,7 +57,46 @@ TruthMatchAlgo :: TruthMatchAlgo() :
 
 }
 
-TruthMatchAlgo :: ~TruthMatchAlgo(){}
+TruthMatchAlgo :: ~TruthMatchAlgo(){
+
+  delete m_isTruthMatchedDecor;
+  delete m_truthTypeDecor;
+  delete m_truthOriginDecor;
+  delete m_truthPdgIdDecor;
+  delete m_truthStatusDecor;
+  delete m_truthPtDecor;
+  delete m_truthEtaDecor;
+  delete m_truthPhiDecor;
+  delete m_truthMDecor;
+  delete m_truthEDecor;
+  delete m_truthRapidityDecor;
+  delete m_isQMisIDDecor;
+  delete m_isConvPhDecor;
+  delete m_isExtConvPhDecor;
+  delete m_isIntConvPhDecor;
+  delete m_isISR_FSR_PhDecor;
+  delete m_isBremsDecor;
+  delete m_ancestorTruthTypeDecor;
+  delete m_ancestorTruthPdgIdDecor;
+  delete m_ancestorTruthOriginDecor;
+  delete m_ancestorTruthStatusDecor;
+
+  delete m_isTruthMatchedAcc;
+  delete m_isQMisIDAcc;
+  delete m_isConvPhAcc;
+  delete m_isIntConvPhAcc;
+  delete m_isExtConvPhAcc;
+  delete m_isISR_FSR_PhAcc;
+  delete m_isBremsAcc;
+  delete m_truthPLAcc;
+  delete m_truthTypeAcc;
+  delete m_truthOriginAcc;
+  delete m_truthMatchProbabilityAcc;
+  delete m_ancestorTruthTypeAcc;
+  delete m_ancestorTruthOriginAcc;
+
+  delete m_MCTClassifier;
+}
 
 StatusCode TruthMatchAlgo :: executeTruthMatching( const top::Event& event ) {
 
