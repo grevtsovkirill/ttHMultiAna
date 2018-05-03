@@ -45,7 +45,8 @@ DecorateTaus::DecorateTaus(std::string params,std::shared_ptr<top::TopConfig> co
   m_tauSelectionEleOLR("TauSelectionEleOLR"),
   m_tauSelectionEleBDT("TauSelectionEleBDT"),
   m_tauSelectionMuonOLR("TauSelectionMuonOLR"),
-  m_config(config)
+  m_config(config),
+  m_isRemote(false)    
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
     char* const rc = getenv("WorkDir_DIR");
@@ -61,6 +62,7 @@ DecorateTaus::DecorateTaus(std::string params,std::shared_ptr<top::TopConfig> co
 
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
+     m_isRemote=true; 
    } 
    else {
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
@@ -72,7 +74,7 @@ DecorateTaus::DecorateTaus(std::string params,std::shared_ptr<top::TopConfig> co
 }
 
 DecorateTaus::~DecorateTaus(){
-
+  if(!m_isRemote)  delete m_asgHelper;  
 }
 
 bool DecorateTaus::apply(const top::Event & event) const{

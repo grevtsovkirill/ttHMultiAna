@@ -19,8 +19,8 @@
 DecorateMuons::DecorateMuons(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
   iso_1( "iso_1" ),
-
-  m_config(config)
+  m_config(config),
+  m_isRemote(false) 
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
     auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
@@ -31,6 +31,7 @@ DecorateMuons::DecorateMuons(std::string params,std::shared_ptr<top::TopConfig> 
 
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
+     m_isRemote=true;
    } 
    else {
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
@@ -42,7 +43,7 @@ DecorateMuons::DecorateMuons(std::string params,std::shared_ptr<top::TopConfig> 
 }
 
 DecorateMuons::~DecorateMuons(){
-
+  if(!m_isRemote)  delete m_asgHelper;  
 }
 
 bool DecorateMuons::apply(const top::Event & event) const{
