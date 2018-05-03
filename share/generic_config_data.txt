@@ -33,7 +33,7 @@ ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
 ElectronIsolation FixedCutLoose
-ElectronIsolationLoose PromptLepton
+#ElectronIsolationLoose PromptLepton
 
 #Muon cuts
 MuonQuality Loose
