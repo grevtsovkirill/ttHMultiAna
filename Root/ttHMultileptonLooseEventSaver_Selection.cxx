@@ -1206,7 +1206,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
  // unsigned runNumber = 305291; // 2016 period G
   //event.m_info->auxdecor<unsigned int>("RandomRunNumber") = runNumber;
   unsigned runNumber=event.m_info->auxdecor<unsigned int>("RandomRunNumber");
-  std::cout<<"runnumber= " <<runNumber<<std::endl;
+  //std::cout<<"runnumber= " <<runNumber<<std::endl;
   std::vector<const xAOD::Electron*> myTriggeringElectrons;
   std::vector<const xAOD::Muon*> myTriggeringMuons;
   
@@ -1246,13 +1246,12 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	else {
 	  for(auto e : myTriggeringElectrons) {dec_tight(*e) = 1;  dec_loose(*e) = 0;}//TightTight SF 2LSS
 	}
-  std::cout<<"2Lepton"<<std::endl;
-	double sf_tt = 1.;
+  
+  	double sf_tt = 1.;
 	auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
 	if(cc_tt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigTight[nTrig] = sf_tt;
-	    //std::cout << "2LSSTightTight:TriggerScaleFactor is for sys " << systvar.second << " : " << sf_tt << std::endl;
 	  }
 	double dummy,eff_tt = 0.; //TightTight EFF
 	auto cc_Ett = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy, eff_tt);
@@ -1260,9 +1259,6 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  {
 	    m_ttHEvent->lepEffTrigTight[nTrig] = eff_tt;
 	    m_ttHEvent->lepDataEffTrigTight[nTrig] = dummy;
-	    
-	     std::cout << "2LSSTightTight:TriggerEff is for sys " << systvar.second << " : " << eff_tt << std::endl;
-	    // std::cout << "2LSSTightTight:TriggerEff Data is for sys " << systvar.second << " : " << dummy << std::endl;
 	  }
       
 	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0;  dec_loose(*e) = 1;} //LooseLoose SF
@@ -1279,7 +1275,6 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  {
 	    m_ttHEvent->lepEffTrigLoose[nTrig] = eff_ll;
 	    m_ttHEvent->lepDataEffTrigLoose[nTrig] = dummy_2;
-	    //std::cout << "2LSSLooseLoose:TriggerEff is for sys " << systvar.second << " : " << eff_ll << std::endl;
 	  }
 	
 	float leadElectronPt = -1000.;
@@ -1287,7 +1282,6 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	for(auto e : myTriggeringElectrons) {
 	  ++nCount;
 	  float pt = 0.001f*e->pt();
-	  //std::cout << nCount << " electron pT " << pt << std::endl;
 	  leadElectronPt = std::max(pt,leadElectronPt);
 	  //dec_tight(*e) = 0;
 	  if (myTriggeringMuons.size()==0){
@@ -1312,7 +1306,6 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  {
 	    m_ttHEvent->lepEffTrigTightLoose[nTrig] = eff_tl;
 	    m_ttHEvent->lepDataEffTrigTightLoose[nTrig] = dummy_3;
-	    //std::cout << "2LSSTightLoose:TriggerEff is for sys " << systvar.second << " : " << eff_tl << std::endl;
 	  }
 	
 	leadElectronPt = -1000.;
