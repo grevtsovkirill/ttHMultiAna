@@ -1935,8 +1935,10 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-  if (m_isMC){
-    doEventTrigSFs(*Electrons,*Muons,event);}
+    if (m_isMC && m_config->systematicName(event.m_hashValue)=="nominal"){
+    //std::cout<< "vartype "<< m_config->systematicName(event.m_hashValue) << std::endl;
+    doEventTrigSFs(*Electrons,*Muons,event);
+  }
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
