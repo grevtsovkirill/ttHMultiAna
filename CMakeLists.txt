@@ -5,6 +5,8 @@ atlas_subdir( ttHMultilepton None )
 
 # This package depends on other packages:
 atlas_depends_on_subdirs( PUBLIC
+                          TriggerAnalysisInterfaces
+                          TrigGlobalEfficiencyCorrection
                           TopObjectSelectionTools
                           TopEventSelectionTools
                           TopEvent
@@ -15,18 +17,17 @@ atlas_depends_on_subdirs( PUBLIC
                           xAODCaloEvent
                           xAODBase
                           xAODTruth 
-			  xAOD/xAODCore
-			  Event/xAOD/xAODEgamma
-		 	  Event/xAOD/xAODEventInfo
-    			  Event/xAOD/xAODJet
-			  Event/xAOD/xAODMissingET
-			  Event/xAOD/xAODTrigMissingE
-			  Event/xAOD/xAODMuon
-			  Event/xAOD/xAODTau
-			  Event/xAOD/xAODTracking
-		  	  Event/xAOD/xAODTruth
-			  Event/xAOD/xAODPFlow
-			  IsolationSelection
+                          xAOD/xAODCore
+                          Event/xAOD/xAODEgamma
+                          Event/xAOD/xAODEventInfo
+                          Event/xAOD/xAODJet
+                          Event/xAOD/xAODMissingET
+                          Event/xAOD/xAODTrigMissingE
+                          Event/xAOD/xAODMuon
+                          Event/xAOD/xAODTau
+                          Event/xAOD/xAODTracking
+                          Event/xAOD/xAODTruth
+                          IsolationSelection
                           AsgTools )
 
 # This package uses ROOT:
@@ -44,10 +45,11 @@ atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
                    PUBLIC_HEADERS ttHMultilepton
                    LINK_LIBRARIES TopObjectSelectionTools
                                   TopEventSelectionTools
+                                  TrigGlobalEfficiencyCorrectionLib
                                   TopEvent
                                   TopConfiguration
                                   TopAnalysis
-                          	  TopDataPreparation
+                                  TopDataPreparation
                                   JetJvtEfficiencyLib
                                   AsgTools
                                   xAODCaloEvent
@@ -62,6 +64,7 @@ atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
 			  xAODTracking
 		  	xAODTruth
 			  xAODPFlow
+        FTagAnalysisInterfacesLib
                                   ${ROOT_LIBRARIES}
                    INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
 
