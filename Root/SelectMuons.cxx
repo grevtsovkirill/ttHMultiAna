@@ -20,13 +20,15 @@
 SelectMuons::SelectMuons(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
   muonSelection("MuonSelection"),
-  m_config(config)
+  m_config(config),
+  m_isRemote(false) 
 {
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
 
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
+     m_isRemote=true; 
    } 
    else {
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
@@ -37,7 +39,7 @@ SelectMuons::SelectMuons(std::string params,std::shared_ptr<top::TopConfig> conf
 }
 
 SelectMuons::~SelectMuons(){
-
+  if(!m_isRemote)  delete m_asgHelper;  
 }
 
 bool SelectMuons::apply(const top::Event & event) const{

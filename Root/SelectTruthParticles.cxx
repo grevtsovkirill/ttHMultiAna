@@ -34,7 +34,7 @@ SelectTruthParticles::SelectTruthParticles(std::string params,std::shared_ptr<to
 }
 
 SelectTruthParticles::~SelectTruthParticles(){
-
+  delete  m_truthMatchAlgo;
 }
 
 bool SelectTruthParticles::apply(const top::Event & event) const{
