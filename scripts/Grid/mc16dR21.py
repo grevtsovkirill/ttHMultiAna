@@ -38,6 +38,11 @@ grid.Add("highPriority_mc16d").datasets=[
 	# missing 363357
 	# missing 410501
 	# missing 410544
+  "mc16_13TeV.364283.Sherpa_222_NNPDF30NNLO_lllljj_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r10201_r10210_p3480",
+#mising364284
+  "mc16_13TeV.364285.Sherpa_222_NNPDF30NNLO_llvvjj_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r10201_r10210_p3480",
+#missing364286
+  "mc16_13TeV.364287.Sherpa_222_NNPDF30NNLO_llvvjj_ss_EW6.deriv.DAOD_HIGG8D1.e6055_e5984_s3126_r10201_r10210_p3480"
 ]
 
 grid.Add("ALL_mc16d").datasets=[
