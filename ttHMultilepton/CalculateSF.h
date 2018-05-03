@@ -18,7 +18,7 @@
   class CalculateSF : public top::EventSelectorBase {
 public:
     explicit CalculateSF(const std::string& params, std::shared_ptr<top::TopConfig> config);
-
+    ~CalculateSF();
     bool apply(const top::Event& event) const override;
 	std::string name() const override;
     bool applyParticleLevel(const top::ParticleLevelEvent& event) const override;
@@ -26,7 +26,7 @@ public:
      std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
 
 	ttHMLAsgHelper* m_asgHelper;
-
+	bool m_isRemote;
     struct scaleFactors {
       float lepSFIDLoose[MAXSYST];
       float lepSFIDTight[MAXSYST];

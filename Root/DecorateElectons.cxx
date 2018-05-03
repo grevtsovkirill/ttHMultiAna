@@ -22,7 +22,8 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
   m_electronChargeIDLoose("ElectronChargeIDSelectorLoose"),
   m_electronChargeIDMedium("ElectronChargeIDSelectorMedium"),
   m_electronChargeIDTight("ElectronChargeIDSelectorTight"),
-  m_config(config)
+  m_config(config),
+  m_isRemote(false)
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
     auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
@@ -43,6 +44,7 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
 
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
+     m_isRemote=true; 
    } 
    else {
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
@@ -54,7 +56,7 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
 }
 
 DecorateElectrons::~DecorateElectrons(){
-
+  if(!m_isRemote)  delete m_asgHelper;
 }
 
 bool DecorateElectrons::apply(const top::Event & event) const{

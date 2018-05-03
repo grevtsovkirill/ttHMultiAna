@@ -38,6 +38,7 @@ class DecorateTaus:public top::EventSelectorBase {
   mutable int m_pvNumber;
   mutable int m_puNumber;
   bool m_doSFSystematics;
+  bool m_isRemote;
   mutable int ntaus;
   std::shared_ptr<top::TopConfig> m_config;
   mutable const top::Event* m_event;
