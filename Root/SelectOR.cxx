@@ -31,10 +31,12 @@ template<typename T> int CountPassOR(ConstDataVector<DataVector<T> >& vec, bool 
 
 SelectOR::SelectOR(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
-  m_config(config)
+  m_config(config),
+  m_isRemote(false) 
 {
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
+     m_isRemote=true; 
    } 
    else {
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
@@ -49,7 +51,7 @@ SelectOR::SelectOR(std::string params,std::shared_ptr<top::TopConfig> config):
 }
 
 SelectOR::~SelectOR(){
-
+  if(!m_isRemote)  delete m_asgHelper; 
 }
 
 bool SelectOR::apply(const top::Event & event) const{
