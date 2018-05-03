@@ -103,7 +103,12 @@ TH1I* m_tauCutflow;
   {
     branchFilters().push_back(std::bind(&getBranchStatus, std::placeholders::_1, std::placeholders::_2));
 }
-//  ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){}
+  ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){
+    delete m_decor_ttHpassOVR;
+    delete m_decor_ttHpassTauOVR;
+    for (unsigned int t=0; t<m_lep_trigger_sf_names.size(); ++t) delete m_trigGlobEffCorr[t]; 
+}
+
 template<typename FCN>
 struct function_traits : public function_traits<decltype(&FCN::operator())>
 {};
@@ -152,6 +157,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     std::cout<<"NO SKIM, NO SLIM"<<std::endl;
   }
 
+
   //Cutflow histograms
   m_eleCutflow = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
   std::cout << "setting bin names" << std::endl;
@@ -174,6 +180,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   for (const auto& label : { "initial", "charge", "ntracks", "eta", "jetbdt", "pt", "EleOLR", "#tau-e,#mu OR"}) {
     m_tauCutflow->GetXaxis()->SetBinLabel(idx++, label);
   }
+
 //Tools
   if (m_isMC){
     std::string tdpfile = PathResolverFindCalibFile("/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"); 
@@ -212,6 +219,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     m_weight_bTagSF_eigen_Light_down_DL1.resize(m_config->btagging_num_Light_eigenvars(m_bTagSF_DL1) );
   }
   //
+
 m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( m_config ) );
 /*std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
     // single-e trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
@@ -314,6 +322,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       }
     }
     
+
     // Configure the trigger SF tool: Nominal
     std::string trigglobname = "TrigGlobalEfficiencyCorrectionTool"+systvar.second;
     //m_trigGlobEffCorr[nTrig] = new TrigGlobalEfficiencyCorrectionTool("TrigGlobalEfficiencyCorrectionTool/MyTool");
@@ -2175,6 +2184,7 @@ void ttHMultileptonLooseEventSaver::finalize()
        
       m_outputFile->cd();
       myTree->GetEntry(0);
+
 
       m_outputFile->cd("loose");
       TH1D* count_histo_lhe_weights = new TH1D("Count_LHE", "LHE weights", names_lhe->size(), -0.5, names_lhe->size() - 0.5);
