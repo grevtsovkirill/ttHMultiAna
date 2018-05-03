@@ -28,6 +28,7 @@ class SelectJets:public top::EventSelectorBase {
  private:
   ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
   bool m_doSFSystematics;
+  bool m_isRemote;
   std::shared_ptr<top::TopConfig> m_config;
   mutable const top::Event* m_event;
  // std::string name;
