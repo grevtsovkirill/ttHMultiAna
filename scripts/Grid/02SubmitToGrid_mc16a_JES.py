@@ -33,7 +33,7 @@ config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #Th
 ####################################################################################
 #Nominal
 #config.suffix = 'DENEME2'
-config.nGBPerJob='10'
+config.nGBPerJob='4'
 config.maxFileSize='20000000000000'
 config.extFile='.root,.so'
 
