@@ -289,6 +289,7 @@ grid.Add("ALL_mc16d").datasets=[
 	"mc16_13TeV.410252.Sherpa_221_NNPDF30NNLO_ttbar_dilepton_MEPS_NLO.deriv.DAOD_HIGG8D1.e5450_e5984_s3126_r10201_r10210_p3480",
 	"mc16_13TeV.410276.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee_mll_1_5.deriv.DAOD_HIGG8D1.e6087_e5984_s3126_r10201_r10210_p3480",
 	"mc16_13TeV.410277.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttmumu_mll_1_5.deriv.DAOD_HIGG8D1.e6087_e5984_s3126_r10201_r10210_p3480",
+        "mc16_13TeV.410560.MadGraphPythia8EvtGen_A14_tZ_4fl_tchan_noAllHad.deriv.DAOD_HIGG8D1.e5803_e5984_s3126_r10201_r10210_p3480",
 	# missing 342282
 	# missing 345672
 	# missing 345673

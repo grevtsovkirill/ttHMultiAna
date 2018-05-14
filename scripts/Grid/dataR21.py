@@ -263,11 +263,11 @@ grid.Add("samples_data16").datasets=[
     "data16_13TeV.00304494.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
     "data16_13TeV.00300687.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
     "data16_13TeV.00310738.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
-    #missing 00310634
-    #missing 00309390
-    #missing 00310341
-    #missing 00310809
-    #missing 00310249
+    "data16_13TeV.00310634.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
+    "data16_13TeV.00309390.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
+    "data16_13TeV.00310341.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
+    "data16_13TeV.00310809.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
+    "data16_13TeV.00310249.physics_Main.deriv.DAOD_HIGG8D1.r9264_p3083_p3468",
 ]
 
 grid.Add("samples_data17").datasets=[
@@ -467,12 +467,12 @@ grid.Add("samples_data17").datasets=[
     "data17_13TeV.00334907.physics_Main.deriv.DAOD_HIGG8D1.f867_m1860_p3468",
     "data17_13TeV.00333519.physics_Main.deriv.DAOD_HIGG8D1.f857_m1855_p3468",
     "data17_13TeV.00339758.physics_Main.deriv.DAOD_HIGG8D1.f889_m1902_p3468",
-    #missing 00328374
-    #missing 00328099
-    #missing 00328393
-    #missing 00328333
-    #missing 00328221
-    #missing 00328042
-    #missing 00328263
+    "data17_13TeV.00328099.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
+    "data17_13TeV.00328393.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
+    "data17_13TeV.00328263.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
+    "data17_13TeV.00328374.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
+    "data17_13TeV.00328333.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
+    "data17_13TeV.00328221.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
+    "data17_13TeV.00328042.physics_Main.deriv.DAOD_HIGG8D1.f836_m1824_p3468",
 ]
 
