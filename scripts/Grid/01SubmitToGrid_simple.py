@@ -33,7 +33,7 @@ config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #Th
 #Nominal
 config.suffix = '2017-02-03-01'
 #config.suffix = 'DENEME2'
-config.maxNFilesPerJob = '20'
+config.nGBPerJob='4'
 config.settingsFile = 'ExtendedAnalysisTop_data.txt'
 config.maxFileSize='20000000000000'
 config.extFile='.root,.so'
