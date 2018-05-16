@@ -3,7 +3,6 @@ import TopExamples.ami
 import grid
 
 grid.Add("newNominal").datasets=[
-    "mc16_13TeV.364527.Sherpa_222_NNPDF30NNLO_munugamma_pty_15_35.deriv.DAOD_HIGG8D1.e5928_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.410560.MadGraphPythia8EvtGen_A14_tZ_4fl_tchan_noAllHad.deriv.DAOD_HIGG8D1.e5803_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.345708.Sherpa_222_NNPDF30NNLO_ggllllNoHiggs_0M4l130.deriv.DAOD_HIGG8D1.e6213_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.345709.Sherpa_222_NNPDF30NNLO_ggllllNoHiggs_130M4l.deriv.DAOD_HIGG8D1.e6213_e5984_a875_r10201_r10210_p3480",
@@ -16,11 +15,18 @@ grid.Add("newNominal").datasets=[
 ]
 
 grid.Add("newSyst").datasets=[
+    "mc16_13TeV.364242.Sherpa_222_NNPDF30NNLO_WWW_3l3v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364243.Sherpa_222_NNPDF30NNLO_WWZ_4l2v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364244.Sherpa_222_NNPDF30NNLO_WWZ_2l4v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364245.Sherpa_222_NNPDF30NNLO_WZZ_5l1v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364246.Sherpa_222_NNPDF30NNLO_WZZ_3l3v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364247.Sherpa_222_NNPDF30NNLO_ZZZ_6l0v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364248.Sherpa_222_NNPDF30NNLO_ZZZ_4l2v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
+	"mc16_13TeV.364249.Sherpa_222_NNPDF30NNLO_ZZZ_2l4v_EW6.deriv.DAOD_HIGG8D1.e5887_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.410560.MadGraphPythia8EvtGen_A14_tZ_4fl_tchan_noAllHad.deriv.DAOD_HIGG8D1.e5803_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.345708.Sherpa_222_NNPDF30NNLO_ggllllNoHiggs_0M4l130.deriv.DAOD_HIGG8D1.e6213_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.345709.Sherpa_222_NNPDF30NNLO_ggllllNoHiggs_130M4l.deriv.DAOD_HIGG8D1.e6213_e5984_a875_r10201_r10210_p3480",
     "mc16_13TeV.345716.Sherpa_222_NNPDF30NNLO_ggllvvIntNoHiggs.deriv.DAOD_HIGG8D1.e6480_e5984_s3126_r10201_r10210_p3480",
-    #missing 410278                                                                                                                           
     #missing 410408                                                                                                                            
     #missing 364284                                                                                                                          
     #missing 364286                                                                                                                            
