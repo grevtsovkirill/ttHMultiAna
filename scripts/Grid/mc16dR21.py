@@ -118,7 +118,6 @@ grid.Add("singleSample_410472").datasets=[
 grid.Add("highPriority_NominalConfig").datasets=[
     "mc16_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.deriv.DAOD_HIGG8D1.e4706_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.343367.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e4706_e5984_s3126_r10201_r10210_p3480",
-    "mc16_13TeV.363355.Sherpa_221_NNPDF30NNLO_ZqqZvv.deriv.DAOD_HIGG8D1.e5525_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.363356.Sherpa_221_NNPDF30NNLO_ZqqZll.deriv.DAOD_HIGG8D1.e5525_s3126_r10201_r10210_p3480",
     "mc16_13TeV.363358.Sherpa_221_NNPDF30NNLO_WqqZll.deriv.DAOD_HIGG8D1.e5525_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.363358.Sherpa_221_NNPDF30NNLO_WqqZll.deriv.DAOD_HIGG8D1.e5525_s3126_r10201_r10210_p3480",
@@ -394,5 +393,7 @@ grid.Add("ALL_mc16d").datasets=[
 	# missing 364500
 	# missing 410278
 	# missing 410501
+        "mc16_13TeV.363355.Sherpa_221_NNPDF30NNLO_ZqqZvv.deriv.DAOD_HIGG8D1.e5525_e5984_s3126_r10201_r10210_p3480",
+
 ]
 
