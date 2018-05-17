@@ -27,6 +27,10 @@ do
     sed 's|#JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root|JetUncertainties_QGFracFile $WorkDir_DIR/data/ttHMultilepton/data/'$dsid'_preselections_FlavourComposition.root|g' generic_config_systmc16d.txt > generic_config_systmc16d_$dsid.txt
 done
 
+for dsid in 345674 345673 345672
+do
+sed 's|#JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root|JetUncertainties_QGFracFile $WorkDir_DIR/data/ttHMultilepton/data/'$dsid'_preselections_FlavourComposition.root|g' generic_config_systmc16c.txt > generic_config_systmc16c_$dsid.txt
+done
 
 cd ..
 echo "Done. You must rebuild the code now."
