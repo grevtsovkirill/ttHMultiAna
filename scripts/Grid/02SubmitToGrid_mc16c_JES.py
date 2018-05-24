@@ -18,12 +18,12 @@ config.CMake = True
 config.code          = 'top-xaod'
 config.gridUsername  = 'phys-higgs'
 config.groupProduction= 'True'
-config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
+#config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
 config.noSubmit      = True
 config.memory	     = ''
 
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
-config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
+#config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 #config.forceSite     = 'ANALY_CONNECT'
 #config.destSE        = ''
 
@@ -32,6 +32,7 @@ config.destSE        = 'IN2P3-CPPM_LOCALGROUPDISK'#'BNL-OSG2_LOCALGROUPDISK' #Th
 #config.suffix = 'DENEME2'
 config.nGBPerJob='4'
 config.maxFileSize='20000000000000'
+config.otherOptions='--forceStaged'
 config.extFile='.root,.so'
 
 
