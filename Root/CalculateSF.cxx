@@ -26,8 +26,11 @@ CalculateSF::CalculateSF(const std::string& params, std::shared_ptr<top::TopConf
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
    }
 
-   m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
-   
+   //m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
+   top::ScaleFactorRetriever* m_sfRetriever = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
+   top::check(asg::setProperty(m_sfRetriever, "config", config), "Failed to set config");
+   top::check(m_sfRetriever->initialize(), "Failed to initialize");
+	
   m_params = params;
 
 }

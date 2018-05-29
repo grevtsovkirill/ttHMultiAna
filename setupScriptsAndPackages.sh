@@ -6,7 +6,7 @@ setupATLAS
 
 #Setting up AnalysisTop release in source directory and copying patched packages
 cd ../
-asetup AnalysisTop,21.2.26,here
+asetup AnalysisTop,21.2.30,here
 cp -r /eos/user/a/acasha/TTHML/TopCPTools/ ./
 
 cd ttHMultiAna/share
