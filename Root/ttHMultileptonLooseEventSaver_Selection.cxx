@@ -539,14 +539,15 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue; // break after doing nominal
-    lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false);
-    lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true);
-    lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false);
-    lep.SFTrigTight[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, true);
+	std::cout << "ALBERT IN EVENTSAVER" << std::endl;
+    lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false, m_config);
+    lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true, m_config);
+    lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false, m_config);
+    lep.SFTrigTight[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, true, m_config);
     if (lep.SFTrigLoose[ivar] == 0) lep.SFTrigLoose[ivar] = 1;
     if (lep.SFTrigTight[ivar] == 0) lep.SFTrigTight[ivar] = 1;
-    lep.SFIsoLoose[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, false);
-    lep.SFIsoTight[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, true);
+    lep.SFIsoLoose[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, false, m_config);
+    lep.SFIsoTight[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, true, m_config);
     lep.SFReco[ivar] = m_sfRetriever->electronSF_Reco(el, ivar);
     lep.SFTTVA[ivar] = 1;
     // I know the loose/tight swap looks weird, but it's intentional
@@ -956,12 +957,12 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // I know the loose/tight swap looks weird, but it's intentional
-    lep.SFIDLoose[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, false);
-    lep.SFIDTight[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, true);
-    lep.SFTrigLoose[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, false);
-    lep.SFTrigTight[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, true);
-    lep.SFIsoLoose[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, false);
-    lep.SFIsoTight[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, true);
+    lep.SFIDLoose[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, false, m_config);
+    lep.SFIDTight[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, true, m_config);
+    lep.SFTrigLoose[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, false, m_config);
+    lep.SFTrigTight[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, true, m_config);
+    lep.SFIsoLoose[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, false, m_config);
+    lep.SFIsoTight[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, true, m_config);
     lep.SFTTVA[ivar] = m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0;
     lep.SFReco[ivar] = 1;
     lep.EffTrigLoose[ivar] = muonEff_Trigger(mu, m_config->muonQuality(), ivar);

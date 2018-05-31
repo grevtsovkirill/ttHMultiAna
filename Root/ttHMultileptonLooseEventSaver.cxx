@@ -222,7 +222,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
 
   //m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( m_config ) );
   top::ScaleFactorRetriever* m_sfRetriever = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
-  top::check(asg::setProperty(m_sfRetriever, "config", config), "Failed to set config");
+  top::check(asg::setProperty(m_sfRetriever, "config", m_config), "Failed to set config");
   top::check(m_sfRetriever->initialize(), "Failed to initialize");	
 
 /*std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>

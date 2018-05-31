@@ -25,7 +25,18 @@ CalculateSF::CalculateSF(const std::string& params, std::shared_ptr<top::TopConf
      m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
    }
+   
+   /*if(asg::ToolStore::contains<ScaleFactorRetriever>("top::ScaleFactorRetriever")){
+     m_sfRetriever = asg::ToolStore::get<ScaleFactorRetriever>("top::ScaleFactorRetriever");
+   }
+   else{
+     top::ScaleFactorRetriever* m_sfRetriever = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
+     top::check(asg::setProperty(m_sfRetriever, "config", m_config), "Failed to set config");
+     top::check(m_sfRetriever->initialize(), "Failed to initalialise");
+   }
+	*/
 
+   std::cout << "ALBERT ALBERT ALBERT ALBERT ALBERT ALBERT ALBERT ALBERT ALBERT ALBERT LABERT ALBERT ALBERT ALBERT ALBERT ALBERT ALBERT " << std::endl;
    //m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
    top::ScaleFactorRetriever* m_sfRetriever = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
    top::check(asg::setProperty(m_sfRetriever, "config", config), "Failed to set config");
@@ -57,7 +68,6 @@ bool CalculateSF::apply(const top::Event& event) const {
     top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Electrons");
 	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Muons");
 	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Taus"); 
-
 
 
 	typedef std::tuple<const TLorentzVector*, int, std::string> sorttype_t;
@@ -147,7 +157,7 @@ bool CalculateSF::apply(const top::Event& event) const {
 	  std::string type;
 	  std::tie(p4, lidx, type) = lepItr;
 	  if(type == "ELECTRON"){
-	    doEventSFs_Helper(*(*Electrons)[lidx], tightIsLoose[tightItr], tthevt->m_lep_sf_names);
+		doEventSFs_Helper(*(*Electrons)[lidx], tightIsLoose[tightItr], tthevt->m_lep_sf_names);
 	  } else if (type == "MUON"){
 	    doEventSFs_Helper(*(*Muons).at(lidx), tightIsLoose.at(tightItr), tthevt->m_lep_sf_names);
 	  } else { std::cout << "ERROR!! INVALID TYPE" << std::endl;}
@@ -228,26 +238,31 @@ std::cout << " lepSFObjLoose: " << tthevt->lepSFObjLoose[top::topSFSyst::nominal
 void CalculateSF::doEventSFs_Helper(const xAOD::Electron_v1& el, bool tightIsLoose, std::map<top::topSFSyst, std::string> m_lep_sf_names) const {
 	for (const auto& systvar : m_lep_sf_names){	
 	  auto ivar = systvar.first;
+	  std::cout << "Albert ivar=" << m_config->electronID() << std::endl; 
 	  
-	  m_SF.lepSFIDLoose[ivar] *= m_sfRetriever->electronSF_ID(el, ivar, false);
-	  m_SF.lepSFIDTight[ivar] *= m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose);
-	  
-	  m_SF.lepSFIsoLoose[ivar] *= m_sfRetriever->electronSF_Isol(el, ivar, false);
-	  m_SF.lepSFIsoTight[ivar] *= m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose);
-	  
+	  std::cout << "Albert about to retrieve" << std::endl; 
+	  m_SF.lepSFIDLoose[ivar] *= m_sfRetriever->electronSF_ID(el, ivar, false, m_config);
+	  std::cout << "Albert Retreieved Loose" << std::endl;
+	  m_SF.lepSFIDTight[ivar] *= m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose, m_config);
+	  std::cout << "Albert Retrieved Tight" << std::endl;	  
+
+	  m_SF.lepSFIsoLoose[ivar] *= m_sfRetriever->electronSF_Isol(el, ivar, false, m_config);
+	  m_SF.lepSFIsoTight[ivar] *= m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose, m_config);
+	  std::cout << "Albert retrieved Isol" << std::endl;	 
+ 
 	  m_SF.lepSFReco[ivar] *= m_sfRetriever->electronSF_Reco(el, ivar);
 	  m_SF.lepSFTTVA[ivar] *= 1;
 	  
-	  m_SF.lepSFTrigLoose[ivar] *= m_sfRetriever->electronSF_Trigger(el, ivar, false);
-	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->electronSF_Trigger(el, ivar, !tightIsLoose);
+	  m_SF.lepSFTrigLoose[ivar] *= m_sfRetriever->electronSF_Trigger(el, ivar, false, m_config);
+	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->electronSF_Trigger(el, ivar, !tightIsLoose, m_config);
 	  if(m_SF.lepSFTrigLoose[ivar] == 0) m_SF.lepSFTrigLoose[ivar] = 1;
 	  if(m_SF.lepSFTrigTight[ivar] == 0) m_SF.lepSFTrigTight[ivar] = 1;
-	 
+	  std::cout << "Albert retrieved trigger" << std::endl; 
 
 
-	  m_SF.lepSFObjLoose[ivar]*= m_sfRetriever->electronSF_ID(el, ivar, false) * m_sfRetriever->electronSF_Isol(el, ivar, false) * m_sfRetriever->electronSF_Reco(el, ivar);
+	  m_SF.lepSFObjLoose[ivar]*= m_sfRetriever->electronSF_ID(el, ivar, false,m_config) * m_sfRetriever->electronSF_Isol(el, ivar, false, m_config) * m_sfRetriever->electronSF_Reco(el, ivar);
 
-	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose) * m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose) * m_sfRetriever->electronSF_Reco(el, ivar));
+	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose, m_config) * m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose, m_config) * m_sfRetriever->electronSF_Reco(el, ivar));
  
 	  //m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFReco[ivar];
 	  //m_SF.lepSFObjTight[ivar] *= (tightIsLoose ? m_SF.lepSFObjLoose[ivar] :  m_SF.lepSFIDTight[ivar]*m_SF.lepSFIsoTight[ivar]*m_SF.lepSFReco[ivar] );
@@ -257,23 +272,23 @@ void CalculateSF::doEventSFs_Helper(const  xAOD::Muon_v1& mu, bool tightIsLoose,
 	bool m_isMC = m_config->isMC();
 	for (const auto& systvar : m_lep_sf_names){
 	  auto ivar = systvar.first;
-	  m_SF.lepSFIDLoose[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, false);
-	  m_SF.lepSFIDTight[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, !tightIsLoose);
+	  m_SF.lepSFIDLoose[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, false ,m_config);
+	  m_SF.lepSFIDTight[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, !tightIsLoose ,m_config);
 	  
-	  m_SF.lepSFIsoLoose[ivar] *= m_sfRetriever->muonSF_Isol(mu, ivar, false);
-	  m_SF.lepSFIsoTight[ivar] *= m_sfRetriever->muonSF_Isol(mu, ivar, !tightIsLoose);
+	  m_SF.lepSFIsoLoose[ivar] *= m_sfRetriever->muonSF_Isol(mu, ivar, false, m_config);
+	  m_SF.lepSFIsoTight[ivar] *= m_sfRetriever->muonSF_Isol(mu, ivar, !tightIsLoose,m_config);
 	  
 	  m_SF.lepSFReco[ivar] *= 1;
 	  m_SF.lepSFTTVA[ivar] *= m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0;
 	  
-	  m_SF.lepSFTrigLoose[ivar] *= m_sfRetriever->muonSF_Trigger(mu, ivar, false);
-	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->muonSF_Trigger(mu, ivar, !tightIsLoose);
+	  m_SF.lepSFTrigLoose[ivar] *= m_sfRetriever->muonSF_Trigger(mu, ivar, false,m_config);
+	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->muonSF_Trigger(mu, ivar, !tightIsLoose,m_config);
 	  if(m_SF.lepSFTrigLoose[ivar] == 0) m_SF.lepSFTrigLoose[ivar] = 1;
 	  if(m_SF.lepSFTrigTight[ivar] == 0) m_SF.lepSFTrigTight[ivar] = 1;
 
-	  m_SF.lepSFObjLoose[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, false) * m_sfRetriever->muonSF_Isol(mu, ivar, false) * ( m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0) ;
+	  m_SF.lepSFObjLoose[ivar] *= m_sfRetriever->muonSF_ID(mu, ivar, false,m_config) * m_sfRetriever->muonSF_Isol(mu, ivar, false,m_config) * ( m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0) ;
 
-	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->muonSF_ID(mu, ivar, !tightIsLoose) * m_sfRetriever->muonSF_Isol(mu, ivar, !tightIsLoose) * (m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0));
+	  m_SF.lepSFObjTight[ivar]*= (tightIsLoose? m_SF.lepSFObjLoose[ivar] : m_sfRetriever->muonSF_ID(mu, ivar, !tightIsLoose,m_config) * m_sfRetriever->muonSF_Isol(mu, ivar, !tightIsLoose,m_config) * (m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0));
 
 	  
 //	  m_SF.lepSFObjLoose[ivar] *= m_SF.lepSFIDLoose[ivar]*m_SF.lepSFIsoLoose[ivar]*m_SF.lepSFTTVA[ivar];

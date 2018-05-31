@@ -23,7 +23,8 @@ public:
 	std::string name() const override;
     bool applyParticleLevel(const top::ParticleLevelEvent& event) const override;
      ///Scale factors
-     std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
+     //std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
+	top::ScaleFactorRetriever* m_sfRetriever;
 
 	ttHMLAsgHelper* m_asgHelper;
 	bool m_isRemote;

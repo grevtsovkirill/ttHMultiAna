@@ -1,0 +1,125 @@
+--- TopEgammaCPTools.cxx.orig	2018-05-29 15:28:33.000000001 +0200
++++ TopEgammaCPTools.cxx	2018-05-29 15:28:32.000000001 +0200
+@@ -225,12 +225,12 @@
+   m_electronEffSFIDFile           = electronSFMapFilePath("ID");
+   m_electronEffSFTriggerFile      = electronSFMapFilePath("trigger");
+   m_electronEffTriggerFile        = electronSFMapFilePath("trigger");
+-  m_electronEffSFIsoFile          = electronSFMapFilePath("isolation");
++  m_electronEffSFIsoFile          = electronSFMapFilePath("isolation", electronIsolation);
+   // - Loose
+   m_electronEffSFIDLooseFile      = electronSFMapFilePath("ID");
+   m_electronEffSFTriggerLooseFile = electronSFMapFilePath("trigger");
+   m_electronEffTriggerLooseFile   = electronSFMapFilePath("trigger");
+-  m_electronEffSFIsoLooseFile     = electronSFMapFilePath("isolation");
++  m_electronEffSFIsoLooseFile     = electronSFMapFilePath("isolation", electronIsolationLoose);
+ 
+   // Perform check on the isolation WP and identify if there are cases where the SF is not available
+   if( (electronIsolation != "None" && m_electronEffSFIsoFile == "") || (electronIsolationLoose != "None" && m_electronEffSFIsoLooseFile == "") ){
+@@ -246,6 +246,7 @@
+     }
+   }
+ 
++	//	std::cout << "ALBERT Trigger Key : " << trigger_key << std::endl;
+   // Define the trigger string for scale factors
+   const std::string trigger_string = "SINGLE_E_2015_e24_lhmedium_L1EM20VH_"
+                                      "OR_e60_lhmedium_"
+@@ -268,16 +269,51 @@
+   // ID SFs
+   m_electronEffSFID           = setupElectronSFToolWithMap(elSFPrefix + "ID", m_electronEffSFIDFile, "", electronID, "", "", dataType);
+   m_electronEffSFIDLoose      = setupElectronSFToolWithMap(elSFPrefix + "IDLoose", m_electronEffSFIDLooseFile, "", electronIDLoose, "", "", dataType);
++	std::cout << "ALBERT at triggerSFs" << std::endl;
++  bool changeBack = false, changeBackLoose = false;
++  if(electronIsolation == "PromptLepton"){electronIsolation = "None"; changeBack = true;}
++  if(electronIsolationLoose == "PromptLepton"){electronIsolationLoose = "None"; changeBackLoose = true;}
++
+   // Trigger SFs
+   m_electronEffSFTrigger      = setupElectronSFToolWithMap(elSFPrefix + "TriggerSF", m_electronEffSFTriggerFile, "", electronID, electronIsolation, trigger_string, dataType);
+   m_electronEffSFTriggerLoose = setupElectronSFToolWithMap(elSFPrefix + "TriggerSFLoose", m_electronEffSFTriggerLooseFile, "", electronIDLoose, electronIsolationLoose, trigger_string, dataType);
+   // Trigger Efficiencies
+   m_electronEffTrigger        = setupElectronSFToolWithMap(elSFPrefix + "Trigger", m_electronEffTriggerFile, "", electronID, electronIsolation, "Eff_"+trigger_string, dataType);
+   m_electronEffTriggerLoose   = setupElectronSFToolWithMap(elSFPrefix + "TriggerLoose", m_electronEffTriggerLooseFile, "", electronIDLoose, electronIsolationLoose, "Eff_"+trigger_string, dataType);
++  
++  if(changeBack){electronIsolation = "PromptLepton";}
++  if(changeBackLoose){electronIsolationLoose = "PromptLepton";}
++  std::cout << "ALBERT atisolation" << std::endl;
++  if(electronIsolation == "PromptLepton"){
++    std::vector< std::string > albert_filenames;
++    albert_filenames.push_back(m_electronEffSFIsoFile);
++    m_electronEffSFIso = setupElectronSFTool(elSFPrefix + "Iso", albert_filenames, dataType);
++  } else { m_electronEffSFIso          = setupElectronSFToolWithMap(elSFPrefix + "Iso", m_electronEffSFIsoFile,  "", electronID, electronIsolation, "", dataType);}
++
++  std::cout << "ALBERT DONE ISOLATION NORMAL" << std::endl;
++  std::cout << "ALBERT ELECTRON ISOLATION LOOSE : " << electronIsolationLoose <<std::endl;
++  if(electronIsolationLoose == "PromptLepton"){
++	std::cout << "ALBERT IN ELECTRON ISOLATION LOOST " << std::endl;
++    std::vector< std::string > albert_filenames_loose;
++    albert_filenames_loose.push_back(m_electronEffSFIsoLooseFile);
++    m_electronEffSFIsoLoose = setupElectronSFTool(elSFPrefix + "IsoLoose", albert_filenames_loose, dataType);
++  } else { m_electronEffSFIsoLoose          = setupElectronSFToolWithMap(elSFPrefix + "IsoLoose", m_electronEffSFIsoLooseFile,  "", electronID, electronIsolation, "", dataType);}
++std::cout << "Albert done isolation loose " << std::endl;
++/*
+   // Isolation SFs
++  std::cout << "ALBERT atisolation" << std::endl;
+   m_electronEffSFIso          = setupElectronSFToolWithMap(elSFPrefix + "Iso", m_electronEffSFIsoFile,  "", electronID, electronIsolation, "", dataType);
+-  m_electronEffSFIsoLoose     = setupElectronSFToolWithMap(elSFPrefix + "IsoLoose", m_electronEffSFIsoLooseFile, "", electronID, electronIsolationLoose, "", dataType);
+-
++  std::cout << "Albert at isolation loose " << std::endl;
++  electronIsolationLoose = "PromptLepton";
++  
++  std::vector< std::string > albert_filenames;
++  albert_filenames.push_back(m_electronEffSFIsoLooseFile);
++  
++  m_electronEffSFIsoLoose = setupElectronSFTool(elSFPrefix + "IsoLoose", albert_filenames, dataType);
++  //m_electronEffSFIsoLoose     = setupElectronSFToolWithMap(elSFPrefix + "IsoLoose", m_electronEffSFIsoLooseFile, "", electronID, electronIsolationLoose, "", dataType);
++  //m_electronEffSFIsoLoose     = setupElectronSFToolWithMap(elSFPrefix + "IsoLoose", m_electronEffSFIsoLooseFile,"","","","",dataType);
++  std::cout << "Albert done isolation loose " << std::endl;
++*/
+   // Charge ID cannot use maps at the moment so we defualt to the old method
+   // for the moment only for MediumLH and FixedCutTight isolation
+   // either at Tight or Loose level
+@@ -301,6 +337,7 @@
+ 
+ IAsgElectronEfficiencyCorrectionTool*
+ EgammaCPTools::setupElectronSFTool(const std::string& name, const std::vector<std::string>& file_list, int data_type) {
++  std::cout << "ALBERT SETTING UP OLD STYLE ELECTRONSFTOOL" << std::endl;
+   IAsgElectronEfficiencyCorrectionTool* tool = nullptr;
+   if (asg::ToolStore::contains<IAsgElectronEfficiencyCorrectionTool>(name)) {
+     tool = asg::ToolStore::get<IAsgElectronEfficiencyCorrectionTool>(name);
+@@ -353,11 +390,13 @@
+         top::check(asg::setProperty(tool, "IsoKey", iso_key), "Failed to set IsoKey to " + name);
+       }
+       if(trigger_key != "" && trigger_key != "None"){
++		std::cout << "ALBERT Trigger Key : " << trigger_key << std::endl;
+ 	ATH_MSG_INFO(" Adding TriggerKey : " + trigger_key);
+         top::check(asg::setProperty(tool, "TriggerKey", trigger_key), "Failed to set TriggerKey to " + name);
+       }
+       // Initialise this tool
+-      top::check(tool->initialize(), "Failed to initialize " + name);
++    std::cout << "Albert Initializing " << std::endl;  
++    top::check(tool->initialize(), "Failed to initialize " + name);
+   }
+   return tool;
+ }
+@@ -388,7 +427,7 @@
+   return PathResolverFindCalibFile(el_calib_path + file_path);
+ }
+ 
+-std::string EgammaCPTools::electronSFMapFilePath(const std::string& type) {
++std::string EgammaCPTools::electronSFMapFilePath(const std::string& type, const std::string& isolation) {
+     // Store here the paths to maps which may be updated with new recommendations
+     // Currently can use maps for reco, id, iso, trigger but not ChargeID
+     // Temporary: Take away constness of path since we have a mixture for rel20 and 21 at the moment.
+@@ -403,8 +442,12 @@
+     }
+     else if(type == "isolation"){
+       file_path = "map0.txt";
++      if (isolation == "PromptLepton" || isolation == "PromptLeptonCFT") { // should be only true in case of using ttH-ML private root file
++        char* const rc = getenv("WorkDir_DIR");
++        return PathResolverFindCalibFile( std::string(rc)+"/data/ttHMultilepton/data/R21_PLV_SFs/efficiencySF.Isolation.TightLLH_d0z0_v13_PLVeto_CFTtight_ambiguity0_isolFixedCutLoose.root");
++      }
+     }
+-    else if(type == "trigger"){
++	else if(type == "trigger"){
+       // Need to still use old path for triggers
+       el_calib_path = "ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v3/";
+       file_path = "map1.txt";

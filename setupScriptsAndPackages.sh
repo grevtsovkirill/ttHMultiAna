@@ -8,6 +8,7 @@ setupATLAS
 cd ../
 asetup AnalysisTop,21.2.30,here
 cp -r /eos/user/a/acasha/TTHML/TopCPTools/ ./
+cp -r /eos/user/a/acasha/TTHML/TopCorrections/ ./
 
 cd ttHMultiAna/share
 
