@@ -539,7 +539,6 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue; // break after doing nominal
-	std::cout << "ALBERT IN EVENTSAVER" << std::endl;
     lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false, m_config);
     lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true, m_config);
     lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false, m_config);

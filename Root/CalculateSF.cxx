@@ -238,17 +238,12 @@ std::cout << " lepSFObjLoose: " << tthevt->lepSFObjLoose[top::topSFSyst::nominal
 void CalculateSF::doEventSFs_Helper(const xAOD::Electron_v1& el, bool tightIsLoose, std::map<top::topSFSyst, std::string> m_lep_sf_names) const {
 	for (const auto& systvar : m_lep_sf_names){	
 	  auto ivar = systvar.first;
-	  std::cout << "Albert ivar=" << m_config->electronID() << std::endl; 
 	  
-	  std::cout << "Albert about to retrieve" << std::endl; 
 	  m_SF.lepSFIDLoose[ivar] *= m_sfRetriever->electronSF_ID(el, ivar, false, m_config);
-	  std::cout << "Albert Retreieved Loose" << std::endl;
 	  m_SF.lepSFIDTight[ivar] *= m_sfRetriever->electronSF_ID(el, ivar, !tightIsLoose, m_config);
-	  std::cout << "Albert Retrieved Tight" << std::endl;	  
 
 	  m_SF.lepSFIsoLoose[ivar] *= m_sfRetriever->electronSF_Isol(el, ivar, false, m_config);
 	  m_SF.lepSFIsoTight[ivar] *= m_sfRetriever->electronSF_Isol(el, ivar, !tightIsLoose, m_config);
-	  std::cout << "Albert retrieved Isol" << std::endl;	 
  
 	  m_SF.lepSFReco[ivar] *= m_sfRetriever->electronSF_Reco(el, ivar);
 	  m_SF.lepSFTTVA[ivar] *= 1;
@@ -257,7 +252,6 @@ void CalculateSF::doEventSFs_Helper(const xAOD::Electron_v1& el, bool tightIsLoo
 	  m_SF.lepSFTrigTight[ivar] *= m_sfRetriever->electronSF_Trigger(el, ivar, !tightIsLoose, m_config);
 	  if(m_SF.lepSFTrigLoose[ivar] == 0) m_SF.lepSFTrigLoose[ivar] = 1;
 	  if(m_SF.lepSFTrigTight[ivar] == 0) m_SF.lepSFTrigTight[ivar] = 1;
-	  std::cout << "Albert retrieved trigger" << std::endl; 
 
 
 	  m_SF.lepSFObjLoose[ivar]*= m_sfRetriever->electronSF_ID(el, ivar, false,m_config) * m_sfRetriever->electronSF_Isol(el, ivar, false, m_config) * m_sfRetriever->electronSF_Reco(el, ivar);

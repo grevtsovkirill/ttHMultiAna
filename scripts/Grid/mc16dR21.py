@@ -2,6 +2,23 @@ import TopExamples.grid
 import TopExamples.ami
 import grid
 
+grid.Add("p3552_submission").datasets=[
+	"mc16_13TeV.345875.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_dilep.deriv.DAOD_HIGG8D1.e6474_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.345874.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_semilep.deriv.DAOD_HIGG8D1.e6474_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.410644.PowhegPythia8EvtGen_A14_singletop_schan_lept_top.deriv.DAOD_HIGG8D1.e6527_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.345874.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_semilep.deriv.DAOD_HIGG8D1.e6474_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.410659.PhPy8EG_A14_tchan_BW50_lept_antitop.deriv.DAOD_HIGG8D1.e6671_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.410645.PowhegPythia8EvtGen_A14_singletop_schan_lept_antitop.deriv.DAOD_HIGG8D1.e6527_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.344096.CalcHepPythia8_A14_CTEQ6L1_HppHmm_200GeV_4W.deriv.DAOD_HIGG8D1.e5024_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.410408.aMcAtNloPythia8EvtGen_tWZ_Ztoll_minDR1.deriv.DAOD_HIGG8D1.e6423_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.410658.PhPy8EG_A14_tchan_BW50_lept_top.deriv.DAOD_HIGG8D1.e6671_e5984_s3126_r9364_r9315_p3552",
+	"mc16_13TeV.345940.aMcAtNloPythia8EvtGen_ttH_dilep.deriv.DAOD_HIGG8D1.e6654_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.345942.aMcAtNloPythia8EvtGen_ttH_allhad.deriv.DAOD_HIGG8D1.e6654_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.345941.aMcAtNloPythia8EvtGen_ttH_semilep.deriv.DAOD_HIGG8D1.e6654_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.344098.CalcHepPythia8_A14_CTEQ6L1_HppHmm_400GeV_4W.deriv.DAOD_HIGG8D1.e5024_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.345875.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_dilep.deriv.DAOD_HIGG8D1.e6474_e5984_a875_r9364_r9315_p3552",
+	"mc16_13TeV.345873.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6553_e5984_s3126_r9364_r9315_p3552",
+]
 
 
 grid.Add("singleSample_410155").datasets=[
