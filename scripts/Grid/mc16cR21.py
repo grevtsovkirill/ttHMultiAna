@@ -3,7 +3,15 @@ import TopExamples.ami
 
 import grid
 
-
+grid.Add("singleSample_345672").datasets=[
+	"mc16_13TeV.345672.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9781_r9778_p3371",
+]
+grid.Add("singleSample_345673").datasets=[
+	"mc16_13TeV.345673.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_semilep.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9781_r9778_p3371",
+]
+grid.Add("singleSample_345674").datasets=[
+	"mc16_13TeV.345674.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_dilep.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9781_r9778_p3371",
+]
 
 grid.Add("highPriority_mc16c").datasets=[
 

@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 import TopExamples.grid
-import mc16aR21
-#import mc16cR21
-#import dataR21
-#import MC_EPS
-#import Data16
+import mc16cR21
 import os
 import grid
 import shutil
@@ -39,24 +35,19 @@ config.maxFileSize='20000000000000'
 config.extFile='.root,.so'
 
 
-if not os.path.isfile("generic_config_systmc16d.txt"):
+if not os.path.isfile("generic_config_systmc16c.txt"):
 	print "Missing generic_config_systmc16d.txt. Code will crash. Exiting..."
 	sys.exit()
-for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
-	if not os.path.isfile("generic_config_systmc16d_" + dsid + ".txt"):
-		print "Missing generic_config_systmc16d_"+ dsid + ".txt. Code will crash. Exiting..."
+for dsid in ["345674", "345673", "345672"]:
+	if not os.path.isfile("generic_config_systmc16c_" + dsid + ".txt"):
+		print "Missing generic_config_systmc16c_"+ dsid + ".txt. Code will crash. Exiting..."
 		sys.exit()
 
 baseSuffix = "2018-05-02-01"
-for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
-	config.settingsFile = 'generic_config_systmc16d_' + dsid + '.txt'
+
+for dsid in ["345674", "345673", "345672"]:
+	config.settingsFile = 'generic_config_systmc16c_' + dsid + '.txt'
 	config.suffix = baseSuffix + "-" + dsid
 	names = ["singleSample_" + dsid,]
 	samples = grid.Samples(names)
 	grid.submit(config, samples)
-
-config.suffix = baseSuffix
-names = ["highPriority_NominalConfig",]
-config.settingsFile = "generic_config_systmc16d.txt"
-samples = grid.Samples(names)
-grid.submit(config, samples)
