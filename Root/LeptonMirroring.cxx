@@ -130,5 +130,8 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &SFObjLoose[0],  "lep_SFObjLoose_", index);
   CreateBranch(tree, &SFObjTight[0],  "lep_SFObjTight_", index);
   CreateBranch(tree, &nInnerPix, "lep_nInnerPix_", index);
+  CreateBranch(tree, &firstEgMotherPdgId, "lep_firstEgMotherPdgId_", index);
+  CreateBranch(tree, &firstEgMotherTruthType, "lep_firstEgMotherTruthType_", index);
+  CreateBranch(tree, &firstEgMotherTruthOrigin, "lep_firstEgMotherTruthOrigin_", index);
 }
 
