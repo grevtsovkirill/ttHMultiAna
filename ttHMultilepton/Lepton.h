@@ -168,6 +168,9 @@ namespace ttHML {
     int     truthParentStatus;
     int     truthParentType;
     int     truthParentOrigin;
+    int     firstEgMotherPdgId;
+    int     firstEgMotherTruthType;
+    int     firstEgMotherTruthOrigin;
     float   truthPt;
     float   truthEta;
     float   truthPhi;

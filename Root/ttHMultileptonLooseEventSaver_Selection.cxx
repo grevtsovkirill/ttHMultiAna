@@ -492,6 +492,15 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   static SG::AuxElement::Accessor<float> truthRapidity("truthRapidity");
   lep.truthRapidity = ( truthRapidity.isAvailable(el) ) ? truthRapidity(el) : -1;
   
+  static SG::AuxElement::Accessor<int> firstEgMotherPdgId("firstEgMotherPdgId");
+  lep.firstEgMotherPdgId = ( firstEgMotherPdgId.isAvailable(el) ) ? firstEgMotherPdgId(el) : -99;
+
+  static SG::AuxElement::Accessor<int> firstEgMotherTruthType("firstEgMotherTruthType");
+  lep.firstEgMotherTruthType = ( firstEgMotherTruthType.isAvailable(el) ) ? firstEgMotherTruthType(el) : -99;
+
+  static SG::AuxElement::Accessor<int> firstEgMotherTruthOrigin("firstEgMotherTruthOrigin");
+  lep.firstEgMotherTruthOrigin = ( firstEgMotherTruthOrigin.isAvailable(el) ) ? firstEgMotherTruthOrigin(el) : -99;
+
   // trigger matching, electron pt > 25 GeV
   if (m_runYear == 2015) {
     lep.isTrigMatch = ( el.pt() > 25e3 && (

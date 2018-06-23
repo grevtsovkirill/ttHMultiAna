@@ -775,6 +775,18 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 	  if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
 	  return (int) m_el_true_type; },   *systematicTree, "electron_firstEgMotherPdgId");
 
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          int m_el_true_type = -99;
+          static SG::AuxElement::Accessor<int> typeel("firstEgMotherTruthType");
+          if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
+          return (int) m_el_true_type; },   *systematicTree, "electron_firstEgMotherTruthType");
+
+      Wrap2(elevec, [=](const xAOD::Electron& ele) {
+          int m_el_true_type = -99;
+          static SG::AuxElement::Accessor<int> typeel("firstEgMotherTruthOrigin");
+          if (typeel.isAvailable(ele)) m_el_true_type = typeel(ele);
+          return (int) m_el_true_type; },   *systematicTree, "electron_firstEgMotherTruthOrigin");
+
       // Add non-prompt electron vars
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<double>("jetFitterComb"); }, *systematicTree, "electron_jetFitterComb");
 
