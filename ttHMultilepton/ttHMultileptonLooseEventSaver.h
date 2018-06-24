@@ -107,7 +107,9 @@ extern TH1I* m_tauCutflow;
       //TH1* m_tauCutflow;
 
   ///Scale factors
-      std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
+//      std::unique_ptr<top::ScaleFactorRetriever> m_sfRetriever;
+	top::ScaleFactorRetriever* m_sfRetriever;
+
 
       ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
       ToolHandle<CP::IPileupReweightingTool> m_purwtool;
