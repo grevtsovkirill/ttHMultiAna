@@ -26,8 +26,18 @@ CalculateSF::CalculateSF(const std::string& params, std::shared_ptr<top::TopConf
      top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
    }
 
-   m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
-   
+//   m_sfRetriever = std::unique_ptr<top::ScaleFactorRetriever> ( new top::ScaleFactorRetriever( config ) );
+
+	if(asg::ToolStore::contains<top::ScaleFactorRetriever>("top::ScaleFactorRetriever")){
+	      m_sfRetriever = asg::ToolStore::get<top::ScaleFactorRetriever>("top::ScaleFactorRetriever");
+	    }
+	    else{
+	      top::ScaleFactorRetriever* topSFR = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
+	      top::check(asg::setProperty(topSFR, "config", m_config), "Failed to set config");
+	      top::check(topSFR->initialize(), "Failed to initalialise");
+	      m_sfRetriever = topSFR;
+	    }
+
   m_params = params;
 
 }
@@ -128,8 +138,8 @@ bool CalculateSF::apply(const top::Event& event) const {
 	  // for 4l tight = loose*loose*tight*tight
 	  tightIsLoose.push_back( true);
 	  tightIsLoose.push_back( true);
-	  tightIsLoose.push_back( false);
-	  tightIsLoose.push_back( false);
+	  tightIsLoose.push_back( true);
+	  tightIsLoose.push_back( true);
 	} else {	
 	  for (int ilep = 0; ilep < tthevt->totalLeptons; ++ilep) {
 	    tightIsLoose.push_back( false);

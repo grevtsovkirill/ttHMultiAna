@@ -18,12 +18,12 @@ config.CMake = True
 config.code          = 'top-xaod'
 config.gridUsername  = 'phys-higgs'
 config.groupProduction= 'True'
-config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
+#config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
 config.noSubmit      = True
 config.memory	     = ''
-
+config.otherOptions='--forceStaged'
 config.mergeType     = 'Default' #'None', 'Default' or 'xAOD'
-config.destSE        = 'CERN-PROD_SCRATCHDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
+#config.destSE        = 'CERN-PROD_SCRATCHDISK'#'BNL-OSG2_LOCALGROUPDISK' #This is the default (anywhere), or try e.g. 'UKI-SOUTHGRID-BHAM-HEP_LOCALGROUPDISK'
 #config.forceSite     = 'ANALY_CONNECT'
 #config.destSE        = ''
 
