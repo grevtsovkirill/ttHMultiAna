@@ -224,10 +224,12 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
 
 	if(asg::ToolStore::contains<top::ScaleFactorRetriever>("top::ScaleFactorRetriever")){
 	      m_sfRetriever = asg::ToolStore::get<top::ScaleFactorRetriever>("top::ScaleFactorRetriever");
+        m_sfRetriever->setProperty("OutputLevel", MSG::INFO).ignore();
 	    }
 	    else{
 	      top::ScaleFactorRetriever* topSFR = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
 	      top::check(asg::setProperty(topSFR, "config", m_config), "Failed to set config");
+        top::check(asg::setProperty(topSFR,"OutputLevel", MSG::ERROR)," Failed to set output level");
 	      top::check(topSFR->initialize(), "Failed to initalialise");
 	      m_sfRetriever = topSFR;
 	    }
@@ -345,9 +347,9 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     m_trigGlobEffCorr[nTrig]->setProperty("MuonTools",m_muonToolsHandles).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", " 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu20_iloose_L1MU15_OR_mu50 || mu18_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", " 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2017", " 2e24_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu26_ivarmedium_OR_mu50 || mu22_mu8noL1").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", " 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu18_mu8noL1").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", " 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2017", " 2e24_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
     //m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,SignalCFT,Baseline").ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
     top::check( m_trigGlobEffCorr[nTrig]->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
