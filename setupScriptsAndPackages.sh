@@ -11,6 +11,7 @@ cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.34/InstallAre
 cd TopCPTools/Root/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopMuonCPTools_cxx.diff
+patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopFlavorTaggingCPTools_cxx.diff
 cd ../TopCPTools/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
 cd ../../
