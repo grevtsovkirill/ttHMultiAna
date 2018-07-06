@@ -1465,7 +1465,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       m_taus[idx].BootstrapTree(systematicTree, idx);
     }
 
-    m_ttHEvent->BootstrapTree(systematicTree,this,false);
+    m_ttHEvent->BootstrapTree(systematicTree,this,m_doSFSystematics);
     }
 ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
 			    "passPreORSelection");
@@ -1960,7 +1960,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-    if (m_isMC && !m_doSFSystematics ){
+    if (m_isMC && m_doSFSystematics ){
     doEventTrigSFs(*Electrons,*Muons,event);}
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
   xAOD::JetContainer* calibratedJets(nullptr);

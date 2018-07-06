@@ -137,7 +137,6 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(tauSFLoose    [top::topSFSyst::nominal], "tauSFLoose");
 
   //additional loop for trig SFs uncertainties with multiTrigger tool
-  doSFSystematics = true;
   if(doSFSystematics) {
     int nTrig = -1;
     for (const auto systvar : ntupler->m_lep_trigger_sf_names) {
