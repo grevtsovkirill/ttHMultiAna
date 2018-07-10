@@ -115,12 +115,12 @@ bool CalculateSF::apply(const top::Event& event) const {
 	  m_SF.lepSFTrigTight[ivar] = 1;
 	  m_SF.lepSFObjLoose[ivar] = 1;
 	  m_SF.lepSFObjTight[ivar] = 1;
-	  m_SF.tauSFLoose[ivar] = 1;
-	  m_SF.tauSFTight[ivar] = 1;
 	}
 	for (const auto& systvar : tthevt->m_tau_sf_names ) {
 	  auto ivar = systvar.first;
-	  tthevt->tauSFTight[ivar] = 1;
+      m_SF.tauSFLoose[ivar] = 1;
+      m_SF.tauSFTight[ivar] = 1;
+      tthevt->tauSFTight[ivar] = 1;
 	  tthevt->tauSFLoose[ivar] = 1;
 	}
 
