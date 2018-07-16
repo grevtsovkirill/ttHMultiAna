@@ -327,6 +327,8 @@ extern TH1I* m_tauCutflow;
   CP::SystematicSet dummy_eldo;
   CP::SystematicSet dummy_muup;
   CP::SystematicSet dummy_mudo;
+  CP::SystematicSet dummy_musysup;
+  CP::SystematicSet dummy_musysdo;
   CP::SystematicSet dummy_eleffup;
   CP::SystematicSet dummy_eleffdo;
 
@@ -344,6 +346,8 @@ extern TH1I* m_tauCutflow;
    		{ dummy_eldo, "EL_SF_Trigger_DOWN" },
 	    { dummy_muup, "MU_SF_Trigger_STAT_UP" },
 	    { dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
+		{ dummy_musysup, "MU_SF_Trigger_SYST_UP" },
+        { dummy_musysdo, "MU_SF_Trigger_SYST_DOWN" },
 	    { dummy_eleffup, "EL_EFF_Trigger_UP" },
 	    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
 	  }; 

@@ -97,6 +97,8 @@ TH1I* m_tauCutflow;
     dummy_eldo("EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR__1down"),
     dummy_muup("MUON_EFF_TrigStatUncertainty__1up"),
     dummy_mudo("MUON_EFF_TrigStatUncertainty__1down"),
+    dummy_musysup("MUON_EFF_TrigSystUncertainty__1up"),
+    dummy_musysdo("MUON_EFF_TrigSystUncertainty__1down"),
     dummy_eleffup("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1up"),
     dummy_eleffdo("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1down")
   
@@ -330,7 +332,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 	top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
 	m_muonToolsHandles.push_back(t->getHandle());
 
-    if (systvar.second=="MU_SF_Trigger_STAT_UP" || systvar.second=="MU_SF_Trigger_STAT_DOWN") {
+    if (systvar.second=="MU_SF_Trigger_STAT_UP" || systvar.second=="MU_SF_Trigger_STAT_DOWN" || systvar.second=="MU_SF_Trigger_SYST_UP" || systvar.second=="MU_SF_Trigger_SYST_DOWN") {
       for(auto& mutool : m_muonToolsHandles){
 	if(mutool->applySystematicVariation(systvar.first) != CP::SystematicCode::Ok) 
 	  std::cout << "Unable to apply systematic variation " << systvar.second << std::endl;
