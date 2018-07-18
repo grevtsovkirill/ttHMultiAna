@@ -3,6 +3,15 @@ import TopExamples.ami
 import grid
 
 grid.Add("syst_mc16d").datasets=[
+    #410155 - sub as individualSample
+    #410218 - sub as individualSample
+    #410219 - sub as individualSample
+    #410220 - sub as individualSample
+    #345672 - sub as individualSample
+    #345673 - sub as individualSample
+    #345674 - sub as individualSample
+    #410470 - sub as individualSample
+    #410470 - sub as individualSample
     "mc16_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.deriv.DAOD_HIGG8D1.e4324_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.341471.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_ggH125_ZZ4lep.deriv.DAOD_HIGG8D1.e3951_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.deriv.DAOD_HIGG8D1.e3951_e5984_s3126_r10201_r10210_p3480",
@@ -54,8 +63,6 @@ grid.Add("syst_mc16d").datasets=[
     "mc16_13TeV.410278.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau_mll_1_5.deriv.DAOD_HIGG8D1.e6087_e5984_s3126_r10201_r10210_p3552",
     "mc16_13TeV.410398.MadGraphPythia8EvtGen_ttbar_wbmumu_MEN30LO_A14N23LO.deriv.DAOD_HIGG8D1.e6086_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.410399.MadGraphPythia8EvtGen_ttbar_wbtautau_MEN30LO_A14N23LO.deriv.DAOD_HIGG8D1.e6086_e5984_s3126_r10201_r10210_p3480",
-    "mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_e5984_s3126_r10201_r10210_p3480",
-    "mc16_13TeV.410472.PhPy8EG_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e6348_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.410560.MadGraphPythia8EvtGen_A14_tZ_4fl_tchan_noAllHad.deriv.DAOD_HIGG8D1.e5803_e5984_s3126_r10201_r10210_p3480",
     ]
 
@@ -79,6 +86,12 @@ grid.Add("singleSample_345673").datasets=[
     ]
 grid.Add("singleSample_345674").datasets=[
     #only in mc16c
+    ]
+grid.Add("singleSample_410470").datasets=[
+    "mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_e5984_s3126_r10201_r10210_p3480",
+    ]
+grid.Add("singleSample_410472").datasets=[
+    "mc16_13TeV.410472.PhPy8EG_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e6348_e5984_s3126_r10201_r10210_p3480",
     ]
 
 grid.Add("highPriority_mc16d").datasets=[
