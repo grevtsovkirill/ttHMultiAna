@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 import TopExamples.grid
 import mc16aR21
-#import mc16cR21
-#import dataR21
-#import MC_EPS
-#import Data16
 import os
 import grid
 import shutil
@@ -48,10 +44,10 @@ for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218
 		print "Missing generic_config_systmc16a_"+ dsid + ".txt. Code will crash. Exiting..."
 		sys.exit()
 
-baseSuffix = "2018-05-02-01"
+baseSuffix = "CHANGEME"
 for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
 	config.settingsFile = 'generic_config_systmc16a_' + dsid + '.txt'
-	config.suffix = baseSuffix + "-" + dsid
+	config.suffix = baseSuffix
 	names = ["singleSample_" + dsid,]
 	samples = grid.Samples(names)
 	grid.submit(config, samples)
