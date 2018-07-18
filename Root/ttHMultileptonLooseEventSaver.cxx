@@ -1285,8 +1285,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     }
     //Continous b-tag
     //https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingCalibrationDataInterface#Example_for_continuous_tagging
-    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous")) ?jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;},
-      *systematicTree,"m_jet_tagWeightBin");
+    //    Wrap2(jetvec, [](const xAOD::Jet& jet){return (int) ( jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous")) ?jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;},      *systematicTree,"m_jet_tagWeightBin");
 
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassOVR"); },    *systematicTree, "m_jet_passOR");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.auxdataConst<char>("ttHpassTauOVR"); }, *systematicTree, "m_jet_passTauOR");
@@ -2087,7 +2086,7 @@ void ttHMultileptonLooseEventSaver::setBtagSFs(const top::Event& event) {
     m_bTagSF70_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_FixedCutBEff_70",false);
     m_bTagSF77_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_FixedCutBEff_77",false);
     m_bTagSF85_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_FixedCutBEff_85",false);
-    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_Continuous",false);
+    //    m_bTagSFContinuous_weight = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"MV2c10_Continuous",false);
     //btag
     if(m_doSFSystematics) {
       m_sfRetriever->btagSF_eigen_vars(event,
@@ -2140,7 +2139,7 @@ void ttHMultileptonLooseEventSaver::setBtagSFs_ForDL1(const top::Event& event) {
     m_bTagSF70_weight_DL1 = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"DL1_FixedCutBEff_70",false);
     m_bTagSF77_weight_DL1 = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"DL1_FixedCutBEff_77",false);
     m_bTagSF85_weight_DL1 = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"DL1_FixedCutBEff_85",false);
-    m_bTagSFContinuous_weight_DL1 = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"DL1_Continuous",false);
+    //    m_bTagSFContinuous_weight_DL1 = m_sfRetriever->btagSF(event,top::topSFSyst::nominal,"DL1_Continuous",false);
     //btag
     if(m_doSFSystematics) {
       m_sfRetriever->btagSF_eigen_vars(event,
