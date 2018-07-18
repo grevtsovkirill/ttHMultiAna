@@ -35,14 +35,14 @@ config.nGBPerJob='4'
 config.maxFileSize='20000000000000'
 config.extFile='.root,.so'
 
-
-if not os.path.isfile("generic_config_systmc16d.txt"):
-	print "Missing generic_config_systmc16d.txt. Code will crash. Exiting..."
-	sys.exit()
-for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
-	if not os.path.isfile("generic_config_systmc16d_" + dsid + ".txt"):
-		print "Missing generic_config_systmc16d_"+ dsid + ".txt. Code will crash. Exiting..."
-		sys.exit()
+# THIS IS NOT NEEDED - in beggining is check to copy files from $WorkDir
+# if not os.path.isfile("generic_config_systmc16d.txt"):
+# 	print "Missing generic_config_systmc16d.txt. Code will crash. Exiting..."
+# 	sys.exit()
+# for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
+# 	if not os.path.isfile("generic_config_systmc16d_" + dsid + ".txt"):
+# 		print "Missing generic_config_systmc16d_"+ dsid + ".txt. Code will crash. Exiting..."
+# 		sys.exit()
 
 subsuf="CHANGEME"
 # for systematics
