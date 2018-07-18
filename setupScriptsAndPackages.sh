@@ -19,7 +19,7 @@ cd ../../
 cd ttHMultiAna/share
 
 #Uncommenting the PromptLepton Option in config files
-for period in data mc16a mc16c mc16d systmc16a systmc16c systmc16d
+for period in data mc16a mc16c mc16d AFIImc16a AFIImc16c AFIImc16d systmc16a systmc16c systmc16d
 do
 	sed "s/#ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLepton/" generic_config_$period.txt > generic_config_temp.txt
 	mv generic_config_temp.txt generic_config_$period.txt
