@@ -48,7 +48,7 @@ baseSuffix = "2018-05-02-01"
 
 for dsid in ["345674", "345673", "345672"]:
 	config.settingsFile = 'generic_config_systmc16c_' + dsid + '.txt'
-	config.suffix = baseSuffix + "-" + dsid
+	config.suffix = baseSuffix
 	names = ["singleSample_" + dsid,]
 	samples = grid.Samples(names)
 	grid.submit(config, samples)
