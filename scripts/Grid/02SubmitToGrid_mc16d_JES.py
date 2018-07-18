@@ -44,16 +44,34 @@ for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218
 		print "Missing generic_config_systmc16d_"+ dsid + ".txt. Code will crash. Exiting..."
 		sys.exit()
 
-baseSuffix = "CHANGEME"
+subsuf="CHANGEME"
+# for systematics
+baseSuffix = subsuf+"_sys_mc16d"
 for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
-	config.settingsFile = 'generic_config_systmc16d_' + dsid + '.txt'
-	config.suffix = baseSuffix
-	names = ["singleSample_" + dsid,]
-	samples = grid.Samples(names)
-	grid.submit(config, samples)
+    # individual files
+    config.settingsFile = 'generic_config_systmc16d_' + dsid + '.txt'
+    config.suffix = baseSuffix
+    names = ["singleSample_" + dsid,]
+    samples = grid.Samples(names)
+    grid.submit(config, samples)
+else:
+    # other systematics
+    config.suffix = baseSuffix
+    names = ["syst_mc16d",]
+    config.settingsFile = "generic_config_systmc16d.txt"
+    samples = grid.Samples(names)
+    grid.submit(config, samples)
 
-config.suffix = baseSuffix
-names = ["highPriority_NominalConfig",]
-config.settingsFile = "generic_config_systmc16d.txt"
+#for nominal:
+baseSuffix = subsuf+"_nom_mc16d"
+names = ["FS_mc16d",]
+config.settingsFile = "generic_config_mc16d.txt"
+samples = grid.Samples(names)
+grid.submit(config, samples)
+
+# for AFII:
+baseSuffix = subsuf+"_af2_mc16d"
+names = ["AF_mc16d",]
+config.settingsFile = "generic_config_AFIImc16d.txt"
 samples = grid.Samples(names)
 grid.submit(config, samples)
