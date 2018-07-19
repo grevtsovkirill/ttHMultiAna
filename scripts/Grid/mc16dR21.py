@@ -85,6 +85,16 @@ grid.Add("singleSample_345673").datasets=[
 grid.Add("singleSample_345674").datasets=[
     #only in mc16c
     ]
+grid.Add("singleSample_345875").datasets=[
+    "mc16_13TeV.345875.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_dilep.deriv.DAOD_HIGG8D1.e6474_e5984_s3126_r10201_r10210_p3552",
+    ]
+grid.Add("singleSample_345874").datasets=[
+    "mc16_13TeV.345874.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_semilep.deriv.DAOD_HIGG8D1.e6474_e5984_s3126_r10201_r10210_p3552",
+    ]
+grid.Add("singleSample_345873").datasets=[
+    "mc16_13TeV.345873.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6553_e5984_s3126_r10201_r10210_p3552",
+    ]
+
 # no need it ttbar with syst
 # grid.Add("singleSample_410470").datasets=[
 #     "mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_e5984_s3126_r10201_r10210_p3480",
