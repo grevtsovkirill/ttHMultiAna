@@ -47,8 +47,10 @@ config.extFile='.root,.so'
 subsuf="CHANGEME"
 # for systematics
 baseSuffix = subsuf+"_sys_mc16a"
-# unused sampels:"410470", "410472",
-for dsid in ["345674", "345673", "345672", "410155", "410218", "410219" ,"410220"]:
+# unused sampels:
+#           ttbars "410470", "410472", 
+#           old sig "345674", "345673", "345672",
+for dsid in ["345875","345874","345873","410155", "410218", "410219" ,"410220"]:
     # individual files
     config.settingsFile = 'generic_config_systmc16a_' + dsid + '.txt'
     config.suffix = baseSuffix
