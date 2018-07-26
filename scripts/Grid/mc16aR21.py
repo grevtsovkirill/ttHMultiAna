@@ -68,7 +68,7 @@ grid.Add("singleSample_345674").datasets=[
 grid.Add("singleSample_345673").datasets=[
     "mc16_13TeV.345673.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_semilep.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9364_r9315_p3480",
 ]
-grid.Add("singleSample_345672").datasets=[_ttW.deriv.DAOD_HIGG8D1.e4686_e5984_s3
+grid.Add("singleSample_345672").datasets=[
    "mc16_13TeV.345672.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6322_e5984_s3126_r9364_r9315_p3480",
 ]
 grid.Add("singleSample_410155").datasets=[
