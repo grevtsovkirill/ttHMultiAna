@@ -47,8 +47,8 @@ config.extFile='.root,.so'
 subsuf="CHANGEME"
 # for systematics
 baseSuffix = subsuf+"_sys_mc16d"
-# unused samles: "345674", "345673", "345672" - from mc16c; "410470", "410472" - ttbar
-for dsid in ["345875","345874","345873",  "410155", "410218", "410219" ,"410220"]:
+# unused samles: "345674", "345673", "345672" - from mc16c; 
+for dsid in ["410470", "410472","345875","345874","345873",  "410155", "410218", "410219" ,"410220"]:
     # individual files
     config.settingsFile = 'generic_config_systmc16d_' + dsid + '.txt'
     config.suffix = baseSuffix
