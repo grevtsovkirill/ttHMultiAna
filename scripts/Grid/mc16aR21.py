@@ -62,6 +62,7 @@ grid.Add("syst_mc16a").datasets=[
     "mc16_13TeV.364250.Sherpa_222_NNPDF30NNLO_llll.deriv.DAOD_HIGG8D1.e5894_s3126_r9364_r9315_p3480",
     "mc16_13TeV.363355.Sherpa_221_NNPDF30NNLO_ZqqZvv.deriv.DAOD_HIGG8D1.e5525_s3126_r9364_r9315_p3480",
     "mc16_13TeV.363357.Sherpa_221_NNPDF30NNLO_WqqZvv.deriv.DAOD_HIGG8D1.e5525_s3126_r9364_r9315_p3480",
+    "mc16_13TeV.410389.MadGraphPythia8EvtGen_A14NNPDF23_ttgamma_nonallhadronic.deriv.DAOD_HIGG8D1.e6155_e5984_s3126_r9364_r9315_p3480",
 ]
 
 grid.Add("singleSample_410155").datasets=[
@@ -85,6 +86,13 @@ grid.Add("singleSample_345874").datasets=[
 grid.Add("singleSample_345873").datasets=[
     "mc16_13TeV.345873.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6553_e5984_s3126_r9364_r9315_p3552",
     ]
+
+grid.Add("singleSample_410470").datasets=[
+    "mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_e5984_s3126_r9364_r9315_p3480",
+]
+grid.Add("singleSample_410472").datasets=[
+    "mc16_13TeV.410472.PhPy8EG_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e6348_e5984_s3126_r9364_r9315_p3480",
+]
 
 grid.Add("FS_mc16a").datasets=[
     "mc16_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.deriv.DAOD_HIGG8D1.e4324_s3126_r9364_r9315_p3480",
