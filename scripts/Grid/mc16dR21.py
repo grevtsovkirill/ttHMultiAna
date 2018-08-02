@@ -7,9 +7,9 @@ grid.Add("syst_mc16d").datasets=[
     #410218 - sub as individualSample
     #410219 - sub as individualSample
     #410220 - sub as individualSample
-    #345672 - sub as individualSample
-    #345673 - sub as individualSample
-    #345674 - sub as individualSample
+    #345873 - sub as individualSample
+    #345874 - sub as individualSample
+    #345875 - sub as individualSample
     "mc16_13TeV.304014.MadGraphPythia8EvtGen_A14NNPDF23_3top_SM.deriv.DAOD_HIGG8D1.e4324_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.341471.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_ggH125_ZZ4lep.deriv.DAOD_HIGG8D1.e3951_e5984_s3126_r10201_r10210_p3480",
     "mc16_13TeV.341488.PowhegPythia8EvtGen_CT10_AZNLOCTEQ6L1_VBFH125_ZZ4lep.deriv.DAOD_HIGG8D1.e3951_e5984_s3126_r10201_r10210_p3480",
@@ -76,15 +76,6 @@ grid.Add("singleSample_410219").datasets=[
 grid.Add("singleSample_410220").datasets=[
     "mc16_13TeV.410220.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_tttautau.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r10201_r10210_p3480",
     ]
-grid.Add("singleSample_345672").datasets=[
-    #only in mc16c
-    ]
-grid.Add("singleSample_345673").datasets=[
-    #only in mc16c
-    ]
-grid.Add("singleSample_345674").datasets=[
-    #only in mc16c
-    ]
 grid.Add("singleSample_345875").datasets=[
     "mc16_13TeV.345875.PhPy8EG_A14NNPDF23_NNPDF30ME_ttH125_hdamp352p5_dilep.deriv.DAOD_HIGG8D1.e6474_e5984_s3126_r10201_r10210_p3552",
     ]
@@ -95,13 +86,12 @@ grid.Add("singleSample_345873").datasets=[
     "mc16_13TeV.345873.PowhegPythia8EvtGen_A14NNPDF23_NNPDF30ME_ttH125_allhad.deriv.DAOD_HIGG8D1.e6553_e5984_s3126_r10201_r10210_p3552",
     ]
 
-# no need it ttbar with syst
-# grid.Add("singleSample_410470").datasets=[
-#     "mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_e5984_s3126_r10201_r10210_p3480",
-#     ]
-# grid.Add("singleSample_410472").datasets=[
-#     "mc16_13TeV.410472.PhPy8EG_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e6348_e5984_s3126_r10201_r10210_p3480",
-#     ]
+grid.Add("singleSample_410470").datasets=[
+    "mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_e5984_s3126_r10201_r10210_p3480",
+    ]
+grid.Add("singleSample_410472").datasets=[
+    "mc16_13TeV.410472.PhPy8EG_A14_ttbar_hdamp258p75_dil.deriv.DAOD_HIGG8D1.e6348_e5984_s3126_r10201_r10210_p3480",
+    ]
 
 grid.Add("highPriority_mc16d").datasets=[
     "mc16_13TeV.343366.aMcAtNloPythia8EvtGen_A14_NNPDF23_NNPDF30ME_ttH125_semilep.deriv.DAOD_HIGG8D1.e4706_e5984_s3126_r10201_r10210_p3480",
