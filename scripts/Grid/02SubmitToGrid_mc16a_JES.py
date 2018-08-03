@@ -66,6 +66,7 @@ else:
 
 #for nominal:
 baseSuffix = subsuf+"_nom_mc16a"
+config.suffix = baseSuffix
 names = ["FS_mc16a",]
 config.settingsFile = "generic_config_mc16a.txt"
 samples = grid.Samples(names)
@@ -73,6 +74,7 @@ grid.submit(config, samples)
 
 # for AFII:
 baseSuffix = subsuf+"_af2_mc16a"
+config.suffix = baseSuffix
 names = ["AF_mc16a",]
 config.settingsFile = "generic_config_AFIImc16a.txt"
 samples = grid.Samples(names)
