@@ -1963,7 +1963,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-    if (m_isMC && m_doSFSystematics ){
+    if (m_isMC){
     doEventTrigSFs(*Electrons,*Muons,event);}
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   
   xAOD::JetContainer* calibratedJets(nullptr);
