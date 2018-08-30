@@ -79,6 +79,16 @@ extern TH1I* m_tauCutflow;
       int getNTruthJets(const xAOD::JetContainer jetColl);
       int getNInnerPix(const xAOD::Electron& el);
       int getNInnerPix(const xAOD::Muon& mu);
+      template <class T> T getattr_truthJet(const xAOD::Jet &jet, std::string  attr) {
+	      T attr_value = -99;
+	      if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink")
+			      && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid()) {
+		      const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
+		      if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<T>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
+	      }
+	      return attr_value;
+      }
+
 
       //extern TH1I* m_eleCutflow;// = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
       //extern TH1I* m_muCutflow;// = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
