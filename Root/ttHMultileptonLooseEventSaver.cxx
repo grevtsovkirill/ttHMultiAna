@@ -1246,7 +1246,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.eta(); }, *systematicTree, "m_jet_eta");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.phi(); }, *systematicTree, "m_jet_phi");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return (float) jet.e(); }, *systematicTree, "m_jet_E");
- /*   if(!m_doSystematics) {
+    if(!m_doSystematics) {
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"pt");},*systematicTree,"m_truth_jet_pt");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"eta");},*systematicTree,"m_truth_jet_eta");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (float) this->getattr_truthJet<float>(jet,"phi");},*systematicTree,"m_truth_jet_phi");
@@ -1256,7 +1256,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostTQuarksFinalCount");},*systematicTree,"m_truth_jet_Tcount");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostWBosonsCount");},*systematicTree,"m_truth_jet_Wcount");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostZBosonsCount");},*systematicTree,"m_truth_jet_Zcount");
-    }*/
+    }
 
 
     if(!m_doSystematics) {
