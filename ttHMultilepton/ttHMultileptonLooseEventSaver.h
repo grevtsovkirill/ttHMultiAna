@@ -79,7 +79,7 @@ extern TH1I* m_tauCutflow;
       int getNTruthJets(const xAOD::JetContainer jetColl);
       int getNInnerPix(const xAOD::Electron& el);
       int getNInnerPix(const xAOD::Muon& mu);
-      template <class T> T getattr_truthJet(const xAOD::Jet &jet, std::string  attr) {
+      /*template <class T> T getattr_truthJet(const xAOD::Jet &jet, std::string  attr) {
 	      T attr_value = -99;
 	      if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink")
 			      && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid()) {
@@ -87,8 +87,7 @@ extern TH1I* m_tauCutflow;
 		      if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<T>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
 	      }
 	      return attr_value;
-      }
-
+      }*/
 
       //extern TH1I* m_eleCutflow;// = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
       //extern TH1I* m_muCutflow;// = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
@@ -325,13 +324,18 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_PDFinfo_Q;
   std::vector<float> m_PDFinfo_XF1;
   std::vector<float> m_PDFinfo_XF2;
-/*
+
   std::vector<float> m_trjet_pt;
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;
-  std::vector<float> m_trjet_e;
-  std::vector<int>   m_trjet_Wcount, m_trjet_Zcount, m_trjet_Hcount, m_trjet_Tcount;
-*/
+  std::vector<float> m_trjet_m;
+  std::vector<int>   m_trjet_Wcount; 
+  std::vector<int>   m_trjet_Zcount;
+  std::vector<int>   m_trjet_Hcount;
+  std::vector<int>   m_trjet_Tcount;
+  std::vector<int>   m_trjet_BHandronCount;
+  std::vector<int>   m_trjet_CHandronCount;
+
   CP::SystematicSet dummy_nom;
   CP::SystematicSet dummy_elup;
   CP::SystematicSet dummy_eldo;
