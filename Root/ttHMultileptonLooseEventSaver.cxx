@@ -1987,7 +1987,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     
     
     // Truth Jets Information...
-	if(!m_doSystematics) {
+	if(!m_doSystematics && m_isMC) {
 		m_trjet_pt.clear();
 		m_trjet_eta.clear();
 		m_trjet_phi.clear();
