@@ -335,6 +335,8 @@ extern TH1I* m_tauCutflow;
   std::vector<int>   m_trjet_Tcount;
   std::vector<int>   m_trjet_BHandronCount;
   std::vector<int>   m_trjet_CHandronCount;
+  std::vector<int>   m_trjet_ConeTruthLabelID;
+  std::vector<int>   m_trjet_PartonTruthLabelID;
 
   CP::SystematicSet dummy_nom;
   CP::SystematicSet dummy_elup;

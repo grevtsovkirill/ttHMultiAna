@@ -514,6 +514,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       systematicTree->makeOutputVariable(m_trjet_Tcount,   "m_truth_jet_Tcount");
       systematicTree->makeOutputVariable(m_trjet_BHandronCount,   "m_truth_jet_BHadronCount");
       systematicTree->makeOutputVariable(m_trjet_CHandronCount,   "m_truth_jet_CHadronCount");
+      systematicTree->makeOutputVariable(m_trjet_ConeTruthLabelID,   "m_truth_jet_ConeTruthLabelID");
+      systematicTree->makeOutputVariable(m_trjet_PartonTruthLabelID,   "m_truth_jet_PartonTruthLabelID");
 
       //truthEvent information
       systematicTree->makeOutputVariable(m_PDFinfo_X1,        "m_mcevt_pdf_X1");
@@ -1998,6 +2000,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 		m_trjet_Tcount.clear();
 		m_trjet_BHandronCount.clear();
 		m_trjet_CHandronCount.clear();	
+		m_trjet_ConeTruthLabelID.clear();
+		m_trjet_PartonTruthLabelID.clear();
 		const xAOD::JetContainer* truthJets(nullptr);
 		top::check (evtStore()->retrieve( truthJets, "AntiKt4TruthJets"), "Failed to retrieve Truth Jets");
 		//ATH_MSG_INFO ("execute(): number of truth jets = " << truthJets->size());
@@ -2007,12 +2011,14 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 			m_trjet_eta.push_back(jet->eta());
 			m_trjet_phi.push_back(jet->phi());
 			m_trjet_m.push_back(jet->m());
-			m_trjet_Wcount.push_back(jet->auxdataConst<int>("GhostWBosonsCount"));
-			m_trjet_Zcount.push_back(jet->auxdataConst<int>("GhostZBosonsCount"));
-			m_trjet_Hcount.push_back(jet->auxdataConst<int>("GhostHBosonsCount"));
-			m_trjet_Tcount.push_back(jet->auxdataConst<int>("GhostTQuarksFinalCount"));
-			m_trjet_BHandronCount.push_back(jet->auxdataConst<int>("GhostBHadronsFinalCount"));
-			m_trjet_CHandronCount.push_back(jet->auxdataConst<int>("GhostCHadronsFinalCount"));	
+			m_trjet_Wcount.push_back(jet->auxdata<int>("GhostWBosonsCount"));
+			m_trjet_Zcount.push_back(jet->auxdata<int>("GhostZBosonsCount"));
+			m_trjet_Hcount.push_back(jet->auxdata<int>("GhostHBosonsCount"));
+			m_trjet_Tcount.push_back(jet->auxdata<int>("GhostTQuarksFinalCount"));
+			m_trjet_BHandronCount.push_back(jet->auxdata<int>("GhostBHadronsFinalCount"));
+			m_trjet_CHandronCount.push_back(jet->auxdata<int>("GhostCHadronsFinalCount"));	
+			m_trjet_ConeTruthLabelID.push_back(jet->auxdata<int>("ConeTruthLabelID"));	
+			m_trjet_PartonTruthLabelID.push_back(jet->auxdata<int>("PartonTruthLabelID"));	
 		}
 	}
     
