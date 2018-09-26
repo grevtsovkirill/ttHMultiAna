@@ -57,14 +57,14 @@ extern TH1I* m_tauCutflow;
       ttHMultileptonLooseEventSaver();
       ///-- Destructor does nothing --///
       ~ttHMultileptonLooseEventSaver();
-      
+
       ///-- initialize function for top::EventSaverFlatNtuple --///
       ///-- We will be setting up out custom variables here --///
       virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) override;
-      
+
       ///-- Keep the asg::AsgTool happy --///
-      virtual StatusCode initialize() override {return StatusCode::SUCCESS;}      
-      
+      virtual StatusCode initialize() override {return StatusCode::SUCCESS;}
+
       void finalize();
       ///-- saveEvent function for top::EventSaverFlatNtuple --///
       ///-- We will be setting our custom variables on a per-event basis --///
@@ -135,12 +135,12 @@ extern TH1I* m_tauCutflow;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
       ORUtils::ToolBox                       m_ORtoolBox[3];
       asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
-  
-  //Trigger Scale Factors -- NEW -- 
+
+  //Trigger Scale Factors -- NEW --
   // --> Electrons
       ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
       ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
-      std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
+      std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory;
  // --> Muons
       ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
       std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
@@ -226,6 +226,9 @@ extern TH1I* m_tauCutflow;
   double m_JVT_weight_UP;
   double m_JVT_weight_DOWN;
 
+  // Exclude this DSIDs from for the truth jet info code
+  std::vector<int> m_excludedDSIDs;
+
   //event info
   unsigned long long m_eventNumber;
   uint32_t m_runNumber;
@@ -261,7 +264,7 @@ extern TH1I* m_tauCutflow;
   float m_MEphoton_pt;
   float m_MEphoton_eta;
   float m_MEphoton_phi;
-  int m_MEphoton_mother_pdgId;  
+  int m_MEphoton_mother_pdgId;
   float m_MEphoton_mother_pt;
   float m_MEphoton_mother_e;
   float m_MEphoton_mother_eta;
@@ -329,7 +332,7 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;
   std::vector<float> m_trjet_m;
-  std::vector<int>   m_trjet_Wcount; 
+  std::vector<int>   m_trjet_Wcount;
   std::vector<int>   m_trjet_Zcount;
   std::vector<int>   m_trjet_Hcount;
   std::vector<int>   m_trjet_Tcount;
@@ -355,7 +358,7 @@ extern TH1I* m_tauCutflow;
 
 
       // for names of lepton trigger SFs for multi-trigger tool
-      //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
+      //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{
       std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{
     	{ dummy_nom, "nominal" },
     	{ dummy_elup, "EL_SF_Trigger_UP" },
@@ -366,7 +369,7 @@ extern TH1I* m_tauCutflow;
         { dummy_musysdo, "MU_SF_Trigger_SYST_DOWN" },
 	    { dummy_eleffup, "EL_EFF_Trigger_UP" },
 	    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
-	  }; 
+	  };
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{
     { top::topSFSyst::nominal, "nominal" },
@@ -429,11 +432,10 @@ extern TH1I* m_tauCutflow;
   std::vector<VectorWrapperCollection> vec_vtx_wrappers;
   #endif
 
-      
+
       ///-- Tell RootCore to build a dictionary (we need this) --///
   //ClassDef(ttHMultileptonLooseEventSaver, 0);
   };
 
 
 #endif
-
