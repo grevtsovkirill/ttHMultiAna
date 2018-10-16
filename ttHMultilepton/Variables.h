@@ -19,7 +19,7 @@
 #include <vector>
 #include <memory>
 
-#define LEPTON_ARR_SIZE 5
+#define LEPTON_ARR_SIZE 4
 #define TAU_ARR_SIZE 2
 #define MAXSYST 50
 
@@ -90,6 +90,7 @@ namespace ttHML {
     float HT;
     float HT_lep;
     float HT_jets;
+    float HT_alljets;
     float lead_jetPt;
     float lead_jetEta;
     float lead_jetPhi;

@@ -43,7 +43,7 @@ ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
 ElectronIsolation FixedCutLoose
-#ElectronIsolationLoose PromptLepton
+ElectronIsolationLoose PromptLepton
 
 #Muon cuts
 MuonQuality Loose
@@ -51,7 +51,7 @@ MuonQualityLoose Loose
 MuonEta 2.7
 MuonPt 5000
 MuonIsolation FixedCutLoose
-#MuonIsolationLoose PromptLepton
+MuonIsolationLoose PromptLepton
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
