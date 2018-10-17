@@ -22,14 +22,14 @@ SelectTaus::SelectTaus(std::string params,std::shared_ptr<top::TopConfig> config
   m_config(config),
   m_isRemote(false)  
 {
-   if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
-     m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
-     m_isRemote=true;
-   } 
-   else {
-     m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
-     top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
-   }
+  if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
+    m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
+    m_isRemote=true;
+  } 
+  else {
+    m_asgHelper = new ttHMLAsgHelper("ttHMLAsgHelper");
+    top::check( m_asgHelper->initialize() , "Failed to initialize ttHMLAsgToolHelper" );
+  }
   m_params=params;
   m_taus="SelectedTaus";
   //m_evtSaver = new ttHMultileptonLooseEventSaver();
@@ -40,7 +40,7 @@ SelectTaus::~SelectTaus(){
 }
 
 bool SelectTaus::apply(const top::Event & event) const{
-
+  
   m_event = &event;
 
   if(!event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
@@ -68,7 +68,8 @@ bool SelectTaus::apply(const top::Event & event) const{
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(4);
-    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) {
+    //    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) {
+    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose)) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(5);
