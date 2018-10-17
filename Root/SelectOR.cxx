@@ -128,12 +128,13 @@ bool SelectOR::apply(const top::Event & event) const{
   for (const auto jetItr : *goodJet) {
     auto p4 = jetItr->p4();
     for (const auto elItr : *goodEl) {
-    if (! elItr->auxdataConst<char>("ttHpassOVR")) {
-  	continue;
+      if (! elItr->auxdataConst<char>("ttHpassOVR")) {
+	continue;
       }
-     if (p4.DeltaR(elItr->p4()) < 0.3) {
-  	jetItr->auxdecor<char>("ttHpassOVR") = 0;
-  	break;
+      //      if (p4.DeltaR(elItr->p4()) < 0.3) {
+      if (p4.DeltaR(elItr->p4()) < 0.2) {
+	jetItr->auxdecor<char>("ttHpassOVR") = 0;
+	break;
       }
     }
   }
@@ -156,7 +157,7 @@ bool SelectOR::apply(const top::Event & event) const{
   }*/
 
   //if a muon and a jet are within (0.4, 0.04+10[GeV]/pT(muon)) of each other: remove the muon
-  for (const auto jetItr : *goodJet) {
+  /*  for (const auto jetItr : *goodJet) {
     if (! jetItr->auxdataConst<char>("ttHpassOVR")) {
       continue;
     }
@@ -170,8 +171,21 @@ bool SelectOR::apply(const top::Event & event) const{
   	muItr->auxdecor<char>("ttHpassOVR") = 0;
       }
     }
-  }
+    }*/
 
+  // if a muon and a jet are within 0.2 of each other : remove the muon
+  for (const auto jetItr : *goodJet) {
+    auto p4 = jetItr->p4();
+    for (const auto muItr : *goodMu) {      
+      if (! muItr->auxdataConst<char>("ttHpassOVR")) {
+  	continue;
+      }
+      if(p4.DeltaR(muItr->p4()) < 0.2){
+	jetItr->auxdecor<char>("ttHpassOVR") =0;
+	break;
+      }
+    }
+  }
   // now done later
   event.m_ttreeIndex == 0 && m_muCutflow->Fill(7, CountPassOR(*goodMu));
 
@@ -224,7 +238,7 @@ bool SelectOR::apply(const top::Event & event) const{
   }
   for (const auto jetItr : *goodJet) {
     //jetItr->auxdecor<char>("ttHJetOVRStatus") = jetItr->auxdataConst<char>("ttHpassOVR") + 
-jetItr->auxdataConst<char>("ttHpassTauOVR");
+    jetItr->auxdataConst<char>("ttHpassTauOVR");
     if (jetItr->auxdataConst<char>("ttHpassOVR")) {
      tthevt->selected_OR_jets->push_back(jetItr);
     }
