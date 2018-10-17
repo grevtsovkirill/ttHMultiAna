@@ -30,6 +30,9 @@ const static int PDG_Z = 23;
 const static int PDG_W = 24;
 const static int PDG_HIGGS = 25;
 
+const static int PDG_LQu = 43;// mistake?????
+const static int PDG_LQ  = 42;
+
 const static int NOT_SELECTED = -1;
 
 //=========================================================================
@@ -113,6 +116,14 @@ ttH::TruthSelector::TruthSelector():
      decaymodestr[noproducts]   = "noproducts";
      decaymodestr[nohiggs]      = "nohiggs";
      decaymodestr[problem]      = "problem";
+
+     decaymodestr[ttau]      = "ttau";
+     decaymodestr[tmu]       = "tmu";
+     decaymodestr[btau]      = "btau";
+     decaymodestr[bmu]       = "bmu";
+     decaymodestr[tnu]       = "tnu";
+     decaymodestr[bnu]       = "bnu";
+
 }
 
 //=========================================================================
@@ -319,7 +330,79 @@ ttH::decaymode ttH::TruthSelector::GetHiggsDecayMode(const xAOD::TruthParticleCo
                 else if(higgs_cpdg[0] == 22 && abs(higgs_cpdg[1]) == 15) return taugamma;
                 else cerr << "1 = " << higgs_cpdg[0] << ", 2 = " << higgs_cpdg[1] << endl;
             }
-            std::cout<<"Warning: Higgs children size: "<<higgs_cpdg.size() <<std::endl;
+	    std::cout<<"Warning: Higgs children size: "<<higgs_cpdg.size() <<std::endl;
+            return unclassified;   
+        }
+    }
+    return unclassified;
+}
+
+ttH::decaymode ttH::TruthSelector::GetLQDecayMode(const xAOD::TruthParticleContainer* cont)
+{
+    m_truths    = cont;
+    for(const xAOD::TruthParticle *part: *m_truths)
+    {
+        if(!part)
+        {
+            continue;
+        }
+	TruthPart p(*part);
+        if(IsGoodLQ(p.pdgId,p.bc_children) )
+        {
+	  
+            std::vector<int> LQ_cpdg;
+            LQ_cpdg.clear();
+
+            for(unsigned int mcp_c = 0; mcp_c < GetChildren(*part).size();mcp_c++)
+            {
+                ttH::TruthPart child = GetChildren(*part).at(mcp_c);
+                int cpdg = child.pdgId;		
+		LQ_cpdg.push_back(cpdg);
+	    }                      
+            int gammacount = 0;
+            //if there is one (or more) extra gamma(s), remove it(them)
+            if(LQ_cpdg.size() > 2 )
+            {
+                gammacount = count(LQ_cpdg.begin(), LQ_cpdg.end(), 22);
+                if(LQ_cpdg.size() - gammacount >= 1)
+                {
+                    vector<int>::iterator pos;
+                    //if only 1 other particle + photons, leave last photon
+                    if(LQ_cpdg.size() - gammacount == 1) gammacount--;
+                    for(int iter = 0; iter < gammacount; iter++)
+                    {
+                        pos = find(LQ_cpdg.begin(), LQ_cpdg.end(),22);
+                        LQ_cpdg.erase(pos);
+                    }
+                }
+            }
+ 
+            if(LQ_cpdg.size()==2)
+            {
+	      if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 15) return ttau;
+	      else if(abs(LQ_cpdg[0]) == 15 && abs(LQ_cpdg[1]) == 6) return ttau;
+	      else if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 13) return tmu;
+	      else if(abs(LQ_cpdg[0]) == 13 && abs(LQ_cpdg[1]) == 6) return tmu;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 15) return btau;
+	      else if(abs(LQ_cpdg[0]) == 15 && abs(LQ_cpdg[1]) == 5) return btau;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 13) return bmu;
+	      else if(abs(LQ_cpdg[0]) == 13 && abs(LQ_cpdg[1]) == 5) return bmu;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 12) return bnu;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 14) return bnu;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 16) return bnu;
+	      else if(abs(LQ_cpdg[0]) == 12 && abs(LQ_cpdg[1]) == 5) return bnu;
+	      else if(abs(LQ_cpdg[0]) == 14 && abs(LQ_cpdg[1]) == 5) return bnu;
+	      else if(abs(LQ_cpdg[0]) == 16 && abs(LQ_cpdg[1]) == 5) return bnu;
+	      else if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 12) return tnu;
+	      else if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 14) return tnu;
+	      else if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 16) return tnu;
+	      else if(abs(LQ_cpdg[0]) == 12 && abs(LQ_cpdg[1]) == 6) return tnu;
+	      else if(abs(LQ_cpdg[0]) == 14 && abs(LQ_cpdg[1]) == 6) return tnu;
+	      else if(abs(LQ_cpdg[0]) == 16 && abs(LQ_cpdg[1]) == 6) return tnu;
+
+	      else cerr << "1 = " << LQ_cpdg[0] << ", 2 = " << LQ_cpdg[1] << endl;
+            }
+	    //            std::cout<<"Warning: LQ children size: "<<LQ_cpdg.size() <<std::endl;
             return unclassified;   
         }
     }
@@ -344,6 +427,114 @@ const xAOD::TruthParticle* ttH::TruthSelector::GetHiggs(const xAOD::TruthParticl
     }
     
     return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetLQ(const xAOD::TruthParticleContainer* cont)
+{
+    m_truths    = cont;
+    for(const xAOD::TruthParticle *part: *m_truths)
+    {
+        if(!part)
+        {
+            continue;
+        }
+	TruthPart p(*part);
+        if(IsGoodLQ(p.pdgId,p.bc_children) && p.pdgId>0)
+        {
+	  return part;
+	}
+    }
+    
+    return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetLQbar(const xAOD::TruthParticleContainer* cont)
+{
+    m_truths    = cont;
+    for(const xAOD::TruthParticle *part: *m_truths)
+    {
+        if(!part)
+        {
+            continue;
+        }
+	TruthPart p(*part);
+        if(IsGoodLQ(p.pdgId,p.bc_children) && p.pdgId<0)
+        {
+	  return part;
+	}
+    }
+    
+    return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetLQlep(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetLQ(cont));
+  for (auto child : children) {
+    //    if (child.pdgId == PDG_ELECTRON || child.pdgId == PDG_MUON || child.pdgId == PDG_TAU) {
+    if (IsLepton(child)) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetLQbarlep(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetLQbar(cont));
+  for (auto child : children) {
+    //    if (child.pdgId == PDG_ELECTRON || child.pdgId == PDG_MUON || child.pdgId == PDG_TAU) {
+    if (IsLepton(child)) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetLQq(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetLQ(cont));
+  for (auto child : children) {
+    //    if (child.pdgId == PDG_ELECTRON || child.pdgId == PDG_MUON || child.pdgId == PDG_TAU) {
+    if (!IsLepton(child)) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+//=========================================================================
+const xAOD::TruthParticle* ttH::TruthSelector::GetLQbarq(const xAOD::TruthParticleContainer* cont)
+{
+  const std::vector<ttH::TruthPart> children = GetChildren(*GetLQbar(cont));
+  for (auto child : children) {
+    //    if (child.pdgId == PDG_ELECTRON || child.pdgId == PDG_MUON || child.pdgId == PDG_TAU) {
+    if (!IsLepton(child)) {
+      for (const xAOD::TruthParticle *part: *cont) {
+        if (part->barcode() == child.barcode) {
+          return part;
+        }
+      }
+    }
+  }
+  return nullptr;
 }
 
 //=========================================================================
@@ -463,6 +654,12 @@ bool ttH::TruthSelector::IsGoodHiggs(const int pdgId, const vector<int>& childre
 }
 
 //=========================================================================
+bool ttH::TruthSelector::IsGoodLQ(const int pdgId, const vector<int>& children)
+{
+  return std::abs(pdgId) == PDG_LQ && children.size() >= 2;
+}
+
+//=========================================================================
 bool ttH::TruthSelector::IsGoodW(const int pdgId, const vector<int>& children)
 {
   return std::abs(pdgId) == PDG_W && children.size() >= 2;
@@ -537,6 +734,18 @@ bool ttH::TruthSelector::IsLepton(const xAOD::TruthParticle& truth) const
   return false;
 }
 
+//=========================================================================
+bool ttH::TruthSelector::IsLepton(const ttH::TruthPart& truth) const
+{
+  const int pdgId = std::abs(truth.pdgId);
+
+  if(11 <= pdgId && pdgId <= 16) {
+    return true;
+  }
+
+  return false;
+}
+
 //=================================================================================
 bool ttH::TruthSelector::IsGenerator(int status, int barcode) const
 {
@@ -598,7 +807,9 @@ std::vector<ttH::TruthPart> ttH::TruthSelector::GetParents(const xAOD::TruthPart
 std::vector<ttH::TruthPart> ttH::TruthSelector::GetChildren(const xAOD::TruthParticle &truth)
 {
   std::vector<ttH::TruthPart> out;
+  return out;
   if (&truth == nullptr) return out;
+  if(!(&truth)) return out;
 
   std::set<int> bc_set;
 
@@ -675,3 +886,140 @@ unsigned int ttH::TruthSelector::CountLightLeptons(const xAOD::TruthParticleCont
       nLightLeptons++;
   return nLightLeptons;
 }
+
+//=========================================================================
+unsigned int ttH::TruthSelector::GetLQttauttauMode(const xAOD::TruthParticleContainer* truthParticles)
+{
+  int  tau0=0, tau1=0, top0=0, top1=0;
+
+  for (const auto& p : *truthParticles) {
+    if (!(fabs(p->pdgId())==15)) continue;
+    if (hasParticleIdenticalParent(p)) continue;
+
+    for (size_t iparent = 0; iparent < p->nParents(); ++iparent){
+      if (p->parent(iparent) == nullptr) continue;
+      if (!(fabs(p->parent(iparent)->pdgId())==42)) continue;
+      const auto& tau = findAfterFSR(p);
+      if(p->parent(iparent)->pdgId()==42){
+        for (size_t i = 0; i < tau->nChildren(); ++i) {
+          const auto& child = tau->child(i);
+          if (!child) continue;
+          if (fabs(child->pdgId())==12 || fabs(child->pdgId())==14 || fabs(child->pdgId())==16) continue;
+          if (fabs(child->pdgId())==11 || fabs(child->pdgId())==13) tau0 = 1;
+          else tau0 = 2;
+	}//for tau children
+      }//if 42
+      if(p->parent(iparent)->pdgId()==-42){
+        for (size_t i = 0; i < tau->nChildren(); ++i) {
+          const auto& child = tau->child(i);
+          if (!child) continue;
+          if (fabs(child->pdgId())==12 || fabs(child->pdgId())==14 || fabs(child->pdgId())==16) continue;
+          if (fabs(child->pdgId())==11 || fabs(child->pdgId())==13) tau1 = 1;
+          else tau1 = 2;
+	}//for tau
+      }// if -42
+    }//for tau parents
+  }// for truth
+
+  for (const auto& p : *truthParticles) {
+    if(!(fabs(p->pdgId())==6)) continue;
+    if(hasParticleIdenticalParent(p)) continue;
+    const auto& top = findAfterFSR(p);
+    for (size_t k=0; k < top->nChildren(); k++) {
+      const xAOD::TruthParticle* topChildren = top->child(k);
+      if (!(abs(topChildren->pdgId()) == 24)) continue;
+      topChildren = findAfterFSR(topChildren);
+      
+      for (size_t q = 0; q < topChildren->nChildren(); ++q) {
+	const xAOD::TruthParticle* WChildren = topChildren->child(q);
+	if (fabs(WChildren->pdgId())==12 || fabs(WChildren->pdgId())==14 || fabs(WChildren->pdgId())==16) continue;
+	
+	if (abs(WChildren->pdgId())<17){
+	  if (topChildren->pdgId()>0){
+	    if(abs(WChildren->pdgId())==11 || abs(WChildren->pdgId())==13) top0 = 1;
+	    else if (abs(WChildren->pdgId())==15){
+	      for(size_t r = 0; r < WChildren->nChildren(); ++r){
+		const xAOD::TruthParticle* tauChildren = WChildren->child(r);
+		if(abs(tauChildren->pdgId())==12 || abs(tauChildren->pdgId())==14 || abs(tauChildren->pdgId())==16) continue;
+		if(abs(tauChildren->pdgId())==11 || abs(tauChildren->pdgId())==13) top0=1;
+		else top0 = 2;
+	      }//for wchildren
+	    }else top0 = 3;
+	  }else{
+	    if(abs(WChildren->pdgId())==11 || abs(WChildren->pdgId())==13) top1 = 1;
+	    else if (abs(WChildren->pdgId())==15){
+	      for(size_t r = 0; r < WChildren->nChildren(); ++r){
+		const xAOD::TruthParticle* tauChildren = WChildren->child(r);
+		if(abs(tauChildren->pdgId())==12 || abs(tauChildren->pdgId())==14 || abs(tauChildren->pdgId())==16) continue;
+		if(abs(tauChildren->pdgId())==11 || abs(tauChildren->pdgId())==13) top1=1;
+		else top1 = 2;
+	      }
+	    }else top1 = 3;
+	  }//else
+	}//Wchildren
+      }//for top children children
+    }//for top children
+  }//for all truth
+
+  //  cout<<tau0<<tau1<<top0<<top1<<endl;
+
+  if(tau0==1 && tau1==1){
+    if(top0==1 && top1==1)                              return 1;
+    else if((top0==1 && top1==2)||(top0==2 && top1==1)) return 2;
+    else if((top0==1 && top1==3)||(top0==3 && top1==1)) return 3;
+    else if( top0==2 && top1==2)                        return 4;
+    else if((top0==2 && top1==3)||(top0==3 && top1==2)) return 5;
+    else if( top0==3 && top1==3)                        return 6;
+    else return 0;
+  }else if(tau0==2 && tau1==2){
+    if(top0==1 && top1==1)                              return 13;
+    else if((top0==1 && top1==2)||(top0==2 && top1==1)) return 14;
+    else if((top0==1 && top1==3)||(top0==3 && top1==1)) return 15;
+    else if( top0==2 && top1==2)                        return 16;
+    else if((top0==2 && top1==3)||(top0==3 && top1==2)) return 17;
+    else if( top0==3 && top1==3)                        return 18;
+    else return 0;
+  }else{
+    if(top0==1 && top1==1)                              return 7;
+    else if((top0==1 && top1==2)||(top0==2 && top1==1)) return 8;
+    else if((top0==1 && top1==3)||(top0==3 && top1==1)) return 9;
+    else if( top0==2 && top1==2)                        return 10;
+    else if((top0==2 && top1==3)||(top0==3 && top1==2)) return 11;
+    else if( top0==3 && top1==3)                        return 12;
+    else return 0;
+  }
+
+}
+
+const xAOD::TruthParticle* ttH::TruthSelector::findAfterFSR(const xAOD::TruthParticle* particle) {
+  bool isAfterFSR(false);
+  const int particle_ID = particle->pdgId();
+  int forLoop  = 0;
+  while(!isAfterFSR){
+
+    forLoop  = 0;
+    for (size_t j=0; j< particle->nChildren(); j++ ) {
+      const xAOD::TruthParticle* tmp_children = particle->child(j);
+      if (tmp_children && tmp_children->pdgId()==particle_ID){
+	particle = particle->child(j);
+	forLoop++;
+	break;
+      }//if
+    }//for
+    if (forLoop == 0)       isAfterFSR = true;
+  }//while
+  return particle;
+}
+
+bool ttH::TruthSelector::hasParticleIdenticalParent(const xAOD::TruthParticle* particle) {
+  bool skipit(false);
+  for (size_t i=0; i< particle->nParents(); i++ ) {
+    const xAOD::TruthParticle* parent = particle->parent(i);
+    if (parent && parent->pdgId()==particle->pdgId()){
+      skipit=true;
+      break;
+    }//if
+  }//for
+  return skipit;
+}
+
