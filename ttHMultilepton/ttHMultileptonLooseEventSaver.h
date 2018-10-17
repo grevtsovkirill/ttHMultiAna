@@ -57,14 +57,14 @@ extern TH1I* m_tauCutflow;
       ttHMultileptonLooseEventSaver();
       ///-- Destructor does nothing --///
       ~ttHMultileptonLooseEventSaver();
-
+      
       ///-- initialize function for top::EventSaverFlatNtuple --///
       ///-- We will be setting up out custom variables here --///
       virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) override;
-
+      
       ///-- Keep the asg::AsgTool happy --///
-      virtual StatusCode initialize() override {return StatusCode::SUCCESS;}
-
+      virtual StatusCode initialize() override {return StatusCode::SUCCESS;}      
+      
       void finalize();
       ///-- saveEvent function for top::EventSaverFlatNtuple --///
       ///-- We will be setting our custom variables on a per-event basis --///
@@ -75,19 +75,11 @@ extern TH1I* m_tauCutflow;
       void CopyTaus(const xAOD::TauJetContainer& Taus);
       void CheckIsBlinded();
       void CopyHT(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::JetContainer& goodJets, const xAOD::TauJetContainer& goodTaus);
+      void CopyHT_trig(const xAOD::JetContainer& goodJets);
       void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
       int getNTruthJets(const xAOD::JetContainer jetColl);
       int getNInnerPix(const xAOD::Electron& el);
       int getNInnerPix(const xAOD::Muon& mu);
-      /*template <class T> T getattr_truthJet(const xAOD::Jet &jet, std::string  attr) {
-	      T attr_value = -99;
-	      if (jet.isAvailable<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink")
-			      && jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink").isValid()) {
-		      const xAOD::Jet* trthjet = *jet.auxdata<ElementLink<xAOD::JetContainer> >("GhostTruthAssociationLink");
-		      if(trthjet->pt() >10000) attr_value = trthjet->auxdataConst<T>(attr.c_str()); //10 GeV cut recommended for finding hard-scattering jet
-	      }
-	      return attr_value;
-      }*/
 
       //extern TH1I* m_eleCutflow;// = new TH1I("m_eleCutflow", "Electron cutflow", 10, 0.5, 10.5);
       //extern TH1I* m_muCutflow;// = new TH1I("m_muCutflow", "Muon cutflow", 10, 0.5, 10.5);
@@ -135,12 +127,12 @@ extern TH1I* m_tauCutflow;
   // OR tools: 0 = e/mu only; 1 = nominal; 2 = all but tau;
       ORUtils::ToolBox                       m_ORtoolBox[3];
       asg::AnaToolHandle<ORUtils::IOverlapRemovalTool> m_overlapRemovalTool[3];
-
-  //Trigger Scale Factors -- NEW --
+  
+  //Trigger Scale Factors -- NEW -- 
   // --> Electrons
       ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronEffToolsHandles;
       ToolHandleArray<IAsgElectronEfficiencyCorrectionTool>                    m_electronSFToolsHandles;
-      std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory;
+      std::vector<asg::AnaToolHandle<IAsgElectronEfficiencyCorrectionTool> >   m_electronToolsFactory; 
  // --> Muons
       ToolHandleArray<CP::IMuonTriggerScaleFactors>                            m_muonToolsHandles;
       std::vector<asg::AnaToolHandle<CP::IMuonTriggerScaleFactors> >           m_muonToolsFactory;
@@ -226,9 +218,6 @@ extern TH1I* m_tauCutflow;
   double m_JVT_weight_UP;
   double m_JVT_weight_DOWN;
 
-  // Exclude this DSIDs from for the truth jet info code
-  std::vector<int> m_excludedDSIDs;
-
   //event info
   unsigned long long m_eventNumber;
   uint32_t m_runNumber;
@@ -264,7 +253,7 @@ extern TH1I* m_tauCutflow;
   float m_MEphoton_pt;
   float m_MEphoton_eta;
   float m_MEphoton_phi;
-  int m_MEphoton_mother_pdgId;
+  int m_MEphoton_mother_pdgId;  
   float m_MEphoton_mother_pt;
   float m_MEphoton_mother_e;
   float m_MEphoton_mother_eta;
@@ -305,9 +294,17 @@ extern TH1I* m_tauCutflow;
 
   //MC
   int   m_higgsMode;
+  int   m_LQMode;
+  int   m_ttaudecay;
   const xAOD::TruthParticle* m_higgs;
   const xAOD::TruthParticle* m_top;
   const xAOD::TruthParticle* m_antitop;
+  const xAOD::TruthParticle* m_LQ;
+  const xAOD::TruthParticle* m_LQbar;
+  const xAOD::TruthParticle* m_LQlep;
+  const xAOD::TruthParticle* m_LQbarlep;
+  const xAOD::TruthParticle* m_LQq;
+  const xAOD::TruthParticle* m_LQbarq;
   std::vector<float> m_mc_m;
   std::vector<float> m_mc_pt;
   std::vector<float> m_mc_eta;
@@ -327,20 +324,13 @@ extern TH1I* m_tauCutflow;
   std::vector<float> m_PDFinfo_Q;
   std::vector<float> m_PDFinfo_XF1;
   std::vector<float> m_PDFinfo_XF2;
-
+/*
   std::vector<float> m_trjet_pt;
   std::vector<float> m_trjet_eta;
   std::vector<float> m_trjet_phi;
-  std::vector<float> m_trjet_m;
-  std::vector<int>   m_trjet_Wcount;
-  std::vector<int>   m_trjet_Zcount;
-  std::vector<int>   m_trjet_Hcount;
-  std::vector<int>   m_trjet_Tcount;
-  std::vector<int>   m_trjet_BHandronCount;
-  std::vector<int>   m_trjet_CHandronCount;
-  std::vector<int>   m_trjet_ConeTruthLabelID;
-  std::vector<int>   m_trjet_PartonTruthLabelID;
-
+  std::vector<float> m_trjet_e;
+  std::vector<int>   m_trjet_Wcount, m_trjet_Zcount, m_trjet_Hcount, m_trjet_Tcount;
+*/
   CP::SystematicSet dummy_nom;
   CP::SystematicSet dummy_elup;
   CP::SystematicSet dummy_eldo;
@@ -358,7 +348,7 @@ extern TH1I* m_tauCutflow;
 
 
       // for names of lepton trigger SFs for multi-trigger tool
-      //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{
+      //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
       std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{
     	{ dummy_nom, "nominal" },
     	{ dummy_elup, "EL_SF_Trigger_UP" },
@@ -369,7 +359,7 @@ extern TH1I* m_tauCutflow;
         { dummy_musysdo, "MU_SF_Trigger_SYST_DOWN" },
 	    { dummy_eleffup, "EL_EFF_Trigger_UP" },
 	    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
-	  };
+	  }; 
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{
     { top::topSFSyst::nominal, "nominal" },
@@ -432,10 +422,11 @@ extern TH1I* m_tauCutflow;
   std::vector<VectorWrapperCollection> vec_vtx_wrappers;
   #endif
 
-
+      
       ///-- Tell RootCore to build a dictionary (we need this) --///
   //ClassDef(ttHMultileptonLooseEventSaver, 0);
   };
 
 
 #endif
+

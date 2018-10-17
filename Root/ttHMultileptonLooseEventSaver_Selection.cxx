@@ -1081,8 +1081,10 @@ ttHMultileptonLooseEventSaver::CopyHT(const xAOD::ElectronContainer& goodEl, con
   m_ttHEvent->HT_jets = 0;
 
   for (const auto jetItr : goodJets) {
-    m_ttHEvent->HT += jetItr->pt();
-    m_ttHEvent->HT_jets += jetItr->pt();
+    if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+      m_ttHEvent->HT += jetItr->pt();
+      m_ttHEvent->HT_jets += jetItr->pt();
+    }
   }
   for (const auto elItr : goodEl) {
     m_ttHEvent->HT += elItr->pt();
@@ -1094,6 +1096,14 @@ ttHMultileptonLooseEventSaver::CopyHT(const xAOD::ElectronContainer& goodEl, con
   }
   for (const auto tauItr : goodTaus) {
     m_ttHEvent->HT += tauItr->pt();
+  }
+}
+
+void
+ttHMultileptonLooseEventSaver::CopyHT_trig(const xAOD::JetContainer& goodJets) {
+  m_ttHEvent->HT_alljets = 0;
+  for (const auto jetItr : goodJets) {
+    m_ttHEvent->HT_alljets += jetItr->pt();
   }
 }
 
