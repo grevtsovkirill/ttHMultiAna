@@ -367,6 +367,12 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
   lep.isConvPh = ( ConvPh.isAvailable(el) ) ?  ConvPh(el) : -1;
 
+  static SG::AuxElement::Accessor<char> IntConvPh("isIntConvPh");
+  lep.isIntConvPh = ( IntConvPh.isAvailable(el) ) ?  IntConvPh(el) : -1;
+
+  static SG::AuxElement::Accessor<char> ExtConvPh("isExtConvPh");
+  lep.isExtConvPh = ( ExtConvPh.isAvailable(el) ) ?  ExtConvPh(el) : -1;
+
   static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
   lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(el) ) ?  ISR_FSR_Ph(el) : -1;
 
@@ -829,6 +835,12 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
 
   static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
   lep.isConvPh = ( ConvPh.isAvailable(mu) ) ?  ConvPh(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> ExtConvPh("isExtConvPh");
+  lep.isExtConvPh = ( ExtConvPh.isAvailable(mu) ) ?  ExtConvPh(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> IntConvPh("isIntConvPh");
+  lep.isIntConvPh = ( IntConvPh.isAvailable(mu) ) ?  IntConvPh(mu) : -1;
 
   static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
   lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(mu) ) ?  ISR_FSR_Ph(mu) : -1;
