@@ -100,4 +100,10 @@ run_data:
   variables:
     eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/data_17_13TeV:DAOD_HIGG8D1.12825536._000052.pool.root.1
     config_file: generic_config_data.txt
+    
+run_sys:
+  <<: *run
+  variables:
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.12726347._001270.pool.root.1
+    config_file: generic_config_systmc16a.txt
 
