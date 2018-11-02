@@ -615,6 +615,7 @@ StatusCode TruthMatchAlgo :: checkTruthQMisID ( const xAOD::IParticle* lep, cons
 		 "isBrems? " << (*m_isBremsAcc)( *lep ) << "\n" <<
 		 "isConvPh? " << (*m_isConvPhAcc)( *lep ) << "\n" <<
 		 "isExtConvPh? " << (*m_isExtConvPhAcc)( *lep ) << "\n" <<
+		 "isIntConvPh? " << (*m_isIntConvPhAcc)( *lep ) << "\n" <<
 		 "is from ISR/FSR? " << (*m_isISR_FSR_PhDecor)( *lep ) << "\n" <<
 		 "-----------\nRECO: \n" <<
 		 "norm charge: " << reco_norm_charge << " \n" <<
