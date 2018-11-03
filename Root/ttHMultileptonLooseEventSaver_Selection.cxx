@@ -337,7 +337,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.d0 = el.trackParticle()->d0();
   lep.z0 = el.trackParticle()->z0();
   lep.vz = el.trackParticle()->vz();
-
+  lep.nTrackParticles= el.nTrackParticles();
   // truth matching, fakes, QMisId
   int TruthType = -99;
   int TruthOrigin = -99;
@@ -727,7 +727,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   lep.d0 = mu.primaryTrackParticle()->d0();
   lep.z0 = mu.primaryTrackParticle()->z0();
   lep.vz = mu.primaryTrackParticle()->vz();
-
+  lep.nTrackParticles= -1;
 
   static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
   lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;

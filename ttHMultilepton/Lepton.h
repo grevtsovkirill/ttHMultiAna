@@ -119,7 +119,8 @@ namespace ttHML {
     char    isIntConvPh;
     char    isISR_FSR_Ph;
     char    isBrems;
-
+    int     nTrackParticles;
+    
     float   chargeIDBDTLoose;
     float   chargeIDBDTMedium;
     float   chargeIDBDTTight;
