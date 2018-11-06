@@ -679,6 +679,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.phi(); }, *systematicTree, "electron_phi");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.e(); },   *systematicTree, "electron_E");
     Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) (-11*ele.charge()); }, *systematicTree, "electron_ID");
+    Wrap2(elevec, [=](const xAOD::Electron& ele) { return (int) ele.nTrackParticles(); }, *systematicTree, "electron_nTrackParticles");
 
     if(!m_doSystematics) {
       Wrap2(elevec, [=](const xAOD::Electron& ele) { return (float) ele.auxdataConst<float>("d0sig"); },             *systematicTree, "electron_sigd0PV");
