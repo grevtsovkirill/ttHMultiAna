@@ -4,6 +4,7 @@
 
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "TopEvent/Event.h"
+#include "TopEvent/EventTools.h"
 #include "TopEventSelectionTools/TreeManager.h"
 #include "ttHMultilepton/Variables.h"
 #include "AssociationUtils/OverlapRemovalInit.h"
@@ -259,9 +260,11 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
     //{"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseAndBLayerLLH", "isolFixedCutLoose"},
     // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"},
-    // dielectron trigger, only for untagged electrons, configured wrt loose WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFixedCutLoose"},
+    //{"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"},
+    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0_L1EM20VH", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"},
+	// dielectron trigger, only for untagged electrons, configured wrt loose WP:
+    //{"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFixedCutLoose"},
+	{"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0_L1EM20VH", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFixedCutLoose"},
     // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"},
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
@@ -1563,22 +1566,27 @@ ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
   ///-- saveEvent - run for every systematic and every event --///
   void ttHMultileptonLooseEventSaver::saveEvent(const top::Event& event)
   {
+	std::cout << "ALBERT ALBERT ALBERT 0"<< std::endl;
     m_ttHEvent->Clear();
     std::shared_ptr<ttHML::Variables> tthevt;
     if(event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
       tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
     }
+	std::cout << "ALBERT ALBERT ALBERT 1"<< std::endl;
 if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
-    if(tthevt)tthevt->clearReco();
-    return;
+    std::cout << "ALBERT ALBERT ALBERT 1.1" << std::endl;
+	if(tthevt)tthevt->clearReco();
+	std::cout << "ALBERT ALBERT ALBERT 1.2" << std::endl;
+  return;
   }
+	std::cout << "ALBERT ALBERT ALBERT 2"<< std::endl;
   if(!m_config->saveOnlySelectedEvents()){
     top::EventSaverFlatNtuple::saveEvent(event);
     if(tthevt)tthevt->clearReco();
     return;
   }
 
-
+  std::cout << "ALBERT ALBERT ALBERT 3"<< std::endl;
   //unique name for selected containers
   std::size_t sysHash = event.m_hashValue;
   m_sysName = m_config->systematicName(sysHash);
@@ -1969,8 +1977,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-    if (m_isMC){
-    doEventTrigSFs(*Electrons,*Muons,event);}
+    //if (m_isMC){
+    //doEventTrigSFs(*Electrons,*Muons,event);}
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");

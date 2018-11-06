@@ -6,8 +6,8 @@ setupATLAS
 
 #Setting up AnalysisTop release in source directory and copying patched packages
 cd ../
-asetup AnalysisTop,21.2.36,here
-cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.36/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools ./
+asetup AnalysisTop,21.2.50,here
+cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.50/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools ./
 cd TopCPTools/Root/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopMuonCPTools_cxx.diff
