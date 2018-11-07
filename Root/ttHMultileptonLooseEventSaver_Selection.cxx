@@ -1272,6 +1272,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
 	if(cc_tt==CP::CorrectionCode::Ok)
 	  {
+	  if(m_ttHEvent->dilep_type==1) std::cout<<sf_tt<<std::endl;
 	    m_ttHEvent->lepSFTrigTight[nTrig] = sf_tt;
 	  }
 	double dummy,eff_tt = 1.; //TightTight EFF
