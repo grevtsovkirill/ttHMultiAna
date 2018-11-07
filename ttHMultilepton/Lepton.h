@@ -119,7 +119,7 @@ namespace ttHML {
     char    isIntConvPh;
     char    isISR_FSR_Ph;
     char    isBrems;
-    int     nTrackParticles;
+   
     
     float   chargeIDBDTLoose;
     float   chargeIDBDTMedium;
@@ -190,6 +190,10 @@ namespace ttHML {
     float   EffTrigTight[MAXSYST];
     unsigned char ambiguityType;
     int nInnerPix;
+
+    int     nTrackParticles;
+    float   MeeCO;
+    float   RadiusCO;
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 

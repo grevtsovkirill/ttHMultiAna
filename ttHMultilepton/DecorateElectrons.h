@@ -28,6 +28,8 @@ class DecorateElectrons:public top::EventSelectorBase {
   bool apply(const top::Event & event) const override;
   std::string name() const override;
   ttHMLAsgHelper* m_asgHelper;
+ 
+
  private:
   AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
   AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
@@ -46,7 +48,7 @@ class DecorateElectrons:public top::EventSelectorBase {
  // std::string name;
   std::string m_electrons;
   std::string m_params;
-
+  
 
 };
 
