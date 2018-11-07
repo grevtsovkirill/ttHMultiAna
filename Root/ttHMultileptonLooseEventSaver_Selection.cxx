@@ -337,7 +337,20 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.d0 = el.trackParticle()->d0();
   lep.z0 = el.trackParticle()->z0();
   lep.vz = el.trackParticle()->vz();
+
+  ///// Variables needed for internal and external conversions
+
+  // NTracks associated to the reco electron
   lep.nTrackParticles= el.nTrackParticles();
+
+  // Mee from tracks
+  lep.MeeCO = el.auxdataConst<float>("mll_conv");
+
+  // Conversion radius from tracks
+  lep.RadiusCO = el.auxdataConst<float>("radius_conv");
+
+  /////
+
   // truth matching, fakes, QMisId
   int TruthType = -99;
   int TruthOrigin = -99;

@@ -16,6 +16,13 @@
 #include "AsgTools/ToolHandle.h"
 #include "ttHMultilepton/ttHMLAsgHelper.h"
 
+static const float Pi = 3.14159;
+static const float PTTOCURVATURE = 0.301; // ATLAS B=2T (in MeV/mm) 
+static const float SEPCUT      = 1;
+static const float DCTLOOSECUT = 0.2;
+static const float DCTCUT      = 0.01;
+
+
 DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
   iso_1( "iso_1" ),
@@ -53,6 +60,7 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
   m_params=params;
   m_pv=nullptr;
   nelec=0;
+ 
 }
 
 DecorateElectrons::~DecorateElectrons(){
@@ -71,6 +79,9 @@ bool DecorateElectrons::apply(const top::Event & event) const{
    abort();
  }
 
+  float mll_conv;
+  float radius_conv;
+  
   std::shared_ptr<ttHML::Variables> tthevt = event.m_info->auxdecor<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables");
     for (auto elItr : event.m_electrons) {
       auto isomap = iso_1.accept(*elItr);
@@ -107,9 +118,269 @@ bool DecorateElectrons::apply(const top::Event & event) const{
     elItr->auxdecor<float>("chargeIDBDTLoose") = (float)m_electronChargeIDLoose.calculate(elItr);
     elItr->auxdecor<float>("chargeIDBDTMedium") = (float)m_electronChargeIDMedium.calculate(elItr);
     elItr->auxdecor<float>("chargeIDBDTTight") = (float)m_electronChargeIDTight.calculate(elItr);
-  }
+    
+    // Traces associated to the electron
 
+    mll_conv=-1;
+    radius_conv=-1;
+    int nTPSi = 0;
+    int nTPIBL = 0;
+    int nTPSiNoIBL = 0;
+    double mtretre(-999); 
+    double mtretreSi(-999);
+    double mtretreIBL(-999);  
+    double mtretreMissingIBL(-999); 
+    double track0pt(-1);
+    double track1pt(-1);
+    double detaMin(999);
+    double minDCT(999);
+    double minDCTsimple(999);
+    double separationMinDCT(-999);
+    double convXMinDCT(-999);
+    double convYMinDCT(-999);
+    double convRMinDCT(-999);
 
+    const xAOD::TrackParticleContainer *tpC(nullptr);
+    top::check( m_asgHelper->evtStore()->retrieve(tpC,"InDetTrackParticles"),"Failed to retrieve InDetTrackParticles");
+      
+    if (tpC)
+      { 
+	for (auto tracks1 : *tpC)  // loop on all tracks
+	  {
+	    double dR = elItr->trackParticle(0)->p4().DeltaR(tracks1->p4());
+	    if ( (tracks1 != elItr->trackParticle(0)) && (dR<0.3)  && ((elItr->trackParticle(0)->charge() * tracks1->charge()) < 0)  ) // not the best-match track and opposite charge and loose DeltaR cut  
+	      {
+		//std::cout << "Looping on all tracks" << std::endl;
+		
+		bool hasSi(false); 
+		bool hasInnermostHit(false); 
+		bool hasSiButMissingInnermostHit(false); 
+		uint8_t nBL = 0, nIL = 0, nNIL = 0, nPix = 0, nSCT = 0; 
+		uint8_t nPshared = 0, nSshared = 0; 
+		uint8_t eBL = 1, eIL = 1, eNIL = 1; 
+		tracks1->summaryValue(nPix,xAOD::numberOfPixelHits); 
+		tracks1->summaryValue(nBL,xAOD::numberOfBLayerHits); 
+		tracks1->summaryValue(nIL,xAOD::numberOfInnermostPixelLayerHits); 
+		tracks1->summaryValue(nNIL,xAOD::numberOfNextToInnermostPixelLayerHits); 
+		tracks1->summaryValue(nSCT,xAOD::numberOfSCTHits); 
+		tracks1->summaryValue(eBL,xAOD::expectBLayerHit); 
+		tracks1->summaryValue(eIL,xAOD::expectInnermostPixelLayerHit); 
+		tracks1->summaryValue(eNIL,xAOD::expectNextToInnermostPixelLayerHit); 
+		tracks1->summaryValue(nPshared,xAOD::numberOfPixelSharedHits); 
+		tracks1->summaryValue(nSshared,xAOD::numberOfSCTSharedHits); 
+		if((nPix+nSCT)>0){
+		  hasSi=true;
+		  nTPSi++;
+		  if(nIL>0||(eIL==0&&nNIL>0)){
+		    hasInnermostHit=true;
+		    nTPIBL++;
+		  }
+		  if( (nIL==0 && eIL>0) || (eIL==0 && eNIL>0 && nNIL==0) ){
+		    hasSiButMissingInnermostHit=true;
+		    nTPSiNoIBL++; 
+		    }
+		}
+		
+		double deta=fabs(tracks1->eta()-elItr->trackParticle(0)->eta()); 
+		if(deta<detaMin && hasSi){
+		  deta=detaMin;
+		  track1pt = tracks1->pt();
+		  
+		  TLorentzVector p0,p1;  
+		  p0.SetPtEtaPhiM(elItr->trackParticle(0)->pt(),elItr->trackParticle(0)->eta(),elItr->trackParticle(0)->phi(),0.511);   
+		  p1.SetPtEtaPhiM(tracks1->pt(),tracks1->eta(),tracks1->phi(),0.511);
+		  mll_conv=(p0+p1).M()*1e-3;
+		  
+		  //		    if(                               mtretre<0)           mtretre = m; // only look at Si tracks
+		  if(hasSi                       && mtretreSi<0)         mtretreSi = mll_conv; 
+		  if(hasInnermostHit             && mtretreIBL<0)        mtretreIBL = mll_conv;
+		  if(hasSiButMissingInnermostHit && mtretreMissingIBL<0) mtretreMissingIBL = mll_conv;  
+		  
+		  // Look for conversions (opposite charge and hasSi)
+		  if(hasSi){
+		   
+		    // Conversion methods
+		    // Helix array:
+		    // 0 cotan(theta)
+		    // 1 curvature
+		    // 2 z
+		    // 3 d0
+		    // 4 phi
+		    
+		    double helix1[5];
+		    double helix2[5];
+
+		    for(int ii=0;ii<5;ii++)
+		      {
+			helix1[ii] = -999.;
+			helix2[ii] = -999.;
+		      }
+		    
+		    ////////////// TrackToHelix Reco Electron Track
+
+		    helix1[0] = 1./tan(elItr->trackParticle(0)->theta());
+		    helix1[1] = PTTOCURVATURE*elItr->trackParticle(0)->charge()/elItr->trackParticle(0)->pt();
+		    
+		    if(elItr->trackParticle(0)->phi0()>0.)
+		      helix1[4] = elItr->trackParticle(0)->phi0();
+		    else
+		      helix1[4] = 2*Pi + elItr->trackParticle(0)->phi0();
+		    
+		    double c1 = cos(elItr->trackParticle(0)->phi0());
+		    double s1 = sin(elItr->trackParticle(0)->phi0());
+		    //  helix1[3] = elItr->trackParticle(0)->d0() + c1*elItr->trackParticle(0)->vy() - s1*elItr->trackParticle(0)->vx(); 
+		    // !!! HENRI'S HACK TO AVOID CRASH WITH DAODS!!!
+		    helix1[3] = elItr->trackParticle(0)->d0();
+		    
+		    c1 = c1*1./tan(elItr->trackParticle(0)->theta());
+		    s1 = s1*1./tan(elItr->trackParticle(0)->theta());
+		    //   helix1[2] = elItr->trackParticle(0)->z0() 
+		    //     - c1*elItr->trackParticle(0)->vx() - s1*elItr->trackParticle(0)->vy()
+		    //     + elItr->trackParticle(0)->vz();
+		    // !!! HENRI'S HACK TO AVOID CRASH WITH DAODS!!! 
+		    helix1[2] = elItr->trackParticle(0)->z0();
+		    
+		    //TVS: for later to get PVTX
+		    // if(vtx->vertexType() == xAOD::VxType::PriVtx) {
+		    //     m_pvNumber++;
+		    //     m_pv = vtx;
+		    //   }
+
+		    ///////////// TrackToHelix Other Electron Track
+
+		    helix2[0] = 1./tan(tracks1->theta());
+		    helix2[1] = PTTOCURVATURE*tracks1->charge()/tracks1->pt();
+		    
+		    if(tracks1->phi0()>0.)
+		      helix2[4] = tracks1->phi0();
+		    else
+		      helix2[4] = 2*Pi + tracks1->phi0();
+		    
+		    double c2 = cos(tracks1->phi0());
+		    double s2 = sin(tracks1->phi0());
+		    //  helix2[3] = tracks1->d0() + c1*tracks1->vy() - s1*tracks1->vx(); 
+		    // !!! HENRI'S HACK TO AVOID CRASH WITH DAODS!!!
+		    helix2[3] = tracks1->d0();
+		    
+		    c2 = c2*1./tan(tracks1->theta());
+		    s2 = s2*1./tan(tracks1->theta());
+		    //   helix2[2] = tracks1->z0() 
+		    //     - c1*tracks1->vx() - s1*tracks1->vy()
+		    //     + tracks1->vz();
+		    // !!! HENRI'S HACK TO AVOID CRASH WITH DAODS!!! 
+		    helix2[2] = tracks1->z0();
+		    
+		    //////
+		    
+		    double dct(helix1[0]-helix2[0]); 
+		   
+		    if( (fabs(dct)<fabs(minDCTsimple)) )
+		      {
+			minDCTsimple=dct;
+		      }  
+		    if( (fabs(dct)<fabs(minDCT)) && (fabs(dct)<DCTLOOSECUT) ) 
+		      { 
+			double separation=999;
+			double convX=999;
+			double convY=999;
+			//ConvSeparation(helix1, helix2, true, separation, convX, convY); 
+			
+			double x1, y1, r1, x2, y2, r2;
+			double cpx1, cpx2;
+			
+			double beta(0.);
+			if(helix1[4] < helix2[4])
+			  {
+			    beta = Pi/2-helix1[4];
+			  }
+			else
+			  {
+			    beta = Pi/2-helix2[4];
+			  }
+			
+			double phi1(helix1[4] + beta);
+			if(phi1>2*Pi) phi1=phi1-2*Pi;
+			if(phi1<0.) phi1=phi1+2*Pi;
+			
+			double phi2(helix2[4] + beta);
+			if(phi2>2*Pi) phi2 = phi2 - 2*Pi;
+			if(phi2<0) phi2 = phi2 + 2*Pi;
+			
+			//HelixToCircle(helix1, phi1, x1, y1, r1);
+			//HelixToCircle(helix2, phi2, x2, y2, r2);
+			/// HelixToCircle Main Track Electron
+			r1 = 1/(2.*fabs(helix1[1]));
+			
+			double charge1(1.);
+			if(helix1[1]<0.) charge1 = -1.;
+			double rcenter1(helix1[3]/charge1 + r1);
+			double phicenter1(phi1 + Pi/2*charge1);
+			
+			x1 = rcenter1*cos(phicenter1);
+			y1 = rcenter1*sin(phicenter1);
+			
+			/// HelixToCircle Other Electron Conv Track
+			r2 = 1/(2.*fabs(helix2[1]));
+			
+			double charge2(1.);
+			if(helix2[1]<0.) charge2 = -1.;
+			double rcenter2(helix2[3]/charge2 + r2);
+			double phicenter2(phi2 + Pi/2*charge2);
+			
+			x2 = rcenter2*cos(phicenter2);
+			y2 = rcenter2*sin(phicenter2);
+			//////
+
+			double dx(x1- x2);
+			if(dx <  1e-9 && dx > 0.) dx =  1e-9;
+			if(dx > -1e-9 && dx < 0.) dx = -1e-9;
+			double slope((y1-y2)/dx);
+			double b(y1 - slope*x1);
+			double alpha(atan(slope));
+			double d(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));
+			//only keeping opposite sign option
+			separation = d-r1-r2;
+			if(x1>x2)
+			  {
+			    cpx1 = x1-r1*cos(alpha);
+			    cpx2 = x2+r2*cos(alpha); 
+			  }
+			else
+			  {
+			    cpx1 = x1+r1*cos(alpha);
+			    cpx2 = x2 - r2*cos(alpha);
+			  }
+		      
+			
+			double temp1 = (cpx1+cpx2)/2;
+			double temp2 = slope*temp1+b;
+			convX = cos(beta)*temp1 + sin(beta)*temp2;
+			convY = -sin(beta)*temp1+ cos(beta)*temp2;
+			
+
+			///////
+			if(fabs(separation)<SEPCUT){
+			  minDCT=dct; 
+			  separationMinDCT=separation;
+			  convXMinDCT=convX;
+			  convYMinDCT=convY;
+			  
+			}
+		      } 
+		  }
+		}
+	      }
+	  } // end loop on all tracks
+      }
+
+    radius_conv=sqrt(convXMinDCT*convXMinDCT + convYMinDCT*convYMinDCT);
+    
+    elItr->auxdecor<float>("mll_conv") = mll_conv;
+    elItr->auxdecor<float>("radius_conv") = radius_conv;
+    
+    } // end loop over electrons 
+    
+    
 
 
  /* m_vertices = event.m_primaryVertices;
