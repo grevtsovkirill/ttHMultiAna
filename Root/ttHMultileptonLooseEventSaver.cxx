@@ -633,6 +633,22 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) m_trigDecTool->getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
     }*/
     //END trigger
+
+    // Keep tracks
+
+    // const xAOD::TrackParticleContainer *tpC(nullptr);
+    // top::check( m_asgHelper->evtStore()->retrieve(tpC,"InDetTrackParticles"),"Failed to retrieve InDetTrackParticles");
+
+    // if (tpC)
+    //   { 
+    // 	for (auto tracks1 : *tpC)  // loop on all tracks
+    // 	  {
+    // 	    double dR = elItr->trackParticle(0)->p4().DeltaR(tracks1->p4());
+    // 	    if ( (tracks1 != elItr->trackParticle(0)) && (dR<0.3)  )
+	      
+    // 	      }
+
+
     vec_scalar_wrappers.push_back(scalarvec);
 
     if(!m_doSystematics) {

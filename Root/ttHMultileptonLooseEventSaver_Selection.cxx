@@ -341,14 +341,41 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   ///// Variables needed for internal and external conversions
 
   // NTracks associated to the reco electron
-  lep.nTrackParticles= el.nTrackParticles();
+  lep.nTrackParticles      = el.nTrackParticles();
 
   // Mee from tracks
-  lep.MeeCO = el.auxdataConst<float>("mll_conv");
+  lep.MeeCO                = el.auxdataConst<float>("mll_conv");
 
   // Conversion radius from tracks
-  lep.RadiusCO = el.auxdataConst<float>("radius_conv");
+  lep.RadiusCO             = el.auxdataConst<float>("radius_conv");
 
+  // Distance between the two track curves
+  lep.SeparationMinDCT     = el.auxdataConst<float>("separationMinDCT");
+
+  // Pt, Eta, Phi, D0, Z0 from best matched non-GSF track to electron
+  lep.BestMatchTrackPt     = el.auxdataConst<float>("bestmatchSiTrackPt");
+  lep.BestMatchTrackEta    = el.auxdataConst<float>("bestmatchSiTrackEta");
+  lep.BestMatchTrackPhi    = el.auxdataConst<float>("bestmatchSiTrackPhi");
+  lep.BestMatchTrackD0     = el.auxdataConst<float>("bestmatchSiTrackD0");
+  lep.BestMatchTrackZ0     = el.auxdataConst<float>("bestmatchSiTrackZ0");
+  lep.BestMatchTrackQ      = el.auxdataConst<float>("bestmatchSiTrackQ");
+  
+
+  // Pt, Eta, Phi, D0, Z0 from closest non-GSF track to electron
+  lep.ClosestSiTrackPt     = el.auxdataConst<float>("closestSiTrackPt");
+  lep.ClosestSiTrackEta    = el.auxdataConst<float>("closestSiTrackEta");
+  lep.ClosestSiTrackPhi    = el.auxdataConst<float>("closestSiTrackPhi");
+  lep.ClosestSiTrackD0     = el.auxdataConst<float>("closestSiTrackD0");
+  lep.ClosestSiTrackZ0     = el.auxdataConst<float>("closestSiTrackZ0");
+  lep.ClosestSiTrackQ      = el.auxdataConst<float>("closestSiTrackQ");
+  
+
+  // nIL (observed Innermost layer hits), eIL (expected Innermost layer hits), nNIL (observed next to Innermost layer hits), eNIL (expected next to Innermost layer hits)
+  lep.ClosestSiTracknIL    = el.auxdataConst<float>("closestSiTracknIL");
+  lep.ClosestSiTrackeIL    = el.auxdataConst<float>("closestSiTrackeIL");
+  lep.ClosestSiTracknNIL    = el.auxdataConst<float>("closestSiTracknNIL");
+  lep.ClosestSiTrackeNIL    = el.auxdataConst<float>("closestSiTrackeNIL");
+  
   /////
 
   // truth matching, fakes, QMisId

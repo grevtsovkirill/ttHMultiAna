@@ -66,6 +66,27 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &nTrackParticles, "lep_nTrackParticles_", index);
   CreateBranch(tree, &MeeCO, "lep_MeeCO_", index);
   CreateBranch(tree, &RadiusCO, "lep_RadiusCO_", index);
+  CreateBranch(tree, &SeparationMinDCT, "lep_SeparationMinDCT_", index);
+
+  CreateBranch(tree, &ClosestSiTracknIL,  "lep_ClosestSiTracknIL_", index);
+  CreateBranch(tree, &ClosestSiTrackeIL,  "lep_ClosestSiTrackeIL_", index);
+  CreateBranch(tree, &ClosestSiTracknNIL, "lep_ClosestSiTracknNIL_", index);
+  CreateBranch(tree, &ClosestSiTrackeNIL, "lep_ClosestSiTrackeNIL_", index);
+
+  CreateBranch(tree, &BestMatchTrackPt,   "lep_BestMatchTrackPt_", index);
+  CreateBranch(tree, &BestMatchTrackEta,  "lep_BestMatchTrackEta_", index);
+  CreateBranch(tree, &BestMatchTrackPhi,  "lep_BestMatchTrackPhi_", index);
+  CreateBranch(tree, &BestMatchTrackD0,   "lep_BestMatchTrackD0_", index);
+  CreateBranch(tree, &BestMatchTrackZ0,   "lep_BestMatchTrackZ0_", index);
+  CreateBranch(tree, &BestMatchTrackQ,    "lep_BestMatchTrackQ_", index);
+
+  CreateBranch(tree, &ClosestSiTrackPt,   "lep_ClosestSiTrackPt_", index);
+  CreateBranch(tree, &ClosestSiTrackEta,  "lep_ClosestSiTrackEta_", index);
+  CreateBranch(tree, &ClosestSiTrackPhi,  "lep_ClosestSiTrackPhi_", index);
+  CreateBranch(tree, &ClosestSiTrackD0,   "lep_ClosestSiTrackD0_", index);
+  CreateBranch(tree, &ClosestSiTrackZ0,   "lep_ClosestSiTrackZ0_", index);
+  CreateBranch(tree, &ClosestSiTrackQ,    "lep_ClosestSiTrackQ_", index);
+
 
   CreateBranch(tree, &chargeIDBDTLoose, "lep_chargeIDBDTLoose_", index);
   CreateBranch(tree, &chargeIDBDTMedium, "lep_chargeIDBDTMedium_", index);

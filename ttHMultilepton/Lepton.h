@@ -194,6 +194,23 @@ namespace ttHML {
     int     nTrackParticles;
     float   MeeCO;
     float   RadiusCO;
+    float   SeparationMinDCT;
+    float   ClosestSiTracknIL;
+    float   ClosestSiTrackeIL;
+    float   ClosestSiTracknNIL;
+    float   ClosestSiTrackeNIL;
+    float   BestMatchTrackPt;
+    float   BestMatchTrackEta;
+    float   BestMatchTrackPhi;
+    float   BestMatchTrackD0;
+    float   BestMatchTrackZ0;
+    float   BestMatchTrackQ;
+    float   ClosestSiTrackPt;
+    float   ClosestSiTrackEta;
+    float   ClosestSiTrackPhi;
+    float   ClosestSiTrackD0;
+    float   ClosestSiTrackZ0;
+    float   ClosestSiTrackQ;
 
     void BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index);
 
