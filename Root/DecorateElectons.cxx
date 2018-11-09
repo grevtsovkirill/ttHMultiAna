@@ -167,7 +167,7 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	const xAOD::TrackParticle *bestmatchedGSFElTrack=elItr->trackParticle(0);
 	const xAOD::TrackParticle *bestmatchedElTrack = xAOD::EgammaHelpers::getOriginalTrackParticleFromGSF(bestmatchedGSFElTrack);
 
-	std::cout << "Validation w Henri: electron pT" << elItr->pt() << std::endl;
+	//std::cout << "Validation w Henri: electron pT" << elItr->pt() << std::endl;
 
 	for (auto tracks1 : *tpC)  // loop on all tracks
 	  {
@@ -200,7 +200,7 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 		
 		double deta=fabs(tracks1->eta()-bestmatchedElTrack->eta()); 
 		if(deta<detaMin && hasSi && ((bestmatchedElTrack->charge() * tracks1->charge()) < 0) && (tracks1 != bestmatchedElTrack) ){ // not the best matched El Track and OS
-		  deta=detaMin;
+		  detaMin=deta;
 		  closestSiTrack = tracks1;
 		  closestSiTracknIL = nIL;
 		  closestSiTrackeIL = eIL;
@@ -210,8 +210,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	      }
 	  }  // end loop on all tracks
 	
-	std::cout << "Validation w Henri: nTPSi: " << nTPSi << std::endl;
-	std::cout << "Validation w Henri: nTPSiNoIBL: " << nTPSiNoIBL << std::endl;
+	//std::cout << "Validation w Henri: nTPSi: " << nTPSi << std::endl;
+	//std::cout << "Validation w Henri: nTPSiNoIBL: " << nTPSiNoIBL << std::endl;
 	
 
 	// Keep pt, eta, phi, d0, z0
@@ -374,10 +374,10 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 
     radius_conv=sqrt(convXMinDCT*convXMinDCT + convYMinDCT*convYMinDCT);
 
-    std::cout << "Validation w Henri: Mass: " << mll_conv << std::endl;
-    std::cout << "Validation w Henri: Radius: " << radius_conv << std::endl;
-    std::cout << "Validation w Henri: separationMinDCT: " << separationMinDCT << std::endl;
-    std::cout << "Validation w Henri: closestSiTrackPt: " << closestSiTrackPt << std::endl;
+    // std::cout << "Validation w Henri: Mass: " << mll_conv << std::endl;
+    // std::cout << "Validation w Henri: Radius: " << radius_conv << std::endl;
+    // std::cout << "Validation w Henri: separationMinDCT: " << separationMinDCT << std::endl;
+    // std::cout << "Validation w Henri: closestSiTrackPt: " << closestSiTrackPt << std::endl;
     
     elItr->auxdecor<float>("mll_conv") = mll_conv;
     elItr->auxdecor<float>("radius_conv") = radius_conv;
