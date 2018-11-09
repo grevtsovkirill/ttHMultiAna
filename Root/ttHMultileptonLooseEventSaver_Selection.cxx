@@ -358,6 +358,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.BestMatchTrackPhi    = el.auxdataConst<float>("bestmatchSiTrackPhi");
   lep.BestMatchTrackD0     = el.auxdataConst<float>("bestmatchSiTrackD0");
   lep.BestMatchTrackZ0     = el.auxdataConst<float>("bestmatchSiTrackZ0");
+  lep.BestMatchTrackQ      = el.auxdataConst<float>("bestmatchSiTrackQ");
+  
 
   // Pt, Eta, Phi, D0, Z0 from closest non-GSF track to electron
   lep.ClosestSiTrackPt     = el.auxdataConst<float>("closestSiTrackPt");
@@ -365,6 +367,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.ClosestSiTrackPhi    = el.auxdataConst<float>("closestSiTrackPhi");
   lep.ClosestSiTrackD0     = el.auxdataConst<float>("closestSiTrackD0");
   lep.ClosestSiTrackZ0     = el.auxdataConst<float>("closestSiTrackZ0");
+  lep.ClosestSiTrackQ      = el.auxdataConst<float>("closestSiTrackQ");
+  
 
   // nIL (observed Innermost layer hits), eIL (expected Innermost layer hits), nNIL (observed next to Innermost layer hits), eNIL (expected next to Innermost layer hits)
   lep.ClosestSiTracknIL    = el.auxdataConst<float>("closestSiTracknIL");

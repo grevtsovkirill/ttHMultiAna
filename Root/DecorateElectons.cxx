@@ -20,8 +20,7 @@
 static const float Pi = 3.14159;
 static const float PTTOCURVATURE = 0.301; // ATLAS B=2T (in MeV/mm) 
 static const float SEPCUT      = 1;
-static const float DCTLOOSECUT = 0.2;
-static const float DCTCUT      = 0.01;
+static const float DCTCUT      = 0.02;
 static const float SIMINHITS   = 8; // requiring min 8 Si hits
 
 
@@ -84,8 +83,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
   float mll_conv;
   float radius_conv;
   float closestSiTracknIL, closestSiTrackeIL, closestSiTracknNIL, closestSiTrackeNIL;
-  float closestSiTrackPt, closestSiTrackEta, closestSiTrackPhi, closestSiTrackD0, closestSiTrackZ0;
-  float bestmatchSiTrackPt, bestmatchSiTrackEta, bestmatchSiTrackPhi, bestmatchSiTrackD0, bestmatchSiTrackZ0;
+  float closestSiTrackPt, closestSiTrackEta, closestSiTrackPhi, closestSiTrackD0, closestSiTrackZ0, closestSiTrackQ;
+  float bestmatchSiTrackPt, bestmatchSiTrackEta, bestmatchSiTrackPhi, bestmatchSiTrackD0, bestmatchSiTrackZ0, bestmatchSiTrackQ;
   float separationMinDCT;
 
 
@@ -147,17 +146,15 @@ bool DecorateElectrons::apply(const top::Event & event) const{
     closestSiTracknNIL = -999;
     closestSiTrackeNIL = -999;
 
-    closestSiTrackPt = closestSiTrackEta = closestSiTrackPhi = closestSiTrackD0 = closestSiTrackZ0 = -999;
-    bestmatchSiTrackPt = bestmatchSiTrackEta = bestmatchSiTrackPhi = bestmatchSiTrackD0 = bestmatchSiTrackZ0 = -999;
+    closestSiTrackPt = closestSiTrackEta = closestSiTrackPhi = closestSiTrackD0 = closestSiTrackZ0  = closestSiTrackQ = -999;
+    bestmatchSiTrackPt = bestmatchSiTrackEta = bestmatchSiTrackPhi = bestmatchSiTrackD0 = bestmatchSiTrackZ0 = bestmatchSiTrackQ = -999;
 
     separationMinDCT = -999; // how good the distance between the circles is 
 
     int nTPSi = 0;
     int nTPSiNoIBL = 0;
     double detaMin(999);
-    double convXMinDCT(-999);
-    double convYMinDCT(-999);
-   
+    
     const xAOD::TrackParticleContainer *tpC(nullptr);
     top::check( m_asgHelper->evtStore()->retrieve(tpC,"InDetTrackParticles"),"Failed to retrieve InDetTrackParticles");
       
@@ -199,7 +196,7 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 		}
 		
 		double deta=fabs(tracks1->eta()-bestmatchedElTrack->eta()); 
-		if(deta<detaMin && hasSi && ((bestmatchedElTrack->charge() * tracks1->charge()) < 0) && (tracks1 != bestmatchedElTrack) ){ // not the best matched El Track and OS
+		if(deta<detaMin && hasSi && ((bestmatchedElTrack->charge() * tracks1->charge()) < 0) ){ // opposite-sign
 		  detaMin=deta;
 		  closestSiTrack = tracks1;
 		  closestSiTracknIL = nIL;
@@ -210,8 +207,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	      }
 	  }  // end loop on all tracks
 	
-	//std::cout << "Validation w Henri: nTPSi: " << nTPSi << std::endl;
-	//std::cout << "Validation w Henri: nTPSiNoIBL: " << nTPSiNoIBL << std::endl;
+	// std::cout << "Validation w Henri: nTPSi: " << nTPSi << std::endl;
+	// std::cout << "Validation w Henri: nTPSiNoIBL: " << nTPSiNoIBL << std::endl;
 	
 	if (closestSiTrack){
 	  // Keep pt, eta, phi, d0, z0
@@ -220,6 +217,7 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	  closestSiTrackPhi   = closestSiTrack->phi();
 	  closestSiTrackD0    = closestSiTrack->d0();
 	  closestSiTrackZ0    = closestSiTrack->z0();
+	  closestSiTrackQ     = closestSiTrack->charge();
 	
 
 	  bestmatchSiTrackPt    = bestmatchedElTrack->pt();
@@ -227,6 +225,7 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	  bestmatchSiTrackPhi   = bestmatchedElTrack->phi();
 	  bestmatchSiTrackD0    = bestmatchedElTrack->d0();
 	  bestmatchSiTrackZ0    = bestmatchedElTrack->z0();
+	  bestmatchSiTrackQ     = bestmatchedElTrack->charge();
 	
 
 	  TLorentzVector p0,p1;  
@@ -278,12 +277,13 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	
 	  double c2 = cos(closestSiTrack->phi0());
 	  double s2 = sin(closestSiTrack->phi0());
-	  helix2[3] = bestmatchedElTrack->d0() + c2*pvtx->y() - s2*pvtx->x(); 
+	  helix2[3] = closestSiTrack->d0() + c2*pvtx->y() - s2*pvtx->x(); 
 		    
 	  c2 = c2*1./tan(closestSiTrack->theta());
 	  s2 = s2*1./tan(closestSiTrack->theta());
-	  helix2[2] = bestmatchedElTrack->z0() - c2*pvtx->x() - s2*pvtx->y() + pvtx->z();
-	   
+	  helix2[2] = closestSiTrack->z0() - c2*pvtx->x() - s2*pvtx->y() + pvtx->z();
+	  
+	  double dct(helix1[0]-helix2[0]); 
 		    
 	  //////
 		    
@@ -363,18 +363,15 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	    
 	    
 	  ///////
-	  separationMinDCT=separation;
-	  convXMinDCT=convX;
-	  convYMinDCT=convY;
+	  if(fabs(separation)<SEPCUT && fabs(dct)<DCTCUT){
+	    separationMinDCT=separation;
+	    radius_conv=sqrt(convX*convX + convY*convY);
+	  }
 	}
 	
       }
     
     
-    
-
-    radius_conv=sqrt(convXMinDCT*convXMinDCT + convYMinDCT*convYMinDCT);
-
     // std::cout << "Validation w Henri: Mass: " << mll_conv << std::endl;
     // std::cout << "Validation w Henri: Radius: " << radius_conv << std::endl;
     // std::cout << "Validation w Henri: separationMinDCT: " << separationMinDCT << std::endl;
@@ -393,12 +390,15 @@ bool DecorateElectrons::apply(const top::Event & event) const{
     elItr->auxdecor<float>("closestSiTrackPhi") = closestSiTrackPhi;
     elItr->auxdecor<float>("closestSiTrackD0") = closestSiTrackD0;
     elItr->auxdecor<float>("closestSiTrackZ0") = closestSiTrackZ0;
+    elItr->auxdecor<float>("closestSiTrackQ") = closestSiTrackQ;
 
     elItr->auxdecor<float>("bestmatchSiTrackPt") = bestmatchSiTrackPt;
     elItr->auxdecor<float>("bestmatchSiTrackEta") = bestmatchSiTrackEta;
     elItr->auxdecor<float>("bestmatchSiTrackPhi") = bestmatchSiTrackPhi;
     elItr->auxdecor<float>("bestmatchSiTrackD0") = bestmatchSiTrackD0;
     elItr->auxdecor<float>("bestmatchSiTrackZ0") = bestmatchSiTrackZ0;
+    elItr->auxdecor<float>("bestmatchSiTrackQ") = bestmatchSiTrackQ;
+    
     
     elItr->auxdecor<float>("separationMinDCT") = separationMinDCT;
 
