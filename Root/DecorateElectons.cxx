@@ -213,163 +213,164 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	//std::cout << "Validation w Henri: nTPSi: " << nTPSi << std::endl;
 	//std::cout << "Validation w Henri: nTPSiNoIBL: " << nTPSiNoIBL << std::endl;
 	
+	if (closestSiTrack){
+	  // Keep pt, eta, phi, d0, z0
+	  closestSiTrackPt    = closestSiTrack->pt();
+	  closestSiTrackEta   = closestSiTrack->eta();
+	  closestSiTrackPhi   = closestSiTrack->phi();
+	  closestSiTrackD0    = closestSiTrack->d0();
+	  closestSiTrackZ0    = closestSiTrack->z0();
+	
 
-	// Keep pt, eta, phi, d0, z0
-	closestSiTrackPt    = closestSiTrack->pt();
-	closestSiTrackEta   = closestSiTrack->eta();
-	closestSiTrackPhi   = closestSiTrack->phi();
-	closestSiTrackD0    = closestSiTrack->d0();
-	closestSiTrackZ0    = closestSiTrack->z0();
+	  bestmatchSiTrackPt    = bestmatchedElTrack->pt();
+	  bestmatchSiTrackEta   = bestmatchedElTrack->eta();
+	  bestmatchSiTrackPhi   = bestmatchedElTrack->phi();
+	  bestmatchSiTrackD0    = bestmatchedElTrack->d0();
+	  bestmatchSiTrackZ0    = bestmatchedElTrack->z0();
+	
 
-	bestmatchSiTrackPt    = bestmatchedElTrack->pt();
-	bestmatchSiTrackEta   = bestmatchedElTrack->eta();
-	bestmatchSiTrackPhi   = bestmatchedElTrack->phi();
-	bestmatchSiTrackD0    = bestmatchedElTrack->d0();
-	bestmatchSiTrackZ0    = bestmatchedElTrack->z0();
-
-
-	TLorentzVector p0,p1;  
-	p0.SetPtEtaPhiM(bestmatchedElTrack->pt(),bestmatchedElTrack->eta(),bestmatchedElTrack->phi(),0.511);   
-	p1.SetPtEtaPhiM(closestSiTrack->pt(),closestSiTrack->eta(),closestSiTrack->phi(),0.511);
+	  TLorentzVector p0,p1;  
+	  p0.SetPtEtaPhiM(bestmatchedElTrack->pt(),bestmatchedElTrack->eta(),bestmatchedElTrack->phi(),0.511);   
+	  p1.SetPtEtaPhiM(closestSiTrack->pt(),closestSiTrack->eta(),closestSiTrack->phi(),0.511);
+	  
+	  mll_conv=(p0+p1).M()*1e-3;
+	  
+	  
+	  // Conversion methods
+	  // Helix array:
+	  // 0 cotan(theta)
+	  // 1 curvature
+	  // 2 z
+	  // 3 d0
+	  // 4 phi
+	  
+	  double helix1[5];
+	  double helix2[5];
+	  
+	  ////////////// TrackToHelix Reco Electron Track
+	  
+	  helix1[0] = 1./tan(bestmatchedElTrack->theta());
+	  helix1[1] = PTTOCURVATURE*bestmatchedElTrack->charge()/bestmatchedElTrack->pt();
+	  
+	  if(bestmatchedElTrack->phi0()>0.)
+	    helix1[4] = bestmatchedElTrack->phi0();
+	  else
+	    helix1[4] = 2*Pi + bestmatchedElTrack->phi0();
+	  
+	  double c1 = cos(bestmatchedElTrack->phi0());
+	  double s1 = sin(bestmatchedElTrack->phi0());
+	  helix1[3] = bestmatchedElTrack->d0() + c1*pvtx->y() - s1*pvtx->x(); 
+	  
+	  c1 = c1*1./tan(bestmatchedElTrack->theta());
+	  s1 = s1*1./tan(bestmatchedElTrack->theta());
+	  helix1[2] = bestmatchedElTrack->z0() - c1*pvtx->x() - s1*pvtx->y() + pvtx->z();
+	  
+	  
+	  ///////////// TrackToHelix Other Electron Track
+	  
+	  helix2[0] = 1./tan(closestSiTrack->theta());
+	  helix2[1] = PTTOCURVATURE*closestSiTrack->charge()/closestSiTrack->pt();
+	  
+	  if(closestSiTrack->phi0()>0.)
+	    helix2[4] = closestSiTrack->phi0();
+	  else
+	    helix2[4] = 2*Pi + closestSiTrack->phi0();
 	
-	mll_conv=(p0+p1).M()*1e-3;
-	
-	
-	// Conversion methods
-	// Helix array:
-	// 0 cotan(theta)
-	// 1 curvature
-	// 2 z
-	// 3 d0
-	// 4 phi
-	
-	double helix1[5];
-	double helix2[5];
-	
-	////////////// TrackToHelix Reco Electron Track
-	
-	helix1[0] = 1./tan(bestmatchedElTrack->theta());
-	helix1[1] = PTTOCURVATURE*bestmatchedElTrack->charge()/bestmatchedElTrack->pt();
-	
-	if(bestmatchedElTrack->phi0()>0.)
-	  helix1[4] = bestmatchedElTrack->phi0();
-	else
-	  helix1[4] = 2*Pi + bestmatchedElTrack->phi0();
-	
-	double c1 = cos(bestmatchedElTrack->phi0());
-	double s1 = sin(bestmatchedElTrack->phi0());
-	helix1[3] = bestmatchedElTrack->d0() + c1*pvtx->y() - s1*pvtx->x(); 
-	
-	c1 = c1*1./tan(bestmatchedElTrack->theta());
-	s1 = s1*1./tan(bestmatchedElTrack->theta());
-	helix1[2] = bestmatchedElTrack->z0() - c1*pvtx->x() - s1*pvtx->y() + pvtx->z();
+	  double c2 = cos(closestSiTrack->phi0());
+	  double s2 = sin(closestSiTrack->phi0());
+	  helix2[3] = bestmatchedElTrack->d0() + c2*pvtx->y() - s2*pvtx->x(); 
+		    
+	  c2 = c2*1./tan(closestSiTrack->theta());
+	  s2 = s2*1./tan(closestSiTrack->theta());
+	  helix2[2] = bestmatchedElTrack->z0() - c2*pvtx->x() - s2*pvtx->y() + pvtx->z();
 	   
-	
-	///////////// TrackToHelix Other Electron Track
-	
-	helix2[0] = 1./tan(closestSiTrack->theta());
-	helix2[1] = PTTOCURVATURE*closestSiTrack->charge()/closestSiTrack->pt();
-	
-	if(closestSiTrack->phi0()>0.)
-	  helix2[4] = closestSiTrack->phi0();
-	else
-	  helix2[4] = 2*Pi + closestSiTrack->phi0();
-	
-	double c2 = cos(closestSiTrack->phi0());
-	double s2 = sin(closestSiTrack->phi0());
-	helix2[3] = bestmatchedElTrack->d0() + c2*pvtx->y() - s2*pvtx->x(); 
 		    
-	c2 = c2*1./tan(closestSiTrack->theta());
-	s2 = s2*1./tan(closestSiTrack->theta());
-	helix2[2] = bestmatchedElTrack->z0() - c2*pvtx->x() - s2*pvtx->y() + pvtx->z();
-	   
+	  //////
 		    
-	//////
-		    
-	double separation=999;
-	double convX=999;
-	double convY=999;
+	  double separation=999;
+	  double convX=999;
+	  double convY=999;
 	
-	double x1, y1, r1, x2, y2, r2;
-	double cpx1, cpx2;
+	  double x1, y1, r1, x2, y2, r2;
+	  double cpx1, cpx2;
 	
-	double beta(0.);
-	if(helix1[4] < helix2[4])
-	  {
-	    beta = Pi/2-helix1[4];
-	  }
-	else
-	  {
-	    beta = Pi/2-helix2[4];
-	  }
+	  double beta(0.);
+	  if(helix1[4] < helix2[4])
+	    {
+	      beta = Pi/2-helix1[4];
+	    }
+	  else
+	    {
+	      beta = Pi/2-helix2[4];
+	    }
 	
-	double phi1(helix1[4] + beta);
-	if(phi1>2*Pi) phi1=phi1-2*Pi;
-	if(phi1<0.) phi1=phi1+2*Pi;
+	  double phi1(helix1[4] + beta);
+	  if(phi1>2*Pi) phi1=phi1-2*Pi;
+	  if(phi1<0.) phi1=phi1+2*Pi;
 	
-	double phi2(helix2[4] + beta);
-	if(phi2>2*Pi) phi2 = phi2 - 2*Pi;
-	if(phi2<0) phi2 = phi2 + 2*Pi;
+	  double phi2(helix2[4] + beta);
+	  if(phi2>2*Pi) phi2 = phi2 - 2*Pi;
+	  if(phi2<0) phi2 = phi2 + 2*Pi;
 	
-	/// HelixToCircle Main Track Electron
-	r1 = 1/(2.*fabs(helix1[1]));
+	  /// HelixToCircle Main Track Electron
+	  r1 = 1/(2.*fabs(helix1[1]));
 	
-	double charge1(1.);
-	if(helix1[1]<0.) charge1 = -1.;
-	double rcenter1(helix1[3]/charge1 + r1);
-	double phicenter1(phi1 + Pi/2*charge1);
+	  double charge1(1.);
+	  if(helix1[1]<0.) charge1 = -1.;
+	  double rcenter1(helix1[3]/charge1 + r1);
+	  double phicenter1(phi1 + Pi/2*charge1);
 	
-	x1 = rcenter1*cos(phicenter1);
-	y1 = rcenter1*sin(phicenter1);
+	  x1 = rcenter1*cos(phicenter1);
+	  y1 = rcenter1*sin(phicenter1);
 	
-	/// HelixToCircle Other Electron Conv Track
-	r2 = 1/(2.*fabs(helix2[1]));
+	  /// HelixToCircle Other Electron Conv Track
+	  r2 = 1/(2.*fabs(helix2[1]));
 	
-	double charge2(1.);
-	if(helix2[1]<0.) charge2 = -1.;
-	double rcenter2(helix2[3]/charge2 + r2);
-	double phicenter2(phi2 + Pi/2*charge2);
+	  double charge2(1.);
+	  if(helix2[1]<0.) charge2 = -1.;
+	  double rcenter2(helix2[3]/charge2 + r2);
+	  double phicenter2(phi2 + Pi/2*charge2);
 	
-	x2 = rcenter2*cos(phicenter2);
-	y2 = rcenter2*sin(phicenter2);
-	//////
+	  x2 = rcenter2*cos(phicenter2);
+	  y2 = rcenter2*sin(phicenter2);
+	  //////
 	
-	double dx(x1- x2);
-	if(dx <  1e-9 && dx > 0.) dx =  1e-9;
-	if(dx > -1e-9 && dx < 0.) dx = -1e-9;
-	double slope((y1-y2)/dx);
-	double b(y1 - slope*x1);
-	double alpha(atan(slope));
-	double d(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));
-	//only keeping opposite sign option
-	separation = d-r1-r2;
-	if(x1>x2)
-	  {
-	    cpx1 = x1-r1*cos(alpha);
-	    cpx2 = x2+r2*cos(alpha); 
-	  }
-	else
-	  {
-	    cpx1 = x1+r1*cos(alpha);
-	    cpx2 = x2 - r2*cos(alpha);
-	  }
+	  double dx(x1- x2);
+	  if(dx <  1e-9 && dx > 0.) dx =  1e-9;
+	  if(dx > -1e-9 && dx < 0.) dx = -1e-9;
+	  double slope((y1-y2)/dx);
+	  double b(y1 - slope*x1);
+	  double alpha(atan(slope));
+	  double d(sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));
+	  //only keeping opposite sign option
+	  separation = d-r1-r2;
+	  if(x1>x2)
+	    {
+	      cpx1 = x1-r1*cos(alpha);
+	      cpx2 = x2+r2*cos(alpha); 
+	    }
+	  else
+	    {
+	      cpx1 = x1+r1*cos(alpha);
+	      cpx2 = x2 - r2*cos(alpha);
+	    }
 	
 	
-	double temp1 = (cpx1+cpx2)/2;
-	double temp2 = slope*temp1+b;
-	convX = cos(beta)*temp1 + sin(beta)*temp2;
-	convY = -sin(beta)*temp1+ cos(beta)*temp2;
+	  double temp1 = (cpx1+cpx2)/2;
+	  double temp2 = slope*temp1+b;
+	  convX = cos(beta)*temp1 + sin(beta)*temp2;
+	  convY = -sin(beta)*temp1+ cos(beta)*temp2;
 	    
 	    
-	///////
-	separationMinDCT=separation;
-	convXMinDCT=convX;
-	convYMinDCT=convY;
-      
+	  ///////
+	  separationMinDCT=separation;
+	  convXMinDCT=convX;
+	  convYMinDCT=convY;
+	}
 	
       }
     
-   
+    
     
 
     radius_conv=sqrt(convXMinDCT*convXMinDCT + convYMinDCT*convYMinDCT);
