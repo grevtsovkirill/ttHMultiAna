@@ -324,8 +324,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 	auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
 	ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
 	t->setName("MuonTrigEff_"+std::to_string(++nTools)+systvar.second);
-  t->setProperty("CalibrationRelease", "180516_HighEtaUpdate").ignore();
-  t->setProperty("useRel207",true).ignore();
+  t->setProperty("CalibrationRelease", "180905_TriggerUpdate").ignore();
+ // t->setProperty("useRel207",true).ignore();
 	t->setProperty("MuonQuality", "Medium").ignore();
   t->setProperty("AllowZeroSF",true).ignore();
 	top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
@@ -351,7 +351,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", " 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu18_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", " 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
+    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", " 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu20_mu8noL1").ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2017", " 2e24_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
     //m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,SignalCFT,Baseline").ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
@@ -627,27 +627,6 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       systematicTree->makeOutputVariable(m_truthMET_phi, "MET_Truth_phi");
       systematicTree->makeOutputVariable(m_truthMET_sumet, "MET_Truth_sumet");
     }
-
-/*    for (auto trigger : triggernames) {
-      WrapS(scalarvec, [=](const top::Event&){ return (unsigned int) m_trigDecTool->isPassed( trigger ) ; }, *systematicTree, trigger.c_str());
-      if(!m_doSystematics) WrapS(scalarvec, [=](const top::Event&){ return (float) m_trigDecTool->getPrescale( trigger ); }, *systematicTree, (trigger + "_PS").c_str());
-    }*/
-    //END trigger
-
-    // Keep tracks
-
-    // const xAOD::TrackParticleContainer *tpC(nullptr);
-    // top::check( m_asgHelper->evtStore()->retrieve(tpC,"InDetTrackParticles"),"Failed to retrieve InDetTrackParticles");
-
-    // if (tpC)
-    //   { 
-    // 	for (auto tracks1 : *tpC)  // loop on all tracks
-    // 	  {
-    // 	    double dR = elItr->trackParticle(0)->p4().DeltaR(tracks1->p4());
-    // 	    if ( (tracks1 != elItr->trackParticle(0)) && (dR<0.3)  )
-	      
-    // 	      }
-
 
     vec_scalar_wrappers.push_back(scalarvec);
 
@@ -2034,12 +2013,12 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 			m_trjet_eta.push_back(jet->eta());
 			m_trjet_phi.push_back(jet->phi());
 			m_trjet_m.push_back(jet->m());
-			m_trjet_Wcount.push_back(jet->auxdata<int>("GhostWBosonsCount"));
-			m_trjet_Zcount.push_back(jet->auxdata<int>("GhostZBosonsCount"));
-			m_trjet_Hcount.push_back(jet->auxdata<int>("GhostHBosonsCount"));
-			m_trjet_Tcount.push_back(jet->auxdata<int>("GhostTQuarksFinalCount"));
-			m_trjet_BHandronCount.push_back(jet->auxdata<int>("GhostBHadronsFinalCount"));
-			m_trjet_CHandronCount.push_back(jet->auxdata<int>("GhostCHadronsFinalCount"));
+			//m_trjet_Wcount.push_back(jet->auxdata<int>("GhostWBosonsCount"));
+			//m_trjet_Zcount.push_back(jet->auxdata<int>("GhostZBosonsCount"));
+			//m_trjet_Hcount.push_back(jet->auxdata<int>("GhostHBosonsCount"));
+			//m_trjet_Tcount.push_back(jet->auxdata<int>("GhostTQuarksFinalCount"));
+			//m_trjet_BHandronCount.push_back(jet->auxdata<int>("GhostBHadronsFinalCount"));
+			m//_trjet_CHandronCount.push_back(jet->auxdata<int>("GhostCHadronsFinalCount"));
 			m_trjet_ConeTruthLabelID.push_back(jet->auxdata<int>("ConeTruthLabelID"));
 			m_trjet_PartonTruthLabelID.push_back(jet->auxdata<int>("PartonTruthLabelID"));
 		}
