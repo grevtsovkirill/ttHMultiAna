@@ -2018,7 +2018,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 			//m_trjet_Hcount.push_back(jet->auxdata<int>("GhostHBosonsCount"));
 			//m_trjet_Tcount.push_back(jet->auxdata<int>("GhostTQuarksFinalCount"));
 			//m_trjet_BHandronCount.push_back(jet->auxdata<int>("GhostBHadronsFinalCount"));
-			m//_trjet_CHandronCount.push_back(jet->auxdata<int>("GhostCHadronsFinalCount"));
+			//m_trjet_CHandronCount.push_back(jet->auxdata<int>("GhostCHadronsFinalCount"));
 			m_trjet_ConeTruthLabelID.push_back(jet->auxdata<int>("ConeTruthLabelID"));
 			m_trjet_PartonTruthLabelID.push_back(jet->auxdata<int>("PartonTruthLabelID"));
 		}
