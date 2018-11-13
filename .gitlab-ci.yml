@@ -30,9 +30,6 @@ variables:
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
-    - cd ttHMultiAna
-    - source setupScriptsAndPackages.sh
-    - cd ../
     
 .run_template: &run
   <<: *image
@@ -41,6 +38,9 @@ variables:
   script:
     - pwd
     - ls
+    - cd ttHMultiAna
+    - source setupScriptsAndPackages.sh
+    - cd ../
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
