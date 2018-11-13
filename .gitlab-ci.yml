@@ -38,9 +38,11 @@ variables:
   script:
     - pwd
     - ls
-    - source setupScriptsAndPackages.sh
     - set +e
+    - pwd
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+    - pwd
+    - source setupScriptsAndPackages.sh
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - ls ${BUILD_DIR}/
     - source ${BUILD_DIR_ABS}/${AnalysisTop_PLATFORM}/setup.sh
