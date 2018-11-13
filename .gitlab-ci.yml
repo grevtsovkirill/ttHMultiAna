@@ -30,6 +30,9 @@ variables:
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
+    - cd ttHMultiAna
+    - source setupScriptsAndPackages.sh
+    - cd ../
     
 .run_template: &run
   <<: *image
