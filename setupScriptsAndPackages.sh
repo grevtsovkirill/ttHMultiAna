@@ -20,7 +20,7 @@ cd ../../
 cd ttHMultiAna/share
 
 #Uncommenting the PromptLepton Option in config files
-for period in data mc16a mc16c mc16d AFIImc16a AFIImc16c AFIImc16d systmc16a systmc16c systmc16d
+for period in data mc16a mc16c mc16d mc16e AFIImc16a AFIImc16c AFIImc16d AFIImc16e systmc16a systmc16c systmc16d systmc16e
 do
 	sed "s/#ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLepton/" generic_config_$period.txt > generic_config_temp.txt
 	mv generic_config_temp.txt generic_config_$period.txt
@@ -33,6 +33,7 @@ for dsid in 345674 345673 345672 410470 410472 410155 410218 410219 410220 34587
 do
     sed 's|#JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root|JetUncertainties_QGFracFile $WorkDir_DIR/data/ttHMultilepton/data/'$dsid'_preselections_FlavourComposition.root|g' generic_config_systmc16a.txt > generic_config_systmc16a_$dsid.txt
     sed 's|#JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root|JetUncertainties_QGFracFile $WorkDir_DIR/data/ttHMultilepton/data/'$dsid'_preselections_FlavourComposition.root|g' generic_config_systmc16d.txt > generic_config_systmc16d_$dsid.txt
+    sed 's|#JetUncertainties_QGFracFile ttHMultiAna/FlavourComposition.root|JetUncertainties_QGFracFile $WorkDir_DIR/data/ttHMultilepton/data/'$dsid'_preselections_FlavourComposition.root|g' generic_config_systmc16e.txt > generic_config_systmc16e_$dsid.txt
 done
 
 for dsid in 345674 345673 345672
