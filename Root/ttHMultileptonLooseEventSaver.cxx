@@ -1744,7 +1744,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   if (event.m_truth != nullptr ) {
   for (const auto& leptons : *(event.m_truth)) {
     //if (leptons!=nullptr ){
-      if((fabs(leptons->pdgId()) == 11 && leptons->status() == 1 ) || (fabs(leptons->pdgId()) == 13 && leptons->status() == 1 ) )truleptons.push_back(leptons);
+      if((fabs(leptons->pdgId()) == 11 && leptons->status() == 1 && leptons->barcode()<2e5) || (fabs(leptons->pdgId()) == 13 && leptons->status() == 1 && leptons->barcode()<2e5) )truleptons.push_back(leptons);
     //}
   }
   std::cout<<"--> nleptons= " <<truleptons.size()<<std::endl;
@@ -1786,23 +1786,29 @@ int g=0;
 	      m_hasMEphoton_DRgt02_nonhad = false;// in selection use with "ttbar && !m_hasMEphoton_DRgt02_nonhad" or "tty && m_hasMEphoton_DRgt02_nonhad"
           }
         }
-        if((abs(motherPdgId) == 11 || abs(motherPdgId) == 13) && particle->status() == 1 && particle->pt() > 7e3 && abs(particle->eta()) < 2.5 && motherPt > 0){
+        if((abs(motherPdgId) == 11 || abs(motherPdgId) == 13) && particle->status() == 1 && particle->pt() > 7e3 && abs(particle->eta()) < 2.5 && motherPt > 0 && particle->barcode()<2e5){
         //m_hasFSRPhotonLargeDeltaR = true;
         found = true;
         g++;
         std::cout<<"--> found photon from lepton " <<g<<std::endl;
+        std::cout<<"mother of the photon= "<<particle->parent(0)->pdgId()<<std::endl;
+        std::cout<<"barcode of mother of the photon= "<<particle->parent(0)->barcode()<<std::endl;
+        std::cout<<"photon barcode= "<<particle->barcode()<<std::endl;
           for(unsigned int iL=0; iL<truleptons.size(); iL++){
             const xAOD::TruthParticle* lepAfterRad = truleptons.at(iL);
             std::cout<<"Leptonpt= " <<lepAfterRad->pt()<<std::endl;
             auto dr= (particle->p4()).DeltaR(lepAfterRad->p4());
             std::cout<<"--> Delta R lepton after rad- photon:" <<dr<<std::endl;
+            std::cout<<"electron barcode = "<<lepAfterRad->barcode()<<std::endl;
+            std::cout<<"mother electron barcode = "<<lepAfterRad->parent(0)->barcode()<<std::endl;
               if (minDR > (particle->p4()).DeltaR(lepAfterRad->p4())){
                 minDR = (particle->p4()).DeltaR(lepAfterRad->p4()); 
               }
           }
           std::cout<<"minDR= " <<minDR<<std::endl;
-          if(minDR > 0.1 )
+          if(minDR > 0.1 ){
           m_hasFSRPhotonLargeDeltaR = true;
+          std::cout<<"m_hasFSRPhotonLargeDeltaR= "<<m_hasFSRPhotonLargeDeltaR<<std::endl;}
           //break;
           else 
           m_hasFSRPhotonLargeDeltaR = false;
