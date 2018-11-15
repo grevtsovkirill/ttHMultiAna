@@ -26,18 +26,33 @@ variables:
     - mkdir -p $BUILD_DIR_ABS
     - mkdir -p $SRC_DIR_ABS
     - mkdir -p $SRC_DIR_ABS/$PACKAGE_NAME
+    - ls
+    - ls $SRC_DIR_ABS
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv CMakeLists.txt $SRC_DIR_ABS/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv Root $SRC_DIR_ABS/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv cmt $SRC_DIR_ABS/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv data $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv infile_data.txt $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv patches $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv restructuring.md $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv scripts $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv setupScriptsAndPackages.sh $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv share $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv ttHMultilepton $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - mv util $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - ls
     - ls $SRC_DIR_ABS
     - ls $SRC_DIR_ABS/$PACKAGE_NAME
