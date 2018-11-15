@@ -24,6 +24,7 @@ variables:
   before_script:
     - pwd
     - mkdir -p $BUILD_DIR_ABS
+    - mkdir -p $SRC_DIR_ABS
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
