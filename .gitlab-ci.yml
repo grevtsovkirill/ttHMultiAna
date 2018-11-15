@@ -26,18 +26,21 @@ variables:
     - mkdir -p $BUILD_DIR_ABS
     - mkdir -p $SRC_DIR_ABS
     - mkdir -p $SRC_DIR_ABS/$PACKAGE_NAME
-    - mv CMakeLists.txt $SRC_DIR_ABS/$PACKAGE_NAME
-    - mv Root $SRC_DIR_ABS/$PACKAGE_NAME
-    - mv cmt $SRC_DIR_ABS/$PACKAGE_NAME
-    - mv data $SRC_DIR_AB/$PACKAGE_NAME
-    - mv infile_data.txt $SRC_DIR_AB/$PACKAGE_NAME
-    - mv patches $SRC_DIR_AB/$PACKAGE_NAME
-    - mv restructuring.md $SRC_DIR_AB/$PACKAGE_NAME
-    - mv scripts $SRC_DIR_AB/$PACKAGE_NAME
-    - mv setupScriptsAndPackages.sh $SRC_DIR_AB/$PACKAGE_NAME
-    - mv share $SRC_DIR_AB/$PACKAGE_NAME
-    - mv ttHMultilepton $SRC_DIR_AB/$PACKAGE_NAME
-    - mv util $SRC_DIR_AB/$PACKAGE_NAME
+    - mv CMakeLists.txt $SRC_DIR_ABS/$PACKAGE_NAME/
+    - mv Root $SRC_DIR_ABS/$PACKAGE_NAME/
+    - mv cmt $SRC_DIR_ABS/$PACKAGE_NAME/
+    - mv data $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv infile_data.txt $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv patches $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv restructuring.md $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv scripts $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv setupScriptsAndPackages.sh $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv share $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv ttHMultilepton $SRC_DIR_AB/$PACKAGE_NAME/
+    - mv util $SRC_DIR_AB/$PACKAGE_NAME/
+    - ls
+    - ls $SRC_DIR_ABS
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
@@ -91,6 +94,7 @@ build:
   script:
     - set +e
     - cd $SRC_DIR_ABS/$PACKAGE_NAME
+    - pwd
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - source setupScriptsAndPackages.sh
     - cd $BUILD_DIR_ABS
