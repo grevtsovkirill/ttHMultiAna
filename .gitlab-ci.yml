@@ -67,7 +67,8 @@ variables:
     - mkdir $RUN_DIR_ABS
     - cd $RUN_DIR_ABS
     - ls
-    - cp ${CI_PROJECT_DIR}$SRC_DIR_ABS/$PACKAGE_NAME/share/${config_file} . 
+    - ls $SRC_DIR_ABS/$PACKAGE_NAME
+    - cp $SRC_DIR_ABS/$PACKAGE_NAME/share/${config_file} . 
     - echo  ${eos_file} > infile_tth.txt 
     - sed -i 's/#NEvents.*/NEvents 2000/' ${config_file}
     - top-xaod ${config_file}  infile_tth.txt
