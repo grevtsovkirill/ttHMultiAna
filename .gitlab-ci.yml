@@ -40,7 +40,9 @@ variables:
     - ls
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+    - cd $SRC_DIR_ABS
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
+    - cd ../
     - ls ${BUILD_DIR}/
     - source ${BUILD_DIR_ABS}/${AnalysisTop_PLATFORM}/setup.sh
     - mkdir $RUN_DIR_ABS
@@ -72,11 +74,11 @@ build:
   stage: build
   script:
     - set +e
-    - cd $BUILD_DIR_ABS
+    - cd $SRC_DIR_ABS/$PACKAGE_NAME
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-    - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
-    - mv CMakeLists.txt ../../
-    - cmake ../../
+    - source setupScriptsAndPackages.sh
+    - cd $BUILD_DIR_ABS
+    - cmake $SRC_DIR_ABS 
     - cmake --build ./
     - cd ../
     - source $BUILD_DIR_ABS/${AnalysisTop_PLATFORM}/setup.sh
