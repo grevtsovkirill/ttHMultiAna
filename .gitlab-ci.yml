@@ -24,30 +24,12 @@ variables:
   before_script:
     - pwd
     - mkdir -p $BUILD_DIR_ABS
-    - mkdir -p $SRC_DIR_ABS
-    - mkdir -p $SRC_DIR_ABS/$PACKAGE_NAME
-    - mv CMakeLists.txt $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv Root $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv cmt $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv data $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv infile_data.txt $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv patches $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv restructuring.md $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv scripts $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv setupScriptsAndPackages.sh $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv share $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv ttHMultilepton $SRC_DIR_ABS/$PACKAGE_NAME/
-    - mv util $SRC_DIR_ABS/$PACKAGE_NAME/
-    - ls
-    - ls $SRC_DIR_ABS
-    - ls $SRC_DIR_ABS/$PACKAGE_NAME
     - echo "Project Directory    ${CI_PROJECT_DIR}"
     - echo "Source Directory     ${SRC_DIR_ABS}"
     - echo "      Directory Name ${SRC_DIR}"
     - echo "Build Directory      ${BUILD_DIR_ABS}"
     - echo "      Directory Name ${BUILD_DIR}"
     - echo $TTHML_PASSWD | kinit $TTHML_USER 
-    
     
 .run_template: &run
   <<: *image
@@ -58,17 +40,13 @@ variables:
     - ls
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-    - cd $SRC_DIR_ABS
-    - ls
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
-    - cd ../
     - ls ${BUILD_DIR}/
     - source ${BUILD_DIR_ABS}/${AnalysisTop_PLATFORM}/setup.sh
     - mkdir $RUN_DIR_ABS
     - cd $RUN_DIR_ABS
     - ls
-    - ls $SRC_DIR_ABS/$PACKAGE_NAME
-    - cp $SRC_DIR_ABS/$PACKAGE_NAME/share/${config_file} . 
+    - cp ${CI_PROJECT_DIR}/share/${config_file} . 
     - echo  ${eos_file} > infile_tth.txt 
     - sed -i 's/#NEvents.*/NEvents 2000/' ${config_file}
     - top-xaod ${config_file}  infile_tth.txt
@@ -94,12 +72,13 @@ build:
   stage: build
   script:
     - set +e
-    - cd $SRC_DIR_ABS/$PACKAGE_NAME
+    - cd $BUILD_DIR_ABS
     - pwd
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - source setupScriptsAndPackages.sh
-    - cd $BUILD_DIR_ABS
-    - cmake $SRC_DIR_ABS 
+    - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
+    - mv CMakeLists.txt ../../
+    - cmake ../../
     - cmake --build ./
     - cd ../
     - source $BUILD_DIR_ABS/${AnalysisTop_PLATFORM}/setup.sh
