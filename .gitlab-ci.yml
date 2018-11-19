@@ -74,8 +74,16 @@ build:
     - set +e
     - cd $BUILD_DIR_ABS
     - pwd
+    - echo " ================      "
+    - ls
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+    - echo " ++++++++++++++++      "
+    - ls
+    - pwd
     - source setupScriptsAndPackages.sh
+    - echo " ----------------      "
+    - ls
+    - pwd
     - asetup AnalysisTop,${ANALYSIS_TOP_VERSION},here
     - mv CMakeLists.txt ../../
     - cmake ../../
