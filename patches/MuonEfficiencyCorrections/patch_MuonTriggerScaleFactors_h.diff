@@ -1,0 +1,11 @@
+--- MuonEfficiencyCorrections/MuonEfficiencyCorrections/MuonTriggerScaleFactors.h	2018-11-15 19:47:39.000000001 +0100
++++ ./Nazlim_MuonEfficiencyCorrections/MuonEfficiencyCorrections/MuonTriggerScaleFactors.h	2018-11-15 19:51:18.000000001 +0100
+@@ -144,7 +144,7 @@
+             bool m_allowZeroSF;
+             bool m_experimental;
+             bool m_useRel207;
+-            
++            bool m_useMC16c;
+             //Variables for toy replicas setup
+             std::vector<std::string> m_replicaTriggerList;
+             std::set<std::string> m_replicaSet; //set of triggers for replicas, for fast searching

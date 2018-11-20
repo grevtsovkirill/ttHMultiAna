@@ -7,7 +7,18 @@ setupATLAS
 #Setting up AnalysisTop release in source directory and copying patched packages
 cd ../
 asetup AnalysisTop,21.2.36,here
-cp -r /afs/cern.ch/user/m/magaras/public/MuonEfficiencyCorrections ./
+
+#Patching MuonEfficiencyCorrections
+echo "Patching MuonEfficiencyCorrections..."
+cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.36/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/MuonID/MuonIDAnalysis/MuonEfficiencyCorrections/ ./
+cd MuonEfficiencyCorrections/Root/
+patch < ../../ttHMultiAna/patches/MuonEfficiencyCorrections/patch_MuonTriggerScaleFactors_cxx.diff
+cd ../MuonEfficiencyCorrections/
+patch < ../../ttHMultiAna/patches/MuonEfficiencyCorrections/patch_MuonTriggerScaleFactors_h.diff
+cd ../../
+
+#Patching TopCPTools
+echo "Patching TopCPTools..."
 cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.36/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools ./
 cd TopCPTools/Root/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
