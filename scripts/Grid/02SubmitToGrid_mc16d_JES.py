@@ -45,8 +45,9 @@ config.extFile='.root,.so'
 # 		sys.exit()
 
 subsuf="CHANGEME"
+v_subsuf="_v8"
 # for systematics
-baseSuffix = subsuf+"_sys_mc16d"
+baseSuffix = subsuf+"_sys_mc16d"+v_subsuf
 # unused samles: "345674", "345673", "345672" - from mc16c; 
 for dsid in ["410470", "410472","345875","345874","345873",  "410155", "410218", "410219" ,"410220"]:
     # individual files
@@ -64,7 +65,7 @@ else:
     grid.submit(config, samples)
 
 #for nominal:
-baseSuffix = subsuf+"_nom_mc16d"
+baseSuffix = subsuf+"_nom_mc16d"+v_subsuf
 config.suffix = baseSuffix
 names = ["FS_mc16d",]
 config.settingsFile = "generic_config_mc16d.txt"
@@ -72,7 +73,7 @@ samples = grid.Samples(names)
 grid.submit(config, samples)
 
 # for AFII:
-baseSuffix = subsuf+"_af2_mc16d"
+baseSuffix = subsuf+"_af2_mc16d"+v_subsuf
 config.suffix = baseSuffix
 names = ["AF_mc16d",]
 config.settingsFile = "generic_config_AFIImc16d.txt"
