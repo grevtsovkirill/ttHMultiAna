@@ -45,6 +45,7 @@ config.extFile='.root,.so'
 # 		sys.exit()
 
 subsuf="CHANGEME"
+v_subsuf="_v8"
 # for systematics
 baseSuffix = subsuf+"_sys_mc16a"+v_subsuf
 # unused sampels:
