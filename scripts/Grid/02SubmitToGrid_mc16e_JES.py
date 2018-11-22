@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import TopExamples.grid
-import mc16dR21
+import mc16eR21
 import os
 import grid
 import shutil
@@ -19,7 +19,7 @@ config.code          = 'top-xaod'
 config.gridUsername  = 'phys-higgs'
 config.groupProduction= 'True'
 #config.excludedSites = 'ANALY_CONNECT,ANALY_CONNECT_SHORT'#'ANALY_GOEGRID'
-config.noSubmit      = True
+config.noSubmit      = False #True #
 config.memory	     = ''
 config.otherOptions='--forceStaged'
 
@@ -47,11 +47,12 @@ config.extFile='.root,.so'
 subsuf="CHANGEME"
 v_subsuf="_v8"
 # for systematics
-baseSuffix = subsuf+"_sys_mc16d"+v_subsuf
+baseSuffix = subsuf+"_sys_mc16e"+v_subsuf
 # unused samles: "345674", "345673", "345672" - from mc16c; 
-for dsid in ["410470", "410472","345875","345874","345873",  "410155", "410218", "410219" ,"410220"]:
+#, "410472","345875","345874","345873",  "410155", "410218", "410219" ,"410220"
+for dsid in ["410470"]:
     # individual files
-    config.settingsFile = 'generic_config_systmc16d_' + dsid + '.txt'
+    config.settingsFile = 'generic_config_systmc16e_' + dsid + '.txt'
     config.suffix = baseSuffix
     names = ["singleSample_" + dsid,]
     samples = grid.Samples(names)
@@ -59,23 +60,25 @@ for dsid in ["410470", "410472","345875","345874","345873",  "410155", "410218",
 else:
     # other systematics
     config.suffix = baseSuffix
-    names = ["syst_mc16d",]
-    config.settingsFile = "generic_config_systmc16d.txt"
+    names = ["syst_mc16e",]
+    config.settingsFile = "generic_config_systmc16e.txt"
     samples = grid.Samples(names)
+    print "------- " 
+    print samples
     grid.submit(config, samples)
 
 #for nominal:
-baseSuffix = subsuf+"_nom_mc16d"+v_subsuf
+baseSuffix = subsuf+"_nom_mc16e"+v_subsuf
 config.suffix = baseSuffix
-names = ["FS_mc16d",]
-config.settingsFile = "generic_config_mc16d.txt"
+names = ["FS_mc16e",]
+config.settingsFile = "generic_config_mc16e.txt"
 samples = grid.Samples(names)
 grid.submit(config, samples)
 
 # for AFII:
-baseSuffix = subsuf+"_af2_mc16d"+v_subsuf
+baseSuffix = subsuf+"_af2_mc16e"+v_subsuf
 config.suffix = baseSuffix
-names = ["AF_mc16d",]
-config.settingsFile = "generic_config_AFIImc16d.txt"
+names = ["AF_mc16e",]
+config.settingsFile = "generic_config_AFIImc16e.txt"
 samples = grid.Samples(names)
 grid.submit(config, samples)

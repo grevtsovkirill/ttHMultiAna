@@ -44,7 +44,10 @@ config.extFile='.root,.so'
 # 		print "Missing generic_config_systmc16c_"+ dsid + ".txt. Code will crash. Exiting..."
 # 		sys.exit()
 
-baseSuffix = "DD-MM_sys_mc16c"
+subsuf="CHANGEME"
+v_subsuf="_v8"
+baseSuffix = subsuf+"sys_mc16c"+v_subsuf
+
 # do not use anymore mc16c for signal - exist in mc16d
 # for dsid in ["345674", "345673", "345672"]:
 # 	config.settingsFile = 'generic_config_systmc16c_' + dsid + '.txt'
