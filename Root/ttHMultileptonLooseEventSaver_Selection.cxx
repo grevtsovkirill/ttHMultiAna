@@ -508,7 +508,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium", (char) 0) ||
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e120_lhloose", (char) 0)));
   }
-  else if (m_runYear == 2016 || m_runYear == 2017) {
+  else if (m_runYear == 2016 || m_runYear == 2017 || m_runYear == 2018) {
     lep.isTrigMatch = ( el.pt() > 27e3 && (
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e26_lhtight_nod0_ivarloose", (char) 0) ||
 					   returnDecoIfAvailable(el, "TRIGMATCH_HLT_e60_lhmedium_nod0", (char) 0) ||
@@ -671,7 +671,7 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 
   std::sort(sorter_jets.begin(), sorter_jets.end(),
 	      [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
-
+                
   std::vector<const TLorentzVector*> p4s;
   const int totjets = goodJets.size();
   for (short idx1 = 0; idx1 < totjets; ++idx1) {
@@ -754,7 +754,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     lep.isTrigMatch = (mu.pt() > 21e3 && (
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu20_iloose_L1MU15", (char) 0) ||
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
-  } else if (m_runYear == 2016 || m_runYear == 2017) { // since period D4 on in 2016 data (high luminosity triggers)
+  } else if (m_runYear == 2016 || m_runYear == 2017 || m_runYear == 2018) { // since period D4 on in 2016 data (high luminosity triggers)
     lep.isTrigMatch = (mu.pt() > 27e3 && (
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu26_ivarmedium", (char) 0) ||
 					  returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu50", (char) 0)));
@@ -1073,6 +1073,15 @@ ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& Taus) {
   for(int i = 0; i < totalTaus && i < TAU_ARR_SIZE; ++i) {
     CopyTau( *(Taus.at(i)) , m_taus[i] );
   }
+  for ( const auto tauItr : Taus) {
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose)) 
+      m_ttHEvent->nTaus_OR_Loose++;
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) 
+      m_ttHEvent->nTaus_OR_Medium++;
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight)) 
+      m_ttHEvent->nTaus_OR_Tight++;
+  }
+
 }
 void
 ttHMultileptonLooseEventSaver::CopyHT(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::JetContainer& goodJets, const xAOD::TauJetContainer& goodTaus) {
@@ -1104,6 +1113,83 @@ ttHMultileptonLooseEventSaver::CopyHT_trig(const xAOD::JetContainer& goodJets) {
   m_ttHEvent->HT_alljets = 0;
   for (const auto jetItr : goodJets) {
     m_ttHEvent->HT_alljets += jetItr->pt();
+  }
+}
+
+void
+ttHMultileptonLooseEventSaver::CopyMass(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::TauJetContainer& goodTaus) {
+  m_ttHEvent->Mlt00 = 0;
+  m_ttHEvent->Mlt01 = 0;
+  m_ttHEvent->Mlt10 = 0;
+  m_ttHEvent->Mlt11 = 0;
+  m_ttHEvent->Mtt01 = 0;
+  m_ttHEvent->MTlmet = 0;
+  const int totleptons = goodEl.size() + goodMu.size();
+
+  std::vector<const TLorentzVector*> tau_p4s;
+  std::vector<const TLorentzVector*> lep_p4s;
+
+  typedef std::tuple<const TLorentzVector*, int, ttHML::LepType> sorttype_t;
+  std::vector<sorttype_t> sorter;
+  size_t idx = 0;
+  for (const auto elItr : goodEl) {
+    sorter.push_back(std::make_tuple(&(elItr->p4()), idx++, ttHML::ELECTRON));
+  }
+  idx = 0;
+  for (const auto muItr : goodMu) {
+    sorter.push_back(sorttype_t(&(muItr->p4()), idx++, ttHML::MUON));
+  }
+  std::sort(sorter.begin(), sorter.end(),
+	    [](sorttype_t a, sorttype_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
+  for (short idx1 = 0; idx1<totleptons; ++idx1) {
+    const TLorentzVector* p4;
+    int lidx;
+    ttHML::LepType typ;
+    std::tie(p4, lidx, typ) = sorter[idx1];
+    lep_p4s.push_back(p4);
+  }
+  if( totleptons>0 ){
+    //    lmet = (p4met+*lep_p4s[0]);
+    m_ttHEvent->MTlmet = (sqrt(2*m_met_met*lep_p4s[0]->Pt()*(1-cos(acos(cos(m_met_phi-lep_p4s[0]->Phi()))))));
+  }
+
+  idx=0;
+  typedef std::tuple<const TLorentzVector*, int> sortvec_t;
+  std::vector<sortvec_t> sorter_taus;
+  for (const auto tauItr : goodTaus) {
+    sorter_taus.push_back(std::make_tuple(&(tauItr->p4()), idx++));
+  }
+  std::sort(sorter_taus.begin(), sorter_taus.end(),
+	    [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
+  
+  for (short idx1 = 0; idx1<goodTaus.size(); ++idx1)  {
+    const TLorentzVector* p4;
+    int lidx;
+    std::tie(p4,lidx) = sorter_taus[idx1];
+    tau_p4s.push_back(p4);
+  }
+  if( goodTaus.size() > 1 ) {
+    TLorentzVector ditau;
+    ditau = (*tau_p4s[0]+*tau_p4s[1]);
+    m_ttHEvent->Mtt01 = ditau.M();
+  }
+  
+  if(goodTaus.size()>0 && totleptons>0){
+    TLorentzVector lephad00,lephad01,lephad10,lephad11;
+    lephad00 = (*tau_p4s[0]+*lep_p4s[0]);
+    m_ttHEvent->Mlt00 = lephad00.M();
+    if(goodTaus.size()>1) {
+      lephad01 = (*tau_p4s[1]+*lep_p4s[0]);
+      m_ttHEvent->Mlt01 = lephad01.M();
+    }
+    if(totleptons>1) {
+      lephad10 = (*tau_p4s[0]+*lep_p4s[1]);
+      m_ttHEvent->Mlt10 = lephad10.M();
+    }
+    if(goodTaus.size()>1 && totleptons>1){
+      lephad11 = (*tau_p4s[1]+*lep_p4s[1]);
+      m_ttHEvent->Mlt11 = lephad11.M();
+    }	
   }
 }
 

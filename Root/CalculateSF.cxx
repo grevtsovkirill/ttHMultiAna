@@ -47,7 +47,7 @@ CalculateSF::~CalculateSF(){
 }
 
 bool CalculateSF::apply(const top::Event& event) const {
-	m_event = &event;
+        m_event = &event;
  	if(!event.m_info->isAvailable<std::shared_ptr<ttHML::Variables> >("ttHMLEventVariables")){
     	std::cout <<name() <<": ttHMLEventVariables (std::shared_ptr<ttHML::Variables>) object not found" << std::endl;
     	std::cout << "-----> more info: <params: " << m_params
@@ -61,7 +61,7 @@ bool CalculateSF::apply(const top::Event& event) const {
 	const xAOD::MuonContainer* Muons(nullptr);
 	const xAOD::TauJetContainer* Taus(nullptr);
 	
-    top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Electrons");
+	top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Electrons");
 	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Muons");
 	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Taus"); 
 
@@ -118,9 +118,9 @@ bool CalculateSF::apply(const top::Event& event) const {
 	}
 	for (const auto& systvar : tthevt->m_tau_sf_names ) {
 	  auto ivar = systvar.first;
-      m_SF.tauSFLoose[ivar] = 1;
-      m_SF.tauSFTight[ivar] = 1;
-      tthevt->tauSFTight[ivar] = 1;
+	  m_SF.tauSFLoose[ivar] = 1;
+	  m_SF.tauSFTight[ivar] = 1;
+	  tthevt->tauSFTight[ivar] = 1;
 	  tthevt->tauSFLoose[ivar] = 1;
 	}
 

@@ -58,11 +58,11 @@ atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
                                   xAODCore
 			  xAODEgamma
 		 	  xAODEventInfo
-    		xAODJet
+	   		  xAODJet
 			  xAODMuon
 			  xAODTau
 			  xAODTracking
-		  	xAODTruth
+		  	  xAODTruth
 			  xAODPFlow
         FTagAnalysisInterfacesLib
                                   ${ROOT_LIBRARIES}

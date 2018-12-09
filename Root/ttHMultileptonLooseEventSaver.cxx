@@ -4,10 +4,10 @@
 
 #include "ttHMultilepton/ttHMultileptonLooseEventSaver.h"
 #include "TopEvent/Event.h"
+#include "TopEvent/EventTools.h"
 #include "TopEventSelectionTools/TreeManager.h"
 #include "ttHMultilepton/Variables.h"
 #include "AssociationUtils/OverlapRemovalInit.h"
-
 
 #include "TopConfiguration/TopConfig.h"
 
@@ -53,8 +53,10 @@ TH1I* m_tauCutflow;
     //m_trigGlobEffCorr(0),
     m_mcWeight(1.),
 //    m_pileup_weight(1.),
-    m_bTagSF_default("MV2c10_FixedCutBEff_70"),
-    m_bTagSF_DL1("DL1_FixedCutBEff_70"),
+    m_bTagSF_default("MV2c10_FixedCutBEff_77"),
+    m_bTagSF_DL1("DL1_FixedCutBEff_77"),
+    //    m_bTagSF_default("MV2c10_FixedCutBEff_70"),
+    //    m_bTagSF_DL1("DL1_FixedCutBEff_70"),
     m_bTagSF_weight(1.),
     m_JVT_weight(1.),
     m_eventNumber(0),
@@ -608,7 +610,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     //systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
 
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
-    systematicTree->makeOutputVariable(m_LQMode,         "higgsDecayMode");
+    systematicTree->makeOutputVariable(m_LQMode,         "LQDecayMode");
+    systematicTree->makeOutputVariable(m_LQbarMode,         "LQbarDecayMode");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_isAFII, "mc_isAFII");
@@ -1401,9 +1404,9 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
         return tau.auxdata<float>("BDTEleScoreSigTrans");
     }, *systematicTree, std::string(tauprefix+"BDTEleScoreSigTrans").c_str());
 
-	Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-		return tau.auxdata<float>("BDTJetScoreSigTrans");
-	}, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
+    // Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+    // 	return tau.auxdata<float>("BDTJetScoreSigTrans");
+    //   }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
 
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
@@ -1667,7 +1670,9 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   m_mu_ac   = event.m_info->actualInteractionsPerCrossing();
   m_mu_unc  = event.m_info->averageInteractionsPerCrossing();
   //see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/ExtendedPileupReweighting#Using_the_tool_for_pileup_reweig
-  if (m_runNumber >= 320000) {
+  if (m_runNumber >= 348000) {
+    m_runYear = 2018;
+  } else if (m_runNumber >= 320000) {
     m_runYear = 2017;
   } else if (m_runNumber >=290000) {
     m_runYear = 2016;
@@ -1868,7 +1873,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     m_higgs     = truthSelector.GetHiggs(event.m_truth);
     m_top       = truthSelector.GetTop(event.m_truth);
     m_antitop   = truthSelector.GetAntiTop(event.m_truth);
-    m_LQMode    = truthSelector.GetLQDecayMode(event.m_truth);
+    m_LQMode    = truthSelector.GetLQDecayMode(event.m_truth,0);
+    m_LQbarMode = truthSelector.GetLQDecayMode(event.m_truth,1);
     m_LQ        = truthSelector.GetLQ(event.m_truth);
     m_LQbar     = truthSelector.GetLQbar(event.m_truth);
     m_LQlep     = truthSelector.GetLQlep(event.m_truth);
@@ -2008,7 +2014,9 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     //MakeJetIndices(*Jets,event.m_jets);
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
+    CopyMass(*Electrons,*Muons,*Taus);
     CheckIsBlinded();
+
     if (m_isMC && m_doSFSystematics ){
     doEventTrigSFs(*Electrons,*Muons,event);}
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);   

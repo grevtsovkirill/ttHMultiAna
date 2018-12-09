@@ -50,10 +50,14 @@ namespace ttH
         gamgam,Zgamma,taugamma,
         unclassified,noproducts,nohiggs,
         problem,
-	ttau,tmu,tnu,
-	btau,bmu,bnu
     };
-   
+
+  enum LQdecaymode {
+    ttau,tnu,btau,bnu,
+    unclassifiedLQ,noproductsLQ,noLQ,
+    problemLQ,
+  };
+    
   
 
   class TruthSelector {
@@ -70,8 +74,8 @@ namespace ttH
     
     const std::vector<TruthPart>& SelectTruth(const xAOD::TruthParticleContainer *truths);
  
+    LQdecaymode GetLQDecayMode           (const xAOD::TruthParticleContainer* truthCont, bool LQbar);
     decaymode GetHiggsDecayMode          (const xAOD::TruthParticleContainer* truthCont);
-    decaymode GetLQDecayMode             (const xAOD::TruthParticleContainer* truthCont);
     const xAOD::TruthParticle* GetHiggs  (const xAOD::TruthParticleContainer* truthCont);
     const xAOD::TruthParticle* GetTop    (const xAOD::TruthParticleContainer* truthCont);
     const xAOD::TruthParticle* GetTopW   (const xAOD::TruthParticleContainer* truthCont);
@@ -133,6 +137,7 @@ namespace ttH
     
     std::vector<TruthPart>              m_select;
     std::map<int,std::string>           decaymodestr;
+    std::map<int,std::string>           LQdecaymodestr;
   }; // class TruthSelector
 }
 

@@ -1,4 +1,4 @@
---- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.34/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopEgammaCPTools.cxx	2018-06-13 03:03:41.000000000 +0200
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.52/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopEgammaCPTools.cxx	2018-06-13 03:03:41.000000000 +0200
 +++ Top.cxx	2018-06-24 20:49:06.000000001 +0200
 @@ -225,12 +225,12 @@
    m_electronEffSFIDFile           = electronSFMapFilePath("ID");

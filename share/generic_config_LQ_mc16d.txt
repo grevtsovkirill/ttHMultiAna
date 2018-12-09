@@ -1,13 +1,12 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-PRWConfigFiles /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v1/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16a_prw_missing.root $WorkDir_DIR/data/ttHMultilepton/data/pileup_lq_mc16a.root  $WorkDir_DIR/data/ttHMultilepton/data/NTUP_PILEUP.15693023._000003.pool.root.1
-#PRWConfigFiles $WorkDir_DIR/data/ttHMultilepton/data/pileup_lq.root
+PRWConfigFiles GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v2/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16d_prw.root
 
-##FOR MC16A CANT USE data17GRL
-PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20180129/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-009.root
+PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root 
 
-GRLDir GoodRunsLists
-GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml 
+#GRLDir GoodRunsLists
+GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml
+#GRLFile data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -71,7 +70,7 @@ FakesControlRegionDoLooseMC False
 ApplyElectronInJetSubtraction False
 OverlapRemovalLeptonDef Tight
 
-# DoLoose Both
+# DoLoose False
 
 # Turn on MetaData to pull IsAFII from metadata
 #UseAodMetaData True
@@ -116,3 +115,4 @@ SRPRESKIM LEPTONS
 CALCULATESF
 JETFLAVORPLOTS detailed nJetsMax:20 pt:25:30:35:50:75:100:150:2500 abseta:0.:0.6:1.2:1.8:2.5
 SAVE
+

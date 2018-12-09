@@ -17,6 +17,7 @@ def getXsecAndKFac(dsid):
 fList = os.listdir(os.getcwd())
 xsecFiles = [f for f in fList if ( f.startswith("Xsection") and f.endswith(".txt") ) ] # Get list of Xsection files to update
 TDP = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data" # TopDataPreparation
+#TDP = "/afs/cern.ch/work/y/yshimoga/ttHMultiFW/source/ttHMultiAna/data/XSection-MC15-13TeV.data" # TopDataPreparation
 
 if os.path.exists(TDP):
     print "TopDataPreparation Status: OK"

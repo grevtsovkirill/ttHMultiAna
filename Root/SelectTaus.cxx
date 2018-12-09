@@ -69,7 +69,8 @@ bool SelectTaus::apply(const top::Event & event) const{
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(4);
     //    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) {
-    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose)) {
+    //    if (!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose)) {
+    if(!(tauItr->discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans)>0.005)) {
       continue;
     }
     event.m_ttreeIndex == 0 && m_tauCutflow->Fill(5);

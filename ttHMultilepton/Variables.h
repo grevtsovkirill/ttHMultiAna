@@ -20,7 +20,7 @@
 #include <memory>
 
 #define LEPTON_ARR_SIZE 4
-#define TAU_ARR_SIZE 2
+#define TAU_ARR_SIZE 3
 #define MAXSYST 50
 
 class ttHMultileptonLooseEventSaver;
@@ -65,6 +65,12 @@ namespace ttHML {
     float Mllll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-2][LEPTON_ARR_SIZE-3];
     float best_Z_Mll, best_Z_other_Mll, best_Z_other_MtLepMet;
     float minOSSFMll, minOSMll;
+    float Mlt00;
+    float Mlt01;
+    float Mlt10;
+    float Mlt11;
+    float Mtt01;
+    float MTlmet;     
     int nJets_OR_T;
     int nTruthJets;
     int nTruthJets_OR;
@@ -86,6 +92,9 @@ namespace ttHML {
     int nJets_OR_DL1_70;
     int nJets_OR_DL1_85;
     int nTaus_OR_Pt25;
+    int nTaus_OR_Loose;
+    int nTaus_OR_Medium;
+    int nTaus_OR_Tight;
     bool isBlinded;
     float HT;
     float HT_lep;

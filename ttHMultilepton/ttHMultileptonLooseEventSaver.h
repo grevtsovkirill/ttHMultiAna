@@ -75,6 +75,7 @@ extern TH1I* m_tauCutflow;
       void CopyTaus(const xAOD::TauJetContainer& Taus);
       void CheckIsBlinded();
       void CopyHT(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::JetContainer& goodJets, const xAOD::TauJetContainer& goodTaus);
+      void CopyMass(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::TauJetContainer& goodTaus);
       void CopyHT_trig(const xAOD::JetContainer& goodJets);
       void MakeJetIndices(const std::shared_ptr<xAOD::JetContainer>& goodJets, const xAOD::JetContainer& allJets);
       int getNTruthJets(const xAOD::JetContainer jetColl);
@@ -295,6 +296,7 @@ extern TH1I* m_tauCutflow;
   //MC
   int   m_higgsMode;
   int   m_LQMode;
+  int   m_LQbarMode;
   int   m_ttaudecay;
   const xAOD::TruthParticle* m_higgs;
   const xAOD::TruthParticle* m_top;
@@ -351,15 +353,15 @@ extern TH1I* m_tauCutflow;
       //std::map<CP::SystematicSet, std::string> m_lep_trigger_sf_names{ 
       std::vector< std::pair<CP::SystematicSet, std::string> >  m_lep_trigger_sf_names{
     	{ dummy_nom, "nominal" },
-    	{ dummy_elup, "EL_SF_Trigger_UP" },
-   		{ dummy_eldo, "EL_SF_Trigger_DOWN" },
-	    { dummy_muup, "MU_SF_Trigger_STAT_UP" },
-	    { dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
-		{ dummy_musysup, "MU_SF_Trigger_SYST_UP" },
+	{ dummy_elup, "EL_SF_Trigger_UP" },
+	{ dummy_eldo, "EL_SF_Trigger_DOWN" },
+	{ dummy_muup, "MU_SF_Trigger_STAT_UP" },
+	{ dummy_mudo, "MU_SF_Trigger_STAT_DOWN" },
+	{ dummy_musysup, "MU_SF_Trigger_SYST_UP" },
         { dummy_musysdo, "MU_SF_Trigger_SYST_DOWN" },
-	    { dummy_eleffup, "EL_EFF_Trigger_UP" },
-	    { dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
-	  }; 
+	{ dummy_eleffup, "EL_EFF_Trigger_UP" },
+	{ dummy_eleffdo, "EL_EFF_Trigger_DOWN" }
+      }; 
   // for names of lepton SFs
   std::map<top::topSFSyst, std::string> m_lep_sf_names{
     { top::topSFSyst::nominal, "nominal" },

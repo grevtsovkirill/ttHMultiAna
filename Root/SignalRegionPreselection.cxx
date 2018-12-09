@@ -72,6 +72,9 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
 	} else if(m_params == "LEPTONS") {
 		if (totalLeptons + totalTaus == 0)
 			return false;
+	} else if(m_params == "2LEPTONS") {
+	        if (totalLeptons + totalTaus < 2)
+		        return false;
 	} else if(m_params == "NONE") {
 			return true;
 	} else if(m_params == ""){

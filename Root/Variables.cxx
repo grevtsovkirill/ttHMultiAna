@@ -64,6 +64,12 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(best_Z_other_Mll, "best_Z_other_Mll");
   tree->makeOutputVariable(minOSSFMll, "minOSSFMll");
   tree->makeOutputVariable(minOSMll, "minOSMll");
+  tree->makeOutputVariable(Mlt00, "Mlt00");
+  tree->makeOutputVariable(Mlt01, "Mlt01");
+  tree->makeOutputVariable(Mlt10, "Mlt10");
+  tree->makeOutputVariable(Mlt11, "Mlt11");
+  tree->makeOutputVariable(Mtt01, "Mtt01");
+  tree->makeOutputVariable(MTlmet, "MTlmet");
   //tree->makeOutputVariable(Ptll01, "Ptll01");
   //tree->makeOutputVariable(DRll01, "DRll01");
   tree->makeOutputVariable(nJets_OR_T, "nJets_OR_T");
@@ -87,6 +93,9 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(nJets_OR_DL1_77, "nJets_OR_DL1_77");
   tree->makeOutputVariable(nJets_OR_DL1_70, "nJets_OR_DL1_70");
   tree->makeOutputVariable(nTaus_OR_Pt25, "nTaus_OR_Pt25");
+  tree->makeOutputVariable(nTaus_OR_Loose, "nTaus_OR_Loose");
+  tree->makeOutputVariable(nTaus_OR_Medium, "nTaus_OR_Medium");
+  tree->makeOutputVariable(nTaus_OR_Tight, "nTaus_OR_Tight");
   tree->makeOutputVariable(isBlinded, "isBlinded");
   tree->makeOutputVariable(HT, "HT");
   tree->makeOutputVariable(HT_lep, "HT_lep");
