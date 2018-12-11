@@ -597,6 +597,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     // Truth Matrix element photon
     systematicTree->makeOutputVariable(m_hasMEphoton, "m_hasMEphoton");
     systematicTree->makeOutputVariable(m_hasMEphoton_DRgt02_nonhad, "m_hasMEphoton_DRgt02_nonhad");
+    systematicTree->makeOutputVariable(m_hasFSRPhotonLargeDeltaR, "m_hasFSRPhotonLargeDeltaR");
     // systematicTree->makeOutputVariable(m_MEphoton_OLtty_keepEvent, "m_MEphoton_OLtty_keepEvent");
     // systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat1, "m_MEphoton_OLtty_cat1");
     // systematicTree->makeOutputVariable(m_MEphoton_OLtty_cat2, "m_MEphoton_OLtty_cat2");
@@ -1681,7 +1682,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   m_MEphoton_mother_pt = -10.;
   m_MEphoton_mother_eta = -10.;
   m_MEphoton_mother_phi = -10.;
-  if (event.m_truth != nullptr ) {
+/*  if (event.m_truth != nullptr ) {
     for (const auto& particle : *(event.m_truth)) {
       int pdgId = 22; // look at photons
       if (particle!=nullptr && particle->parent(0)!=nullptr){
@@ -1734,7 +1735,89 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
       }
      }
     }
+  }*/
+  bool found=false;
+  float minDR = 999.9;
+  m_hasFSRPhotonLargeDeltaR = false;
+  std::vector<const xAOD::TruthParticle* > truleptons;
+  //const xAOD::TruthParticle* truleptons= nullptr;
+  if (event.m_truth != nullptr ) {
+  for (const auto& leptons : *(event.m_truth)) {
+    //if (leptons!=nullptr ){
+      if((fabs(leptons->pdgId()) == 11 && leptons->status() == 1 && leptons->barcode()<2e5) || (fabs(leptons->pdgId()) == 13 && leptons->status() == 1 && leptons->barcode()<2e5) )truleptons.push_back(leptons);
+    //}
   }
+  //std::cout<<"--> nleptons= " <<truleptons.size()<<std::endl;
+}
+//&&  fabs(leptons->parent(0)->pdgId()) != 11)
+//int g=0;
+  if (event.m_truth != nullptr ) {
+    for (const auto& particle : *(event.m_truth)) {
+      int pdgId = 22; // look at photons
+      if (particle!=nullptr && particle->parent(0)!=nullptr){
+      if (fabs(particle->pdgId()) == pdgId
+          && (particle->nParents()==0 || fabs(particle->parent(0)->pdgId()) != pdgId)) {// this particle is a photon
+        int motherPdgId = 999;
+        float motherPt = -1;
+        const xAOD::TruthParticle* mother = nullptr;
+        if (particle->nParents() > 0) {
+          mother = particle->parent(0);  // i am interested in DR only of the mother
+          motherPdgId = mother->pdgId();
+          motherPt = mother->pt();
+        }
+        
+        if (abs(motherPdgId) < 100 && particle->barcode() < 2e5 && particle->pt() > 0 && motherPt > 0) {
+          m_hasMEphoton = true;
+          if(particle->pt() > m_MEphoton_pt) {
+            m_MEphoton_e = particle->e();
+            m_MEphoton_pt = particle->pt();
+            m_MEphoton_eta = particle->eta();
+            m_MEphoton_phi = particle->phi();
+            m_MEphoton_mother_pdgId = motherPdgId;
+            m_MEphoton_mother_pt = motherPt;
+            m_MEphoton_mother_e = mother->e();
+            m_MEphoton_mother_eta = mother->eta();
+            m_MEphoton_mother_phi = mother->phi();
+
+	    // we want this for the highest pT only
+	    if (particle->pt() > 15e3 && (abs(motherPdgId) == 24 || abs(motherPdgId) == 6))
+	      m_hasMEphoton_DRgt02_nonhad = true;// in selection use with "ttbar && !m_hasMEphoton_DRgt02_nonhad" or "tty && m_hasMEphoton_DRgt02_nonhad"
+	    else
+	      m_hasMEphoton_DRgt02_nonhad = false;// in selection use with "ttbar && !m_hasMEphoton_DRgt02_nonhad" or "tty && m_hasMEphoton_DRgt02_nonhad"
+          }
+        }
+        if((abs(motherPdgId) == 11 || abs(motherPdgId) == 13) && particle->status() == 1 && particle->pt() > 7e3 && abs(particle->eta()) < 2.5 && motherPt > 0 && particle->barcode()<2e5){
+        //m_hasFSRPhotonLargeDeltaR = true;
+        found = true;
+        //g++;
+        //std::cout<<"--> found photon from lepton " <<g<<std::endl;
+        //std::cout<<"mother of the photon= "<<particle->parent(0)->pdgId()<<std::endl;
+        //std::cout<<"barcode of mother of the photon= "<<particle->parent(0)->barcode()<<std::endl;
+        //std::cout<<"photon barcode= "<<particle->barcode()<<std::endl;
+          for(unsigned int iL=0; iL<truleptons.size(); iL++){
+            const xAOD::TruthParticle* lepAfterRad = truleptons.at(iL);
+            //std::cout<<"Leptonpt= " <<lepAfterRad->pt()<<std::endl;
+            auto dr= (particle->p4()).DeltaR(lepAfterRad->p4());
+            //std::cout<<"--> Delta R lepton after rad- photon:" <<dr<<std::endl;
+            //std::cout<<"electron barcode = "<<lepAfterRad->barcode()<<std::endl;
+            //std::cout<<"mother electron barcode = "<<lepAfterRad->parent(0)->barcode()<<std::endl;
+              if (minDR > (particle->p4()).DeltaR(lepAfterRad->p4())){
+                minDR = (particle->p4()).DeltaR(lepAfterRad->p4()); 
+              }
+          }
+          //std::cout<<"minDR= " <<minDR<<std::endl;
+          if(minDR > 0.1 )
+          m_hasFSRPhotonLargeDeltaR = true;
+          //break;
+          else 
+          m_hasFSRPhotonLargeDeltaR = false;
+        }
+       }
+     }
+    }
+  }
+
+
   // if (!m_hasMEphoton)
   //   m_MEphoton_OLtty_keepEvent = true;
 

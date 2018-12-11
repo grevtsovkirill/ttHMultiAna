@@ -255,6 +255,7 @@ extern TH1I* m_tauCutflow;
   // Truth Matrix element photon
   char m_hasMEphoton;
   char m_hasMEphoton_DRgt02_nonhad;
+  char m_hasFSRPhotonLargeDeltaR;
   /* char m_MEphoton_OLtty_keepEvent; */
   /* char m_MEphoton_OLtty_cat1; */
   /* char m_MEphoton_OLtty_cat2; */
