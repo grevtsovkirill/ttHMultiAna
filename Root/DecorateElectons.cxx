@@ -18,10 +18,11 @@
 #include "ttHMultilepton/ttHMLAsgHelper.h"
 
 static const float Pi = 3.14159;
-static const float PTTOCURVATURE = 0.301; // ATLAS B=2T (in MeV/mm) 
+static const float PTTOCURVATURE = -0.301; // ATLAS B=+2T (in MeV/mm) 
 static const float SEPCUT      = 1;
 static const float DCTCUT      = 0.02;
 static const float SIMINHITS   = 8; // requiring min 8 Si hits
+static const float MAXZ0DIFF = 0.5; // (in mm) 
 
 
 DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::TopConfig> config):
@@ -81,7 +82,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
  }
 
   float mll_conv;
-  float radius_conv;
+  float mll_conv_atConvV;
+  float radius_conv, radius_convX, radius_convY;
   float closestSiTracknIL, closestSiTrackeIL, closestSiTracknNIL, closestSiTrackeNIL;
   float closestSiTrackPt, closestSiTrackEta, closestSiTrackPhi, closestSiTrackD0, closestSiTrackZ0, closestSiTrackQ;
   float bestmatchSiTrackPt, bestmatchSiTrackEta, bestmatchSiTrackPhi, bestmatchSiTrackD0, bestmatchSiTrackZ0, bestmatchSiTrackQ;
@@ -140,7 +142,10 @@ bool DecorateElectrons::apply(const top::Event & event) const{
     // Tracks associated to the electron
 
     mll_conv=-999;
+    mll_conv_atConvV=-999;
     radius_conv=-999;
+    radius_convX=-999;
+    radius_convY=-999;
     closestSiTracknIL = -999;
     closestSiTrackeIL = -999;
     closestSiTracknNIL = -999;
@@ -169,7 +174,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	for (auto tracks1 : *tpC)  // loop on all tracks
 	  {
 	    double dR = bestmatchedElTrack->p4().DeltaR(tracks1->p4());
-	    if (  (dR<0.3)  ) // not the best-match track and loose DeltaR cut  
+	    double dz0 = fabs(bestmatchedElTrack->z0() - tracks1->z0())*sin(bestmatchedElTrack->theta()); 
+	    if (  (dR<0.3) && (dz0<MAXZ0DIFF) ) // loose DeltaR cut and tight delta(z0) cut  
 	      {
 		//std::cout << "Looping on all tracks" << std::endl;
 		
@@ -209,6 +215,13 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	
 	// std::cout << "Validation w Henri: nTPSi: " << nTPSi << std::endl;
 	// std::cout << "Validation w Henri: nTPSiNoIBL: " << nTPSiNoIBL << std::endl;
+
+	bestmatchSiTrackPt    = bestmatchedElTrack->pt(); 
+	bestmatchSiTrackEta   = bestmatchedElTrack->eta(); 
+	bestmatchSiTrackPhi   = bestmatchedElTrack->phi(); 
+	bestmatchSiTrackD0    = bestmatchedElTrack->d0(); 
+	bestmatchSiTrackZ0    = bestmatchedElTrack->z0(); 
+	bestmatchSiTrackQ     = bestmatchedElTrack->charge(); 
 	
 	if (closestSiTrack){
 	  // Keep pt, eta, phi, d0, z0
@@ -219,20 +232,16 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	  closestSiTrackZ0    = closestSiTrack->z0();
 	  closestSiTrackQ     = closestSiTrack->charge();
 	
-
-	  bestmatchSiTrackPt    = bestmatchedElTrack->pt();
-	  bestmatchSiTrackEta   = bestmatchedElTrack->eta();
-	  bestmatchSiTrackPhi   = bestmatchedElTrack->phi();
-	  bestmatchSiTrackD0    = bestmatchedElTrack->d0();
-	  bestmatchSiTrackZ0    = bestmatchedElTrack->z0();
-	  bestmatchSiTrackQ     = bestmatchedElTrack->charge();
-	
-
 	  TLorentzVector p0,p1;  
 	  p0.SetPtEtaPhiM(bestmatchedElTrack->pt(),bestmatchedElTrack->eta(),bestmatchedElTrack->phi(),0.511);   
 	  p1.SetPtEtaPhiM(closestSiTrack->pt(),closestSiTrack->eta(),closestSiTrack->phi(),0.511);
 	  
 	  mll_conv=(p0+p1).M()*1e-3;
+	  
+	  p0.SetPtEtaPhiM(bestmatchedElTrack->pt(),bestmatchedElTrack->eta(),0,0.511);   
+	  p1.SetPtEtaPhiM(closestSiTrack->pt(),closestSiTrack->eta(),0,0.511);
+	  
+	  mll_conv_atConvV=(p0+p1).M()*1e-3;
 	  
 	  
 	  // Conversion methods
@@ -365,20 +374,29 @@ bool DecorateElectrons::apply(const top::Event & event) const{
 	  ///////
 	  if(fabs(separation)<SEPCUT && fabs(dct)<DCTCUT){
 	    separationMinDCT=separation;
+	    radius_convX=convX;
+	    radius_convY=convY;
 	    radius_conv=sqrt(convX*convX + convY*convY);
+	    if( convX*cos(bestmatchedElTrack->phi()) + convY*sin(bestmatchedElTrack->phi()) < 0)radius_conv = -radius_conv; 
+
 	  }
 	}
 	
       }
     
     
-    // std::cout << "Validation w Henri: Mass: " << mll_conv << std::endl;
+    // std::cout << "Validation w Henri: track0 pT eta: " << bestmatchSiTrackPt*bestmatchSiTrackQ << " " << bestmatchSiTrackEta << std::endl; 
+    // std::cout << "Validation w Henri: Mass at PV: " << mll_conv << std::endl;
+    // std::cout << "Validation w Henri: Mass at conv. vertex : " << mll_conv_atConvV << std::endl; 
     // std::cout << "Validation w Henri: Radius: " << radius_conv << std::endl;
     // std::cout << "Validation w Henri: separationMinDCT: " << separationMinDCT << std::endl;
     // std::cout << "Validation w Henri: closestSiTrackPt: " << closestSiTrackPt << std::endl;
     
     elItr->auxdecor<float>("mll_conv") = mll_conv;
+    elItr->auxdecor<float>("mll_conv_atConvV") = mll_conv_atConvV;
     elItr->auxdecor<float>("radius_conv") = radius_conv;
+    elItr->auxdecor<float>("radius_convX") = radius_convX;
+    elItr->auxdecor<float>("radius_convY") = radius_convY;
 
     elItr->auxdecor<float>("closestSiTracknIL") = closestSiTracknIL;
     elItr->auxdecor<float>("closestSiTrackeIL") = closestSiTrackeIL;
