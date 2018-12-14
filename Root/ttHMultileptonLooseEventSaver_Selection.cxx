@@ -343,11 +343,16 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   // NTracks associated to the reco electron
   lep.nTrackParticles      = el.nTrackParticles();
 
-  // Mee from tracks
-  lep.MeeCO                = el.auxdataConst<float>("mll_conv");
+  // Mtrktrk at Primary Vertex
+  lep.Mtrktrk_atPV_CO      = el.auxdataConst<float>("mll_conv");
+
+  // Mtrktrk at Conversion Vertex
+  lep.Mtrktrk_atConvV_CO   = el.auxdataConst<float>("mll_conv_atConvV");
 
   // Conversion radius from tracks
   lep.RadiusCO             = el.auxdataConst<float>("radius_conv");
+  lep.RadiusCOX            = el.auxdataConst<float>("radius_convX");
+  lep.RadiusCOY            = el.auxdataConst<float>("radius_convY");
 
   // Distance between the two track curves
   lep.SeparationMinDCT     = el.auxdataConst<float>("separationMinDCT");

@@ -192,8 +192,11 @@ namespace ttHML {
     int nInnerPix;
 
     int     nTrackParticles;
-    float   MeeCO;
+    float   Mtrktrk_atPV_CO;
+    float   Mtrktrk_atConvV_CO;
     float   RadiusCO;
+    float   RadiusCOX;
+    float   RadiusCOY;
     float   SeparationMinDCT;
     float   ClosestSiTracknIL;
     float   ClosestSiTrackeIL;
