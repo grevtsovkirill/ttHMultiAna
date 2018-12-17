@@ -21,7 +21,7 @@ static const float Pi = 3.14159;
 static const float PTTOCURVATURE = -0.301; // ATLAS B=+2T (in MeV/mm) 
 static const float SEPCUT      = 1;
 static const float DCTCUT      = 0.02;
-static const float SIMINHITS   = 8; // requiring min 8 Si hits
+static const float SIMINHITS   = 7; // requiring min 7 Si hits
 static const float MAXZ0DIFF = 0.5; // (in mm) 
 
 
