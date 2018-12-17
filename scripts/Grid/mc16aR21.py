@@ -67,6 +67,14 @@ grid.Add("syst_mc16a").datasets=[
     "mc16_13TeV.361106.PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zee.deriv.DAOD_HIGG8D1.e3601_s3126_r9364_r9315_p3652",
     "mc16_13TeV.361107.PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zmumu.deriv.DAOD_HIGG8D1.e3601_s3126_r9364_r9315_p3652",
     "mc16_13TeV.364288.Sherpa_222_NNPDF30NNLO_llll_lowMllPtComplement.deriv.DAOD_HIGG8D1.e6096_e5984_s3126_r9364_r9315_p3652",
+"mc16_13TeV.410658.PhPy8EG_A14_tchan_BW50_lept_top.deriv.DAOD_HIGG8D1.e6671_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410659.PhPy8EG_A14_tchan_BW50_lept_antitop.deriv.DAOD_HIGG8D1.e6671_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410644.PowhegPythia8EvtGen_A14_singletop_schan_lept_top.deriv.DAOD_HIGG8D1.e6527_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410645.PowhegPythia8EvtGen_A14_singletop_schan_lept_antitop.deriv.DAOD_HIGG8D1.e6527_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410646.PowhegPythia8EvtGen_A14_Wt_DR_inclusive_top.deriv.DAOD_HIGG8D1.e6552_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410647.PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop.deriv.DAOD_HIGG8D1.e6552_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410648.PowhegPythia8EvtGen_A14_Wt_DR_dilepton_top.deriv.DAOD_HIGG8D1.e6615_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.410649.PowhegPythia8EvtGen_A14_Wt_DR_dilepton_antitop.deriv.DAOD_HIGG8D1.e6615_e5984_s3126_r9364_r9315_p3552",
 ]
 
 grid.Add("singleSample_410155").datasets=[
@@ -347,14 +355,6 @@ grid.Add("FS_mc16a").datasets=[
     "mc16_13TeV.361106.PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zee.deriv.DAOD_HIGG8D1.e3601_s3126_r9364_r9315_p3652",
     "mc16_13TeV.361107.PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zmumu.deriv.DAOD_HIGG8D1.e3601_s3126_r9364_r9315_p3652",
     "mc16_13TeV.364288.Sherpa_222_NNPDF30NNLO_llll_lowMllPtComplement.deriv.DAOD_HIGG8D1.e6096_e5984_s3126_r9364_r9315_p3652",
-"mc16_13TeV.410658.PhPy8EG_A14_tchan_BW50_lept_top.deriv.DAOD_HIGG8D1.e6671_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410659.PhPy8EG_A14_tchan_BW50_lept_antitop.deriv.DAOD_HIGG8D1.e6671_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410644.PowhegPythia8EvtGen_A14_singletop_schan_lept_top.deriv.DAOD_HIGG8D1.e6527_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410645.PowhegPythia8EvtGen_A14_singletop_schan_lept_antitop.deriv.DAOD_HIGG8D1.e6527_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410646.PowhegPythia8EvtGen_A14_Wt_DR_inclusive_top.deriv.DAOD_HIGG8D1.e6552_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410647.PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop.deriv.DAOD_HIGG8D1.e6552_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410648.PowhegPythia8EvtGen_A14_Wt_DR_dilepton_top.deriv.DAOD_HIGG8D1.e6615_e5984_s3126_r9364_r9315_p3552",
-    "mc16_13TeV.410649.PowhegPythia8EvtGen_A14_Wt_DR_dilepton_antitop.deriv.DAOD_HIGG8D1.e6615_e5984_s3126_r9364_r9315_p3552",
 ]
 
 grid.Add("AF_mc16a").datasets=[
