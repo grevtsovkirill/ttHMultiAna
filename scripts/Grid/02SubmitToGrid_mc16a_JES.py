@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 import TopExamples.grid
 import mc16aR21
@@ -50,7 +51,7 @@ v_subsuf="_v8"
 baseSuffix = subsuf+"_sys_mc16a"+v_subsuf
 # unused sampels:
 #           old sig "345674", "345673", "345672",
-for dsid in ["410470", "410472","345875","345874","345873","410155", "410218", "410219" ,"410220"]:
+for dsid in ["410470", "410472","345875","345874","345873","413001", "410218", "410219" ,"410220"]:
     # individual files
     config.settingsFile = 'generic_config_systmc16a_' + dsid + '.txt'
     config.suffix = baseSuffix

@@ -80,6 +80,9 @@ grid.Add("syst_mc16d").datasets=[
 grid.Add("singleSample_410155").datasets=[
     "mc16_13TeV.410155.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttW.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r10201_r10210_p3480",
     ]
+grid.Add("singleSample_413001").datasets=[
+    "mc16_13TeV.413001.Sherpa_ttW_multilegNLO.deriv.DAOD_HIGG8D1.e7071_e5984_a875_r10201_r10210_p3652",
+    ]
 grid.Add("singleSample_410218").datasets=[
     "mc16_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.deriv.DAOD_HIGG8D1.e5070_e5984_s3126_r10201_r10210_p3480",
     ]
