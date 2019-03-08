@@ -179,23 +179,22 @@ void DecorateTaus::decoratetau(const top::Event& event)const{
       tau->auxdecor<float>("MV2c10") = rv;
 
       tau->auxdecor<int>("tagWeightBin") =
-	jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous") ? jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;
-
+	    jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous") ? jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;
+     
       tau->auxdecor<char>("passJVT") =	
-	jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
-	}
-      try {
-        tau->auxdecor<char>("fromPV") =
-          (tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
-      }
-      catch(std::exception& e) {
-        tau->auxdecor<char>("fromPV") = 1;
-      }
-    
+	    jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
+      float tmpWidth = -1;
+      jet.getAttribute("Width", tmpWidth);
+      tau->auxdecor<float>("Width") = tmpWidth;
+    }
+    try {
+      tau->auxdecor<char>("fromPV") =
+        (tau->vertex() and m_pv) ? ( tau->vertex()->position() == m_pv->position() ) : -1;
+    }
+    catch(std::exception& e) {
+      tau->auxdecor<char>("fromPV") = 1;
+    }
   }
-
-
-
 }
 
 std::string DecorateTaus::name() const{
