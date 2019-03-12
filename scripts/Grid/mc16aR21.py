@@ -359,6 +359,7 @@ grid.Add("FS_mc16a").datasets=[
     "mc16_13TeV.361107.PowhegPythia8EvtGen_AZNLOCTEQ6L1_Zmumu.deriv.DAOD_HIGG8D1.e3601_s3126_r9364_r9315_p3652",
     "mc16_13TeV.364288.Sherpa_222_NNPDF30NNLO_llll_lowMllPtComplement.deriv.DAOD_HIGG8D1.e6096_e5984_s3126_r9364_r9315_p3652",
     "mc16_13TeV.413001.Sherpa_ttW_multilegNLO.deriv.DAOD_HIGG8D1.e7071_e5984_s3126_r9364_r9315_p3652",
+    "mc16_13TeV.346413.PhPy8EG_AZNLOCTEQ6L1_ZmumuWithInternalConversionFilter.deriv.DAOD_HIGG8D1.e7322_e5984_s3126_r9364_r9315_p3627",
 ]
 
 grid.Add("AF_mc16a").datasets=[
