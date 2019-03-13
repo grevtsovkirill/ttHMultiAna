@@ -75,6 +75,7 @@ grid.Add("syst_mc16a").datasets=[
     "mc16_13TeV.410647.PowhegPythia8EvtGen_A14_Wt_DR_inclusive_antitop.deriv.DAOD_HIGG8D1.e6552_e5984_s3126_r9364_r9315_p3552",
     "mc16_13TeV.410648.PowhegPythia8EvtGen_A14_Wt_DR_dilepton_top.deriv.DAOD_HIGG8D1.e6615_e5984_s3126_r9364_r9315_p3552",
     "mc16_13TeV.410649.PowhegPythia8EvtGen_A14_Wt_DR_dilepton_antitop.deriv.DAOD_HIGG8D1.e6615_e5984_s3126_r9364_r9315_p3552",
+    "mc16_13TeV.346413.PhPy8EG_AZNLOCTEQ6L1_ZmumuWithInternalConversionFilter.deriv.DAOD_HIGG8D1.e7322_e5984_s3126_r9364_r9315_p3627",
 ]
 
 grid.Add("singleSample_410155").datasets=[
