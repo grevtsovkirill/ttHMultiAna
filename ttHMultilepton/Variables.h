@@ -100,6 +100,7 @@ namespace ttHML {
     float HT_lep;
     float HT_jets;
     float HT_alljets;
+    float Meff;
     float lead_jetPt;
     float lead_jetEta;
     float lead_jetPhi;

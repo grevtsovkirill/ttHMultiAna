@@ -265,17 +265,19 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   };
 */
   std::vector<std::array<std::string,5> > triggerKeys = { // <list of legs>, <list of tags>, <key in map file>, <PID WP>, <iso WP>
-    //{"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"}, 
+    //    {"e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "isolFixedCutTight"}, 
+    //    {"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Signal", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "TightLLH", "isolFixedCutTightTrackOnly"}, 
     // single-e trigger, only for untagged electrons, configured wrt tight+iso WP:
     //{"e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose, e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "Baseline", "SINGLE_E_2015_e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose_2016_2017_e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", "LooseAndBLayerLLH", "isolFixedCutLoose"}, 
     // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"}, 
+    //    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"}, 
+    //    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "isolFCTight"}, 
     // dielectron trigger, only for untagged electrons, configured wrt loose WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFixedCutLoose"}, 
+    //    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFCTight"}, 
     // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-    {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"},  
+    //    {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "TightLLH", "PLVeto_CFTtight_ambiguity0_isolFixedCutLoose"},  
     // e-mu trigger, only for untagged electrons, configured wrt loose WP:
-    {"e17_lhloose, e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "LooseAndBLayerLLH", "isolFixedCutLoose"}
+    //    {"e17_lhloose, e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_e17_lhloose_nod0_2017_e17_lhloose_nod0", "LooseAndBLayerLLH", "isolFixedCutLoose"}
   };
  int nTrig = -1;
 
@@ -300,9 +302,10 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       for(int j=0;j<2;++j) // one tool instance for efficiencies, another for scale factors
 	{
 	  auto t = m_electronToolsFactory.emplace(m_electronToolsFactory.end(), "AsgElectronEfficiencyCorrectionTool/ElTrigEff_"+std::to_string(++nTools)+systvar.second);
-    std::string filepath="ElectronEfficiencyCorrection/2015_2017/rel21.2/Moriond_February2018_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13_" + kv[4] + ".root";
+	  std::string filepath="ElectronEfficiencyCorrection/2015_2017/rel21.2/Moriond_February2018_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13_" + kv[4] + ".root";
+	  //std::string filepath="ElectronEfficiencyCorrection/2015_2017/rel21.2/Consolidation_September2018_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13_" + kv[4] + ".root";
 	  //std::string filepath="ElectronEfficiencyCorrection/2015_2016/rel20.7/Moriond_February2017_v1/trigger/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v11" + kv[4] + ".root";
-	  if (kv[4]!="isolFixedCutLoose") filepath=std::string(rc)+"/data/ttHMultilepton/data/R21_PLV_SFs/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13_" + kv[4] + ".root";
+	  //	  if (kv[4]!="isolFixedCutLoose") filepath=std::string(rc)+"/data/ttHMultilepton/data/R21_PLV_SFs/"+ (std::string)(j?"efficiencySF.":"efficiency.") + kv[2] + "." + kv[3] + "_d0z0_v13_" + kv[4] + ".root";
 
 	  std::vector<std::string> inputFiles;
 	  inputFiles.push_back(filepath);
@@ -331,15 +334,15 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       }
     }
 
-	auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
-	ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
-	t->setName("MuonTrigEff_"+std::to_string(++nTools)+systvar.second);
-  t->setProperty("CalibrationRelease", "180516_HighEtaUpdate").ignore(); 
-  t->setProperty("useRel207",true).ignore();
-	t->setProperty("MuonQuality", "Medium").ignore(); 
-  t->setProperty("AllowZeroSF",true).ignore();
-	top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
-	m_muonToolsHandles.push_back(t->getHandle());
+    auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
+    ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
+    t->setName("MuonTrigEff_"+std::to_string(++nTools)+systvar.second);
+    t->setProperty("CalibrationRelease", "180516_HighEtaUpdate").ignore(); 
+    t->setProperty("useRel207",true).ignore();
+    t->setProperty("MuonQuality", "Medium").ignore(); 
+    t->setProperty("AllowZeroSF",true).ignore();
+    top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
+    m_muonToolsHandles.push_back(t->getHandle());
 
     if (systvar.second=="MU_SF_Trigger_STAT_UP" || systvar.second=="MU_SF_Trigger_STAT_DOWN" || systvar.second=="MU_SF_Trigger_SYST_UP" || systvar.second=="MU_SF_Trigger_SYST_DOWN") {
       for(auto& mutool : m_muonToolsHandles){
@@ -360,12 +363,12 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     m_trigGlobEffCorr[nTrig]->setProperty("MuonTools",m_muonToolsHandles).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfLegsPerTool",legsPerTool).ignore();
     m_trigGlobEffCorr[nTrig]->setProperty("ListOfTagsPerTool",tagsPerTool).ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", " 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu18_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", " 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2017", " 2e24_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
+    // m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2015", " 2e12_lhloose_L12EM10VH || e17_lhloose_mu14 || mu18_mu8noL1").ignore();
+    // m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2016", " 2e17_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
+    // m_trigGlobEffCorr[nTrig]->setProperty("TriggerCombination2017", " 2e24_lhvloose_nod0 || e17_lhloose_nod0_mu14 || mu22_mu8noL1").ignore();
     //m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,SignalCFT,Baseline").ignore();
-    m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
-    top::check( m_trigGlobEffCorr[nTrig]->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
+    //m_trigGlobEffCorr[nTrig]->setProperty("LeptonTagDecorations", "Signal,Baseline").ignore();
+    //    top::check( m_trigGlobEffCorr[nTrig]->initialize(), "TrigGlobalEfficiencyCorrectionTool failed to initialize!" );
     ////////////////////////// end Trigger SF tool
   }
 }
@@ -601,7 +604,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 
     systematicTree->makeOutputVariable(m_ttaudecay, "LQLQdecayMode");
     
-
+    
+   
     systematicTree->makeOutputVariable(m_runYear, "RunYear");
 // ttbar HF, DLF, MLF classification
 //    systematicTree->makeOutputVariable(m_HF_Classification, "HF_Classification");
@@ -612,6 +616,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
     systematicTree->makeOutputVariable(m_LQMode,         "LQDecayMode");
     systematicTree->makeOutputVariable(m_LQbarMode,         "LQbarDecayMode");
+
+    systematicTree->makeOutputVariable(m_gen_filt_ht,     "gen_filt_ht");
 
     systematicTree->makeOutputVariable(m_mcChannelNumber, "mc_channel_number");
     systematicTree->makeOutputVariable(m_isAFII, "mc_isAFII");
@@ -1663,7 +1669,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
  //event info
   m_eventNumber = event.m_info->eventNumber();
   if (top::isSimulation(event)) {
-    m_runNumber = m_purwtool->getRandomRunNumber(*event.m_info);
+    m_runNumber = m_purwtool->getRandomRunNumber(*event.m_info);    
   } else {
     m_runNumber = event.m_info->runNumber();
   }
@@ -1967,6 +1973,15 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 
   //Event info (for TrackingxAODHelpers)
   m_eventInfo = event.m_info;
+
+
+  if (top::isSimulation(event)) {
+    static SG::AuxElement::ConstAccessor<float> GenFiltHT_d("GenFiltHT");
+    m_gen_filt_ht = 0.0;
+    const xAOD::EventInfo* info = event.m_info;
+    if(GenFiltHT_d.isAvailable(*info)) m_gen_filt_ht = GenFiltHT_d(*info);
+    else std::cout<<"not Available ht filter"<<std::endl;
+  }
 
   // Probably we want to bomb out if the vertices nonexist?
   if (event.m_primaryVertices == nullptr) {

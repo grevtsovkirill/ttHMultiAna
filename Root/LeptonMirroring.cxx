@@ -63,6 +63,11 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &isIntConvPh, "lep_isIntConvPh_", index);
   CreateBranch(tree, &isISR_FSR_Ph, "lep_isISR_FSR_Ph_", index);
   CreateBranch(tree, &isBrems, "lep_isBrems_", index);
+  CreateBranch(tree, &Mtrktrk_atPV_CO, "lep_Mtrktrk_atPV_CO_", index);
+  CreateBranch(tree, &Mtrktrk_atConvV_CO, "lep_Mtrktrk_atConvV_CO_", index);
+  CreateBranch(tree, &RadiusCO, "lep_RadiusCO_", index);
+  CreateBranch(tree, &RadiusCOX, "lep_RadiusCOX_", index);
+  CreateBranch(tree, &RadiusCOY, "lep_RadiusCOY_", index);
 
   CreateBranch(tree, &chargeIDBDTLoose, "lep_chargeIDBDTLoose_", index);
   CreateBranch(tree, &chargeIDBDTMedium, "lep_chargeIDBDTMedium_", index);

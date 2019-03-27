@@ -1,0 +1,11 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCorrections/Root/ScaleFactorRetriever.cxx	2018-12-14 03:07:38.000000000 +0100
++++ ScaleFactorRetriever.cxx	2019-02-22 17:23:31.000000001 +0100
+@@ -736,7 +736,7 @@
+     }
+ 
+     if (!(x.isAvailable<float>(decoration))) {
+-      ATH_MSG_INFO("Muon is not decorated with requested TTVA SF. 1.0 will be returned.");
++      //      ATH_MSG_INFO("Muon is not decorated with requested TTVA SF. 1.0 will be returned.");
+       return 1.0;
+     }
+ 

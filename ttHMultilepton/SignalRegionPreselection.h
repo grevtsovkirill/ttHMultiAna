@@ -22,6 +22,9 @@ public:
 	std::string name() const override;
     bool applyParticleLevel(const top::ParticleLevelEvent& event) const override;
 	ttHMLAsgHelper* m_asgHelper;
+
+	ttHML::Variables* m_ttHEvent;
+
 	
 private:
 	std::shared_ptr<top::TopConfig> m_config;

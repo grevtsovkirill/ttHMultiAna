@@ -1,0 +1,20 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/Root/AsgElectronChargeIDSelectorTool.cxx	2018-12-14 03:07:38.000000000 +0100
++++ AsgElectronChargeIDSelectorTool.cxx	2019-01-16 11:32:11.000000001 +0100
+@@ -312,7 +312,7 @@
+         d0sigma=sqrtf(vard0);
+       }
+     }
+-        
++    /*        
+     //KM: calculation of SCT-weighted charge
+     float charge = 0, SCT = 0;
+     for (unsigned TPit = 0; TPit < eg->nTrackParticles(); TPit++) {
+@@ -323,7 +323,7 @@
+       charge += temp_NSCTHits*eg->trackParticle(TPit)->charge();
+     }
+     avgCharge_SCTw= SCT!=0 ? eg->charge()*charge/SCT : 0;
+-        
++    */  
+     const std::vector<float>&cov= t->definingParametersCovMatrixVec();
+     trackqoverpsig= cov[14];
+         

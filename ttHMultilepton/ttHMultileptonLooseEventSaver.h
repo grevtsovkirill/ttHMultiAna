@@ -316,6 +316,8 @@ extern TH1I* m_tauCutflow;
   std::vector<int>   m_mc_status;
   std::vector<int>   m_mc_barcode;
 
+  float m_gen_filt_ht;
+
   std::vector<std::vector<int> >  m_mc_parents;
   std::vector<std::vector<int> >  m_mc_children;
 

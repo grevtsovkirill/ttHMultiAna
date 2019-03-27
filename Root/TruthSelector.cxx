@@ -125,6 +125,10 @@ ttH::TruthSelector::TruthSelector():
      LQdecaymodestr[noproductsLQ]   = "noproducts";
      LQdecaymodestr[noLQ]           = "noLQ";
      LQdecaymodestr[problemLQ]      = "problem";
+     LQdecaymodestr[ttau]           = "tmu";
+     LQdecaymodestr[tnu]            = "tel";
+     LQdecaymodestr[btau]           = "bmu";
+     LQdecaymodestr[bnu]            = "bel";
 
 }
 
@@ -403,6 +407,14 @@ ttH::LQdecaymode ttH::TruthSelector::GetLQDecayMode(const xAOD::TruthParticleCon
 	      else if(abs(LQ_cpdg[0]) == 12 && abs(LQ_cpdg[1]) == 6) return tnu;
 	      else if(abs(LQ_cpdg[0]) == 14 && abs(LQ_cpdg[1]) == 6) return tnu;
 	      else if(abs(LQ_cpdg[0]) == 16 && abs(LQ_cpdg[1]) == 6) return tnu;
+	      else if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 13) return tmu;
+	      else if(abs(LQ_cpdg[0]) == 13 && abs(LQ_cpdg[1]) == 6) return tmu;
+	      else if(abs(LQ_cpdg[0]) == 6 && abs(LQ_cpdg[1]) == 11) return tel;
+	      else if(abs(LQ_cpdg[0]) == 11 && abs(LQ_cpdg[1]) == 6) return tel;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 13) return bmu;
+	      else if(abs(LQ_cpdg[0]) == 13 && abs(LQ_cpdg[1]) == 5) return bmu;
+	      else if(abs(LQ_cpdg[0]) == 5 && abs(LQ_cpdg[1]) == 13) return bel;
+	      else if(abs(LQ_cpdg[0]) == 13 && abs(LQ_cpdg[1]) == 5) return bel;
 
 	      else cerr << "1 = " << LQ_cpdg[0] << ", 2 = " << LQ_cpdg[1] << endl;
             }

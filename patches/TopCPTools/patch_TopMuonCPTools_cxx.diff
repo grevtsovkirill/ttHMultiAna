@@ -1,6 +1,6 @@
---- Root/TopMuonCPTools.cxx.orig	2018-05-29 20:07:08.000000001 +0200
-+++ Root/TopMuonCPTools.cxx	2018-05-29 20:08:52.000000001 +0200
-@@ -327,9 +327,25 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopMuonCPTools.cxx	2018-12-14 03:07:38.000000000 +0100
++++ TopMuonCPTools.cxx	2019-01-10 10:24:28.000000001 +0100
+@@ -285,9 +285,25 @@
      tool = asg::ToolStore::get<CP::MuonEfficiencyScaleFactors>(name);
    } else {
      tool = new CP::MuonEfficiencyScaleFactors(name);

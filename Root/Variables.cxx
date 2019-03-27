@@ -101,6 +101,7 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(HT_lep, "HT_lep");
   tree->makeOutputVariable(HT_jets, "HT_jets");
   tree->makeOutputVariable(HT_alljets, "HT_alljets");
+  tree->makeOutputVariable(Meff,"Meff");
   tree->makeOutputVariable(lead_jetPt,  "lead_jetPt");
   tree->makeOutputVariable(lead_jetEta, "lead_jetEta");
   tree->makeOutputVariable(lead_jetPhi, "lead_jetPhi");

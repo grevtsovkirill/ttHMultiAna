@@ -38,6 +38,7 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
     const xAOD::ElectronContainer* Electrons(nullptr);
     const xAOD::MuonContainer* Muons(nullptr);
     const xAOD::TauJetContainer* Taus(nullptr);
+    const xAOD::JetContainer* Jets(nullptr);
 
     if(!m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(m_event->m_hashValue) ) || 
                 !m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue) ) || 
@@ -49,11 +50,23 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
       return false;
     }
 
+    if(!m_asgHelper->evtStore()->retrieve(Jets,"SelectedORJets_"+m_config->systematicName(m_event->m_hashValue) )){
+      std::cout<< "Failed to retrieve Jets, skip event" << std::endl;
+
+      std::cout << "-----> more info: <params: " << m_params
+                << "> <systname: " << m_config->systematicName(event.m_hashValue) << ">" << std::endl;
+      return false;
+    }
+
 	const int totalLeptons = Electrons->size() +  Muons->size();
 	int totalTaus = Taus->size();
 	int totalCharge = 0;
+	int totalBJets_85 = 0;
 	for (const auto elItr : *Electrons) { totalCharge += elItr->charge(); }
 	for (const auto muItr : *Muons) { totalCharge += muItr->charge(); }
+	for (const auto JetItr: *Jets)  {
+	  if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
+	}
 	tthevt->totalLeptons = totalLeptons;
 	tthevt->totalTaus = totalTaus;
 	tthevt->totalCharge = totalCharge;
@@ -70,11 +83,14 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
 		if (totalLeptons == 1 && totalTaus <= 1)
 			return false;
 	} else if(m_params == "LEPTONS") {
-		if (totalLeptons + totalTaus == 0)
+		if (totalLeptons == 0)
 			return false;
 	} else if(m_params == "2LEPTONS") {
 	        if (totalLeptons + totalTaus < 2)
 		        return false;
+	} else if(m_params == "BJET_MV2C10_85") {
+	  if (totalBJets_85==0)
+	    return false;
 	} else if(m_params == "NONE") {
 			return true;
 	} else if(m_params == ""){

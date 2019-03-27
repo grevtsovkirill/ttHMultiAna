@@ -338,6 +338,48 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.z0 = el.trackParticle()->z0();
   lep.vz = el.trackParticle()->vz();
 
+  // NTracks associated to the reco electron
+  lep.nTrackParticles      = el.nTrackParticles();
+
+  // Mtrktrk at Primary Vertex
+  lep.Mtrktrk_atPV_CO      = el.auxdataConst<float>("mll_conv");
+
+  // Mtrktrk at Conversion Vertex
+  lep.Mtrktrk_atConvV_CO   = el.auxdataConst<float>("mll_conv_atConvV");
+
+  // Conversion radius from tracks
+  lep.RadiusCO             = el.auxdataConst<float>("radius_conv");
+  lep.RadiusCOX            = el.auxdataConst<float>("radius_convX");
+  lep.RadiusCOY            = el.auxdataConst<float>("radius_convY");
+
+  // Distance between the two track curves
+  lep.SeparationMinDCT     = el.auxdataConst<float>("separationMinDCT");
+
+  // Pt, Eta, Phi, D0, Z0 from best matched non-GSF track to electron
+  lep.BestMatchTrackPt     = el.auxdataConst<float>("bestmatchSiTrackPt");
+  lep.BestMatchTrackEta    = el.auxdataConst<float>("bestmatchSiTrackEta");
+  lep.BestMatchTrackPhi    = el.auxdataConst<float>("bestmatchSiTrackPhi");
+  lep.BestMatchTrackD0     = el.auxdataConst<float>("bestmatchSiTrackD0");
+  lep.BestMatchTrackZ0     = el.auxdataConst<float>("bestmatchSiTrackZ0");
+  lep.BestMatchTrackQ      = el.auxdataConst<float>("bestmatchSiTrackQ");
+  
+
+  // Pt, Eta, Phi, D0, Z0 from closest non-GSF track to electron
+  lep.ClosestSiTrackPt     = el.auxdataConst<float>("closestSiTrackPt");
+  lep.ClosestSiTrackEta    = el.auxdataConst<float>("closestSiTrackEta");
+  lep.ClosestSiTrackPhi    = el.auxdataConst<float>("closestSiTrackPhi");
+  lep.ClosestSiTrackD0     = el.auxdataConst<float>("closestSiTrackD0");
+  lep.ClosestSiTrackZ0     = el.auxdataConst<float>("closestSiTrackZ0");
+  lep.ClosestSiTrackQ      = el.auxdataConst<float>("closestSiTrackQ");
+  
+
+  // nIL (observed Innermost layer hits), eIL (expected Innermost layer hits), nNIL (observed next to Innermost layer hits), eNIL (expected next to Innermost layer hits)
+  lep.ClosestSiTracknIL    = el.auxdataConst<float>("closestSiTracknIL");
+  lep.ClosestSiTrackeIL    = el.auxdataConst<float>("closestSiTrackeIL");
+  lep.ClosestSiTracknNIL    = el.auxdataConst<float>("closestSiTracknNIL");
+  lep.ClosestSiTrackeNIL    = el.auxdataConst<float>("closestSiTrackeNIL");
+
+
   // truth matching, fakes, QMisId
   int TruthType = -99;
   int TruthOrigin = -99;
@@ -1088,6 +1130,7 @@ ttHMultileptonLooseEventSaver::CopyHT(const xAOD::ElectronContainer& goodEl, con
   m_ttHEvent->HT = 0;
   m_ttHEvent->HT_lep = 0;
   m_ttHEvent->HT_jets = 0;
+  m_ttHEvent->Meff = 0;
 
   for (const auto jetItr : goodJets) {
     if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
@@ -1106,6 +1149,10 @@ ttHMultileptonLooseEventSaver::CopyHT(const xAOD::ElectronContainer& goodEl, con
   for (const auto tauItr : goodTaus) {
     m_ttHEvent->HT += tauItr->pt();
   }
+  
+  m_ttHEvent->Meff += m_ttHEvent->HT;
+  m_ttHEvent->Meff += m_met_met;
+
 }
 
 void
@@ -1115,6 +1162,7 @@ ttHMultileptonLooseEventSaver::CopyHT_trig(const xAOD::JetContainer& goodJets) {
     m_ttHEvent->HT_alljets += jetItr->pt();
   }
 }
+
 
 void
 ttHMultileptonLooseEventSaver::CopyMass(const xAOD::ElectronContainer& goodEl, const xAOD::MuonContainer& goodMu, const xAOD::TauJetContainer& goodTaus) {
@@ -1314,6 +1362,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
   //std::cout<<"runnumber= " <<runNumber<<std::endl;
   std::vector<const xAOD::Electron*> myTriggeringElectrons;
   std::vector<const xAOD::Muon*> myTriggeringMuons;
+  std::vector<const xAOD::IParticle*> myTriggeringLeptons;
   
   for(auto electron : Electrons)
     {
@@ -1322,6 +1371,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       //int type = electron->auxdata<int>("truthType"), origin = electron->auxdata<int>("truthOrigin");
       //if(type!=2 || !(origin==10 || (origin>=12 && origin<=22) || origin==43)) continue;
       myTriggeringElectrons.push_back(electron);
+      myTriggeringLeptons.push_back(electron);
       //if(pt>18.f) ++nAbove18GeV;
     }
   
@@ -1334,6 +1384,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       //if(type!=6 || !(origin==10 || (origin>=12 && origin<=22) || origin==43)) continue;
       leadMuonPt = std::max(pt,leadMuonPt);
       myTriggeringMuons.push_back(muon);
+      myTriggeringLeptons.push_back(muon);
     }
 
   //Calculate per-Event Trigger lepton SFs
@@ -1353,13 +1404,15 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	}
   
   	double sf_tt = 1.;
-	auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
+	//auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tt);
+	auto cc_tt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_tt);
 	if(cc_tt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigTight[nTrig] = sf_tt;
 	  }
 	double dummy,eff_tt = 1.; //TightTight EFF
-	auto cc_Ett = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy, eff_tt);
+       	//auto cc_Ett = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy, eff_tt);
+	auto cc_Ett = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy, eff_tt);
 	if(cc_Ett==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigTight[nTrig] = eff_tt;
@@ -1368,14 +1421,16 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       
 	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0;  dec_loose(*e) = 1;} //LooseLoose SF
 	double sf_ll = 1.;
-	auto cc_ll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ll);
+	//auto cc_ll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ll);
+	auto cc_ll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_ll);
 	if(cc_ll==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigLoose[nTrig] = sf_ll;
 	    //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
 	  }
 	double dummy_2,eff_ll = 1.; //LooseLoose EFF
-	auto cc_Ell = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_2, eff_ll);
+	//auto cc_Ell = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_2, eff_ll);
+	auto cc_Ell = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy_2, eff_ll);
 	if(cc_Ell==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigLoose[nTrig] = eff_ll;
@@ -1399,14 +1454,16 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  }
 	} //TightLoose SF
 	double sf_tl = 1.;
-	auto cc_tl = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tl);
+	//auto cc_tl = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tl);
+	auto cc_tl = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_tl);
 	if(cc_tl==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigTightLoose[nTrig] = sf_tl;
 	   // std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
 	  }
 	double dummy_3,eff_tl = 1.; //TightLoose EFF
-	auto cc_Etl = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_3, eff_tl);
+	auto cc_Etl = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy_3, eff_tl);
+      	//auto cc_Etl = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_3, eff_tl);
 	if(cc_Etl==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigTightLoose[nTrig] = eff_tl;
@@ -1431,14 +1488,16 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  }
 	} //LooseTight SF
 	double sf_lt = 1.;
-	auto cc_lt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lt);
+	auto cc_lt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_lt);
+        //auto cc_lt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lt);
 	if(cc_lt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigLooseTight[nTrig] = sf_lt;
 	    //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
 	  }
 	double dummy_4,eff_lt = 1.; //TightLoose EFF
-	auto cc_Elt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_4, eff_lt);
+	auto cc_Elt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy_4, eff_lt);
+        //auto cc_Elt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_4, eff_lt);
 	if(cc_Elt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigLooseTight[nTrig] = eff_lt;
@@ -1533,7 +1592,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	}//TightTight
 	
 	double sf_ltt = 1.;
-	auto cc_ltt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ltt);
+	//auto cc_ltt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ltt);
+	auto cc_ltt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_ltt);
 	if(cc_ltt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigTight[nTrig] = sf_ltt;
@@ -1541,7 +1601,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  }
 	
 	double dummy,eff_ltt = 1.; //TightTight EFF
-	auto cc_Eltt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy, eff_ltt);
+	//auto cc_Eltt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy, eff_ltt);
+	auto cc_Eltt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy, eff_ltt);
 	if(cc_Eltt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigTight[nTrig] = eff_ltt;
@@ -1551,14 +1612,16 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       
 	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose SF
 	double sf_lll = 1.;
-	auto cc_lll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lll);
+	//auto cc_lll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_lll);
+	auto cc_lll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_lll);
 	if(cc_lll==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigLoose[nTrig] = sf_lll;
 	    //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_lll << std::endl;
 	  }
 	double dummy_2,eff_lll = 1.; //LooseLoose EFF
-	auto cc_Elll = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_2, eff_lll);
+	//auto cc_Elll = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_2, eff_lll);
+	auto cc_Elll = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy_2, eff_lll);
 	if(cc_Elll==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigLoose[nTrig] = eff_lll;
@@ -1581,14 +1644,16 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	} //TightLoose SF
 
 	double sf_ltl = 1.;
-	auto cc_ltl = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ltl);
+	//auto cc_ltl = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_ltl);
+	auto cc_ltl = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_ltl);
 	if(cc_ltl==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigTightLoose[nTrig] = sf_ltl;
 	    //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
 	  }
 	double dummy_3,eff_ltl = 1.; //TightLoose EFF
-	auto cc_Eltl = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_3, eff_ltl);
+	//	auto cc_Eltl = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_3, eff_ltl);
+	auto cc_Eltl = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy_3, eff_ltl);
 	if(cc_Eltl==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigTightLoose[nTrig] = eff_ltl;
@@ -1611,14 +1676,16 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	} //LooseTight SF
 
 	double sf_llt = 1.;
-	auto cc_llt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llt);
+	//auto cc_llt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llt);
+	auto cc_llt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_llt);
 	if(cc_llt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigLooseTight[nTrig] = sf_llt;
 	    //std::cout << "2LSSLooseLoose:TriggerScaleFactor is: " << sf_ll << std::endl;
 	  }
 	double dummy_4,eff_llt = 1.; //TightLoose EFF
-	auto cc_Ellt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_4, eff_llt);
+	//auto cc_Ellt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringElectrons, myTriggeringMuons, dummy_4, eff_llt);
+	auto cc_Ellt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myTriggeringLeptons, dummy_4, eff_llt);
 	if(cc_Ellt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepEffTrigLooseTight[nTrig] = eff_llt;
@@ -1696,7 +1763,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	}//TightTight
 
 	double sf_tttt = 1.;
-	auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tttt);
+	//auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_tttt);
+	auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_tttt);
 	if(cc_tttt==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigTight[nTrig] = sf_tttt;
@@ -1705,7 +1773,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	
 	for(auto e : myTriggeringElectrons) {dec_tight(*e) = 0; dec_loose(*e) = 1;} //LooseLoose
 	double sf_llll = 1.;
-	auto cc_llll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llll);
+	//auto cc_llll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringElectrons, myTriggeringMuons, sf_llll);
+	auto cc_llll = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myTriggeringLeptons, sf_llll);
 	if(cc_llll==CP::CorrectionCode::Ok)
 	  {
 	    m_ttHEvent->lepSFTrigLoose[nTrig] = sf_llll;

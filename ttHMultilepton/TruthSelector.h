@@ -55,7 +55,7 @@ namespace ttH
   enum LQdecaymode {
     ttau,tnu,btau,bnu,
     unclassifiedLQ,noproductsLQ,noLQ,
-    problemLQ,
+    problemLQ,tmu,tel,bmu,bel,
   };
     
   

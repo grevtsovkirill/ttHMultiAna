@@ -1,0 +1,17 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/Trigger/TrigAnalysis/TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrection/TrigGlobalEfficiencyCorrectionTool.h	2018-12-14 03:07:40.000000000 +0100
++++ TrigGlobalEfficiencyCorrectionTool.h	2019-02-09 09:11:01.000000001 +0100
+@@ -43,10 +43,10 @@
+ 
+ 	virtual StatusCode  initialize() override;
+ 
+-	virtual CP::CorrectionCode getEfficiencyScaleFactor(const std::vector<const xAOD::IParticle*>& particles, double& efficiencyScaleFactor) override;
+-	virtual CP::CorrectionCode getEfficiencyScaleFactor(unsigned runNumber, const std::vector<const xAOD::IParticle*>& particles, double& efficiencyScaleFactor) override;
+-	virtual CP::CorrectionCode getEfficiency(const std::vector<const xAOD::IParticle*>& particles, double& efficiencyData, double& efficiencyMc) override;
+-	virtual CP::CorrectionCode getEfficiency(unsigned runNumber, const std::vector<const xAOD::IParticle*>& particles, double& efficiencyData, double& efficiencyMc) override;	
++	virtual CP::CorrectionCode getEfficiencyScaleFactor(const std::vector<const xAOD::IParticle*>& particles, double& efficiencyScaleFactor) ;
++	virtual CP::CorrectionCode getEfficiencyScaleFactor(unsigned runNumber, const std::vector<const xAOD::IParticle*>& particles, double& efficiencyScaleFactor) ;
++	virtual CP::CorrectionCode getEfficiency(const std::vector<const xAOD::IParticle*>& particles, double& efficiencyData, double& efficiencyMc) ;
++	virtual CP::CorrectionCode getEfficiency(unsigned runNumber, const std::vector<const xAOD::IParticle*>& particles, double& efficiencyData, double& efficiencyMc) ;	
+ 	
+ 	virtual bool isAffectedBySystematic(const CP::SystematicVariation& systematic) const override;
+ 	virtual CP::SystematicSet affectingSystematics() const override;
