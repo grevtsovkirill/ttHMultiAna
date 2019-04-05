@@ -24,6 +24,7 @@ cd TopCPTools/Root/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopMuonCPTools_cxx.diff
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopFlavorTaggingCPTools_cxx.diff
+patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopJetMETCPTools_cxx.diff
 cd ../TopCPTools/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
 cd ../../
