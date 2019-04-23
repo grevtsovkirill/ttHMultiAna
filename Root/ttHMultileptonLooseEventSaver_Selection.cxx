@@ -1072,6 +1072,9 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> tau_mv2c10("MV2c10");
   MLTau.MV2c10 = ( tau_mv2c10.isAvailable(xTau) ) ? tau_mv2c10(xTau) : -2;
 
+  static SG::AuxElement::Accessor<float> tau_width("width");
+  MLTau.width = ( tau_width.isAvailable(xTau) ) ? tau_width(xTau) : -2;
+
   static SG::AuxElement::Accessor<short> promptTauInput_TrackJetNTrack("PromptTauInput_TrackJetNTrack");
   MLTau.promptTauInput_TrackJetNTrack = ( promptTauInput_TrackJetNTrack.isAvailable(xTau) ) ? promptTauInput_TrackJetNTrack(xTau) : -99;
 
@@ -1102,13 +1105,11 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> promptTauInput_MV2c10("PromptTauInput_MV2c10");
   MLTau.promptTauInput_MV2c10 = ( promptTauInput_MV2c10.isAvailable(xTau) ) ? promptTauInput_MV2c10(xTau) : -99;
 
-
   static SG::AuxElement::Accessor<float> promptTauVeto("PromptTauVeto");
   MLTau.promptTauVeto = (promptTauVeto.isAvailable(xTau)) ? promptTauVeto(xTau) : -99;
 
   static SG::AuxElement::Accessor<float> promptTauIso("PromptTauIso");
   MLTau.promptTauIso = (promptTauIso.isAvailable(xTau)) ? promptTauIso(xTau) : -99;
-
 
   for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
