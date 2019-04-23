@@ -15,6 +15,7 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &phi,             "tau_phi_",              index);
   CreateBranch(tree, &charge,          "tau_charge_",           index);
   CreateBranch(tree, &e,               "tau_E_",                index);
+  CreateBranch(tree, &width,           "tau_width_",            index);
   CreateBranch(tree, &BDTJetScore,     "tau_BDTJetScore_",      index);
   CreateBranch(tree, &JetBDTSigLoose,  "tau_JetBDTSigLoose_",   index);
   CreateBranch(tree, &JetBDTSigMedium, "tau_JetBDTSigMedium_",  index);
