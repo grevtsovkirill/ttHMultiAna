@@ -14,6 +14,7 @@ namespace ttHML {
     float phi;
     float charge;
     float e;
+    float width;
     double BDTJetScore;
     int JetBDTSigLoose;
     int JetBDTSigMedium;
@@ -24,7 +25,6 @@ namespace ttHML {
     char fromPV;
     float SFTight[MAXSYST];
     float SFLoose[MAXSYST];
-
 	float MV2c10;
 	float BDTEleScoreSigTrans;
 	float BDTJetScoreSigTrans;
