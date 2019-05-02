@@ -185,7 +185,7 @@ void DecorateTaus::decoratetau(const top::Event& event)const{
 	    jet.isAvailable<char>("passJVT") ? jet.auxdataConst<char>("passJVT") : -1;
       float tmpWidth = -1;
       jet.getAttribute("Width", tmpWidth);
-      tau->auxdecor<float>("width") = tmpWidth;
+      tau->auxdecor<float>("Width") = tmpWidth;
     }
     try {
       tau->auxdecor<char>("fromPV") =
