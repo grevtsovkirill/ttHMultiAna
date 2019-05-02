@@ -649,7 +649,7 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 
 
   for (const auto jetItr : goodJets) {
-    sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
+   // sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
 
     auto btagging = jetItr->btagging();
     if (btagging) {
@@ -682,10 +682,11 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	}
     }
   }
-
+  Int_t i(0.);
   //same thing for jet with tau OR
   for (const auto jetItr : goodJets) {
     if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+	  i++;
     //std::cout<<"open it when we have OR_1"<<std::endl;
       auto btagging = jetItr->btagging();
       if (btagging) {
@@ -717,15 +718,33 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	  }
 	}
       }
-    }
+	  if(i==1){
+		m_ttHEvent->lead_jetPt = jetItr->pt();
+		m_ttHEvent->lead_jetEta = jetItr->eta();
+		m_ttHEvent->lead_jetPhi = jetItr->phi();
+		m_ttHEvent->lead_jetE = jetItr->e();
+      }
+	  if(i==2){
+		m_ttHEvent->sublead_jetPt = jetItr->pt();
+		m_ttHEvent->sublead_jetEta = jetItr->eta();
+		m_ttHEvent->sublead_jetPhi = jetItr->phi();
+		m_ttHEvent->sublead_jetE = jetItr->e();
+	  }
   }
+}
+//  std::sort(sorter_jets.begin(), sorter_jets.end(),
+	     // [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
 
-  std::sort(sorter_jets.begin(), sorter_jets.end(),
-	      [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
 
-  std::vector<const TLorentzVector*> p4s;
+ /* std::vector<const TLorentzVector*> p4s;
   const int totjets = goodJets.size();
+  int i=0;
   for (short idx1 = 0; idx1 < totjets; ++idx1) {
+	if( goodJets.at(idx1)->auxdataConst<char>("ttHpassTauOVR") ) {
+		i++;
+		if(i==1)m_ttHEvent->lead_jetPt = goodJets.at(idx1)->Pt();
+		if(i==2)m_ttHEvent->sublead_jetPt = goodJets.at(idx1)->Pt();
+	}
     const TLorentzVector* p4;
     int lidx;
     std::tie(p4, lidx) = sorter_jets[idx1];
