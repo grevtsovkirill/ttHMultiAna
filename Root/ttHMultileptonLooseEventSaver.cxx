@@ -225,7 +225,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
 
 	if(asg::ToolStore::contains<top::ScaleFactorRetriever>("top::ScaleFactorRetriever")){
 	      m_sfRetriever = asg::ToolStore::get<top::ScaleFactorRetriever>("top::ScaleFactorRetriever");
-        m_sfRetriever->setProperty("OutputLevel", MSG::INFO).ignore();
+        m_sfRetriever->setProperty("OutputLevel", MSG::ERROR).ignore();
 	    }
 	    else{
 	      top::ScaleFactorRetriever* topSFR = new top::ScaleFactorRetriever("top::ScaleFactorRetriever");
