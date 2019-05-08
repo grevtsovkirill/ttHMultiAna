@@ -2,10 +2,9 @@
 echo "Setting up all the things..."
 echo "This must be run in the Base directory of ttHMultiAna. ie. GFW1/source/ttHMultiAna"
 
-setupATLAS
-
 #Setting up AnalysisTop release in source directory and copying patched packages
 cd ../
+source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
 asetup AnalysisTop,21.2.36,here
 
 #Patching MuonEfficiencyCorrections
