@@ -27,6 +27,13 @@ cd ../TopCPTools/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
 cd ../../
 
+#Patching Objmaker
+echo "Patching Objmaker..."
+cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.36/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopSystematicObjectMaker ./
+cd TopSystematicObjectMaker/Root/
+patch < ../../ttHMultiAna/patches/TopSystematicObjectMaker/patch_EgammaObjectCollectionMaker_cxx.diff
+cd ../../
+
 cd ttHMultiAna/share
 
 #Uncommenting the PromptLepton Option in config files

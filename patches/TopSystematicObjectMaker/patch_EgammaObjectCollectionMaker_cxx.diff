@@ -1,0 +1,44 @@
+*** /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.36/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopSystematicObjectMaker/Root/EgammaObjectCollectionMaker.cxx	2018-07-05 03:04:00.000000000 +0200
+--- TopSystematicObjectMaker/Root/EgammaObjectCollectionMaker.cxx	2019-05-16 17:21:46.000000001 +0200
+***************
+*** 216,223 ****
+    StatusCode EgammaObjectCollectionMaker::executeElectrons(bool executeNominal)
+    {
+      static SG::AuxElement::ConstAccessor<float> ptvarcone30_TightTTVA_pt1000("ptvarcone30_TightTTVA_pt1000");
+!     static SG::AuxElement::Accessor<char> AnalysisTop_Isol_FixedCutHighMuTight("AnalysisTop_Isol_FixedCutHighMuTight");
+!     static SG::AuxElement::Accessor<char> AnalysisTop_Isol_FixedCutHighMuLoose("AnalysisTop_Isol_FixedCutHighMuLoose");
+  
+      const xAOD::EventInfo* eventInfo(nullptr);
+      top::check( evtStore()->retrieve( eventInfo, m_config->sgKeyEventInfo() ), "Failed to retrieve EventInfo");
+--- 216,223 ----
+    StatusCode EgammaObjectCollectionMaker::executeElectrons(bool executeNominal)
+    {
+      static SG::AuxElement::ConstAccessor<float> ptvarcone30_TightTTVA_pt1000("ptvarcone30_TightTTVA_pt1000");
+!   //  static SG::AuxElement::Accessor<char> AnalysisTop_Isol_FixedCutHighMuTight("AnalysisTop_Isol_FixedCutHighMuTight");
+!   //  static SG::AuxElement::Accessor<char> AnalysisTop_Isol_FixedCutHighMuLoose("AnalysisTop_Isol_FixedCutHighMuLoose");
+  
+      const xAOD::EventInfo* eventInfo(nullptr);
+      top::check( evtStore()->retrieve( eventInfo, m_config->sgKeyEventInfo() ), "Failed to retrieve EventInfo");
+***************
+*** 293,302 ****
+  	electron->auxdecor<char>("AnalysisTop_Isol_FixedCutLoose")          = passIsol_FixedCutLoose;
+  	electron->auxdecor<char>("AnalysisTop_Isol_FixedCutHighPtCaloOnly") = passIsol_FixedCutHighPtCaloOnly;
+  
+!         if (ptvarcone30_TightTTVA_pt1000.isAvailable(*electron)) {
+            AnalysisTop_Isol_FixedCutHighMuTight(*electron) = (m_isolationTool_FixedCutHighMuTight->accept(*electron) ? 1 : 0);
+            AnalysisTop_Isol_FixedCutHighMuLoose(*electron) = (m_isolationTool_FixedCutHighMuLoose->accept(*electron) ? 1 : 0);
+!         }
+  
+  	// For electron prompt isolation tagger, check a cut on the tagger and also loose isolation
+  	electron->auxdecor<char>("AnalysisTop_Isol_PromptLepton") = (electron->auxdata<float>("PromptLeptonIso_TagWeight") < -0.5) ? 1 : 0;
+--- 293,302 ----
+  	electron->auxdecor<char>("AnalysisTop_Isol_FixedCutLoose")          = passIsol_FixedCutLoose;
+  	electron->auxdecor<char>("AnalysisTop_Isol_FixedCutHighPtCaloOnly") = passIsol_FixedCutHighPtCaloOnly;
+  
+!        /* if (ptvarcone30_TightTTVA_pt1000.isAvailable(*electron)) {
+            AnalysisTop_Isol_FixedCutHighMuTight(*electron) = (m_isolationTool_FixedCutHighMuTight->accept(*electron) ? 1 : 0);
+            AnalysisTop_Isol_FixedCutHighMuLoose(*electron) = (m_isolationTool_FixedCutHighMuLoose->accept(*electron) ? 1 : 0);
+!         }*/
+  
+  	// For electron prompt isolation tagger, check a cut on the tagger and also loose isolation
+  	electron->auxdecor<char>("AnalysisTop_Isol_PromptLepton") = (electron->auxdata<float>("PromptLeptonIso_TagWeight") < -0.5) ? 1 : 0;
