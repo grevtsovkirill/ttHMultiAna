@@ -100,7 +100,7 @@ run_ttbar:
   <<: *run
   variables: 
     #eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.12726347._001270.pool.root.1
-    eos_file: root://eosuser.cern.ch//eos/home-n/narayan/tthml_ci/DAOD_HIGG8D1/mc16e_410472_DAOD_HIGG8D1.17994328._000061.pool.root.1
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16e_410472_DAOD_HIGG8D1.17994328._000061.pool.root.1
     config_file: generic_config_mc16a.txt
     
 run_data:
