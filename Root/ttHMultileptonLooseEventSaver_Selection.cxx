@@ -577,9 +577,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
   }
   else if (m_runYear == 2017) {
-    lep.isTrigMatchDLT = ( el.pt() > 18e3 && (
-                                              returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e24_lhvloose_nod0" , (char) 0) ||
-											  returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
+    lep.isTrigMatchDLT = ( (el.pt() > 25e3 && returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e24_lhvloose_nod0" , (char) 0)) ||
+				(el.pt() > 18e3 &&(returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0))));
   } else {
     lep.isTrigMatchDLT = 0;
   }
