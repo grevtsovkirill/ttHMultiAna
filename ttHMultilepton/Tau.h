@@ -18,6 +18,11 @@ namespace ttHML {
     int JetBDTSigLoose;
     int JetBDTSigMedium;
     int JetBDTSigTight;
+    double RNNJetScore;
+    int JetRNNSigVeryLoose;
+    int JetRNNSigLoose;
+    int JetRNNSigMedium;
+    int JetRNNSigTight;
     int numTrack;
     int isHadronic;
     int tagWeightBin;
@@ -28,6 +33,7 @@ namespace ttHML {
 	float MV2c10;
 	float BDTEleScoreSigTrans;
 	float BDTJetScoreSigTrans;
+	float RNNJetScoreSigTrans;
     
 	short   promptTauInput_TrackJetNTrack;
     float   promptTauInput_JetF;

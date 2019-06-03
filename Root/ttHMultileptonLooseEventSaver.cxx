@@ -1368,6 +1368,12 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScore); },         *systematicTree, std::string(tauprefix+"RNNJetScore").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"RNNJetScoreSigTrans").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigVeryLoose").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigLoose").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigMedium); },  *systematicTree, std::string(tauprefix+"JetRNNSigMedium").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigTight); },   *systematicTree, std::string(tauprefix+"JetRNNSigTight").c_str());
       
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.auxdataConst<char>("MVATESQuality"); },   *systematicTree, std::string(tauprefix+"MVATESQuality").c_str());
   

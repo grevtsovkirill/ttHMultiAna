@@ -1035,6 +1035,11 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.JetBDTSigLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose);
   MLTau.JetBDTSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium);
   MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
+  MLTau.RNNJetScore     = xTau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScore);
+  MLTau.JetRNNSigVeryLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose);
+  MLTau.JetRNNSigLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose);
+  MLTau.JetRNNSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigMedium);
+  MLTau.JetRNNSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigTight);
   MLTau.numTrack        = xTau.nTracks();
   MLTau.isHadronic      = xTau.auxdata<int>("IsHadronic");
   MLTau.tagWeightBin    = xTau.auxdata<int>("tagWeightBin");
@@ -1053,6 +1058,8 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> BDTJetScoreSigTrans("BDTJetScoreSigTrans");
   MLTau.BDTJetScoreSigTrans = ( BDTJetScoreSigTrans.isAvailable(xTau) ) ? BDTJetScoreSigTrans(xTau) : -2;
 
+  static SG::AuxElement::Accessor<float> RNNJetScoreSigTrans("RNNJetScoreSigTrans");
+  MLTau.RNNJetScoreSigTrans = ( RNNJetScoreSigTrans.isAvailable(xTau) ) ? RNNJetScoreSigTrans(xTau) : -2;
 
   static SG::AuxElement::Accessor<float> tau_mv2c10("MV2c10");
   MLTau.MV2c10 = ( tau_mv2c10.isAvailable(xTau) ) ? tau_mv2c10(xTau) : -2;
@@ -1122,6 +1129,14 @@ ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& Taus) {
       m_ttHEvent->nTaus_OR_Medium++;
     if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight)) 
       m_ttHEvent->nTaus_OR_Tight++;
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose)) 
+      m_ttHEvent->nTaus_OR_RNN_VeryLoose++;
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose)) 
+      m_ttHEvent->nTaus_OR_RNN_Loose++;
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigMedium)) 
+      m_ttHEvent->nTaus_OR_RNN_Medium++;
+    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigTight)) 
+      m_ttHEvent->nTaus_OR_RNN_Tight++;
   }
 
 }

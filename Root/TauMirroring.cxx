@@ -19,6 +19,11 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &JetBDTSigLoose,  "tau_JetBDTSigLoose_",   index);
   CreateBranch(tree, &JetBDTSigMedium, "tau_JetBDTSigMedium_",  index);
   CreateBranch(tree, &JetBDTSigTight,  "tau_JetBDTSigTight_",   index);
+  CreateBranch(tree, &RNNJetScore,     "tau_RNNJetScore_",      index);
+  CreateBranch(tree, &JetRNNSigVeryLoose,  "tau_JetRNNSigVeryLoose_",   index);
+  CreateBranch(tree, &JetRNNSigLoose,  "tau_JetRNNSigLoose_",   index);
+  CreateBranch(tree, &JetRNNSigMedium, "tau_JetRNNSigMedium_",  index);
+  CreateBranch(tree, &JetRNNSigTight,  "tau_JetRNNSigTight_",   index);
   CreateBranch(tree, &numTrack,        "tau_numTrack_",         index);
   CreateBranch(tree, &isHadronic,      "tau_isHadronic_",       index);
   CreateBranch(tree, &tagWeightBin,    "tau_tagWeightBin_",     index);
@@ -32,6 +37,7 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &passMuonOLR,     "tau_passMuonOLR_",      index);
   CreateBranch(tree, &BDTEleScoreSigTrans, "tau_BDTEleScoreSigTrans_", index);
   CreateBranch(tree, &BDTJetScoreSigTrans, "tau_BDTJetScoreSigTrans_", index);
+  CreateBranch(tree, &RNNJetScoreSigTrans, "tau_RNNJetScoreSigTrans_", index);
 
   CreateBranch(tree, &truthOrigin,     "tau_truthOrigin_",      index);
   CreateBranch(tree, &truthType,       "tau_truthType_",        index);

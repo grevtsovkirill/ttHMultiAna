@@ -96,6 +96,10 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(nTaus_OR_Loose, "nTaus_OR_Loose");
   tree->makeOutputVariable(nTaus_OR_Medium, "nTaus_OR_Medium");
   tree->makeOutputVariable(nTaus_OR_Tight, "nTaus_OR_Tight");
+  tree->makeOutputVariable(nTaus_OR_RNN_VeryLoose, "nTaus_OR_RNN_VeryLoose");
+  tree->makeOutputVariable(nTaus_OR_RNN_Loose, "nTaus_OR_RNN_Loose");
+  tree->makeOutputVariable(nTaus_OR_RNN_Medium, "nTaus_OR_RNN_Medium");
+  tree->makeOutputVariable(nTaus_OR_RNN_Tight, "nTaus_OR_RNN_Tight");
   tree->makeOutputVariable(isBlinded, "isBlinded");
   tree->makeOutputVariable(HT, "HT");
   tree->makeOutputVariable(HT_lep, "HT_lep");

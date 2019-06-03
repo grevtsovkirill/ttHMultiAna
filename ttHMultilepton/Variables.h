@@ -95,6 +95,10 @@ namespace ttHML {
     int nTaus_OR_Loose;
     int nTaus_OR_Medium;
     int nTaus_OR_Tight;
+    int nTaus_OR_RNN_VeryLoose;
+    int nTaus_OR_RNN_Loose;
+    int nTaus_OR_RNN_Medium;
+    int nTaus_OR_RNN_Tight;
     bool isBlinded;
     float HT;
     float HT_lep;
@@ -182,10 +186,20 @@ namespace ttHML {
       { top::topSFSyst::nominal, "nominal" },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN, "TAU_SF_ELEOLR_TOTAL_DOWN"},
-      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_UP,   "TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_UP"  },
-      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_DOWN, "TAU_SF_TRUEELECTRON_ELEOLR_TOTAL_DOWN"},
-      { top::topSFSyst::TAU_SF_JETID_TOTAL_UP,    "TAU_SF_JETID_TOTAL_UP"   },
-      { top::topSFSyst::TAU_SF_JETID_TOTAL_DOWN,  "TAU_SF_JETID_TOTAL_DOWN" },
+      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_UP,   "TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_UP"  },
+      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_DOWN, "TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_DOWN"},
+      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_LOWMU_UP,   "TAU_SF_TRUEELECTRON_ELEOLR_LOWMU_UP"  },
+      { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_LOWMU_DOWN, "TAU_SF_TRUEELECTRON_ELEOLR_LOWMU_DOWN"},
+      { top::topSFSyst::TAU_SF_JETID_1P2530_UP,    "TAU_SF_JETID_1P2530_UP"   },
+      { top::topSFSyst::TAU_SF_JETID_1P2530_DOWN,  "TAU_SF_JETID_1P2530_DOWN" },
+      { top::topSFSyst::TAU_SF_JETID_1P3040_UP,    "TAU_SF_JETID_1P3040_UP"   },
+      { top::topSFSyst::TAU_SF_JETID_1P3040_DOWN,  "TAU_SF_JETID_1P3040_DOWN" },
+      { top::topSFSyst::TAU_SF_JETID_1PGE40_UP,    "TAU_SF_JETID_1PGE40_UP"   },
+      { top::topSFSyst::TAU_SF_JETID_1PGE40_DOWN,  "TAU_SF_JETID_1PGE40_DOWN" },
+      { top::topSFSyst::TAU_SF_JETID_3P2030_UP,    "TAU_SF_JETID_3P2030_UP"   },
+      { top::topSFSyst::TAU_SF_JETID_3P2030_DOWN,  "TAU_SF_JETID_3P2030_DOWN" },
+      { top::topSFSyst::TAU_SF_JETID_3PGE30_UP,    "TAU_SF_JETID_3PGE30_UP"   },
+      { top::topSFSyst::TAU_SF_JETID_3PGE30_DOWN,  "TAU_SF_JETID_3PGE30_DOWN" },
       { top::topSFSyst::TAU_SF_JETID_HIGHPT_UP,   "TAU_SF_JETID_HIGHPT_UP"  },
       { top::topSFSyst::TAU_SF_JETID_HIGHPT_DOWN, "TAU_SF_JETID_HIGHPT_DOWN"},
       { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,     "TAU_SF_RECO_TOTAL_UP"    },
