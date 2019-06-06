@@ -1,0 +1,28 @@
+setupATLAS
+#Let’s create a new directory for this analysis from where we will work.
+mkdir YourFancyDirectory
+cd YourFancyDirectory
+#With cmake we have several directories we work with;
+mkdir build run source
+cd source
+git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git 
+
+cd ttHMultiAna/
+source setupScriptsAndPackages.sh
+cd ../../build
+cmake ../source
+cmake --build ./
+source */setup.sh
+
+
+cd ../run
+cp ../source/ttHMultiAna/share/generic_config_mc16e.txt .
+
+You should copy one small file from DAOD_HIGG8D1 mc16e derivations. Then in run directory 
+eg.
+echo mc16_13TeV/DAOD_HIGG8D1.17991373._000474.pool.root.1 > infile_e.txt
+and run
+
+top-xaod generic_config_mc16e.txt infile_e.txt
+
+It will crush while its running due to some errors about root or c++
