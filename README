@@ -5,7 +5,7 @@ cd YourFancyDirectory
 #With cmake we have several directories we work with;
 mkdir build run source
 cd source
-git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git 
+git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git -b at75
 
 cd ttHMultiAna/
 source setupScriptsAndPackages.sh
