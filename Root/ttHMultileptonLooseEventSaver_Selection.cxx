@@ -1317,7 +1317,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
     }
 
   //Calculate per-Event Trigger lepton SFs
-  switch (m_ttHEvent->total_leptons) {
+/*  switch (m_ttHEvent->total_leptons) {
   case 2:
     {
       //if(nAbove18GeV<2) return;
@@ -1635,7 +1635,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       m_ttHEvent->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_ttHEvent->lepSFTrigTight[0] : 1;
     */
   
-    break;
+/*    break;
   case 4:
     {
       // Do a sorting for objects
@@ -1710,7 +1710,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	m_ttHEvent->lepSFTrigTight[ivar] = 1;
       }
       
-  }
+  }*/
 
 
 }
