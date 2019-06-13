@@ -116,13 +116,13 @@ bool CalculateSF::apply(const top::Event& event) const {
 	  m_SF.lepSFObjLoose[ivar] = 1;
 	  m_SF.lepSFObjTight[ivar] = 1;
 	}
-	for (const auto& systvar : tthevt->m_tau_sf_names ) {
+/*	for (const auto& systvar : tthevt->m_tau_sf_names ) {
 	  auto ivar = systvar.first;
       m_SF.tauSFLoose[ivar] = 1;
       m_SF.tauSFTight[ivar] = 1;
       tthevt->tauSFTight[ivar] = 1;
 	  tthevt->tauSFLoose[ivar] = 1;
-	}
+	}*/
 
 	std::vector<bool> tightIsLoose;
 	if (tthevt->totalLeptons == 2 && tthevt->totalCharge == 0 && tthevt->nTaus_OR_Pt25 != 0) {
@@ -179,7 +179,7 @@ bool CalculateSF::apply(const top::Event& event) const {
 
  
     //taus
-    bool m_isMC = m_config->isMC();
+  /*  bool m_isMC = m_config->isMC();
     for ( int itau = 0; itau<tthevt->totalTaus; ++itau) {
       for ( auto syst : tthevt->m_tau_sf_names ) {
 	auto ivar = syst.first;
@@ -193,7 +193,7 @@ bool CalculateSF::apply(const top::Event& event) const {
       tthevt->tauSFLoose[ivar] = m_SF.tauSFLoose[ivar];
       tthevt->tauSFTight[ivar] = m_SF.tauSFTight[ivar];
       if (event.m_hashValue != m_config->nominalHashValue()) break;
-    }
+    }*/
     
 
     
@@ -208,12 +208,12 @@ bool CalculateSF::apply(const top::Event& event) const {
     }
 
 
-	for ( auto syst : tthevt->m_tau_sf_names ) {
+	/*for ( auto syst : tthevt->m_tau_sf_names ) {
 		auto ivar = syst.first;
 		if( ivar == top::topSFSyst::nominal ) continue;
 		tthevt->tauSFTight[ivar] /= tthevt->tauSFTight[top::topSFSyst::nominal];
 		tthevt->tauSFLoose[ivar] /= tthevt->tauSFLoose[top::topSFSyst::nominal];
-	}
+	}*/
 /*
 	std::cout << " lepSFIDLoose: " << tthevt->lepSFIDLoose << std::endl;
 	std::cout << "lepSFIDTight: " << tthevt->lepSFIDTight << std::endl;

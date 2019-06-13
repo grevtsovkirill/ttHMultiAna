@@ -1129,13 +1129,13 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> promptTauIso("PromptTauIso");
   MLTau.promptTauIso = (promptTauIso.isAvailable(xTau)) ? promptTauIso(xTau) : -99;
 
-  for( auto syst : m_tau_sf_names ) {
+  /*for( auto syst : m_tau_sf_names ) {
     auto ivar = syst.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // AnalysisTop tight/loose and our tight/loose are reversed
     MLTau.SFTight[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar,  true) : 1.0;
     MLTau.SFLoose[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar, false)               : 1.0;
-  }
+  }*/
 }
 
 void
@@ -1265,7 +1265,7 @@ ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets
   for(auto itr: OR_T_bWtSorter) { m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.push_back( std::get<1>(itr)); }
 }
 
-void
+/*void
 ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Electrons, const xAOD::MuonContainer& Muons, const top::Event& event) {
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
@@ -1316,8 +1316,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       myTriggeringMuons.push_back(muon);
     }
 
-  //Calculate per-Event Trigger lepton SFs
-/*  switch (m_ttHEvent->total_leptons) {
+ //Calculate per-Event Trigger lepton SFs
+  switch (m_ttHEvent->total_leptons) {
   case 2:
     {
       //if(nAbove18GeV<2) return;
@@ -1634,8 +1634,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       m_ttHEvent->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_ttHEvent->lepSFTrigLoose[0] : 1;
       m_ttHEvent->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_ttHEvent->lepSFTrigTight[0] : 1;
     */
-  
-/*    break;
+ /* 
+    break;
   case 4:
     {
       // Do a sorting for objects
@@ -1710,8 +1710,8 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	m_ttHEvent->lepSFTrigTight[ivar] = 1;
       }
       
-  }*/
+  }
 
 
-}
+}*/
 

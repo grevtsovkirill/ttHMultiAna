@@ -56,7 +56,7 @@ extern TH1I* m_tauCutflow;
       ///-- Default constrcutor with no arguments - needed for ROOT --///
       ttHMultileptonLooseEventSaver();
       ///-- Destructor does nothing --///
-      ~ttHMultileptonLooseEventSaver();
+     // ~ttHMultileptonLooseEventSaver();
 
       ///-- initialize function for top::EventSaverFlatNtuple --///
       ///-- We will be setting up out custom variables here --///

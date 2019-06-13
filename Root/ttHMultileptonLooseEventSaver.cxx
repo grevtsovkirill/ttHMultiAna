@@ -105,11 +105,11 @@ TH1I* m_tauCutflow;
   {
     branchFilters().push_back(std::bind(&getBranchStatus, std::placeholders::_1, std::placeholders::_2));
 }
-  ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){
-    delete m_decor_ttHpassOVR;
-    delete m_decor_ttHpassTauOVR;
-    for (unsigned int t=0; t<m_lep_trigger_sf_names.size(); ++t) delete m_trigGlobEffCorr[t];
-}
+  //ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){
+  //  delete m_decor_ttHpassOVR;
+  //  delete m_decor_ttHpassTauOVR;
+  //  for (unsigned int t=0; t<m_lep_trigger_sf_names.size(); ++t) delete m_trigGlobEffCorr[t];
+//}
 
 template<typename FCN>
 struct function_traits : public function_traits<decltype(&FCN::operator())>
@@ -2043,8 +2043,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-    if (m_isMC){
-    doEventTrigSFs(*Electrons,*Muons,event);}
+  //  if (m_isMC){
+   // doEventTrigSFs(*Electrons,*Muons,event);}
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
