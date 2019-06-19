@@ -4,7 +4,7 @@
 #include <memory>
 #include "TopEventSelectionTools/TreeManager.h"
 
-#define MAXSYST 50
+#define MAXSYST 150
 
 namespace ttHML {
 

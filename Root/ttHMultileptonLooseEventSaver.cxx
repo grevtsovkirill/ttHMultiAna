@@ -261,13 +261,13 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
     // dielectron trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
     {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0_L1EM20VH", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "isolFCTight"},
     // dielectron trigger, only for untagged electrons, configured wrt loose WP:
-    {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0_L1EM20VH", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFCTight"}
-    // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
-  /*  {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_2018_e17_lhloose_nod0", "TightLLH", "isolFCTight"},
-    // e-mu trigger, only for untagged electrons, configured wrt loose WP:
-    {"e17_lhloose, e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_2018_e17_lhloose_nod0", "LooseAndBLayerLLH", "isolFCTight"},
-
     {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0_L1EM20VH", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFCTight"},
+    // e-mu trigger, only for "Signal"-tagged electrons, configured wrt tight+iso WP:
+    {"e17_lhloose, e17_lhloose_nod0", "Signal", "MULTI_L_2015_e17_lhloose_2016_2018_e17_lhloose_nod0", "TightLLH", "isolFCTight"},
+    // e-mu trigger, only for untagged electrons, configured wrt loose WP:
+    {"e17_lhloose, e17_lhloose_nod0", "Baseline", "MULTI_L_2015_e17_lhloose_2016_2018_e17_lhloose_nod0", "LooseAndBLayerLLH", "isolFCTight"}
+
+  /*  {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0, e24_lhvloose_nod0_L1EM20VH", "Baseline", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "LooseAndBLayerLLH", "isolFCTight"},
 
     {"e12_lhloose_L1EM10VH, e17_lhvloose_nod0,e24_lhvloose_nod0_L1EM20VH", "Signal", "DI_E_2015_e12_lhloose_L1EM10VH_2016_e17_lhvloose_nod0_2017_2018_e24_lhvloose_nod0_L1EM20VH", "TightLLH", "isolFCTight"},
 
@@ -2043,8 +2043,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
-  //  if (m_isMC){
-   // doEventTrigSFs(*Electrons,*Muons,event);}
+    if (m_isMC){
+    doEventTrigSFs(*Electrons,*Muons,event);}
     //m_ttHEvent->AssignOutput(m_ttHEvent,tthevt);
   xAOD::JetContainer* calibratedJets(nullptr);
   top::check(evtStore()->retrieve(calibratedJets, m_config->sgKeyJetsTDS(sysHash,false)), "Failed to retrieve calibrated jets");
