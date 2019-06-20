@@ -40,6 +40,10 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
       top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
     }
 
+  top::check( m_electronChargeIDLoose.setProperty("FolderName", "ECIDS_loose"), "ElectronChargeIDLoose: Failed to set folder name." ); 
+  top::check( m_electronChargeIDMedium.setProperty("FolderName", "ECIDS_medium"), "ElectronChargeIDMedium: Failed to set folder name." ); 
+  top::check( m_electronChargeIDTight.setProperty("FolderName", "ECIDS_tight"), "ElectronChargeIDLoose: Failed to set folder name." ); 
+
 
   top::check( m_electronChargeIDLoose.setProperty("TrainingFile", "ElectronPhotonSelectorTools/ChargeID/ECIDS_20161125for2017Moriond.root"), "ElectronChargeIDLoose: Failed to set training file." );
   top::check( m_electronChargeIDLoose.setProperty("OutputLevel", MSG::ERROR), "ElectronChargeIDLoose: Failed to set output level." );

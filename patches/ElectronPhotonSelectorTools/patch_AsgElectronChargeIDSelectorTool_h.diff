@@ -1,0 +1,14 @@
+diff -ur ElectronPhotonSelectorTools_orig/ElectronPhotonSelectorTools/AsgElectronChargeIDSelectorTool.h ElectronPhotonSelectorTools/ElectronPhotonSelectorTools/AsgElectronChargeIDSelectorTool.h
+--- ElectronPhotonSelectorTools_orig/ElectronPhotonSelectorTools/AsgElectronChargeIDSelectorTool.h	2019-05-16 03:11:24.000000001 +0200
++++ ElectronPhotonSelectorTools/ElectronPhotonSelectorTools/AsgElectronChargeIDSelectorTool.h	2019-06-14 11:24:34.000000001 +0200
+@@ -120,6 +120,10 @@
+   mutable Root::TAccept m_acceptBDT;
+   mutable Root::TResult m_resultBDT;
+ 
++  /** FIXME: name of the folder to access inputs */
++  std::string m_folderName;
++
++
+   /// Whether to use the PV (not available for trigger)
+   bool m_usePVCont;
+

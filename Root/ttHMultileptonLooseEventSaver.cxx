@@ -2158,7 +2158,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     }
 
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
-   // MakeJetIndices(*Jets, event.m_jets);
+    MakeJetIndices(*Jets, event.m_jets);
   }
   else {
    for(auto alljet : *calibratedJets) {
@@ -2170,7 +2170,7 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
       }
     }
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
-  //  MakeJetIndices(*Jets, *calibratedJets);
+    MakeJetIndices(*Jets, *calibratedJets);
   }
 
 
