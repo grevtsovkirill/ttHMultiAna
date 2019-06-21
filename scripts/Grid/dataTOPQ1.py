@@ -3,16 +3,12 @@ import TopExamples.ami
 import grid
 
 
-grid.Add("temp_1205").datasets=[
-    "data17_13TeV.00327057.physics_Main.deriv.DAOD_TOPQ1.r10250_p3399_p3601",
-    "data17_13TeV.00327265.physics_Main.deriv.DAOD_TOPQ1.r10250_p3399_p3601",
-    "data17_13TeV.00327862.physics_Main.deriv.DAOD_TOPQ1.r10203_p3399_p3601",
-    "data17_13TeV.00331742.physics_Main.deriv.DAOD_TOPQ1.r10203_p3399_p3601",
-    "data17_13TeV.00331905.physics_Main.deriv.DAOD_TOPQ1.r10203_p3399_p3601",
-    "data17_13TeV.00333380.physics_Main.deriv.DAOD_TOPQ1.r10203_p3399_p3601",
-    "data17_13TeV.00334350.physics_Main.deriv.DAOD_TOPQ1.r10203_p3399_p3601",
-    ]
-
+grid.Add("All_data").datasets=[
+    "data15_13TeV.AllYear.physics_Main.PhysCont.DAOD_TOPQ1.grp15_v01_p3794",
+    "data16_13TeV.AllYear.physics_Main.PhysCont.DAOD_TOPQ1.grp16_v01_p3794",
+    "data17_13TeV.AllYear.physics_Main.PhysCont.DAOD_TOPQ1.grp17_v01_p3794",
+    "data18_13TeV.AllYear.physics_Main.PhysCont.DAOD_TOPQ1.grp18_v01_p3794",
+]
 
 grid.Add("samples_data15").datasets=[
     "data15_13TeV.00276262.physics_Main.deriv.DAOD_TOPQ1.r9264_p3083_p3601",
