@@ -1303,7 +1303,7 @@ int ttHMultileptonLooseEventSaver::getNTruthJets(const xAOD::JetContainer jetCol
 }
 
 void
-ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets,
+ ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets,
 					      const xAOD::JetContainer& allJets) {
   typedef std::tuple<double,  int> bWtSortvec_t;
   std::vector<bWtSortvec_t> OR_bWtSorter;
@@ -1326,26 +1326,27 @@ ttHMultileptonLooseEventSaver::MakeJetIndices(const xAOD::JetContainer& goodJets
      bool found = false;
      for (size_t idx = 0; idx < allJets.size(); ++idx) {
         if (goodp4 == allJets[idx]->p4()) {
-	   found = true;
- 	   OR_bWtSorter.push_back(std::make_tuple(mv2c, idx));
-	   m_ttHEvent->selected_jetsOR.push_back(idx);
-	   if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) 
-	   {
-	      m_ttHEvent->selected_jets_TOR.push_back(idx);
- 	      OR_T_bWtSorter.push_back(std::make_tuple(mv2c,idx));
-	   }
-	   break;
-         }
-       }
-       if (!found) {
-          std::cerr << "Unable to find a jet match. Sad!" << std::endl;
-       }
+  	   found = true;
+  	   OR_bWtSorter.push_back(std::make_tuple(mv2c, idx));
+  	   m_ttHEvent->selected_jetsOR.push_back(idx);
+  	   if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) 
+  	   {
+  	     m_ttHEvent->selected_jets_TOR.push_back(idx);
+  	     OR_T_bWtSorter.push_back(std::make_tuple(mv2c,idx));
+  	   }
+  	   break;
+  	}
+     }
+     if (!found) {
+       std::cerr << "Unable to find a jet match. Sad!" << std::endl;
+     }
   }
+  
   std::sort(OR_bWtSorter.begin(), OR_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
   std::sort(OR_T_bWtSorter.begin(), OR_T_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
   
   for(auto itr: OR_bWtSorter) { m_ttHEvent->selected_jetsOR_mv2c10_Ordrd.push_back( std::get<1>(itr));}
-  for(auto itr: OR_T_bWtSorter) { m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.push_back( std::get<1>(itr)); }
+  for(auto itr: OR_T_bWtSorter) { m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.push_back( std::get<1>(itr));}
 }
 
 void

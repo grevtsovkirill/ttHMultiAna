@@ -2101,25 +2101,25 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
   setBtagSFs_ForDL1(event);
   nc_event.m_jets = tmp_jets;
   if(m_doSystematics) {
-   for(auto alljet : event.m_jets) {
+    for(auto alljet : event.m_jets) {
       for(auto goodjet : *Jets) {
-	if( goodjet->p4() == alljet->p4() ) {
-	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
-	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	}
+ 	if( goodjet->p4() == alljet->p4() ) {
+ 	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
+ 	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
+ 	}
       }
     }
-
+    
     vec_jet_wrappers[event.m_ttreeIndex].push_all(event.m_jets);
     MakeJetIndices(*Jets, event.m_jets);
   }
   else {
-   for(auto alljet : *calibratedJets) {
+    for(auto alljet : *calibratedJets) {
       for(auto goodjet : *Jets ) {
-	if( goodjet->p4() == alljet->p4() ) {
-	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
-	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
-	}
+   	if( goodjet->p4() == alljet->p4() ) {
+   	  (*m_decor_ttHpassOVR)   (*alljet) = (*m_decor_ttHpassOVR)   (*goodjet);
+   	  (*m_decor_ttHpassTauOVR)(*alljet) = (*m_decor_ttHpassTauOVR)(*goodjet);
+   	}
       }
     }
     vec_jet_wrappers[event.m_ttreeIndex].push_all(*calibratedJets);
@@ -2129,8 +2129,6 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 
   top::EventSaverFlatNtuple::saveEvent(event);
   tthevt->clearReco();
-
-
 
 
     ///-- Let the base class do all the hard work --///

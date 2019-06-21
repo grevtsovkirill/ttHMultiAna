@@ -65,7 +65,9 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
 	for (const auto elItr : *Electrons) { totalCharge += elItr->charge(); }
 	for (const auto muItr : *Muons) { totalCharge += muItr->charge(); }
 	for (const auto JetItr: *Jets)  {
-	  if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
+	  //	  if( JetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+	    if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
+	    //	  }
 	}
 	tthevt->totalLeptons = totalLeptons;
 	tthevt->totalTaus = totalTaus;

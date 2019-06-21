@@ -136,8 +136,8 @@ namespace ttHML {
     float tauSFTight[MAXSYST];
     float tauSFLoose[MAXSYST];
     std::vector<short> selected_jetsOR;
-    std::vector<short> selected_jets_TOR; 
-    std::vector<short> selected_jetsOR_mv2c10_Ordrd; 
+    std::vector<short> selected_jets_TOR;
+    std::vector<short> selected_jetsOR_mv2c10_Ordrd;
     std::vector<short> selected_jets_TOR_mv2c10_Ordrd;
 
 
