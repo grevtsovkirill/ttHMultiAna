@@ -16,6 +16,15 @@ cd ../ElectronPhotonSelectorTools/
 patch < ../../ttHMultiAna/patches/ElectronPhotonSelectorTools/patch_AsgElectronChargeIDSelectorTool_h.diff
 cd ../../
 
+#Patching TopCPTools
+echo "Patching TopCPTools..."
+cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools ./
+cd TopCPTools/Root/
+patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
+cd ../TopCPTools/
+patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
+cd ../../
+
 cd ttHMultiAna/share
 
 #Uncommenting the PromptLepton Option in config files
