@@ -104,6 +104,7 @@ TH1I* m_tauCutflow;
     dummy_eleffdo("EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR__1down")
 
   {
+    declareProperty("GamORTool",                 m_VGamORTool);
     branchFilters().push_back(std::bind(&getBranchStatus, std::placeholders::_1, std::placeholders::_2));
 }
   //ttHMultileptonLooseEventSaver::~ttHMultileptonLooseEventSaver(){
