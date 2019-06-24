@@ -27,8 +27,11 @@ atlas_depends_on_subdirs( PUBLIC
                           Event/xAOD/xAODTau
                           Event/xAOD/xAODTracking
                           Event/xAOD/xAODTruth
+                          PhysicsAnalysis/Interfaces/PMGAnalysisInterfaces
+                          PhysicsAnalysis/AnalysisCommon/PMGOverlapRemovalTools
                           IsolationSelection
-                          AsgTools )
+                          AsgTools 
+                        )
 
 # This package uses ROOT:
 find_package( ROOT REQUIRED COMPONENTS Core Gpad Tree Hist RIO MathCore Graf Physics )
@@ -56,19 +59,20 @@ atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
                                   xAODBase
                                   xAODTruth
                                   xAODCore
-			  xAODEgamma
-		 	  xAODEventInfo
-    		xAODJet
-			  xAODMuon
-			  xAODTau
-			  xAODTracking
-		  	xAODTruth
-			  xAODPFlow
-        FTagAnalysisInterfacesLib
+                                  xAODEgamma
+                                  xAODEventInfo
+                                  xAODJet
+			          xAODMuon
+			          xAODTau
+			          xAODTracking
+		  	          xAODTruth
+			          xAODPFlow
+                                  FTagAnalysisInterfacesLib
+                                  GammaORTools
                                   ${ROOT_LIBRARIES}
-                   INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
+                   INCLUDE_DIRS   ${ROOT_INCLUDE_DIRS} )
 
 # Install data files from the package:
-atlas_install_data( DIRECTORY share )
-atlas_install_data(DIRECTORY data )
+atlas_install_data(DIRECTORY share )
+atlas_install_data(DIRECTORY data  )
 

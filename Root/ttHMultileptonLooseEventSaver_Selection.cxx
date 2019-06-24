@@ -257,10 +257,13 @@ if (totleptons >= 2) {
     	break;
       }
     }
+    m_ttHEvent->isVgammaOREvent  =  0; // default
+    
   } else {
     m_ttHEvent->isQMisIDEvent    = -1; // default for data
     m_ttHEvent->isFakeEvent      = -1; // default for data
     m_ttHEvent->isLepFromPhEvent = -1; // default for data
+    m_ttHEvent->isVgammaOREvent  = -1; // default for data
   }
 
 }

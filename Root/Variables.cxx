@@ -26,14 +26,15 @@ Variables::~Variables(){
 }
 
 void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMultileptonLooseEventSaver *ntupler, bool doSFSystematics){
-  tree->makeOutputVariable(onelep_type,   "onelep_type");
-  tree->makeOutputVariable(dilep_type,    "dilep_type");
-  tree->makeOutputVariable(trilep_type,   "trilep_type");
-  tree->makeOutputVariable(quadlep_type,  "quadlep_type");
-  tree->makeOutputVariable(total_charge,  "total_charge");
-  tree->makeOutputVariable(total_leptons, "total_leptons");
-  tree->makeOutputVariable(isQMisIDEvent, "isQMisIDEvent");
-  tree->makeOutputVariable(isFakeEvent,   "isFakeEvent");
+  tree->makeOutputVariable(onelep_type,      "onelep_type");
+  tree->makeOutputVariable(dilep_type,       "dilep_type");
+  tree->makeOutputVariable(trilep_type,      "trilep_type");
+  tree->makeOutputVariable(quadlep_type,     "quadlep_type");
+  tree->makeOutputVariable(total_charge,     "total_charge");
+  tree->makeOutputVariable(total_leptons,    "total_leptons");
+  tree->makeOutputVariable(isQMisIDEvent,    "isQMisIDEvent");
+  tree->makeOutputVariable(isFakeEvent,      "isFakeEvent");
+  tree->makeOutputVariable(isVgammaOREvent,  "isVgammaOREvent");
   tree->makeOutputVariable(isLepFromPhEvent, "isLepFromPhEvent");
 
   //tree->makeOutputVariable(Mll01, "Mll01");
