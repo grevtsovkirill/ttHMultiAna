@@ -32,8 +32,8 @@ for period in data mc16a mc16c mc16d mc16e AFIImc16a AFIImc16c AFIImc16d AFIImc1
 do
 	sed "s/#ElectronIsolationLoose PromptLepton/ElectronIsolationLoose PromptLepton/" generic_config_$period.txt > generic_config_temp.txt
 	mv generic_config_temp.txt generic_config_$period.txt
-	sed "s/#MuonIsolationLoose PromptLepton/MuonIsolationLoose PromptLepton/" generic_config_$period.txt > generic_config_temp.txt
-	mv generic_config_temp.txt generic_config_$period.txt
+	#sed "s/#MuonIsolationLoose PromptLepton/MuonIsolationLoose PromptLepton/" generic_config_$period.txt > generic_config_temp.txt
+	#mv generic_config_temp.txt generic_config_$period.txt
 done
 cd ..
 echo "Done. You must rebuild the code now."
