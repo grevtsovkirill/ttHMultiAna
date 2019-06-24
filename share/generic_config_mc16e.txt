@@ -39,17 +39,18 @@ OutputFilename output.root
 OutputEvents SelectedEvents
 PerfStats No
 
-
-
+#Electron cuts
 ElectronID LooseAndBLayerLH
 ElectronIDLoose TightLH
 ElectronPt 5000
 ElectronIsolation FCLoose
+#ElectronIsolationLoose PromptLepton
 
-
-
+#Muon cuts
 MuonQuality Medium
 MuonQualityLoose Medium
+MuonEta 2.7
+MuonPt 5000
 MuonIsolation  FCLoose
 MuonIsolationLoose None
 
@@ -59,7 +60,6 @@ MuonIsolationLoose None
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
 TauJetConfigFile ttHMultilepton/data/medium_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/data/tight_tau_selection.conf
-#ApplyTauMVATES false
 
 #Jet cuts
 JetPt 25000.
