@@ -57,7 +57,8 @@ namespace ttHML {
     char isQMisIDEvent;
     char isFakeEvent;
     char isLepFromPhEvent; // Lepton coming from a non-GEANT photon
-    char isVgammaOREvent;  // Overlap events between V+jets and V+gamma, see PMG twiki ref: https://its.cern.ch/jira/browse/AGENE-1433
+    char isVGammaOREvent;  // Overlap events between V+jets and V+gamma
+                           // see PMG twiki ref: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/VGammaORTool
     float Mll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float Ptll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];
     float DRll[LEPTON_ARR_SIZE-1][LEPTON_ARR_SIZE-1];

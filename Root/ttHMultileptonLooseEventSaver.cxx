@@ -47,6 +47,7 @@ TH1I* m_tauCutflow;
     m_trigDecTool("Trig::TrigDecisionTool"),
     m_purwtool("CP::PileupReweightingTool"),
     m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
+    m_VGamORTool("VGamORTool"),
 //    m_electronToolsFactory(0),
     //m_muonToolsHandles("MuonToolsHandles"),
 //    m_muonToolsFactory(0),
@@ -194,6 +195,11 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
   top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
+// VGamORTool
+  if (m_isMC){
+    top::check( m_VGamORTool.retrieve() );
+    m_VGamORTool->setProperty("photon_pt_cuts",std::vector<float>({7e3}));
+  }
 
 //Muon Tools
   //top::check( muonSelection.setProperty("OutputLevel", MSG::VERBOSE),"muonSelection fails to set OutputLevel");

@@ -257,13 +257,17 @@ if (totleptons >= 2) {
     	break;
       }
     }
-    m_ttHEvent->isVgammaOREvent  =  0; // default
+
+    m_ttHEvent->isVGammaOREvent  =  0; // default
+    bool in_vy_overlap;
+    top::check ( m_VGamORTool->inOverlap(in_vy_overlap) );
+    if(in_vy_overlap) m_ttHEvent->isVGammaOREvent = 1;
     
   } else {
     m_ttHEvent->isQMisIDEvent    = -1; // default for data
     m_ttHEvent->isFakeEvent      = -1; // default for data
     m_ttHEvent->isLepFromPhEvent = -1; // default for data
-    m_ttHEvent->isVgammaOREvent  = -1; // default for data
+    m_ttHEvent->isVGammaOREvent  = -1; // default for data
   }
 
 }

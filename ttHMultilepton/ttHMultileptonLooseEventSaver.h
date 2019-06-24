@@ -124,7 +124,7 @@ extern TH1I* m_tauCutflow;
       ToolHandle<Trig::TrigDecisionTool>     m_trigDecTool;
       ToolHandle<CP::IPileupReweightingTool> m_purwtool;
       ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
-      ToolHandle<VGammaORTool>               m_VGamORTool;//Vgamma overlap removal
+      ToolHandle<VGammaORTool>               m_VGamORTool; //Vgamma overlap removal
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDLoose;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDMedium;
 //  AsgElectronChargeIDSelectorTool        m_electronChargeIDTight;
