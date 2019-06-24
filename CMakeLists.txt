@@ -27,8 +27,6 @@ atlas_depends_on_subdirs( PUBLIC
                           Event/xAOD/xAODTau
                           Event/xAOD/xAODTracking
                           Event/xAOD/xAODTruth
-                          PhysicsAnalysis/Interfaces/PMGAnalysisInterfaces
-                          PhysicsAnalysis/AnalysisCommon/PMGOverlapRemovalTools
                           IsolationSelection
                           AsgTools 
                         )
@@ -68,7 +66,7 @@ atlas_add_library( ttHMultilepton Root/*.cxx Root/*.h Root/*.icc
 		  	          xAODTruth
 			          xAODPFlow
                                   FTagAnalysisInterfacesLib
-                                  GammaORTools
+                                  GammaORToolsLib
                                   ${ROOT_LIBRARIES}
                    INCLUDE_DIRS   ${ROOT_INCLUDE_DIRS} )
 

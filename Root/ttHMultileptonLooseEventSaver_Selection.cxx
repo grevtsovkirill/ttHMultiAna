@@ -260,7 +260,7 @@ if (totleptons >= 2) {
 
     m_ttHEvent->isVGammaOREvent  =  0; // default
     bool in_vy_overlap;
-    top::check ( m_VGamORTool->inOverlap(in_vy_overlap) );
+    m_VGamORTool->inOverlap(in_vy_overlap);
     if(in_vy_overlap) m_ttHEvent->isVGammaOREvent = 1;
     
   } else {

@@ -197,7 +197,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
 
 // VGamORTool
   if (m_isMC){
-    top::check( m_VGamORTool.retrieve() );
+    top::check( m_VGamORTool.retrieve() , "Failed to retrieve VGamORTool" );
     m_VGamORTool->setProperty("photon_pt_cuts",std::vector<float>({7e3}));
   }
 
