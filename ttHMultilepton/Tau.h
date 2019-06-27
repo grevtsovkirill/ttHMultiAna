@@ -4,7 +4,7 @@
 #include <memory>
 #include "TopEventSelectionTools/TreeManager.h"
 
-#define MAXSYST 50
+#define MAXSYST 150
 
 namespace ttHML {
 
@@ -14,6 +14,7 @@ namespace ttHML {
     float phi;
     float charge;
     float e;
+    float width;
     double BDTJetScore;
     int JetBDTSigLoose;
     int JetBDTSigMedium;

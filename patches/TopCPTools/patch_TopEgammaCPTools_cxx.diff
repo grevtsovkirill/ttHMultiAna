@@ -1,54 +1,110 @@
---- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopEgammaCPTools.cxx	2018-12-14 03:07:38.000000000 +0100
-+++ TopEgammaCPTools.cxx	2019-02-12 12:25:17.000000001 +0100
-@@ -223,7 +223,7 @@
-   const std::string trigger_string = "SINGLE_E_2015_e24_lhmedium_L1EM20VH_"
-                                      "OR_e60_lhmedium_"
-                                      "OR_e120_lhloose_"
--                                     "2016_2018_e26_lhtight_nod0_ivarloose_"
-+                                     "2016_2017_e26_lhtight_nod0_ivarloose_"
-                                      "OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0";
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopEgammaCPTools.cxx	2019-05-16 03:11:24.000000000 +0200
++++ TopEgammaCPTools.cxx	2019-06-20 16:29:23.000000001 +0200
+@@ -217,12 +217,12 @@
+   m_electronEffSFIDFile           = electronSFMapFilePath("ID");
+   m_electronEffSFTriggerFile      = electronSFMapFilePath("trigger");
+   m_electronEffTriggerFile        = electronSFMapFilePath("trigger");
+-  m_electronEffSFIsoFile          = electronSFMapFilePath("isolation");
++  m_electronEffSFIsoFile          = electronSFMapFilePath("isolation", electronIsolation);
+   // - Loose
+   m_electronEffSFIDLooseFile      = electronSFMapFilePath("ID");
+   m_electronEffSFTriggerLooseFile = electronSFMapFilePath("trigger");
+   m_electronEffTriggerLooseFile   = electronSFMapFilePath("trigger");
+-  m_electronEffSFIsoLooseFile     = electronSFMapFilePath("isolation");
++  m_electronEffSFIsoLooseFile          = electronSFMapFilePath("isolation", electronIsolationLoose);
  
-   // Define the data type variable - 0 : Data, 1 : MC FullSim, 3 : MC AFII
-@@ -241,6 +241,11 @@
+   // Define the trigger string for scale factors
+   const std::string trigger_string = "SINGLE_E_2015_e24_lhmedium_L1EM20VH_"
+@@ -246,16 +246,31 @@
    // ID SFs
    m_electronEffSFID           = setupElectronSFToolWithMap(elSFPrefix + "ID", m_electronEffSFIDFile, "", electronID, "", "", dataType);
    m_electronEffSFIDLoose      = setupElectronSFToolWithMap(elSFPrefix + "IDLoose", m_electronEffSFIDLooseFile, "", electronIDLoose, "", "", dataType);
-+  bool changeBack = false,  changeBackLoose = false;
++  bool changeBack = false, changeBackLoose = false;
 +  if(electronIsolation == "PromptLepton"){electronIsolation = "None"; changeBack = true;}
 +  if(electronIsolationLoose == "PromptLepton"){electronIsolationLoose = "None"; changeBackLoose = true;}
-+  // if(electronIsolation == "FixedCutTightTrackOnly"){electronIsolation = "None"; changeBack = true;}
-+  // if(electronIsolationLoose == "FixedCutTightTrackOnly"){electronIsolationLoose = "None"; changeBackLoose = true;}
    // Trigger SFs
    m_electronEffSFTrigger      = setupElectronSFToolWithMap(elSFPrefix + "TriggerSF", m_electronEffSFTriggerFile, "", electronID, electronIsolation, trigger_string, dataType);
    m_electronEffSFTriggerLoose = setupElectronSFToolWithMap(elSFPrefix + "TriggerSFLoose", m_electronEffSFTriggerLooseFile, "", electronIDLoose, electronIsolationLoose, trigger_string, dataType);
-@@ -363,23 +368,24 @@
+   // Trigger Efficiencies
+   m_electronEffTrigger        = setupElectronSFToolWithMap(elSFPrefix + "Trigger", m_electronEffTriggerFile, "", electronID, electronIsolation, "Eff_"+trigger_string, dataType);
+   m_electronEffTriggerLoose   = setupElectronSFToolWithMap(elSFPrefix + "TriggerLoose", m_electronEffTriggerLooseFile, "", electronIDLoose, electronIsolationLoose, "Eff_"+trigger_string, dataType);
++  if(changeBack){electronIsolation = "PromptLepton";}
++  if(changeBackLoose){electronIsolationLoose = "PromptLepton";}
++  if(electronIsolation == "PromptLepton"){
++    std::vector< std::string > filenames;
++    filenames.push_back(m_electronEffSFIsoFile);
++    m_electronEffSFIso = setupElectronSFTool(elSFPrefix + "Iso", filenames, dataType);
++  } else { m_electronEffSFIso          = setupElectronSFToolWithMap(elSFPrefix + "Iso", m_electronEffSFIsoFile,  "", electronID, electronIsolation, "", dataType);}
++  if(electronIsolationLoose == "PromptLepton"){
++    std::vector< std::string > filenames_loose;
++    filenames_loose.push_back(m_electronEffSFIsoLooseFile);
++    m_electronEffSFIsoLoose = setupElectronSFTool(elSFPrefix + "IsoLoose", filenames_loose, dataType);
++  } else { m_electronEffSFIsoLoose          = setupElectronSFToolWithMap(elSFPrefix + "IsoLoose", m_electronEffSFIsoLooseFile,  "", electronID, electronIsolation, "", dataType);}
+   // Isolation SFs
+-  m_electronEffSFIso          = setupElectronSFToolWithMap(elSFPrefix + "Iso", m_electronEffSFIsoFile,  "", electronID, electronIsolation, "", dataType);
++/*  m_electronEffSFIso          = setupElectronSFToolWithMap(elSFPrefix + "Iso", m_electronEffSFIsoFile,  "", electronID, electronIsolation, "", dataType);
+   m_electronEffSFIsoLoose     = setupElectronSFToolWithMap(elSFPrefix + "IsoLoose", m_electronEffSFIsoLooseFile, "", electronID, electronIsolationLoose, "", dataType);
+-
++*/
+   // Charge ID cannot use maps at the moment so we default to the old method
+   if(m_config->useElectronChargeIDSelection()){ // We need to update the implementation according to new recommendations
+     // Charge ID file (no maps)
+@@ -268,18 +283,18 @@
+     std::vector<std::string> inChargeID {m_electronEffSFChargeIDFile};
+     std::vector<std::string> inChargeIDLoose {m_electronEffSFChargeIDLooseFile};
+     // Charge Id efficiency scale factor
+-    m_electronEffSFChargeID      = setupElectronSFTool(elSFPrefix + "ChargeID",      inChargeID, dataType);
+-    m_electronEffSFChargeIDLoose = setupElectronSFTool(elSFPrefix + "ChargeIDLoose", inChargeIDLoose, dataType);
++   // m_electronEffSFChargeID      = setupElectronSFTool(elSFPrefix + "ChargeID",      inChargeID, dataType);
++   // m_electronEffSFChargeIDLoose = setupElectronSFTool(elSFPrefix + "ChargeIDLoose", inChargeIDLoose, dataType);
+   }
+   // Charge flip correction: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/EgammaChargeMisIdentificationTool
+-  CP::ElectronChargeEfficiencyCorrectionTool* ChargeMisIDCorrections      = new CP::ElectronChargeEfficiencyCorrectionTool("ElectronChargeEfficiencyCorrection");
+-  CP::ElectronChargeEfficiencyCorrectionTool* ChargeMisIDCorrectionsLoose = new CP::ElectronChargeEfficiencyCorrectionTool("ElectronChargeEfficiencyCorrectionLoose");
+-  m_electronEffSFChargeMisIDFile      = electronSFFilePath("ChargeMisID", electronID,      electronIsolation);
+-  m_electronEffSFChargeMisIDLooseFile = electronSFFilePath("ChargeMisID", electronIDLoose, electronIsolationLoose);
+-  top::check( ChargeMisIDCorrections     ->setProperty("CorrectionFileName", m_electronEffSFChargeMisIDFile) ,      "Failed to setProperty" );
+-  top::check( ChargeMisIDCorrections     ->initialize() , "Failed to setProperty" );
+-  top::check( ChargeMisIDCorrectionsLoose->setProperty("CorrectionFileName", m_electronEffSFChargeMisIDLooseFile) , "Failed to setProperty" );
+-  top::check( ChargeMisIDCorrectionsLoose->initialize() , "Failed to setProperty" );
++  //CP::ElectronChargeEfficiencyCorrectionTool* ChargeMisIDCorrections      = new CP::ElectronChargeEfficiencyCorrectionTool("ElectronChargeEfficiencyCorrection");
++  //CP::ElectronChargeEfficiencyCorrectionTool* ChargeMisIDCorrectionsLoose = new CP::ElectronChargeEfficiencyCorrectionTool("ElectronChargeEfficiencyCorrectionLoose");
++ // m_electronEffSFChargeMisIDFile      = electronSFFilePath("ChargeMisID", electronID,      electronIsolation);
++ // m_electronEffSFChargeMisIDLooseFile = electronSFFilePath("ChargeMisID", electronIDLoose, electronIsolationLoose);
++ // top::check( ChargeMisIDCorrections     ->setProperty("CorrectionFileName", m_electronEffSFChargeMisIDFile) ,      "Failed to setProperty" );
++ // top::check( ChargeMisIDCorrections     ->initialize() , "Failed to setProperty" );
++ // top::check( ChargeMisIDCorrectionsLoose->setProperty("CorrectionFileName", m_electronEffSFChargeMisIDLooseFile) , "Failed to setProperty" );
++ // top::check( ChargeMisIDCorrectionsLoose->initialize() , "Failed to setProperty" );
+ 
+   return StatusCode::SUCCESS;
+ }
+@@ -371,7 +386,7 @@
+     // Protect against "None" Iso key
+     if (ISO=="None") ISO="";
+     // Protect against Loose ID + any Iso
+-    if (ID=="LooseAndBLayerLLH") ISO="";
++    //if (ID=="LooseAndBLayerLLH") ISO="";
+     file_path  = "charge_misID/";
+     file_path += "chargeEfficiencySF.";
+     file_path += ID;
+@@ -390,7 +405,7 @@
    return PathResolverFindCalibFile(file_path);
  }
  
 -std::string EgammaCPTools::electronSFMapFilePath(const std::string& type) {
-+  std::string EgammaCPTools::electronSFMapFilePath(const std::string& type, const std::string& isolation) {
++std::string EgammaCPTools::electronSFMapFilePath(const std::string& type, const std::string& isolation) {
      // Store here the paths to maps which may be updated with new recommendations
      // Currently can use maps for reco, id, iso, trigger but not ChargeID
--    const std::string el_calib_path = "ElectronEfficiencyCorrection/2015_2017/rel21.2/Consolidation_September2018_v1/";
-+    //    const std::string el_calib_path = "ElectronEfficiencyCorrection/2015_2017/rel21.2/Consolidation_September2018_v1/";
-+    const std::string el_calib_path = "ElectronEfficiencyCorrection/2015_2017/rel21.2/Moriond_February2018_v2/";
- 
-     std::string file_path;
-     if(type == "reco") {
--      file_path = "map1.txt";
-+      file_path = "map6.txt";
-     }
-     else if(type == "ID"){
--      file_path = "map1.txt";
-+      file_path = "map6.txt";
+     const std::string el_calib_path = "ElectronEfficiencyCorrection/2015_2017/rel21.2/Consolidation_September2018_v1/";
+@@ -404,7 +419,11 @@
      }
      else if(type == "isolation"){
--      file_path = "map1.txt";
-+      file_path = "map6.txt";
+       file_path = "map3.txt";
++      if (isolation == "PromptLepton" || isolation == "PromptLeptonCFT") { // should be only true in case of using ttH-ML private root file
++        char* const rc = getenv("WorkDir_DIR");
++        return PathResolverFindCalibFile( std::string(rc)+"/data/ttHMultilepton/data/R21_PLV_SFs/efficiencySF.Isolation.TightLLH_d0z0_v13_PLVeto_CFTtight_ambiguity0_isolFixedCutLoose.root");
      }
++	}
      else if(type == "trigger"){
--      file_path = "map1.txt";
-+      file_path = "map6.txt";
+       file_path = "map3.txt";
      }
-     else if(type == "ChargeID") {
-       ATH_MSG_ERROR("Use electronSFFilePath method until ChargeID is supported by maps");

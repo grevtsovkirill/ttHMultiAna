@@ -2,10 +2,6 @@ import TopExamples.grid
 import TopExamples.ami
 import grid
 
-grid.Add("syst_mc16c").datasets=[
-    "mc16_13TeV.410389.MadGraphPythia8EvtGen_A14NNPDF23_ttgamma_nonallhadronic.deriv.DAOD_HIGG8D1.e6155_e5984_s3126_r9781_r9778_p3371",
- ]
-
 grid.Add("FS_mc16c").datasets=[
     "mc16_13TeV.364210.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV0_70_BVeto.deriv.DAOD_HIGG8D1.e5421_e5984_s3126_r9781_r9778_p3371",
     "mc16_13TeV.364212.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV70_280_BVeto.deriv.DAOD_HIGG8D1.e5421_e5984_s3126_r9781_r9778_p3371",

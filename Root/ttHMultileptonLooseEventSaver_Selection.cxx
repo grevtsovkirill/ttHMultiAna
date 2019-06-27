@@ -338,6 +338,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.z0 = el.trackParticle()->z0();
   lep.vz = el.trackParticle()->vz();
 
+  ///// Variables needed for internal and external conversions
+
   // NTracks associated to the reco electron
   lep.nTrackParticles      = el.nTrackParticles();
 
@@ -380,6 +382,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   lep.ClosestSiTrackeNIL    = el.auxdataConst<float>("closestSiTrackeNIL");
 
 
+
   // truth matching, fakes, QMisId
   int TruthType = -99;
   int TruthOrigin = -99;
@@ -408,6 +411,12 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 
   static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
   lep.isConvPh = ( ConvPh.isAvailable(el) ) ?  ConvPh(el) : -1;
+
+  static SG::AuxElement::Accessor<char> IntConvPh("isIntConvPh");
+  lep.isIntConvPh = ( IntConvPh.isAvailable(el) ) ?  IntConvPh(el) : -1;
+
+  static SG::AuxElement::Accessor<char> ExtConvPh("isExtConvPh");
+  lep.isExtConvPh = ( ExtConvPh.isAvailable(el) ) ?  ExtConvPh(el) : -1;
 
   static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
   lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(el) ) ?  ISR_FSR_Ph(el) : -1;
@@ -567,7 +576,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e17_lhvloose_nod0"   , (char) 0) ||
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
   }
-  else if (m_runYear == 2017) {
+  else if (m_runYear == 2017 || m_runYear == 2018 ) {
     lep.isTrigMatchDLT = ( el.pt() > 18e3 && (
                                               returnDecoIfAvailable(el, "TRIGMATCH_HLT_2e24_lhvloose_nod0" , (char) 0) ||
 											  returnDecoIfAvailable(el, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)));
@@ -640,7 +649,7 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 
 
   for (const auto jetItr : goodJets) {
-    sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
+    //    sorter_jets.push_back(std::make_tuple(&(jetItr->p4()), idx++));
 
     auto btagging = jetItr->btagging();
     if (btagging) {
@@ -673,10 +682,11 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	}
     }
   }
-
+  Int_t i(0.);
   //same thing for jet with tau OR
   for (const auto jetItr : goodJets) {
     if( jetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+      i++;
     //std::cout<<"open it when we have OR_1"<<std::endl;
       auto btagging = jetItr->btagging();
       if (btagging) {
@@ -708,33 +718,45 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	  }
 	}
       }
+	  if(i==1){
+		m_ttHEvent->lead_jetPt = jetItr->pt();
+		m_ttHEvent->lead_jetEta = jetItr->eta();
+		m_ttHEvent->lead_jetPhi = jetItr->phi();
+		m_ttHEvent->lead_jetE = jetItr->e();
+      }
+	  if(i==2){
+		m_ttHEvent->sublead_jetPt = jetItr->pt();
+		m_ttHEvent->sublead_jetEta = jetItr->eta();
+		m_ttHEvent->sublead_jetPhi = jetItr->phi();
+		m_ttHEvent->sublead_jetE = jetItr->e();
+	  }
     }
   }
 
-  std::sort(sorter_jets.begin(), sorter_jets.end(),
-	      [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
+  // std::sort(sorter_jets.begin(), sorter_jets.end(),
+  // 	      [](sortvec_t a, sortvec_t b) { return std::get<0>(a)->Pt() > std::get<0>(b)->Pt(); });
                 
-  std::vector<const TLorentzVector*> p4s;
-  const int totjets = goodJets.size();
-  for (short idx1 = 0; idx1 < totjets; ++idx1) {
-    const TLorentzVector* p4;
-    int lidx;
-    std::tie(p4, lidx) = sorter_jets[idx1];
-    p4s.push_back(p4);
-  }
+  // std::vector<const TLorentzVector*> p4s;
+  // const int totjets = goodJets.size();
+  // for (short idx1 = 0; idx1 < totjets; ++idx1) {
+  //   const TLorentzVector* p4;
+  //   int lidx;
+  //   std::tie(p4, lidx) = sorter_jets[idx1];
+  //   p4s.push_back(p4);
+  // }
 
-  if (goodJets.size() > 0){
-    m_ttHEvent->lead_jetPt  = p4s[0]->Pt();
-    m_ttHEvent->lead_jetEta = p4s[0]->Eta();
-    m_ttHEvent->lead_jetPhi = p4s[0]->Phi();
-    m_ttHEvent->lead_jetE   = p4s[0]->E();
-    }
-  if (goodJets.size() > 1){
-    m_ttHEvent->sublead_jetPt  = p4s[1]->Pt();
-    m_ttHEvent->sublead_jetEta = p4s[1]->Eta();
-    m_ttHEvent->sublead_jetPhi = p4s[1]->Phi();
-    m_ttHEvent->sublead_jetE	= p4s[1]->E();
-  }
+  // if (goodJets.size() > 0){
+  //   m_ttHEvent->lead_jetPt  = p4s[0]->Pt();
+  //   m_ttHEvent->lead_jetEta = p4s[0]->Eta();
+  //   m_ttHEvent->lead_jetPhi = p4s[0]->Phi();
+  //   m_ttHEvent->lead_jetE   = p4s[0]->E();
+  //   }
+  // if (goodJets.size() > 1){
+  //   m_ttHEvent->sublead_jetPt  = p4s[1]->Pt();
+  //   m_ttHEvent->sublead_jetEta = p4s[1]->Eta();
+  //   m_ttHEvent->sublead_jetPhi = p4s[1]->Phi();
+  //   m_ttHEvent->sublead_jetE	= p4s[1]->E();
+  // }
   
   /*typedef std::tuple<double,  int> bWtSortvec_t;
   std::vector<bWtSortvec_t> bWtSorter;
@@ -763,7 +785,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   lep.d0 = mu.primaryTrackParticle()->d0();
   lep.z0 = mu.primaryTrackParticle()->z0();
   lep.vz = mu.primaryTrackParticle()->vz();
-
+  lep.nTrackParticles= -1;
 
   static SG::AuxElement::Accessor<float> mujet_jetPt("jet_pt");
   lep.mujet_jetPt = (mujet_jetPt.isAvailable(mu)) ? mujet_jetPt(mu): -99;
@@ -807,7 +829,7 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu18_mu8noL1"    , (char) 0)) ||
 			   (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_mu14", (char) 0)) );
   }
-  else if (m_runYear == 2016 || m_runYear == 2017) {
+  else if (m_runYear == 2016 || m_runYear == 2017 || m_runYear == 2018) {
     lep.isTrigMatchDLT = ( (mu.pt() > 9e3  && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_mu22_mu8noL1"         , (char) 0)) ||
                            (mu.pt() > 15e3 && returnDecoIfAvailable(mu, "TRIGMATCH_HLT_e17_lhloose_nod0_mu14", (char) 0)) );
   } else {
@@ -871,6 +893,12 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
 
   static SG::AuxElement::Accessor<char> ConvPh("isConvPh");
   lep.isConvPh = ( ConvPh.isAvailable(mu) ) ?  ConvPh(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> ExtConvPh("isExtConvPh");
+  lep.isExtConvPh = ( ExtConvPh.isAvailable(mu) ) ?  ExtConvPh(mu) : -1;
+
+  static SG::AuxElement::Accessor<char> IntConvPh("isIntConvPh");
+  lep.isIntConvPh = ( IntConvPh.isAvailable(mu) ) ?  IntConvPh(mu) : -1;
 
   static SG::AuxElement::Accessor<char> ISR_FSR_Ph("isISR_FSR_Ph");
   lep.isISR_FSR_Ph = ( ISR_FSR_Ph.isAvailable(mu) ) ?  ISR_FSR_Ph(mu) : -1;
@@ -1064,6 +1092,9 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> tau_mv2c10("MV2c10");
   MLTau.MV2c10 = ( tau_mv2c10.isAvailable(xTau) ) ? tau_mv2c10(xTau) : -2;
 
+  static SG::AuxElement::Accessor<float> tau_width("width");
+  MLTau.width = ( tau_width.isAvailable(xTau) ) ? tau_width(xTau) : -2;
+
   static SG::AuxElement::Accessor<short> promptTauInput_TrackJetNTrack("PromptTauInput_TrackJetNTrack");
   MLTau.promptTauInput_TrackJetNTrack = ( promptTauInput_TrackJetNTrack.isAvailable(xTau) ) ? promptTauInput_TrackJetNTrack(xTau) : -99;
 
@@ -1093,7 +1124,6 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
 
   static SG::AuxElement::Accessor<float> promptTauInput_MV2c10("PromptTauInput_MV2c10");
   MLTau.promptTauInput_MV2c10 = ( promptTauInput_MV2c10.isAvailable(xTau) ) ? promptTauInput_MV2c10(xTau) : -99;
-
 
   static SG::AuxElement::Accessor<float> promptTauVeto("PromptTauVeto");
   MLTau.promptTauVeto = (promptTauVeto.isAvailable(xTau)) ? promptTauVeto(xTau) : -99;
@@ -1367,19 +1397,12 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
   //SG::AuxElement::Decorator<char> dec_tightCFT("SignalCFT"); // to tag electrons passing tight PID and PLI+CFT
   SG::AuxElement::Decorator<char> dec_loose("Baseline"); // to tag electrons passing loose PID
  
-  //std::cout << "doEventTrigSFs::Starting event loop" << std::endl;
-  //int errors = 0;
-  
-  //const int totleptons = goodEl->size() + goodMu->size();
-    
- // unsigned runNumber = 305291; // 2016 period G
   //event.m_info->auxdecor<unsigned int>("RandomRunNumber") = runNumber;
   unsigned runNumber=event.m_info->auxdecor<unsigned int>("RandomRunNumber");
   //std::cout<<"runnumber= " <<runNumber<<std::endl;
   std::vector<const xAOD::Electron*> myTriggeringElectrons;
   std::vector<const xAOD::Muon*> myTriggeringMuons;
   std::vector<const xAOD::IParticle*> myTriggeringLeptons;
-  
   for(auto electron : Electrons)
     {
       //float pt = 0.001f*electron->pt(), eta = (electron->caloCluster()? fabs(electron->caloCluster()->etaBE(2)) : 10.f);
@@ -1711,7 +1734,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	
       }
     }
-    /* // OLD trigger SF computation for SLT
+/* // OLD trigger SF computation for SLT
 	 for (const auto& systvar : m_lep_sf_names) {
 	 auto ivar = systvar.first;
 	 oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[0].EffTrigLoose[ivar]);
@@ -1738,7 +1761,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
       m_ttHEvent->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_ttHEvent->lepSFTrigTight[0] : 1;
     */
   
-    break;
+  break;
   case 4:
     {
       // Do a sorting for objects
@@ -1815,7 +1838,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	m_ttHEvent->lepSFTrigTight[ivar] = 1;
       }
       
-  }
+      }
 
 
 }

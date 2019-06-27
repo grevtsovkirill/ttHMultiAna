@@ -21,7 +21,7 @@
 
 #define LEPTON_ARR_SIZE 4
 #define TAU_ARR_SIZE 3
-#define MAXSYST 50
+#define MAXSYST 150
 
 class ttHMultileptonLooseEventSaver;
 

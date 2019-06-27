@@ -36,25 +36,19 @@ config.maxFileSize='20000000000000'
 config.extFile='.root,.so'
 
 
-# if not os.path.isfile("generic_config_systmc16c.txt"):
-# 	print "Missing generic_config_systmc16d.txt. Code will crash. Exiting..."
-# 	sys.exit()
-# for dsid in ["345674", "345673", "345672"]:
-# 	if not os.path.isfile("generic_config_systmc16c_" + dsid + ".txt"):
-# 		print "Missing generic_config_systmc16c_"+ dsid + ".txt. Code will crash. Exiting..."
-# 		sys.exit()
+if not os.path.isfile("generic_config_systmc16c.txt"):
+	print "Missing generic_config_systmc16d.txt. Code will crash. Exiting..."
+	sys.exit()
+for dsid in ["345674", "345673", "345672"]:
+	if not os.path.isfile("generic_config_systmc16c_" + dsid + ".txt"):
+		print "Missing generic_config_systmc16c_"+ dsid + ".txt. Code will crash. Exiting..."
+		sys.exit()
 
-baseSuffix = "DD-MM_sys_mc16c"
-# do not use anymore mc16c for signal - exist in mc16d
-# for dsid in ["345674", "345673", "345672"]:
-# 	config.settingsFile = 'generic_config_systmc16c_' + dsid + '.txt'
-# 	config.suffix = baseSuffix
-# 	names = ["singleSample_" + dsid,]
-# 	samples = grid.Samples(names)
-# 	grid.submit(config, samples)
+baseSuffix = "2018-05-02-01"
 
-config.suffix = baseSuffix
-names = ["syst_mc16c",]
-config.settingsFile = "generic_config_systmc16c.txt"
-samples = grid.Samples(names)
-grid.submit(config, samples)
+for dsid in ["345674", "345673", "345672"]:
+	config.settingsFile = 'generic_config_systmc16c_' + dsid + '.txt'
+	config.suffix = baseSuffix + "-" + dsid
+	names = ["singleSample_" + dsid,]
+	samples = grid.Samples(names)
+	grid.submit(config, samples)

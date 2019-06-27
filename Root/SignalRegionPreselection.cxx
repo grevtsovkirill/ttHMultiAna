@@ -58,56 +58,67 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
       return false;
     }
 
-	const int totalLeptons = Electrons->size() +  Muons->size();
-	int totalTaus = Taus->size();
-	int totalCharge = 0;
-	int totalBJets_85 = 0;
-	for (const auto elItr : *Electrons) { totalCharge += elItr->charge(); }
-	for (const auto muItr : *Muons) { totalCharge += muItr->charge(); }
-	for (const auto JetItr: *Jets)  {
-	  //	  if( JetItr->auxdataConst<char>("ttHpassTauOVR") ) {
-	    if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
-	    //	  }
-	}
-	tthevt->totalLeptons = totalLeptons;
-	tthevt->totalTaus = totalTaus;
-	tthevt->totalCharge = totalCharge;
+    const int totalLeptons = Electrons->size() +  Muons->size();
+    int totalTaus = Taus->size();
+    int totalCharge = 0;
+    int totalBJets_85 = 0;
+    float El_pT_0 = 0.;
+    float Mu_pT_0 = 0.;
+    Int_t i(0),j(0);
+    for (const auto elItr : *Electrons) { 
+      totalCharge += elItr->charge(); 
+      if(i==0) El_pT_0 = elItr->pt();
+      i++;
+    }
+    for (const auto muItr : *Muons) { 
+      totalCharge += muItr->charge(); 
+      if(j==0) Mu_pT_0 = muItr->pt();
+      j++;
+    }
+    for (const auto JetItr: *Jets)  {
+      //	  if( JetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+      if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
+      //	  }
+    }
+    tthevt->totalLeptons = totalLeptons;
+    tthevt->totalTaus = totalTaus;
+    tthevt->totalCharge = totalCharge;
 	
 
 
 
-	//Set as if false for now, should make this configurable from config file
-	if(m_params == "SRONLY"){
-		if (totalLeptons + totalTaus < 2)
-			return false;
-		if (totalLeptons == 2 && totalTaus == 0 && totalCharge == 0 )
-			return false;
-		if (totalLeptons == 1 && totalTaus <= 1)
-			return false;
-	} else if(m_params == "LEPTONS") {
-		if (totalLeptons == 0)
-			return false;
-	} else if(m_params == "2LEPTONS") {
-	        if (totalLeptons + totalTaus < 2)
-		        return false;
-	} else if(m_params == "BJET_MV2C10_85") {
-	  if (totalBJets_85==0)
-	    return false;
-	} else if(m_params == "NONE") {
-			return true;
-	} else if(m_params == ""){
-		std::cout << "No parameter given for SRPRESKIM" << std::endl;
-	} else {
-		std::cout << "SRPRESKIM is not configured properly. Skipping..." << std::endl;
-	}
+    //Set as if false for now, should make this configurable from config file
+    if(m_params == "SRONLY"){
+      if (totalLeptons + totalTaus < 2)
+	return false;
+      if (totalLeptons == 2 && totalTaus == 0 && totalCharge == 0 )
+	return false;
+      if (totalLeptons == 1 && totalTaus <= 1)
+	return false;
+    } else if(m_params == "LEPTONS") {
+      if (totalLeptons == 0 || (El_pT_0<25e3&&Mu_pT_0<25e3))
+	return false;
+    } else if(m_params == "2LEPTONS") {
+      if (totalLeptons + totalTaus < 2)
+	return false;
+    } else if(m_params == "BJET_MV2C10_85") {
+      if (totalBJets_85==0)
+	return false;
+    } else if(m_params == "NONE") {
+      return true;
+    } else if(m_params == ""){
+      std::cout << "No parameter given for SRPRESKIM" << std::endl;
+    } else {
+      std::cout << "SRPRESKIM is not configured properly. Skipping..." << std::endl;
+    }
     return true;
 }
 
 bool SignalRegionPreselection::applyParticleLevel(const top::ParticleLevelEvent& event) const {
-    return false;
+  return false;
 }
 
 std::string SignalRegionPreselection::name() const{
-	return "SRPRESKIM";
+  return "SRPRESKIM";
 } 
 

@@ -1,20 +1,74 @@
---- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools/Root/AsgElectronChargeIDSelectorTool.cxx	2018-12-14 03:07:38.000000000 +0100
-+++ AsgElectronChargeIDSelectorTool.cxx	2019-01-16 11:32:11.000000001 +0100
-@@ -312,7 +312,7 @@
+ 
+diff -ur ElectronPhotonSelectorTools_orig/Root/AsgElectronChargeIDSelectorTool.cxx ElectronPhotonSelectorTools/Root/AsgElectronChargeIDSelectorTool.cxx
+--- ElectronPhotonSelectorTools_orig/Root/AsgElectronChargeIDSelectorTool.cxx	2019-05-16 03:11:24.000000001 +0200
++++ ElectronPhotonSelectorTools/Root/AsgElectronChargeIDSelectorTool.cxx	2019-06-19 09:52:48.000000001 +0200
+@@ -56,6 +56,9 @@
+   declareProperty("primaryVertexContainer", m_primVtxContName="PrimaryVertices", "The primary vertex container name" );
+     
+   declareProperty("TrainingFile",  m_trainingFile="", "The input ROOT file name holding training" );
++  // FIXME 
++  declareProperty("FolderName", m_folderName = "", "Folder name (to be able to run old trainings)");
++
+   declareProperty("CutOnBDT",m_cutOnBDT=0,"Cut on BDT discriminant");
+   m_pid_name=myname.data();
+ }
+@@ -137,6 +140,9 @@
+   ATH_MSG_INFO("ECIDS nfold configuration: "<<nfold);
+     
+   TObjArray* toa= (TObjArray*) bdtfile->Get("/ECIDS_"+m_pid_name+TString::Format("_0o%d",nfold)+"/variables");
++  if(!m_folderName.empty())
++    toa= (TObjArray*) bdtfile->Get("/"+TString::Format("%s",m_folderName.c_str())+"/variables"); 
++
+   std::string commaSepVars="";
+   if (toa) {
+     TObjString *tos= 0;
+@@ -157,7 +163,6 @@
+   std::vector<float*> inputPointers;  //KM: set pointers
+   for (unsigned i_fold=0; i_fold<nfold; i_fold++) {
+     TString treename="/ECIDS_"+m_pid_name+TString::Format("_%do%d",i_fold,nfold)+"/BDT";
+-    //std::cout<<"Trying to access a ttree with name: "<<treename<<std::endl;
+     TTree* tree = (TTree*)bdtfile->Get(treename);
+     m_v_bdts.push_back(new MVAUtils::BDT(tree));
+     bool noBadVariableFound = true;
+@@ -169,9 +174,26 @@
+     }
+     m_v_bdts.back()->SetPointers(inputPointers);
+   }
++
++  // FIXME hack to access the variables in the tree
++  if(!m_folderName.empty()){
++    TString treename="/"+TString::Format("%s",m_folderName.c_str())+"/BDT";
++    TTree* tree = (TTree*)bdtfile->Get(treename);
++    m_v_bdts.push_back(new MVAUtils::BDT(tree));
++    bool noBadVariableFound = true;
++    noBadVariableFound = SetVariableRefs(m_inputVars,inputPointers);
++    if (!noBadVariableFound) {
++      std::cerr<<"\tUnknown input variable given, disabling the algorithm...."<<std::endl;
++      exit(1);
++      //KM: disabling feature to be implemented.
++    }
++    m_v_bdts.back()->SetPointers(inputPointers);
++  }
++
+     
+   ///-----------End of text config----------------------------
+     
++    
+   // Get the name of the current operating point, and massage the other strings accordingly
+   //ATH_MSG_VERBOSE( "Going to massage the labels based on the provided operating point..." );
+     
+@@ -312,10 +334,12 @@
          d0sigma=sqrtf(vard0);
        }
      }
 -        
-+    /*        
++    
      //KM: calculation of SCT-weighted charge
      float charge = 0, SCT = 0;
      for (unsigned TPit = 0; TPit < eg->nTrackParticles(); TPit++) {
-@@ -323,7 +323,7 @@
-       charge += temp_NSCTHits*eg->trackParticle(TPit)->charge();
-     }
-     avgCharge_SCTw= SCT!=0 ? eg->charge()*charge/SCT : 0;
--        
-+    */  
-     const std::vector<float>&cov= t->definingParametersCovMatrixVec();
-     trackqoverpsig= cov[14];
-         
++      // FIXME XP
++      if(TPit>0) continue;
+       uint8_t temp_NSCTHits;
+       eg->trackParticle(TPit)->summaryValue(temp_NSCTHits, xAOD::numberOfSCTHits);
+       //ATH_MSG_INFO ("kmdebug: trk#"<<TPit<<", #SCT-hits="<<unsigned(temp_NSCTHits)<<", charge="<<eg->trackParticle(TPit)->charge() );
+ 

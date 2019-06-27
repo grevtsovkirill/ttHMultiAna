@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import TopExamples.grid
 import mc16aR21
+#import mc16cR21
+#import dataR21
+#import MC_EPS
+#import Data16
 import os
 import grid
 import shutil
@@ -35,47 +39,25 @@ config.nGBPerJob='4'
 config.maxFileSize='20000000000000'
 config.extFile='.root,.so'
 
-# THIS IS NOT NEEDED - in beggining is check to copy files from $WorkDir
-# if not os.path.isfile("generic_config_systmc16a.txt"):
-# 	print "Missing generic_config_systmc16a.txt. Code will crash. Exiting..."
-# 	sys.exit()
-# for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
-# 	if not os.path.isfile("generic_config_systmc16a_" + dsid + ".txt"):
-# 		print "Missing generic_config_systmc16a_"+ dsid + ".txt. Code will crash. Exiting..."
-# 		sys.exit()
 
-subsuf="CHANGEME"
-# for systematics
-baseSuffix = subsuf+"_sys_mc16a"
-# unused sampels:
-#           old sig "345674", "345673", "345672",
-for dsid in ["410470", "410472","345875","345874","345873","410155", "410218", "410219" ,"410220"]:
-    # individual files
-    config.settingsFile = 'generic_config_systmc16a_' + dsid + '.txt'
-    config.suffix = baseSuffix
-    names = ["singleSample_" + dsid,]
-    samples = grid.Samples(names)
-    grid.submit(config, samples)
-else:
-    # other systematics
-    config.suffix = baseSuffix
-    names = ["syst_mc16a",]
-    config.settingsFile = "generic_config_systmc16a.txt"
-    samples = grid.Samples(names)
-    grid.submit(config, samples)
+if not os.path.isfile("generic_config_systmc16a.txt"):
+	print "Missing generic_config_systmc16a.txt. Code will crash. Exiting..."
+	sys.exit()
+for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
+	if not os.path.isfile("generic_config_systmc16a_" + dsid + ".txt"):
+		print "Missing generic_config_systmc16a_"+ dsid + ".txt. Code will crash. Exiting..."
+		sys.exit()
 
-#for nominal:
-baseSuffix = subsuf+"_nom_mc16a"
+baseSuffix = "2018-05-02-01"
+for dsid in ["345674", "345673", "345672", "410470", "410472", "410155", "410218", "410219" ,"410220"]:
+	config.settingsFile = 'generic_config_systmc16a_' + dsid + '.txt'
+	config.suffix = baseSuffix + "-" + dsid
+	names = ["singleSample_" + dsid,]
+	samples = grid.Samples(names)
+	grid.submit(config, samples)
+
 config.suffix = baseSuffix
-names = ["FS_mc16a",]
-config.settingsFile = "generic_config_mc16a.txt"
-samples = grid.Samples(names)
-grid.submit(config, samples)
-
-# for AFII:
-baseSuffix = subsuf+"_af2_mc16a"
-config.suffix = baseSuffix
-names = ["AF_mc16a",]
-config.settingsFile = "generic_config_AFIImc16a.txt"
+names = ["highPriority_NominalConfig",]
+config.settingsFile = "generic_config_systmc16a.txt"
 samples = grid.Samples(names)
 grid.submit(config, samples)

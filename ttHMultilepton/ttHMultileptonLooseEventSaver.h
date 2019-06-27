@@ -56,7 +56,7 @@ extern TH1I* m_tauCutflow;
       ///-- Default constrcutor with no arguments - needed for ROOT --///
       ttHMultileptonLooseEventSaver();
       ///-- Destructor does nothing --///
-      ~ttHMultileptonLooseEventSaver();
+      //~ttHMultileptonLooseEventSaver();
       
       ///-- initialize function for top::EventSaverFlatNtuple --///
       ///-- We will be setting up out custom variables here --///
@@ -141,6 +141,7 @@ extern TH1I* m_tauCutflow;
     //asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>                  m_trigGlobEffCorr;
     //TrigGlobalEfficiencyCorrectionTool*                  m_trigGlobEffCorr;
       std::vector<TrigGlobalEfficiencyCorrectionTool*>                 m_trigGlobEffCorr;
+      std::vector< asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>> m_trigGlobTools;
 
   //decorate all the things in all the sys
       SG::AuxElement::Decorator< char >* m_decor_ttHpassOVR;
@@ -245,6 +246,7 @@ extern TH1I* m_tauCutflow;
   // Truth Matrix element photon
   char m_hasMEphoton;
   char m_hasMEphoton_DRgt02_nonhad;
+  char m_hasFSRPhotonLargeDeltaR;
   /* char m_MEphoton_OLtty_keepEvent; */
   /* char m_MEphoton_OLtty_cat1; */
   /* char m_MEphoton_OLtty_cat2; */

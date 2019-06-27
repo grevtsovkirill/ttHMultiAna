@@ -216,7 +216,11 @@ bool SelectOR::apply(const top::Event & event) const{
       for (const auto jetItr : *goodJet) {
     // don't need additional protection here...
 	if (p4.DeltaR(jetItr->p4()) < 0.3) {
-	  jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
+	  if(!jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))
+	    jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
+	  else if(!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose))
+	    tauItr->auxdecor<char>("ttHpassOVR") = 0;
+	  else jetItr->auxdecor<char>("ttHpassTauOVR") = 0; 
 	}
       }
     }

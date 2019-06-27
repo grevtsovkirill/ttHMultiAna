@@ -1,12 +1,12 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
 
-PRWConfigFiles  /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.FS.v2/prw.merged.root
+PRWConfigFiles  /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.FS.v2/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/pileup_lq_mc16e.root
 
-PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20181111/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-001.root
+PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-010.root
 
 #GRLDir GoodRunsLists
-#GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml data18_13TeV/20181111/physics_25ns_Triggerno17e33prim.xml
-GRLFile data18_13TeV/20181111/physics_25ns_Triggerno17e33prim.xml
+#GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.xml
+GRLFile data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.xml
 
 EventInfoName EventInfo
 ElectronCollectionName Electrons
@@ -40,25 +40,24 @@ PerfStats No
 #Electron cuts
 ElectronID TightLH
 ElectronIDLoose TightLH
-ElectronPt 25000
-ElectronIsolation FixedCutTightTrackOnly
+ElectronPt 10000
+ElectronIsolation FCLoose
 ElectronIsolationLoose PromptLepton
 
 #Muon cuts
-MuonQuality Loose
-MuonQualityLoose Loose
+MuonQuality Medium
+MuonQualityLoose Medium
 MuonEta 2.5
-MuonPt 25000
-#MuonIsolation FixedCutLoose
-MuonIsolation FixedCutTightTrackOnly
-MuonIsolationLoose PromptLepton
+MuonPt 10000
+MuonIsolation FCLoose
+MuonIsolationLoose None
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
 #for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
 TauJetConfigFile ttHMultilepton/data/loose_tau_selection.conf
 TauJetConfigFileLoose ttHMultilepton/data/tight_tau_selection.conf
-ApplyTauMVATES true
+ApplyTauMVATES True
 
 #Jet cuts
 JetPt 25000.
@@ -77,8 +76,9 @@ OverlapRemovalLeptonDef Tight
 IsAFII False
 
 #NEvents 1000000
-NEvents 1000
+#NEvents 10000
 Systematics Nominal
+#Systematics All
 #TruthBlockInfo True
 
 SELECTION triggers
@@ -110,6 +110,7 @@ SELECT_OR
 SELECTTRUTHPARTICLES
 SRPRESKIM LEPTONS
 SRPRESKIM 2LEPTONS
+SRPRESKIM BJET_MV2C10_85
 NLEPTONPLUSTAU 20000 >= 1
 SRPRESKIM LEPTONS
 CALCULATESF

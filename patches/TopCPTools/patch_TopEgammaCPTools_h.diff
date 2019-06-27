@@ -1,6 +1,6 @@
---- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/TopCPTools/TopEgammaCPTools.h	2018-12-14 03:07:38.000000000 +0100
-+++ TopEgammaCPTools.h	2019-01-10 10:24:28.000000001 +0100
-@@ -86,7 +86,7 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/TopCPTools/TopEgammaCPTools.h	2019-05-16 03:11:24.000000000 +0200
++++ ../TopCPTools/TopEgammaCPTools.h	2019-06-20 13:10:48.000000001 +0200
+@@ -89,7 +89,7 @@
    // Helper for using maps from egamma groups
    IAsgElectronEfficiencyCorrectionTool* setupElectronSFToolWithMap(const std::string& name, std::string map_path, std::string reco_key, std::string ID_key, std::string iso_key, std::string trigger_key, int data_type);
  

@@ -9,8 +9,6 @@ cd ../
 asetup AnalysisTop,21.2.75,here
 cp -r  /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools ./
 cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools ./
-cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCorrections ./
-cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/Trigger/TrigAnalysis/TrigGlobalEfficiencyCorrection ./
 cd TopCPTools/Root/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopMuonCPTools_cxx.diff
@@ -19,12 +17,10 @@ cd ../TopCPTools/
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
 cd ../../ElectronPhotonSelectorTools/Root/
 patch < ../../ttHMultiAna/patches/ElectronPhotonSelectorTools/patch_AsgElectronChargeIDSelectorTool_cxx.diff
-cd ../../TopCorrections/Root
-patch < ../../ttHMultiAna/patches/TopCorrections/patch_ScaleFactorRetriever_cxx.diff
-cd ../../TrigGlobalEfficiencyCorrection/Root/
-patch < ../../ttHMultiAna/patches/TrigGlobalEfficiencyCorrection/patch_Calculator_cxx.diff
-cd ../TrigGlobalEfficiencyCorrection
-patch < ../../ttHMultiAna/patches/TrigGlobalEfficiencyCorrection/patch_TrigGlobalEfficiencyCorrectionTool_h.diff
+cd ../ElectronPhotonSelectorTools/
+patch < ../../ttHMultiAna/patches/ElectronPhotonSelectorTools/patch_AsgElectronChargeIDSelectorTool_h.diff
+cd ../../
+
 
 #Uncommenting the PromptLepton Option in config files
 # for period in data mc16a mc16c mc16d AFIImc16a AFIImc16c AFIImc16d systmc16a systmc16c systmc16d
