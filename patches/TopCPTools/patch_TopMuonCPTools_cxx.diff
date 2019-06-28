@@ -1,6 +1,23 @@
---- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.58/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopMuonCPTools.cxx	2018-12-14 03:07:38.000000000 +0100
-+++ TopMuonCPTools.cxx	2019-01-10 10:24:28.000000001 +0100
-@@ -285,9 +285,25 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.75/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/Root/TopMuonCPTools.cxx	2019-05-16 03:11:24.000000000 +0200
++++ ./../../../TopCPTools/Root/TopMuonCPTools.cxx	2019-06-28 10:11:14.000000001 +0200
+@@ -208,11 +208,11 @@ StatusCode MuonCPTools::setupScaleFactor
+ 
+   // WARNING - The PromptLeptonIsolation scale factors are only derived with respect to the loose PID
+   //         - Hence we need to fail if this has occured
+-  if( (m_config->muonQuality() != "Loose" && m_config->muonIsolationSF() == "PromptLepton")
+-      || (m_config->muonQualityLoose() !="Loose" && m_config->muonIsolationSFLoose() == "PromptLepton") ){
+-    ATH_MSG_ERROR("Cannot use PromptLeptonIsolation on muons without using Loose quality - Scale factors are not available");
+-    return StatusCode::FAILURE;
+-  }
++  // if( (m_config->muonQuality() != "Loose" && m_config->muonIsolationSF() == "PromptLepton")
++  //     || (m_config->muonQualityLoose() !="Loose" && m_config->muonIsolationSFLoose() == "PromptLepton") ){
++  //   ATH_MSG_ERROR("Cannot use PromptLeptonIsolation on muons without using Loose quality - Scale factors are not available");
++  //   return StatusCode::FAILURE;
++  // }
+ 
+   return StatusCode::SUCCESS;
+ }
+@@ -288,9 +288,25 @@ MuonCPTools::setupMuonSFTool(const std::
      tool = asg::ToolStore::get<CP::MuonEfficiencyScaleFactors>(name);
    } else {
      tool = new CP::MuonEfficiencyScaleFactors(name);
