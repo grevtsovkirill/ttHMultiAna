@@ -50,7 +50,7 @@ MuonQualityLoose Medium
 MuonEta 2.5
 MuonPt 10000
 MuonIsolation FCLoose
-MuonIsolationLoose None
+MuonIsolationLoose PromptLepton
 
 #Tau cuts
 #have been moved to ttHMultilepton/data/loose_tau_selection.conf
