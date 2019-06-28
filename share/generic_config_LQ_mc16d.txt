@@ -1,0 +1,116 @@
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttHMultilepton
+
+PRWConfigFiles GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v2/prw.merged.root $WorkDir_DIR/data/ttHMultilepton/data/mc16d_prw.root  $WorkDir_DIR/data/ttHMultilepton/data/pileup_lq_mc16d.root 
+
+PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root 
+
+#GRLDir GoodRunsLists
+GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml
+#GRLFile data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml
+
+EventInfoName EventInfo
+ElectronCollectionName Electrons
+MuonCollectionName Muons
+JetCollectionName AntiKt4EMTopoJets
+LargeJetCollectionName None
+LargeJetSubstructure None
+TauCollectionName TauJets
+PhotonCollectionName None
+METCollectionName MET_RefFinal_AntiKt4EMTopo
+LooseMETCollectionName MET_Reference_AntiKt4EMTopo
+
+TruthCollectionName TruthParticles
+TruthJetCollectionName AntiKt4TruthJets
+#TopPartonHistory ttbar
+#TopParticleLevel True
+TruthElectronCollectionName None
+TruthMuonCollectionName None
+PDFInfo True
+IsAFII False
+
+MCGeneratorWeights True
+
+ObjectSelectionName ttHMultileptonLooseObjectLoader
+OutputFormat ttHMultileptonLooseEventSaver
+OutputFilename output.root
+#OutputEvents AllEvents
+OutputEvents SelectedEvents
+PerfStats No
+
+#Electron cuts
+ElectronID TightLH
+ElectronIDLoose TightLH
+ElectronPt 10000
+ElectronIsolation FCLoose
+ElectronIsolationLoose PromptLepton
+
+#Muon cuts
+MuonQuality Medium
+MuonQualityLoose Medium
+MuonEta 2.5
+MuonPt 10000
+MuonIsolation FCLoose
+MuonIsolationLoose PromptLepton
+
+#Tau cuts
+#have been moved to ttHMultilepton/data/loose_tau_selection.conf
+#for details see the README: https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/TauID/TauAnalysisTools/trunk/doc/README-TauSelectionTool.rst
+TauJetConfigFile ttHMultilepton/data/loose_tau_selection.conf
+TauJetConfigFileLoose ttHMultilepton/data/tight_tau_selection.conf
+ApplyTauMVATES True
+
+#Jet cuts
+JetPt 25000.
+JetEta 2.5
+BTaggingWP MV2c10:FixedCutBEff_60 MV2c10:FixedCutBEff_70 MV2c10:FixedCutBEff_77 MV2c10:FixedCutBEff_85 MV2c10:Continuous DL1:FixedCutBEff_60 DL1:FixedCutBEff_70 DL1:FixedCutBEff_77 DL1:FixedCutBEff_85 DL1:Continuous
+
+#Other cuts, overlaps, bkgs..
+FakesControlRegionDoLooseMC False
+ApplyElectronInJetSubtraction False
+OverlapRemovalLeptonDef Tight
+
+# DoLoose False
+
+# Turn on MetaData to pull IsAFII from metadata
+#UseAodMetaData True
+IsAFII False
+
+#NEvents 1000000
+#NEvents 100
+#Systematics All
+#TruthBlockInfo True
+
+SELECTION triggers
+#GRL
+#GOODCALO
+#INITIAL
+PRIVTX
+TRIGDEC   HLT_e24_lhmedium_L1EM20VH HLT_e60_lhmedium HLT_e120_lhloose HLT_e26_lhtight_nod0_ivarloose HLT_e60_lhmedium_nod0 HLT_e140_lhloose_nod0 HLT_mu20_iloose_L1MU15 HLT_mu26_ivarmedium HLT_mu40 HLT_mu50 HLT_tau125_medium1_tracktwo HLT_tau160_medium1_tracktwo HLT_ht1000_L1J100 HLT_ht1000 HLT_ht700_L1J75 HLT_j380 HLT_j420 HLT_xe90_pufit_L1XE50 HLT_xe110_pufit_L1XE55 HLT_xe100_pufit_L1XE50 HLT_xe110_pufit_L1XE50
+#SAVE
+
+SELECTION loose
+INITIAL
+COUNTHISTO
+GRL
+GOODCALO
+PRIVTX
+TRIGDEC   HLT_e24_lhmedium_L1EM20VH HLT_e60_lhmedium HLT_e120_lhloose HLT_e26_lhtight_nod0_ivarloose HLT_e60_lhmedium_nod0 HLT_e140_lhloose_nod0 HLT_mu20_iloose_L1MU15 HLT_mu26_ivarmedium HLT_mu40 HLT_mu50 HLT_tau125_medium1_tracktwo HLT_tau160_medium1_tracktwo HLT_ht1000_L1J100 HLT_ht1000 HLT_ht700_L1J75 HLT_j380 HLT_j420 HLT_xe90_pufit_L1XE50 HLT_xe110_pufit_L1XE55 HLT_xe100_pufit_L1XE50 HLT_xe110_pufit_L1XE50
+JETCLEAN LooseBad
+EVEN
+DECORATEEL
+DECORATETAUS
+DECORATEMUONS
+SELECTJETS
+SELECTELECTRONS
+SELECTTAUS
+SELECTMUONS
+SELECT_OR
+SELECTTRUTHPARTICLES
+SRPRESKIM LEPTONS
+SRPRESKIM 2LEPTONS
+SRPRESKIM BJET_MV2C10_85
+NLEPTONPLUSTAU 20000 >= 1
+CALCULATESF
+JETFLAVORPLOTS detailed nJetsMax:20 pt:25:30:35:50:75:100:150:2500 abseta:0.:0.6:1.2:1.8:2.5
+SAVE
+
