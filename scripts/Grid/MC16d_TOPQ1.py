@@ -219,6 +219,17 @@ grid.Add("ttbar_sys").datasets=[
     'mc16_13TeV.410559.PowhegHerwig7EvtGen_H7UE_tt_hdamp258p75_allhad.deriv.DAOD_TOPQ1.e6567_s3126_r10201_p3832',
     ]
 
+grid.Add("TOPQ1_LQ").datasets= [
+    'mc16_13TeV.312244.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M800.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+    'mc16_13TeV.312245.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M900.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+    'mc16_13TeV.310176.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M1000.deriv.DAOD_TOPQ1.e6726_a875_r10201_p3832',
+    'mc16_13TeV.312246.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M1100.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+    'mc16_13TeV.312247.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M1200.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+    'mc16_13TeV.312248.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M1300.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+    'mc16_13TeV.312249.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M1400.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+    'mc16_13TeV.312250.aMcAtNloPy8EG_A14N30NLO_LQd_gstTL_0p3_nonallhad_M1500.deriv.DAOD_TOPQ1.e7555_a875_r10201_p3832',
+]
+
 grid.Add("TOPQ1_LQ_B05").datasets= [
     'mc16_13TeV.310550.aMcAtNloPy8EG_OffDiag_LQu_ta_ld_0p3_beta_0p5_hnd_1p0_M300.deriv.DAOD_TOPQ1.e6981_e5984_a875_r10201_r10210_p3832',
     'mc16_13TeV.310551.aMcAtNloPy8EG_OffDiag_LQd_ta_ld_0p3_beta_0p5_hnd_1p0_M300.deriv.DAOD_TOPQ1.e6981_e5984_a875_r10201_r10210_p3832',
