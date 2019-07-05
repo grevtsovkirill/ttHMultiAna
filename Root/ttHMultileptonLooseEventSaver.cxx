@@ -1361,62 +1361,62 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     //Taus
     std::vector<VectorWrapper*> tauvec;
     std::string tauprefix = "m_tau_";
-    if(!m_doSystematics) {
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.pt(); },          *systematicTree, std::string(tauprefix+"pt").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.eta(); },         *systematicTree, std::string(tauprefix+"eta").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.phi(); },         *systematicTree, std::string(tauprefix+"phi").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); },           *systematicTree, std::string(tauprefix+"E").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
-     // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScore); },         *systematicTree, std::string(tauprefix+"RNNJetScore").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"RNNJetScoreSigTrans").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigVeryLoose").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigLoose").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigMedium); },  *systematicTree, std::string(tauprefix+"JetRNNSigMedium").c_str());
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigTight); },   *systematicTree, std::string(tauprefix+"JetRNNSigTight").c_str());
+    //    if(!m_doSystematics) {
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.pt(); },          *systematicTree, std::string(tauprefix+"pt").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.eta(); },         *systematicTree, std::string(tauprefix+"eta").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.phi(); },         *systematicTree, std::string(tauprefix+"phi").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); },           *systematicTree, std::string(tauprefix+"E").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
+    // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScore); },         *systematicTree, std::string(tauprefix+"RNNJetScore").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"RNNJetScoreSigTrans").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigVeryLoose").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigLoose").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigMedium); },  *systematicTree, std::string(tauprefix+"JetRNNSigMedium").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigTight); },   *systematicTree, std::string(tauprefix+"JetRNNSigTight").c_str());
       
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.auxdataConst<char>("MVATESQuality"); },   *systematicTree, std::string(tauprefix+"MVATESQuality").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.auxdataConst<char>("MVATESQuality"); },   *systematicTree, std::string(tauprefix+"MVATESQuality").c_str());
   
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.auxdataConst<char>("ttHpassOVR"); }, *systematicTree, std::string(tauprefix+"passOR").c_str());
   
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
         return tau.auxdata<int>("passEleOLR");
       }, *systematicTree, std::string(tauprefix+"passEleOLR").c_str());
     
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
         return tau.auxdata<int>("passEleBDT");
       }, *systematicTree, std::string(tauprefix+"passEleBDT").c_str());
 
-      Wrap2(tauvec, [](const xAOD::TauJet& tau) {
+    Wrap2(tauvec, [](const xAOD::TauJet& tau) {
         return tau.auxdata<int>("passMuonOLR");
       }, *systematicTree, std::string(tauprefix+"passMuonOLR").c_str());
       
-      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
         return tau.auxdata<int>("IsHadronic");
       }, *systematicTree, std::string(tauprefix+"isHadronicTau").c_str());
 
-      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
         return tau.auxdata<float>("MV2c10");
       }, *systematicTree, std::string(tauprefix+"MV2c10").c_str());
 
-      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-	    return tau.auxdata<int>("tagWeightBin");
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<int>("tagWeightBin");
       }, *systematicTree, std::string(tauprefix+"tagWeightBin").c_str());
 
-      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
-	    return tau.auxdata<char>("passJVT");
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	return tau.auxdata<char>("passJVT");
       }, *systematicTree, std::string(tauprefix+"passJVT").c_str());
 
-      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
         return tau.auxdata<char>("fromPV");
       }, *systematicTree, std::string(tauprefix+"fromPV").c_str());
-    }
+      //    }
 
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
         return tau.auxdata<float>("BDTEleScoreSigTrans");
@@ -1488,20 +1488,20 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 
 
 
-	  Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
-	  float m_tau_PTV_float = -99.;
-		SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptTauVeto");
-		if(AccessorNonPrompt.isAvailable(tau)) m_tau_PTV_float = AccessorNonPrompt(tau);
-		return (float) m_tau_PTV_float;}, *systematicTree, std::string(tauprefix+"PromptTauVeto").c_str());
+    Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+	float m_tau_PTV_float = -99.;
+	SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptTauVeto");
+	if(AccessorNonPrompt.isAvailable(tau)) m_tau_PTV_float = AccessorNonPrompt(tau);
+	return (float) m_tau_PTV_float;}, *systematicTree, std::string(tauprefix+"PromptTauVeto").c_str());
 
-      Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
-      float m_tau_PTI_float = -99.;
+    Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+	float m_tau_PTI_float = -99.;
         SG::AuxElement::Accessor<float> AccessorNonPrompt("PromptTauIso");
         if(AccessorNonPrompt.isAvailable(tau)) m_tau_PTI_float = AccessorNonPrompt(tau);
         return (float) m_tau_PTI_float;}, *systematicTree, std::string(tauprefix+"PromptTauIso").c_str());
-
-
-
+    
+    
+    
     vec_tau_wrappers.push_back(VectorWrapperCollection(tauvec));
 
     //Truth jets
@@ -1531,16 +1531,16 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     }
     ORUtils::ORFlags OR_flags("OverlapRemovalToolElMu",
 			  "passPreORSelection");
-  OR_flags.doElectrons = m_config->useElectrons();
-  OR_flags.doMuons     = m_config->useMuons();
-  OR_flags.doJets      = false;
-  OR_flags.doTaus      = false;
-  OR_flags.doPhotons   = false;
-  OR_flags.outputLabel = "sharesTrk";
-
-  top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
-	     "Failed to setup OR Tool box");
-
+    OR_flags.doElectrons = m_config->useElectrons();
+    OR_flags.doMuons     = m_config->useMuons();
+    OR_flags.doJets      = false;
+    OR_flags.doTaus      = false;
+    OR_flags.doPhotons   = false;
+    OR_flags.outputLabel = "sharesTrk";
+    
+    top::check(ORUtils::recommendedTools(OR_flags,m_ORtoolBox[0]),
+	       "Failed to setup OR Tool box");
+    
   // if (m_config->useMuons() && m_config->useElectrons())
   //   top::check(m_ORtoolBox[0].eleMuORT.setProperty("RemoveCaloMuons", false),
   // 	       "Failed to set RemoveCaloMuons in eleMuORT");

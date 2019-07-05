@@ -39,7 +39,7 @@ grid.Add("TOPQ1_schan_noAllHad_PowPy8").datasets = [
     ]
 
 grid.Add("TOPQ1_tZ_noAllHad_PowPy8").datasets = [
-    'mc16_13TeV.410560.MadGraphPythia8EvtGen_A14_tZ_4fl_tchan_noAllHad.deriv.DAOD_TOPQ1.e5803_s3126_r10201_p3629',
+    'mc16_13TeV.410560.MadGraphPythia8EvtGen_A14_tZ_4fl_tchan_noAllHad.deriv.DAOD_TOPQ1.e5803_s3126_r10201_p3832',
     ]
 
 grid.Add("TOPQ1_tZ_trilepton_PowPy8").datasets = [

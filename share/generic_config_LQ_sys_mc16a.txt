@@ -77,13 +77,13 @@ OverlapRemovalLeptonDef Tight
 IsAFII False
 
 #NEvents 1000000
-NEvents 1000
+#NEvents 1000
 #Systematics Nominal
 #TruthBlockInfo True
 
-# Systematics All
-# DynamicKeys DoSystematics
-# DoSystematics True
+Systematics All
+DynamicKeys DoSystematics
+DoSystematics True
 
 SELECTION triggers
 #GRL

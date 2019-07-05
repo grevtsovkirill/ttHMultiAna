@@ -20,7 +20,7 @@
 #include <memory>
 
 #define LEPTON_ARR_SIZE 4
-#define TAU_ARR_SIZE 3
+#define TAU_ARR_SIZE 2
 #define MAXSYST 150
 
 class ttHMultileptonLooseEventSaver;
