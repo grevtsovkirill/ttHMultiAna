@@ -1290,6 +1290,11 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<int>("ConeTruthLabelID"); }, *systematicTree, "m_jet_flavor_truth_label");
     Wrap2(jetvec, [](const xAOD::Jet& jet) { return jet.getAttribute<int>("PartonTruthLabelID"); }, *systematicTree, "m_jet_flavor_truth_label_ghost");
 
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float>>(xAOD::JetAttribute::TrackWidthPt1000);
+        return (float)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_TrackWidthPt1000");
+    Wrap2(jetvec, [&](const xAOD::Jet& jet) { auto tmp = jet.getAttribute<std::vector<float>>(xAOD::JetAttribute::TrackWidthPt500);
+        return (float)   (tmp.size() ? tmp[m_pv->index()] : 0);  }, *systematicTree, "m_jet_TrackWidthPt500");
+
     //////// NOMINAL ONLY
     if(!m_doSystematics) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0); return (float) (btagging && btagging->MVx_discriminant("MV2c00", rv) ? rv : 0.); }, *systematicTree, "m_jet_flavor_weight_MV2c00");
