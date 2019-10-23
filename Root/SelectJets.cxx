@@ -19,11 +19,9 @@
 
 SelectJets::SelectJets(std::string params,std::shared_ptr<top::TopConfig> config):
   m_event(0),
-  m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
   m_config(config),
   m_isRemote(false)
 {
-  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
    if ( asg::ToolStore::contains<ttHMLAsgHelper>("ttHMLAsgHelper") ) {
      m_asgHelper = asg::ToolStore::get<ttHMLAsgHelper>("ttHMLAsgHelper");
      m_isRemote=true; 
@@ -56,9 +54,6 @@ bool SelectJets::apply(const top::Event & event) const{
 
   for (const auto jetItr : event.m_jets) {
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(1);
-    if (!m_jetCleaningToolLooseBad->keep(*jetItr)) {
-      continue;
-    }
     event.m_ttreeIndex == 0 && m_jetCutflow->Fill(2);
     if (jetItr->pt() < 25e3) {
       continue;

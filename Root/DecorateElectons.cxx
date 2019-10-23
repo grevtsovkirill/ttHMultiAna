@@ -34,7 +34,8 @@ DecorateElectrons::DecorateElectrons(std::string params,std::shared_ptr<top::Top
   m_isRemote(false)
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-    auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
+    auto isolation_WPs = {"FCLoose","FCTight"};
+    //    auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
     for (auto wp : isolation_WPs) {
       top::check( iso_1.addElectronWP(wp), "Error adding electron isolation WP" );
     }
@@ -101,7 +102,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
     for (auto elItr : event.m_electrons) {
       auto isomap = iso_1.accept(*elItr);
       int idx = 0;
-        for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose","Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose","Iso_FixedCutTight"}) {
+        for (auto wp : {"Iso_FCLoose","Iso_FCTight"}) {
+	  //        for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose","Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose","Iso_FixedCutTight"}) {
           elItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
         }
 

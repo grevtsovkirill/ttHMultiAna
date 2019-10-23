@@ -23,7 +23,8 @@ DecorateMuons::DecorateMuons(std::string params,std::shared_ptr<top::TopConfig> 
   m_isRemote(false) 
 {
     top::check( iso_1.initialize(),"IsolationTool fails to initialize");
-    auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
+    //    auto isolation_WPs = {"LooseTrackOnly","Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose","FixedCutTight"};
+    auto isolation_WPs = {"FCLoose","FCTight"};
     for (auto wp : isolation_WPs) {
       top::check( iso_1.addMuonWP(wp), "Error adding muon isolation WP" );
     }
@@ -74,7 +75,8 @@ bool DecorateMuons::apply(const top::Event & event) const{
     for (auto muItr : event.m_muons) {
       auto isomap = iso_1.accept(*muItr);
       int idx = 0;
-        for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose","Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose","Iso_FixedCutTight"}) {
+      //        for (auto wp : {"Iso_LooseTrackOnly", "Iso_Loose", "Iso_Gradient", "Iso_GradientLoose","Iso_FixedCutTightTrackOnly","Iso_FixedCutLoose","Iso_FixedCutTight"}) {
+        for (auto wp : {"Iso_FCLoose","Iso_FCTight"}) {
           muItr->auxdecor<short>(wp) = isomap.getCutResult(idx++);
         }
 

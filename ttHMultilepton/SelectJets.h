@@ -26,7 +26,6 @@ class SelectJets:public top::EventSelectorBase {
   std::string name() const override;
   ttHMLAsgHelper* m_asgHelper;
  private:
-  ToolHandle<IJetSelector>               m_jetCleaningToolLooseBad;
   bool m_doSFSystematics;
   bool m_isRemote;
   std::shared_ptr<top::TopConfig> m_config;

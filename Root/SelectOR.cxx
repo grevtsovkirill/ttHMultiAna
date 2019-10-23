@@ -211,19 +211,19 @@ bool SelectOR::apply(const top::Event & event) const{
 	break;
       }
     }
-    //if a tau and a jet are within 0.3 of each other: remove the jet 
-    if (tauItr->auxdataConst<char>("ttHpassOVR")) {
-      for (const auto jetItr : *goodJet) {
-    // don't need additional protection here...
-	if (p4.DeltaR(jetItr->p4()) < 0.3) {
-	  if(!jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))
-	    jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
-	  else if(!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose))
-	    tauItr->auxdecor<char>("ttHpassOVR") = 0;
-	  else jetItr->auxdecor<char>("ttHpassTauOVR") = 0; 
-	}
-      }
-    }
+    // //if a tau and a jet are within 0.3 of each other: remove the jet 
+    // if (tauItr->auxdataConst<char>("ttHpassOVR")) {
+    //   for (const auto jetItr : *goodJet) {
+    // // don't need additional protection here...
+    // 	if (p4.DeltaR(jetItr->p4()) < 0.3) {
+    // 	  if(!jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))
+    // 	    jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
+    // 	  else if(!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose))
+    // 	    tauItr->auxdecor<char>("ttHpassOVR") = 0;
+    // 	  else jetItr->auxdecor<char>("ttHpassTauOVR") = 0; 
+    // 	}
+    //   }
+    // }
   }
   event.m_ttreeIndex == 0 && m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   event.m_ttreeIndex == 0 && m_jetCutflow->Fill(8, CountPassOR(*goodJet));

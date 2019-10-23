@@ -46,7 +46,6 @@ TH1I* m_tauCutflow;
     m_sfRetriever(nullptr),
     m_trigDecTool("Trig::TrigDecisionTool"),
     m_purwtool("CP::PileupReweightingTool"),
-    m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
 //    m_electronToolsFactory(0),
     //m_muonToolsHandles("MuonToolsHandles"),
 //    m_muonToolsFactory(0),
@@ -202,7 +201,6 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
 		"Failed to open AMI X-section file");
   }
   std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
-  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
 
 //Muon Tools
@@ -210,7 +208,8 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
 
-  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
+  auto isolation_WPs={"FCTight","FCLoose"};
+  //  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
   top::check( m_purwtool.retrieve() , "Failed to retrieve PileupReweightingTool" );
   //  top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
 

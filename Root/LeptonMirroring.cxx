@@ -43,13 +43,13 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &isMedium, "lep_isMedium_", index);
   CreateBranch(tree, &isLoose,  "lep_isLoose_", index);
   // isolation WPs
-  CreateBranch(tree, &isolationLooseTrackOnly,         "lep_isolationLooseTrackOnly_", index);
-  CreateBranch(tree, &isolationLoose,                  "lep_isolationLoose_", index);
-  CreateBranch(tree, &isolationGradient,               "lep_isolationGradient_", index);
-  CreateBranch(tree, &isolationGradientLoose,          "lep_isolationGradientLoose_", index);
-  CreateBranch(tree, &isolationFixedCutTight,          "lep_isolationFixedCutTight_", index);
-  CreateBranch(tree, &isolationFixedCutTightTrackOnly, "lep_isolationFixedCutTightTrackOnly_", index);
-  CreateBranch(tree, &isolationFixedCutLoose,          "lep_isolationFixedCutLoose_", index);
+  // CreateBranch(tree, &isolationLooseTrackOnly,         "lep_isolationLooseTrackOnly_", index);
+  // CreateBranch(tree, &isolationLoose,                  "lep_isolationLoose_", index);
+  // CreateBranch(tree, &isolationGradient,               "lep_isolationGradient_", index);
+  // CreateBranch(tree, &isolationGradientLoose,          "lep_isolationGradientLoose_", index);
+  CreateBranch(tree, &isolationFCTight,          "lep_isolationFCTight_", index);
+  // CreateBranch(tree, &isolationFixedCutTightTrackOnly, "lep_isolationFixedCutTightTrackOnly_", index);
+  CreateBranch(tree, &isolationFCLoose,          "lep_isolationFCLoose_", index);
   // trigger matching
   CreateBranch(tree, &isTrigMatch, "lep_isTrigMatch_", index);
   CreateBranch(tree, &isTrigMatchDLT, "lep_isTrigMatchDLT_", index);

@@ -43,12 +43,13 @@ void CopyIParticle(const xAOD::IParticle& part, ttHML::Lepton& lep) {
 }
 
 void CopyIso(const xAOD::IParticle& part, ttHML::Lepton& lep) {
-  lep.isolationLooseTrackOnly = part.auxdataConst<short>("Iso_LooseTrackOnly");
-  lep.isolationLoose = part.auxdataConst<short>("Iso_Loose");
-  lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
-  lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
-  lep.isolationFixedCutTightTrackOnly = part.auxdataConst<short>("Iso_FixedCutTightTrackOnly");
-  lep.isolationFixedCutLoose = part.auxdataConst<short>("Iso_FixedCutLoose");
+  // lep.isolationLooseTrackOnly = part.auxdataConst<short>("Iso_LooseTrackOnly");
+  // lep.isolationLoose = part.auxdataConst<short>("Iso_Loose");
+  // lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
+  // lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
+  // lep.isolationFixedCutTightTrackOnly = part.auxdataConst<short>("Iso_FixedCutTightTrackOnly");
+  lep.isolationFCLoose = part.auxdataConst<short>("Iso_FCLoose");
+  lep.isolationFCTight = part.auxdataConst<short>("Iso_FCTight");
 
 }
 
@@ -332,7 +333,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   // the BLayer cuts are applied by AnalysisTop
   lep.isMediumLH = el.auxdataConst<int>("passLHMedium");
   lep.isTightLH  = el.auxdataConst<int>("passLHTight");
-  lep.isolationFixedCutTight = el.auxdataConst<short>("Iso_FixedCutTight");
+  lep.isolationFCTight = el.auxdataConst<short>("Iso_FCTight");
 
   lep.d0 = el.trackParticle()->d0();
   lep.z0 = el.trackParticle()->z0();

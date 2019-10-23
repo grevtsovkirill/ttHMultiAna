@@ -99,7 +99,7 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
       if (totalLeptons == 0 || (El_pT_0<25e3&&Mu_pT_0<25e3))
 	return false;
     } else if(m_params == "2LEPTONS") {
-      if (totalLeptons + totalTaus < 2)
+      if (totalLeptons< 2)
 	return false;
     } else if(m_params == "BJET_MV2C10_85") {
       if (totalBJets_85==0)

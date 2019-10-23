@@ -93,13 +93,13 @@ namespace ttHML {
     char    isLoose;
     char    isHSG3Clear;
     char    isHSG3IsoClear;
-    int    isolationLooseTrackOnly;
-    int    isolationLoose;
-    int    isolationGradient;
-    int    isolationGradientLoose;
-    int    isolationFixedCutTight;
-    int    isolationFixedCutTightTrackOnly;
-    int    isolationFixedCutLoose;
+    /* int    isolationLooseTrackOnly; */
+    /* int    isolationLoose; */
+    /* int    isolationGradient; */
+    /* int    isolationGradientLoose; */
+    int    isolationFCTight;
+    /* int    isolationFixedCutTightTrackOnly; */
+    int    isolationFCLoose;
 
     char    isTrigMatch;
     char    isTrigMatchDLT;
