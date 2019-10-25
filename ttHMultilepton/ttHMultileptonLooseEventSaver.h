@@ -408,7 +408,7 @@ std::vector< asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>> m_trigGlob
   // names tau SFs
     std::map<top::topSFSyst, std::string> m_tau_sf_names{
       { top::topSFSyst::nominal, "nominal" },
-      { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },
+    /*  { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_UP,   "TAU_SF_ELEOLR_TOTAL_UP"  },
       { top::topSFSyst::TAU_SF_ELEOLR_TOTAL_DOWN, "TAU_SF_ELEOLR_TOTAL_DOWN"},
       { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_DOWN,   "TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_DOWN"  },
       { top::topSFSyst::TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_UP, "TAU_SF_TRUEELECTRON_ELEOLR_HIGHMU_UP"},
@@ -445,7 +445,7 @@ std::vector< asg::AnaToolHandle<ITrigGlobalEfficiencyCorrectionTool>> m_trigGlob
       { top::topSFSyst::TAU_SF_RECO_TOTAL_UP,     "TAU_SF_RECO_TOTAL_UP"    },
       { top::topSFSyst::TAU_SF_RECO_TOTAL_DOWN,   "TAU_SF_RECO_TOTAL_DOWN"  },
       { top::topSFSyst::TAU_SF_RECO_HIGHPT_UP,    "TAU_SF_RECO_HIGHPT_UP"   },
-      { top::topSFSyst::TAU_SF_RECO_HIGHPT_DOWN,  "TAU_SF_RECO_HIGHPT_DOWN" },
+      { top::topSFSyst::TAU_SF_RECO_HIGHPT_DOWN,  "TAU_SF_RECO_HIGHPT_DOWN" },*/
         };
 
   TH1F * h_decayMode;
