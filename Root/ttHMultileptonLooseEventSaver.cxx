@@ -200,9 +200,12 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
   top::check( muonSelection.setProperty( "MaxEta", (double)m_config->muonEtacut() ), "muonSelection tool could not set max eta");
   top::check( muonSelection.initialize(),"muonSelection tool fails to initialize");
 
-  auto isolation_WPs={"LooseTrackOnly", "Loose", "Gradient", "GradientLoose","FixedCutTightTrackOnly","FixedCutLoose"};
+  auto isolation_WPs={"FCTight", "Loose", "Gradient", "GradientLoose","TightTrackOnly","FCLoose"};
+  auto isolation_WPs_mu={"FCTight", "FixedCutPflowLoose", "FCTightTrackOnly_FixedRad", "FCLoose_FixedRad","FixedCutPflowTight","FCLoose"};
+//        for (auto wp : {"Iso_FCTight", "FixedCutPflowLoose", "Iso_FCTightTrackOnly_FixedRad", "Iso_FCLoose_FixedRad","Iso_FixedCutPflowTight","Iso_FCLoose"}) {
   top::check( m_purwtool.retrieve() , "Failed to retrieve PileupReweightingTool" );
  // top::check( m_trigDecTool.retrieve() , "Failed to retrieve TrigDecisionTool" );
+//Gradient, FCLoose, FCTight, FCHighPtCaloOnly, (EXPERIMENTAL: HighPtCaloOnly, Loose, Tight, TightTrackOnly), (DANGEROUS: PflowTight, PflowLoose), None
 
   //prepare btag eigen vectors
   if (m_isMC) {
@@ -660,18 +663,20 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       for (auto wp : isolation_WPs) {
         std::string isoname("Iso_"); isoname += wp;
         std::string eleisoname("electron_isolation"); eleisoname += wp;
-        std::string muisoname("muon_isolation"); muisoname += wp;
+      //  std::string muisoname("muon_isolation"); muisoname += wp;
         Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>(isoname); }, *systematicTree, eleisoname.c_str());
-        Wrap2(muvec,  [=](const xAOD::Muon& mu) {      return (char)  mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
+    //    Wrap2(muvec,  [=](const xAOD::Muon& mu) {      return (char)  mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
       }
     }
 
     /// special case for FixedCutTight (el only)
+  for (auto wp : isolation_WPs_mu) {
     if(!m_doSystematics) {
-      Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<short>("Iso_FixedCutTight"); },
-        *systematicTree, "electron_isolationFixedCutTight");
+        std::string isoname("Iso_"); isoname += wp;
+        std::string muisoname("muon_isolation"); muisoname += wp;
+        Wrap2(muvec,  [=](const xAOD::Muon& mu) {      return (char)  mu.auxdataConst<short>(isoname); }, *systematicTree, muisoname.c_str());
     }
-
+  }
     //debug inconsistency between our Iso and Top Iso
     //Wrap2(elevec, [=](const xAOD::Electron& ele) { return (char) ele.auxdataConst<char>("AnalysisTop_Isol_Loose"); }, *systematicTree, "electron_isolationLoose_Top");
     //Wrap2(elevec, [=](const xAOD::Muon& mu) { return (char) mu.auxdataConst<char>("AnalysisTop_Isol_Loose"); }, *systematicTree, "muon_isolationLoose_Top");

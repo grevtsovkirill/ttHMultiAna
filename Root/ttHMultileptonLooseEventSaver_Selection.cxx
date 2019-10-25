@@ -41,14 +41,15 @@ void CopyIParticle(const xAOD::IParticle& part, ttHML::Lepton& lep) {
   lep.Phi = part.phi();
   lep.Index = part.index();
 }
-
+//auto isolation_WPs={"FCTight", "Loose", "Gradient", "GradientLoose","TightTrackOnly","FCLoose"};
 void CopyIso(const xAOD::IParticle& part, ttHML::Lepton& lep) {
-  lep.isolationLooseTrackOnly = part.auxdataConst<short>("Iso_LooseTrackOnly");
-  lep.isolationLoose = part.auxdataConst<short>("Iso_Loose");
-  lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
-  lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
-  lep.isolationFixedCutTightTrackOnly = part.auxdataConst<short>("Iso_FixedCutTightTrackOnly");
-  lep.isolationFixedCutLoose = part.auxdataConst<short>("Iso_FixedCutLoose");
+
+  if (part.isAvailable<short>("Iso_FCTight"))lep.isolationFCTight= part.auxdataConst<short>("Iso_FCTight");
+    if (part.isAvailable<short>("Iso_Loose")) lep.isolationLoose = part.auxdataConst<short>("Iso_Loose");
+  if (part.isAvailable<short>("Iso_Gradient")) lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
+  if (part.isAvailable<short>("Iso_GradientLoose")) lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
+  if (part.isAvailable<short>("Iso_TightTrackOnly")) lep.isolationTightTrackOnly = part.auxdataConst<short>("Iso_TightTrackOnly");
+//  if (part.isAvailable<short>("Iso_Loose")) lep.isolationFCLoose = part.auxdataConst<short>("Iso_FCLoose");
 
 }
 
