@@ -15,10 +15,6 @@ namespace ttHML {
     float charge;
     float e;
     float width;
-    double BDTJetScore;
-    int JetBDTSigLoose;
-    int JetBDTSigMedium;
-    int JetBDTSigTight;
     double RNNJetScore;
     int JetRNNSigVeryLoose;
     int JetRNNSigLoose;
@@ -33,10 +29,9 @@ namespace ttHML {
 
 	float MV2c10;
 	float BDTEleScoreSigTrans;
-	float BDTJetScoreSigTrans;
 	float RNNJetScoreSigTrans;
     
-	short   promptTauInput_TrackJetNTrack;
+    //	short   promptTauInput_TrackJetNTrack;
     float   promptTauInput_JetF;
     float   promptTauInput_DRlj;
     float   promptTauInput_LepJetPtFrac;
@@ -50,7 +45,9 @@ namespace ttHML {
   float promptTauVeto;
   float promptTauIso;
     int passEleOLR, passEleBDT, passMuonOLR;
-    int truthOrigin, truthType, truthJetFlavour;
+    int truthOrigin, truthType, truthJetFlavour, truthNumCharge;
+    float truthPt;
+    double truthPtVis;
 
     bool operator==(const Tau &other) {
       // compare eta, phi, bleurgh

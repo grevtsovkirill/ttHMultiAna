@@ -75,7 +75,9 @@ bool SelectMuons::apply(const top::Event & event) const{
       continue;
     }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(5);
-    //old iso cut, maybe no longer necessary?
+    if (!muItr->auxdecor<short>("Iso_FCLoose")){
+      continue;
+    }
     event.m_ttreeIndex == 0 && m_muCutflow->Fill(6);
     tthevt-> selected_muons->push_back(muItr);
   }

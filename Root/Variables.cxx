@@ -93,9 +93,6 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(nJets_OR_DL1_77, "nJets_OR_DL1_77");
   tree->makeOutputVariable(nJets_OR_DL1_70, "nJets_OR_DL1_70");
   tree->makeOutputVariable(nTaus_OR_Pt25, "nTaus_OR_Pt25");
-  tree->makeOutputVariable(nTaus_OR_Loose, "nTaus_OR_Loose");
-  tree->makeOutputVariable(nTaus_OR_Medium, "nTaus_OR_Medium");
-  tree->makeOutputVariable(nTaus_OR_Tight, "nTaus_OR_Tight");
   tree->makeOutputVariable(nTaus_OR_RNN_VeryLoose, "nTaus_OR_RNN_VeryLoose");
   tree->makeOutputVariable(nTaus_OR_RNN_Loose, "nTaus_OR_RNN_Loose");
   tree->makeOutputVariable(nTaus_OR_RNN_Medium, "nTaus_OR_RNN_Medium");

@@ -342,8 +342,9 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     auto t = m_muonToolsFactory.emplace(m_muonToolsFactory.end());
     ASG_SET_ANA_TOOL_TYPE(*t, CP::MuonTriggerScaleFactors);
     t->setName("MuonTrigEff_"+std::to_string(++nTools)+systvar.second);
-    t->setProperty("CalibrationRelease", "180516_HighEtaUpdate").ignore(); 
-    t->setProperty("useRel207",true).ignore();
+    t->setProperty("CalibrationRelease", "190530_Spring_r21").ignore(); 
+    //    t->setProperty("CalibrationRelease", "180516_HighEtaUpdate").ignore(); 
+    //    t->setProperty("useRel207",true).ignore();
     t->setProperty("MuonQuality", "Medium").ignore(); 
     t->setProperty("AllowZeroSF",true).ignore();
     top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:muonToolsFactory failed to initialize!");
@@ -566,11 +567,11 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 	    return event.m_info->isAvailable<int>("TTHML_NTruthJetSherpa") ? event.m_info->auxdataConst<int>("TTHML_NTruthJetSherpa") : 0.0;
 	  }, *systematicTree, "nTruthJets_SherpaRwght");
 
-    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
-    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
-    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->phi()            : 0.0; }, *systematicTree, "higgs_phi");
-    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->e()              : 0.0; }, *systematicTree, "higgs_E");
-    WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->p4().Rapidity()  : 0.0; }, *systematicTree, "higgs_rapidity");
+    // WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->pt()             : 0.0; }, *systematicTree, "higgs_pt");
+    // WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->eta()            : 0.0; }, *systematicTree, "higgs_eta");
+    // WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->phi()            : 0.0; }, *systematicTree, "higgs_phi");
+    // WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->e()              : 0.0; }, *systematicTree, "higgs_E");
+    // WrapS(scalarvec, [&](const top::Event&){ return m_higgs ? m_higgs->p4().Rapidity()  : 0.0; }, *systematicTree, "higgs_rapidity");
 
     WrapS(scalarvec, [&](const top::Event&){ return m_top ? m_top->pt()             : 0.0; }, *systematicTree, "top_pt");
     WrapS(scalarvec, [&](const top::Event&){ return m_top ? m_top->eta()            : 0.0; }, *systematicTree, "top_eta");
@@ -618,7 +619,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 //    systematicTree->makeOutputVariable(m_DLF_Classification, "DLF_Classification");
     //systematicTree->makeOutputVariable(m_MLF_Classification, "MLF_Classification");
 
-    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
+    //    systematicTree->makeOutputVariable(m_higgsMode,      "higgsDecayMode");
     systematicTree->makeOutputVariable(m_LQMode,         "LQDecayMode");
     systematicTree->makeOutputVariable(m_LQbarMode,         "LQbarDecayMode");
 
@@ -886,7 +887,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     }
 
 
-	std::vector<std::string> short_vars = {"PromptLeptonInput_sv1_jf_ntrkv", "PromptLeptonInput_TrackJetNTrack"};
+	std::vector<std::string> short_vars = {"PromptLeptonInput_sv1_jf_ntrkv"};
+	//	std::vector<std::string> short_vars = {"PromptLeptonInput_sv1_jf_ntrkv", "PromptLeptonInput_TrackJetNTrack"};
 	for(std::string var: short_vars) {
 		Wrap2(elevec, [=](const xAOD::Electron& ele) {
         short m_el_nonprompt_short = -99;
@@ -1240,7 +1242,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
  */   }
 
 
-    std::vector<std::string> short_mu_vars = {"PromptLeptonInput_sv1_jf_ntrkv", "PromptLeptonInput_TrackJetNTrack"};
+    //    std::vector<std::string> short_mu_vars = {"PromptLeptonInput_sv1_jf_ntrkv", "PromptLeptonInput_TrackJetNTrack"};
+    std::vector<std::string> short_mu_vars = {"PromptLeptonInput_sv1_jf_ntrkv"};
     for(std::string var: short_mu_vars) {
         Wrap2(muvec, [=](const xAOD::Muon& mu) {
         short m_mu_nonprompt_short = -99;
@@ -1321,8 +1324,6 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
         this_jvt = jet.auxdataConst<float>("AnalysisTop_JVT"); return this_jvt;}, *systematicTree, "m_jet_jvt");
       Wrap2(jetvec, [](const xAOD::Jet& jet) { int this_jvt = -1; if(jet.isAvailable<char>("passJVT")) 
         this_jvt = jet.auxdataConst<char>("passJVT"); return this_jvt;}, *systematicTree, "m_jet_passjvt");
-      //Jet cleaning flag
-      Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
       //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); },
       //  *systematicTree, "m_jet_flavor_weight_MV1");
     }
@@ -1368,11 +1369,6 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
     // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium); },  *systematicTree, std::string(tauprefix+"JetBDTSigMedium").c_str());
-    Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight); },   *systematicTree, std::string(tauprefix+"JetBDTSigTight").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScore); },         *systematicTree, std::string(tauprefix+"RNNJetScore").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"RNNJetScoreSigTrans").c_str());
     Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose); },   *systematicTree, std::string(tauprefix+"JetRNNSigVeryLoose").c_str());
@@ -1457,6 +1453,17 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 	  return tau.auxdata<int>("truthJetFlavour");
 	}, *systematicTree, std::string(tauprefix+"truthJetFlavour").c_str());
 
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<int>("tauTruthNumCharge");
+	}, *systematicTree, std::string(tauprefix+"truthNumCharge").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<float>("tauTruthPt");
+	}, *systematicTree, std::string(tauprefix+"truthPt").c_str());
+
+      Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+	  return tau.auxdata<double>("tauTruthPtVis");
+	}, *systematicTree, std::string(tauprefix+"truthPtVis").c_str());
 
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {
 	  return tau.auxdata<float>("ele_match_lhscore");
@@ -1464,14 +1471,14 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 
     }
 
-    std::vector<std::string> short_tau_vars = {"PromptTauInput_TrackJetNTrack"};
-    for(std::string var: short_tau_vars) {
-        Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
-        short m_tau_nonprompt_short = -99;
-        SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
-        if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_short = AccessorNonPrompt(tau);
-        return (short) m_tau_nonprompt_short; }, *systematicTree, (tauprefix + var).c_str());
-    }
+    // std::vector<std::string> short_tau_vars = {"PromptTauInput_TrackJetNTrack"};
+    // for(std::string var: short_tau_vars) {
+    //     Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+    //     short m_tau_nonprompt_short = -99;
+    //     SG::AuxElement::Accessor<short> AccessorNonPrompt(var);
+    //     if(AccessorNonPrompt.isAvailable(tau)) m_tau_nonprompt_short = AccessorNonPrompt(tau);
+    //     return (short) m_tau_nonprompt_short; }, *systematicTree, (tauprefix + var).c_str());
+    // } 
 
 
     std::vector<std::string> float_tau_vars = {"PromptTauInput_DRlj","PromptTauInput_JetF", "PromptTauInput_LepJetPtFrac",
@@ -1968,8 +1975,8 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
 */
   //MC particle
   if (event.m_truth != nullptr) {
-    m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
-    m_higgs     = truthSelector.GetHiggs(event.m_truth);
+    // m_higgsMode = truthSelector.GetHiggsDecayMode(event.m_truth);
+    // m_higgs     = truthSelector.GetHiggs(event.m_truth);
     m_top       = truthSelector.GetTop(event.m_truth);
     m_antitop   = truthSelector.GetAntiTop(event.m_truth);
     m_LQMode    = truthSelector.GetLQDecayMode(event.m_truth,0);

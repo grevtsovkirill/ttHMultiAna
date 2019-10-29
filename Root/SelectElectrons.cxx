@@ -88,7 +88,9 @@ bool SelectElectrons::apply(const top::Event & event) const{
       continue;
     }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(6);
-    //old iso cut, maybe no longer necessary?
+    if(!elItr->auxdecor<short>("Iso_FCLoose")){
+      continue;
+    }
     event.m_ttreeIndex == 0 && m_eleCutflow->Fill(7);
     tthevt->selected_electrons->push_back(elItr);
   }

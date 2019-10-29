@@ -457,8 +457,8 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   static SG::AuxElement::Accessor<short> promptLeptonInput_sv1_jf_ntrkv("PromptLeptonInput_sv1_jf_ntrkv");
   lep.promptLeptonInput_sv1_jf_ntrkv = ( promptLeptonInput_sv1_jf_ntrkv.isAvailable(el) ) ? promptLeptonInput_sv1_jf_ntrkv(el) : -99;
 
-  static SG::AuxElement::Accessor<short> promptLeptonInput_TrackJetNTrack("PromptLeptonInput_TrackJetNTrack");
-  lep.promptLeptonInput_TrackJetNTrack = ( promptLeptonInput_TrackJetNTrack.isAvailable(el) ) ? promptLeptonInput_TrackJetNTrack(el) : -99;
+  // static SG::AuxElement::Accessor<short> promptLeptonInput_TrackJetNTrack("PromptLeptonInput_TrackJetNTrack");
+  // lep.promptLeptonInput_TrackJetNTrack = ( promptLeptonInput_TrackJetNTrack.isAvailable(el) ) ? promptLeptonInput_TrackJetNTrack(el) : -99;
 
   static SG::AuxElement::Accessor<float> promptLeptonInput_DL1mu("PromptLeptonInput_DL1mu");
   lep.promptLeptonInput_DL1mu = ( promptLeptonInput_DL1mu.isAvailable(el) ) ? promptLeptonInput_DL1mu(el) : -99;
@@ -939,9 +939,9 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   static SG::AuxElement::Accessor<short> promptLeptonInput_sv1_jf_ntrkv("PromptLeptonInput_sv1_jf_ntrkv");
   lep.promptLeptonInput_sv1_jf_ntrkv = ( promptLeptonInput_sv1_jf_ntrkv.isAvailable(mu) ) ? promptLeptonInput_sv1_jf_ntrkv(mu) : -99;
 
-  static SG::AuxElement::Accessor<short> promptLeptonInput_TrackJetNTrack("PromptLeptonInput_TrackJetNTrack");
-  lep.promptLeptonInput_TrackJetNTrack = ( promptLeptonInput_TrackJetNTrack.isAvailable(mu) ) ? promptLeptonInput_TrackJetNTrack(mu) : -99;
-
+  // static SG::AuxElement::Accessor<short> promptLeptonInput_TrackJetNTrack("PromptLeptonInput_TrackJetNTrack");
+  // lep.promptLeptonInput_TrackJetNTrack = ( promptLeptonInput_TrackJetNTrack.isAvailable(mu) ) ? promptLeptonInput_TrackJetNTrack(mu) : -99;
+  
   static SG::AuxElement::Accessor<float> promptLeptonInput_DL1mu("PromptLeptonInput_DL1mu");
   lep.promptLeptonInput_DL1mu = ( promptLeptonInput_DL1mu.isAvailable(mu) ) ? promptLeptonInput_DL1mu(mu) : -99;
 
@@ -1060,10 +1060,6 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.phi             = xTau.phi();
   MLTau.charge          = xTau.charge();
   MLTau.e               = xTau.e();
-  MLTau.BDTJetScore     = xTau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore);
-  MLTau.JetBDTSigLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose);
-  MLTau.JetBDTSigMedium = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium);
-  MLTau.JetBDTSigTight  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight);
   MLTau.RNNJetScore     = xTau.discriminant(xAOD::TauJetParameters::TauID::RNNJetScore);
   MLTau.JetRNNSigVeryLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose);
   MLTau.JetRNNSigLoose  = xTau.isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose);
@@ -1079,13 +1075,12 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   MLTau.truthOrigin     = xTau.auxdata<int>("tauTruthOrigin");
   MLTau.truthType       = xTau.auxdata<int>("tauTruthType");
   MLTau.truthJetFlavour = xTau.auxdata<int>("truthJetFlavour");
-  
+  MLTau.truthNumCharge  = xTau.auxdata<int>("tauTruthNumCharge");
+  MLTau.truthPt         = xTau.auxdata<float>("tauTruthPt");
+  MLTau.truthPtVis      = xTau.auxdata<double>("tauTruthPtVis");
 
   static SG::AuxElement::Accessor<float> BDTEleScoreSigTrans("BDTEleScoreSigTrans");
   MLTau.BDTEleScoreSigTrans = ( BDTEleScoreSigTrans.isAvailable(xTau) ) ? BDTEleScoreSigTrans(xTau) : -2;
-
-  static SG::AuxElement::Accessor<float> BDTJetScoreSigTrans("BDTJetScoreSigTrans");
-  MLTau.BDTJetScoreSigTrans = ( BDTJetScoreSigTrans.isAvailable(xTau) ) ? BDTJetScoreSigTrans(xTau) : -2;
 
   static SG::AuxElement::Accessor<float> RNNJetScoreSigTrans("RNNJetScoreSigTrans");
   MLTau.RNNJetScoreSigTrans = ( RNNJetScoreSigTrans.isAvailable(xTau) ) ? RNNJetScoreSigTrans(xTau) : -2;
@@ -1096,8 +1091,8 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> tau_width("width");
   MLTau.width = ( tau_width.isAvailable(xTau) ) ? tau_width(xTau) : -2;
 
-  static SG::AuxElement::Accessor<short> promptTauInput_TrackJetNTrack("PromptTauInput_TrackJetNTrack");
-  MLTau.promptTauInput_TrackJetNTrack = ( promptTauInput_TrackJetNTrack.isAvailable(xTau) ) ? promptTauInput_TrackJetNTrack(xTau) : -99;
+  // static SG::AuxElement::Accessor<short> promptTauInput_TrackJetNTrack("PromptTauInput_TrackJetNTrack");
+  // MLTau.promptTauInput_TrackJetNTrack = ( promptTauInput_TrackJetNTrack.isAvailable(xTau) ) ? promptTauInput_TrackJetNTrack(xTau) : -99;
 
   static SG::AuxElement::Accessor<float> promptTauInput_DRlj("PromptTauInput_DRlj");
   MLTau.promptTauInput_DRlj = ( promptTauInput_DRlj.isAvailable(xTau) ) ? promptTauInput_DRlj(xTau) : -99;
@@ -1138,7 +1133,7 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // AnalysisTop tight/loose and our tight/loose are reversed
     MLTau.SFTight[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar,  true) : 1.0;
-    MLTau.SFLoose[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar, false)               : 1.0;
+    MLTau.SFLoose[ivar] = m_isMC ? m_sfRetriever->tauSF(xTau, ivar, false) : 1.0;
   }
 }
 
@@ -1154,12 +1149,6 @@ ttHMultileptonLooseEventSaver::CopyTaus(const xAOD::TauJetContainer& Taus) {
     CopyTau( *(Taus.at(i)) , m_taus[i] );
   }
   for ( const auto tauItr : Taus) {
-    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose)) 
-      m_ttHEvent->nTaus_OR_Loose++;
-    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigMedium)) 
-      m_ttHEvent->nTaus_OR_Medium++;
-    if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigTight)) 
-      m_ttHEvent->nTaus_OR_Tight++;
     if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigVeryLoose)) 
       m_ttHEvent->nTaus_OR_RNN_VeryLoose++;
     if(tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose)) 

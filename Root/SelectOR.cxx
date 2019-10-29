@@ -92,7 +92,7 @@ bool SelectOR::apply(const top::Event & event) const{
   for (const auto elItr : *goodEl) {
      auto p4 = elItr->p4();
     for (const auto muItr : *goodMu) {
-     if (p4.DeltaR(muItr->p4()) < 0.1) {
+     if (p4.DeltaR(muItr->p4()) < 0.2) {
   	elItr->auxdecor<char>("ttHpassOVR") = 0;
   	break;
       }
@@ -101,30 +101,30 @@ bool SelectOR::apply(const top::Event & event) const{
   event.m_ttreeIndex == 0 && m_eleCutflow->Fill(8, CountPassOR(*goodEl));
 
   //If two electron candidates within 0.1 of each other: remove the one with lower pt 
-  for (size_t i1 = 0; i1 < goodEl->size(); ++i1) {
-    auto elItr = goodEl->at(i1);
-    if (! elItr->auxdataConst<char>("ttHpassOVR")) {
-      continue;
-    }
-    auto p4 = elItr->p4();
-    for (size_t i2 = i1+1; i2 < goodEl->size(); ++i2) {
-    auto elItr2 = goodEl->at(i2);
-      if (! elItr2->auxdataConst<char>("ttHpassOVR")) {
-  	continue;
-      }
-      if (p4.DeltaR(elItr2->p4()) < 0.1) {
-  	if (elItr2->pt() < elItr->pt()) {
-  	  elItr2->auxdecor<char>("ttHpassOVR") = 0;
-  	} else {
-  	  elItr->auxdecor<char>("ttHpassOVR") = 0;
-  	}
-      }
-    }
-  }
-  // now done later
-  event.m_ttreeIndex == 0 && m_eleCutflow->Fill(9, CountPassOR(*goodEl));
+  // for (size_t i1 = 0; i1 < goodEl->size(); ++i1) {
+  //   auto elItr = goodEl->at(i1);
+  //   if (! elItr->auxdataConst<char>("ttHpassOVR")) {
+  //     continue;
+  //   }
+  //   auto p4 = elItr->p4();
+  //   for (size_t i2 = i1+1; i2 < goodEl->size(); ++i2) {
+  //   auto elItr2 = goodEl->at(i2);
+  //     if (! elItr2->auxdataConst<char>("ttHpassOVR")) {
+  // 	continue;
+  //     }
+  //     if (p4.DeltaR(elItr2->p4()) < 0.1) {
+  // 	if (elItr2->pt() < elItr->pt()) {
+  // 	  elItr2->auxdecor<char>("ttHpassOVR") = 0;
+  // 	} else {
+  // 	  elItr->auxdecor<char>("ttHpassOVR") = 0;
+  // 	}
+  //     }
+  //   }
+  // }
+  // // now done later
+  // event.m_ttreeIndex == 0 && m_eleCutflow->Fill(9, CountPassOR(*goodEl));
 
-  //if an electron and a jet are within 0.3 of each other: remove the jet 
+  //if an electron and a jet are within 0.3 -> 0.2 of each other: remove the jet 
   for (const auto jetItr : *goodJet) {
     auto p4 = jetItr->p4();
     for (const auto elItr : *goodEl) {
@@ -211,19 +211,15 @@ bool SelectOR::apply(const top::Event & event) const{
 	break;
       }
     }
-    // //if a tau and a jet are within 0.3 of each other: remove the jet 
-    // if (tauItr->auxdataConst<char>("ttHpassOVR")) {
-    //   for (const auto jetItr : *goodJet) {
-    // // don't need additional protection here...
-    // 	if (p4.DeltaR(jetItr->p4()) < 0.3) {
-    // 	  if(!jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))
-    // 	    jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
-    // 	  else if(!tauItr->isTau(xAOD::TauJetParameters::IsTauFlag::JetRNNSigLoose))
-    // 	    tauItr->auxdecor<char>("ttHpassOVR") = 0;
-    // 	  else jetItr->auxdecor<char>("ttHpassTauOVR") = 0; 
-    // 	}
-    //   }
-    // }
+    //if a tau and a jet are within 0.3 of each other: remove the jet 
+    if (tauItr->auxdataConst<char>("ttHpassOVR")) {
+      for (const auto jetItr : *goodJet) {
+    // don't need additional protection here...
+    	if (p4.DeltaR(jetItr->p4()) < 0.2) {
+    	    jetItr->auxdecor<char>("ttHpassTauOVR") = 0;
+    	}
+      }
+    }
   }
   event.m_ttreeIndex == 0 && m_tauCutflow->Fill(8, CountPassOR(*goodTau));
   event.m_ttreeIndex == 0 && m_jetCutflow->Fill(8, CountPassOR(*goodJet));
@@ -242,7 +238,7 @@ bool SelectOR::apply(const top::Event & event) const{
   }
   for (const auto jetItr : *goodJet) {
     //jetItr->auxdecor<char>("ttHJetOVRStatus") = jetItr->auxdataConst<char>("ttHpassOVR") + 
-    jetItr->auxdataConst<char>("ttHpassTauOVR");
+    //    jetItr->auxdataConst<char>("ttHpassTauOVR");
     if (jetItr->auxdataConst<char>("ttHpassOVR")) {
      tthevt->selected_OR_jets->push_back(jetItr);
     }

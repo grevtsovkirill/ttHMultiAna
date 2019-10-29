@@ -132,7 +132,7 @@ namespace ttHML {
 //    float   promptLeptonIso_LepJetPtFrac;
 
     short   promptLeptonInput_sv1_jf_ntrkv;
-    short   promptLeptonInput_TrackJetNTrack;
+    //    short   promptLeptonInput_TrackJetNTrack;
     float   promptLeptonInput_DL1mu;
     float   promptLeptonInput_DRlj;
     float   promptLeptonInput_LepJetPtFrac;

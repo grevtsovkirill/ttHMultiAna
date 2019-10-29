@@ -15,10 +15,6 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &phi,             "tau_phi_",              index);
   CreateBranch(tree, &charge,          "tau_charge_",           index);
   CreateBranch(tree, &e,               "tau_E_",                index);
-  CreateBranch(tree, &BDTJetScore,     "tau_BDTJetScore_",      index);
-  CreateBranch(tree, &JetBDTSigLoose,  "tau_JetBDTSigLoose_",   index);
-  CreateBranch(tree, &JetBDTSigMedium, "tau_JetBDTSigMedium_",  index);
-  CreateBranch(tree, &JetBDTSigTight,  "tau_JetBDTSigTight_",   index);
   CreateBranch(tree, &RNNJetScore,     "tau_RNNJetScore_",      index);
   CreateBranch(tree, &JetRNNSigVeryLoose,  "tau_JetRNNSigVeryLoose_",   index);
   CreateBranch(tree, &JetRNNSigLoose,  "tau_JetRNNSigLoose_",   index);
@@ -36,14 +32,18 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &passEleBDT,      "tau_passEleBDT_",       index);
   CreateBranch(tree, &passMuonOLR,     "tau_passMuonOLR_",      index);
   CreateBranch(tree, &BDTEleScoreSigTrans, "tau_BDTEleScoreSigTrans_", index);
-  CreateBranch(tree, &BDTJetScoreSigTrans, "tau_BDTJetScoreSigTrans_", index);
   CreateBranch(tree, &RNNJetScoreSigTrans, "tau_RNNJetScoreSigTrans_", index);
 
   CreateBranch(tree, &truthOrigin,     "tau_truthOrigin_",      index);
   CreateBranch(tree, &truthType,       "tau_truthType_",        index);
   CreateBranch(tree, &truthJetFlavour, "tau_truthJetFlavour_",  index);
+  
+  CreateBranch(tree, &truthPt,       "tau_truthPt_",        index);
+  CreateBranch(tree, &truthPtVis,    "tau_truthPtVisible_", index);   
+  CreateBranch(tree, &truthNumCharge,"tau_truthNumCharge_", index);
 
-  CreateBranch(tree, &promptTauInput_TrackJetNTrack, "tau_promptTauInput_TrackJetNTrack_", index);
+
+  //  CreateBranch(tree, &promptTauInput_TrackJetNTrack, "tau_promptTauInput_TrackJetNTrack_", index);
   CreateBranch(tree, &promptTauInput_JetF, "tau_promptTauInput_JetF_", index);
   CreateBranch(tree, &promptTauInput_DRlj, "tau_promptTauInput_DRlj_", index);
   CreateBranch(tree, &promptTauInput_LepJetPtFrac, "tau_promptTauInput_LepJetPtFrac_", index);

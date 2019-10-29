@@ -62,6 +62,7 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
     int totalTaus = Taus->size();
     int totalCharge = 0;
     int totalBJets_85 = 0;
+    int totalBJets_77 = 0;
     float El_pT_0 = 0.;
     float Mu_pT_0 = 0.;
     Int_t i(0),j(0);
@@ -76,9 +77,10 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
       j++;
     }
     for (const auto JetItr: *Jets)  {
-      //	  if( JetItr->auxdataConst<char>("ttHpassTauOVR") ) {
-      if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
-      //	  }
+      if( JetItr->auxdataConst<char>("ttHpassTauOVR") ) {
+	if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_77"))totalBJets_77++;	
+	if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
+      }
     }
     tthevt->totalLeptons = totalLeptons;
     tthevt->totalTaus = totalTaus;
@@ -99,7 +101,10 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
       if (totalLeptons == 0 || (El_pT_0<25e3&&Mu_pT_0<25e3))
 	return false;
     } else if(m_params == "2LEPTONS") {
-      if (totalLeptons< 2)
+      if (totalLeptons+totalTaus< 2)
+	return false;
+    } else if(m_params == "BJET_MV2C10_77") {
+      if (totalBJets_77==0)
 	return false;
     } else if(m_params == "BJET_MV2C10_85") {
       if (totalBJets_85==0)

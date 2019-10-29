@@ -104,10 +104,13 @@ bool DecorateTaus::apply(const top::Event & event) const{
     
     for (auto tauItr : event.m_tauJets) {
 
-  //truth
-    int isHadronic(0), tauTruthType(0), tauTruthOrigin(0);
-    
-    if(tauItr->isAvailable<char>("IsTruthMatched") && static_cast<int>(tauItr->auxdata<char>("IsTruthMatched")) == 1)
+      //truth
+      int isHadronic(0), tauTruthType(0), tauTruthOrigin(0),tauTruthNumCharge(0);
+      float  tauTruthPt(0.);
+      double tauTruthPtVis(0.);
+
+
+      if(tauItr->isAvailable<char>("IsTruthMatched") && static_cast<int>(tauItr->auxdata<char>("IsTruthMatched")) == 1)
       {
 	if(tauItr->isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
 	  auto tauTruthLink = tauItr->auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
@@ -123,6 +126,16 @@ bool DecorateTaus::apply(const top::Event & event) const{
 
 	    if( truthTau->isAvailable<unsigned int>("classifierParticleType") )
 	      tauTruthType = truthTau->auxdata<unsigned int>("classifierParticleType");
+
+	    if( truthTau->isAvailable<unsigned long>("numCharged") )
+	      tauTruthNumCharge = truthTau->auxdata<unsigned long>("numCharged");
+
+	    if( truthTau->isAvailable<float>("pt_vis_dressed") )
+	      tauTruthPt = truthTau->auxdata<float>("pt_vis_dressed");
+
+	    if( truthTau->isAvailable<double>("pt_vis") )
+	      tauTruthPtVis = truthTau->auxdata<double>("pt_vis");
+	    
 	  }
 	}
       }
@@ -130,6 +143,9 @@ bool DecorateTaus::apply(const top::Event & event) const{
     tauItr->auxdecor<int>("IsHadronic")     = isHadronic;
     tauItr->auxdecor<int>("tauTruthType")   = tauTruthType;
     tauItr->auxdecor<int>("tauTruthOrigin") = tauTruthOrigin;
+    tauItr->auxdecor<int>("tauTruthNumCharge") = tauTruthNumCharge;
+    tauItr->auxdecor<float>("tauTruthPt")     = tauTruthPt;
+    tauItr->auxdecor<double>("tauTruthPtVis")  = tauTruthPtVis;
 
     //EleOLR
     int passEleOLR(0);
