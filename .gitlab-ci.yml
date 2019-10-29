@@ -74,14 +74,14 @@ build:
   script:
     - set +e
     - pwd
-    - echo " ================      "
+    - echo " ================    "
     - ls
     - source setupScriptsAndPackages.sh
-    - echo " ----------------      "
+    - echo " ----------------    "
     - ls
     - pwd
     - cd $BUILD_DIR_ABS
-    - echo " ++++++++++++++++      "
+    - echo " ++++++++++++++++    "
     - ls
     - pwd
     - cmake ../../
