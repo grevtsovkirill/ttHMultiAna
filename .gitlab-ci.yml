@@ -18,7 +18,8 @@ variables:
   RUN_DIR_ABS: "${CI_PROJECT_DIR}/${RUN_DIR}"
 
 .analysis_image: &image
-  image: lukasheinrich/recast_cvmfs_assisted:20161231
+  #image: lukasheinrich/recast_cvmfs_assisted:20161231
+  image: atlas/analysisbase:${ANALYSIS_TOP_VERSION}
   tags:
     - cvmfs
   before_script:
