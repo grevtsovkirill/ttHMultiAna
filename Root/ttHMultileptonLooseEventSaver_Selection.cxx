@@ -49,7 +49,7 @@ void CopyIso(const xAOD::IParticle& part, ttHML::Lepton& lep) {
   if (part.isAvailable<short>("Iso_Gradient")) lep.isolationGradient = part.auxdataConst<short>("Iso_Gradient");
   if (part.isAvailable<short>("Iso_GradientLoose")) lep.isolationGradientLoose = part.auxdataConst<short>("Iso_GradientLoose");
   if (part.isAvailable<short>("Iso_TightTrackOnly")) lep.isolationTightTrackOnly = part.auxdataConst<short>("Iso_TightTrackOnly");
-//  if (part.isAvailable<short>("Iso_Loose")) lep.isolationFCLoose = part.auxdataConst<short>("Iso_FCLoose");
+  if (part.isAvailable<short>("Iso_FCLoose")) lep.isolationFCLoose = part.auxdataConst<short>("Iso_FCLoose");
 
 }
 

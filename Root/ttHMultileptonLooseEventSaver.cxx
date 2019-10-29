@@ -46,7 +46,7 @@ TH1I* m_tauCutflow;
     m_sfRetriever(nullptr),
     m_trigDecTool("Trig::TrigDecisionTool"),
     m_purwtool("CP::PileupReweightingTool"),
-    m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
+   // m_jetCleaningToolLooseBad("JetCleaningToolLooseBad"),
 //    m_electronToolsFactory(0),
     //m_muonToolsHandles("MuonToolsHandles"),
 //    m_muonToolsFactory(0),
@@ -192,7 +192,7 @@ template<typename VEC, typename FCN, typename TM> void WrapS(VEC& vec, FCN lambd
 		"Failed to open AMI X-section file");
   }
   std::vector<std::string> triggernames = config->allTriggers_Loose("triggers");
-  top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
+ // top::check( m_jetCleaningToolLooseBad.retrieve() , "Failed to retrieve JetCleaningToolLooseBad" );
 
 
 //Muon Tools
@@ -310,6 +310,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
 	  t->setProperty("CorrectionFileNameList",inputFiles).ignore();
 	  t->setProperty("CorrelationModel","TOTAL").ignore();
 	  t->setProperty("ForceDataType", (int)PATCore::ParticleDataType::Full).ignore();
+    t->setProperty("OutputLevel", MSG::DEBUG).ignore();
 	  top::check( t->initialize(), "TrigGlobalEfficiencyCorrectionTool:electronToolsFactory failed to initialize!" );
 	  auto& handles = j? m_electronSFToolsHandles : m_electronEffToolsHandles;
 	  handles.push_back(t->getHandle());
@@ -1272,7 +1273,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       Wrap2(jetvec, [](const xAOD::Jet& jet) { int this_jvt = -1; if(jet.isAvailable<char>("passJVT"))
         this_jvt = jet.auxdataConst<char>("passJVT"); return this_jvt;}, *systematicTree, "m_jet_passjvt");
       //Jet cleaning flag
-      Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
+    //  Wrap2(jetvec, [=](const xAOD::Jet& jet) { int keepJet = m_jetCleaningToolLooseBad->keep(jet); return (int)keepJet;}, *systematicTree, "m_jet_isLooseBad");
       //Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); return (float) (btagging ? btagging->MV1_discriminant() : 0.); },
       //  *systematicTree, "m_jet_flavor_weight_MV1");
     }
