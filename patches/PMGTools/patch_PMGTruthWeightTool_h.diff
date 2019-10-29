@@ -1,0 +1,11 @@
+--- /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-centos7-gcc8-opt/src/PhysicsAnalysis/AnalysisCommon/PMGTools/PMGTools/PMGTruthWeightTool.h	2019-10-24 03:20:51.000000000 +0200
++++ PMGTruthWeightTool.h	2019-10-25 20:17:50.000000001 +0200
+@@ -97,7 +97,7 @@ namespace PMGTools
+     StatusCode loadPOOLMetaData();
+ 
+     /// Validate weight caches
+-    StatusCode validateWeightLocationCaches() const;
++    StatusCode validateWeightLocationCaches() ;
+ 
+     /// Clear caches
+     void clearWeightLocationCaches();

@@ -8,21 +8,23 @@ setupATLAS
 cd ../
 asetup AnalysisTop,21.2.96,here
 cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-centos7-gcc8-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools/ ./
-cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-centos7-gcc8-opt/src/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools ./
+#cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-centos7-gcc8-opt/src/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools ./
 cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-centos7-gcc8-opt/src/PhysicsAnalysis/AnalysisCommon/PMGTools/ ./
 cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-centos7-gcc8-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCorrections/ ./
 # cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/TopPhys/xAOD/TopCPTools ./
 # cp -r /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.96/InstallArea/x86_64-slc6-gcc62-opt/src/PhysicsAnalysis/ElectronPhotonID/ElectronPhotonSelectorTools ./
 cd TopCPTools/Root/
-patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_cxx.diff
 patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopMuonCPTools_cxx.diff
 #patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopFlavorTaggingCPTools_cxx.diff
-cd ../TopCPTools/
-patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
-cd ../../ElectronPhotonSelectorTools/Root/
-patch < ../../ttHMultiAna/patches/ElectronPhotonSelectorTools/patch_AsgElectronChargeIDSelectorTool_cxx.diff
+# cd ../TopCPTools/
+# patch < ../../ttHMultiAna/patches/TopCPTools/patch_TopEgammaCPTools_h.diff
+cd ../../PMGTools/Root/
+patch < ../../ttHMultiAna/patches/PMGTools/patch_PMGTruthWeightTool_cxx.diff
+cd ../PMGTools/
+patch < ../../ttHMultiAna/patches/PMGTools/patch_PMGTruthWeightTool_h.diff
 cd ../ElectronPhotonSelectorTools/
-patch < ../../ttHMultiAna/patches/ElectronPhotonSelectorTools/patch_AsgElectronChargeIDSelectorTool_h.diff
+cd ../../TopCorrections/TopCorrections/
+patch < ../../ttHMultiAna/patches/TopCorrections/patch_ScaleFactorRetriever_h.diff
 cd ../../
 
 
