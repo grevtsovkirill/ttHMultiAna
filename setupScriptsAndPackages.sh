@@ -22,7 +22,6 @@ cd ../../PMGTools/Root/
 patch < ../../ttHMultiAna/patches/PMGTools/patch_PMGTruthWeightTool_cxx.diff
 cd ../PMGTools/
 patch < ../../ttHMultiAna/patches/PMGTools/patch_PMGTruthWeightTool_h.diff
-cd ../ElectronPhotonSelectorTools/
 cd ../../TopCorrections/TopCorrections/
 patch < ../../ttHMultiAna/patches/TopCorrections/patch_ScaleFactorRetriever_h.diff
 cd ../../

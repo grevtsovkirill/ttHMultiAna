@@ -61,8 +61,10 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
     const int totalLeptons = Electrons->size() +  Muons->size();
     int totalTaus = Taus->size();
     int totalCharge = 0;
-    int totalBJets_85 = 0;
-    int totalBJets_77 = 0;
+    int totalBJets_MV2c10_85 = 0;
+    int totalBJets_MV2c10_77 = 0;
+    int totalBJets_DL1_85 = 0;
+    int totalBJets_DL1_77 = 0;
     float El_pT_0 = 0.;
     float Mu_pT_0 = 0.;
     Int_t i(0),j(0);
@@ -78,8 +80,10 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
     }
     for (const auto JetItr: *Jets)  {
       if( JetItr->auxdataConst<char>("ttHpassTauOVR") ) {
-	if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_77"))totalBJets_77++;	
-	if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_85++;
+	if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_77"))totalBJets_MV2c10_77++;	
+	if(JetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_85"))totalBJets_MV2c10_85++;
+	if(JetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_77"))totalBJets_DL1_77++;	
+	if(JetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_85"))totalBJets_DL1_85++;
       }
     }
     tthevt->totalLeptons = totalLeptons;
@@ -104,10 +108,22 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
       if (totalLeptons+totalTaus< 2)
 	return false;
     } else if(m_params == "BJET_MV2C10_77") {
-      if (totalBJets_77==0)
+      if (totalBJets_MV2c10_77==0)
 	return false;
     } else if(m_params == "BJET_MV2C10_85") {
-      if (totalBJets_85==0)
+      if (totalBJets_MV2c10_85==0)
+	return false;
+    } else if(m_params == "BJET_DL1_77") {
+      if (totalBJets_DL1_77==0)
+	return false;
+    } else if(m_params == "BJET_DL1_85") {
+      if (totalBJets_DL1_85==0)
+	return false;
+    } else if(m_params == "BJET_OR_77") {
+      if (totalBJets_MV2c10_77==0&&totalBJets_DL1_77==0)
+	return false;
+    } else if(m_params == "BJET_OR_85") {
+      if (totalBJets_MV2c10_85==0&&totalBJets_DL1_85==0)
 	return false;
     } else if(m_params == "NONE") {
       return true;
