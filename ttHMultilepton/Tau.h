@@ -28,6 +28,7 @@ namespace ttHML {
     float SFLoose[MAXSYST];
 
 	float MV2c10;
+	float DL1;
 	float BDTEleScoreSigTrans;
 	float RNNJetScoreSigTrans;
     

@@ -136,6 +136,8 @@ namespace ttHML {
     std::vector<short> selected_jets_TOR;
     std::vector<short> selected_jetsOR_mv2c10_Ordrd;
     std::vector<short> selected_jets_TOR_mv2c10_Ordrd;
+    std::vector<short> selected_jetsOR_DL1_Ordrd;
+    std::vector<short> selected_jets_TOR_DL1_Ordrd;
 
 
 //Variables not for output

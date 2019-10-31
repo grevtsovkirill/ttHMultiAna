@@ -23,7 +23,8 @@ void ttHML::Tau::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int index
   CreateBranch(tree, &numTrack,        "tau_numTrack_",         index);
   CreateBranch(tree, &isHadronic,      "tau_isHadronic_",       index);
   CreateBranch(tree, &tagWeightBin,    "tau_tagWeightBin_",     index);
-  CreateBranch(tree, &MV2c10,	       "tau_MV2c10_",			index);
+  CreateBranch(tree, &MV2c10,	       "tau_MV2c10_",		index);
+  CreateBranch(tree, &DL1,	       "tau_DL1_",		index);
   CreateBranch(tree, &fromPV,          "tau_fromPV_",           index);
   CreateBranch(tree, &SFTight[0],      "tau_SFTight_",          index);
   CreateBranch(tree, &SFLoose[0],      "tau_SFLoose_",          index);

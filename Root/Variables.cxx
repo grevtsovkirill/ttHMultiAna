@@ -115,6 +115,8 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(selected_jets_TOR, "selected_jets_T");
   tree->makeOutputVariable(selected_jetsOR_mv2c10_Ordrd,"selected_jets_mv2c10_Ordrd");
   tree->makeOutputVariable(selected_jets_TOR_mv2c10_Ordrd,"selected_jets_T_mv2c10_Ordrd");
+  tree->makeOutputVariable(selected_jetsOR_DL1_Ordrd,"selected_jets_DL1_Ordrd");
+  tree->makeOutputVariable(selected_jets_TOR_DL1_Ordrd,"selected_jets_T_DL1_Ordrd");
 
   // scale factors
   //  tree->makeOutputVariable(lepSFIDLoose, "lepSFIDLoose");

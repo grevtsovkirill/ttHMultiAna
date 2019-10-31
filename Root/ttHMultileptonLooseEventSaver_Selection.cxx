@@ -698,9 +698,9 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	    if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_77")) {
 	      m_ttHEvent->nJets_OR_T_MV2c10_77++;
 	      if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_70")) {
-		      m_ttHEvent->nJets_OR_T_MV2c10_70++;
-		        if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_60")) {
-		          m_ttHEvent->nJets_OR_T_MV2c10_60++;
+		m_ttHEvent->nJets_OR_T_MV2c10_70++;
+		if (jetItr->auxdataConst<char>("isbtagged_MV2c10_FixedCutBEff_60")) {
+		  m_ttHEvent->nJets_OR_T_MV2c10_60++;
 		}
 	      }
 	    }
@@ -713,7 +713,7 @@ ttHMultileptonLooseEventSaver::CopyJets(const xAOD::JetContainer& goodJets) {
 	    if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_70")) {
 	      m_ttHEvent->nJets_OR_T_DL1_70++;
 	      if (jetItr->auxdataConst<char>("isbtagged_DL1_FixedCutBEff_60")) {
-		      m_ttHEvent->nJets_OR_T_DL1_60++;
+		m_ttHEvent->nJets_OR_T_DL1_60++;
 	      }
 	    }
 	  }
@@ -780,7 +780,8 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
   lep.isLoose  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Loose  && muonSelection.passedIDCuts(mu) );
   lep.isMedium = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Medium && muonSelection.passedIDCuts(mu) );
   lep.isTight  = (char) ( muonSelection.getQuality(mu) <= xAOD::Muon::Tight  && muonSelection.passedIDCuts(mu) );
-
+  lep.isHighPt = (char) ( muonSelection.passedHighPtCuts(mu) );
+  
   // lep.d0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->d0();
   // lep.z0 = mu.trackParticle(xAOD::Muon::TrackParticleType::CombinedTrackParticle)->z0();
   lep.d0 = mu.primaryTrackParticle()->d0();
@@ -1088,6 +1089,9 @@ ttHMultileptonLooseEventSaver::CopyTau(const xAOD::TauJet& xTau, ttHML::Tau& MLT
   static SG::AuxElement::Accessor<float> tau_mv2c10("MV2c10");
   MLTau.MV2c10 = ( tau_mv2c10.isAvailable(xTau) ) ? tau_mv2c10(xTau) : -2;
 
+  static SG::AuxElement::Accessor<float> tau_DL1("DL1");
+  MLTau.DL1 = ( tau_DL1.isAvailable(xTau) ) ? tau_DL1(xTau) : -2;
+
   static SG::AuxElement::Accessor<float> tau_width("width");
   MLTau.width = ( tau_width.isAvailable(xTau) ) ? tau_width(xTau) : -2;
 
@@ -1328,6 +1332,8 @@ void
   typedef std::tuple<double,  int> bWtSortvec_t;
   std::vector<bWtSortvec_t> OR_bWtSorter;
   std::vector<bWtSortvec_t> OR_T_bWtSorter;
+  std::vector<bWtSortvec_t> OR_DL1_bWtSorter;
+  std::vector<bWtSortvec_t> OR_T_DL1_bWtSorter;
 
   m_ttHEvent->selected_jetsOR.clear();
   m_ttHEvent->selected_jets_TOR.clear();
@@ -1335,10 +1341,14 @@ void
   m_ttHEvent->selected_jetsOR_mv2c10_Ordrd.clear();
   m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.clear();
 
+  m_ttHEvent->selected_jetsOR_DL1_Ordrd.clear();
+  m_ttHEvent->selected_jets_TOR_DL1_Ordrd.clear();
+
   for (const auto jetItr : goodJets) 
   {
-     double mv2c(0);  
-     jetItr->btagging()->MVx_discriminant("MV2c10", mv2c);
+    double mv2c(0),DL1(0);  
+    jetItr->btagging()->MVx_discriminant("MV2c10", mv2c);
+    DL1 = jetItr->auxdataConst<float>("AnalysisTop_DL1");
 
      if (!jetItr->template auxdataConst<char>("ttHpassOVR")) continue;
 
@@ -1348,11 +1358,13 @@ void
         if (goodp4 == allJets[idx]->p4()) {
   	   found = true;
   	   OR_bWtSorter.push_back(std::make_tuple(mv2c, idx));
+  	   OR_DL1_bWtSorter.push_back(std::make_tuple(DL1, idx));
   	   m_ttHEvent->selected_jetsOR.push_back(idx);
   	   if (jetItr->template auxdataConst<char>("ttHpassTauOVR")) 
   	   {
   	     m_ttHEvent->selected_jets_TOR.push_back(idx);
   	     OR_T_bWtSorter.push_back(std::make_tuple(mv2c,idx));
+  	     OR_T_DL1_bWtSorter.push_back(std::make_tuple(DL1,idx));
   	   }
   	   break;
   	}
@@ -1364,9 +1376,13 @@ void
   
   std::sort(OR_bWtSorter.begin(), OR_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
   std::sort(OR_T_bWtSorter.begin(), OR_T_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
+  std::sort(OR_DL1_bWtSorter.begin(), OR_DL1_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
+  std::sort(OR_T_DL1_bWtSorter.begin(), OR_T_DL1_bWtSorter.end(), [](bWtSortvec_t a, bWtSortvec_t b) { return std::get<0>(a)  > std::get<0>(b); });
   
   for(auto itr: OR_bWtSorter) { m_ttHEvent->selected_jetsOR_mv2c10_Ordrd.push_back( std::get<1>(itr));}
   for(auto itr: OR_T_bWtSorter) { m_ttHEvent->selected_jets_TOR_mv2c10_Ordrd.push_back( std::get<1>(itr));}
+  for(auto itr: OR_DL1_bWtSorter) { m_ttHEvent->selected_jetsOR_DL1_Ordrd.push_back( std::get<1>(itr));}
+  for(auto itr: OR_T_DL1_bWtSorter) { m_ttHEvent->selected_jets_TOR_DL1_Ordrd.push_back( std::get<1>(itr));}
 }
 
 void

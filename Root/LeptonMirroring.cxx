@@ -42,6 +42,7 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
   CreateBranch(tree, &isTight,  "lep_isTight_", index);
   CreateBranch(tree, &isMedium, "lep_isMedium_", index);
   CreateBranch(tree, &isLoose,  "lep_isLoose_", index);
+  CreateBranch(tree, &isHighPt,  "lep_isHighPt_", index);
   // isolation WPs
   // CreateBranch(tree, &isolationLooseTrackOnly,         "lep_isolationLooseTrackOnly_", index);
   // CreateBranch(tree, &isolationLoose,                  "lep_isolationLoose_", index);

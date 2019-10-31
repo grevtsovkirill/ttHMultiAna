@@ -91,6 +91,7 @@ namespace ttHML {
     char    isTight;
     char    isMedium;
     char    isLoose;
+    char    isHighPt;
     char    isHSG3Clear;
     char    isHSG3IsoClear;
     /* int    isolationLooseTrackOnly; */

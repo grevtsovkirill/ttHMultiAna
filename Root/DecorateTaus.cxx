@@ -190,9 +190,11 @@ void DecorateTaus::decoratetau(const top::Event& event)const{
     if( match.second and match.first < 0.3 ) {
       const xAOD::Jet& jet = *match.second;
       
-      auto btagging = jet.btagging(); double rv(-2);
+      auto btagging = jet.btagging(); double rv(-2),rv_DL1(-2);
       if(btagging) btagging->MVx_discriminant("MV2c10", rv);
+      if(jet.isAvailable<float>("AnalysisTop_DL1"))rv_DL1 = jet.auxdataConst<float>("AnalysisTop_DL1");
       tau->auxdecor<float>("MV2c10") = rv;
+      tau->auxdecor<float>("DL1") = rv_DL1;
 
       tau->auxdecor<int>("tagWeightBin") =
 	jet.isAvailable<int>("tagWeightBin_MV2c10_Continuous") ? jet.auxdataConst<int>("tagWeightBin_MV2c10_Continuous") : -5;

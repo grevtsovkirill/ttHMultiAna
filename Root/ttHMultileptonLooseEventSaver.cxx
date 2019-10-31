@@ -968,6 +968,8 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
         isqual=1; return isqual;},*systematicTree, "muon_isMedium");
       Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.getQuality(mu) <= xAOD::Muon::Tight && muonSelection.passedIDCuts(mu))
         isqual=1; return isqual;},*systematicTree, "muon_isTight");
+      Wrap2(muvec, [=](const xAOD::Muon& mu) { char isqual = 0; if(muonSelection.passedHighPtCuts(mu))
+        isqual=1; return isqual;},*systematicTree, "muon_isHighPt");
       // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("InnerDetectorPt"); },    *systematicTree, "muon_PtID");
       // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (float) mu.auxdata<float>("MuonSpectrometerPt"); }, *systematicTree, "muon_PtME");
       // Wrap2(muvec, [=](const xAOD::Muon& mu) { return (int) mu.allAuthors(); }, *systematicTree, "muon_allAuthor");
@@ -1313,7 +1315,7 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostWBosonsCount");},*systematicTree,"m_truth_jet_Wcount");
       Wrap2(jetvec, [&](const xAOD::Jet& jet) {return (int) this->getattr_truthJet<int>(jet,"GhostZBosonsCount");},*systematicTree,"m_truth_jet_Zcount");
     }*/
-
+    
 
     if(!m_doSystematics) {
       //Wrap2(jetvec, [](const xAOD::Jet& jet) { std::vector<float> tmp = jet.getAttribute<std::vector<float> >("JVF");
@@ -1331,6 +1333,10 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     Wrap2(jetvec, [](const xAOD::Jet& jet) { auto btagging = jet.btagging(); double rv(0);
       return (float) (btagging && btagging->MVx_discriminant("MV2c10", rv) ? rv : 0.); },
       *systematicTree, "m_jet_flavor_weight_MV2c10");
+
+    Wrap2(jetvec, [](const xAOD::Jet& jet) { double rv(-2); if(jet.isAvailable<float>("AnalysisTop_DL1"))
+      rv = jet.auxdataConst<float>("AnalysisTop_DL1"); return rv; }, *systematicTree, "m_jet_flavor_weight_DL1");
+
     //Wrap2(jetvec, [](const xAOD::Jet& jet) { return (jet.isAvailable<short>("ttHJetOVRStatus") ? jet.auxdataConst<short>("ttHJetOVRStatus") : 0); },
     //  *systematicTree, "m_jet_OVRStatus");
     if(!m_doSystematics) {
@@ -1400,6 +1406,10 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
         return tau.auxdata<float>("MV2c10");
       }, *systematicTree, std::string(tauprefix+"MV2c10").c_str());
+
+    Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
+        return tau.auxdata<float>("DL1");
+      }, *systematicTree, std::string(tauprefix+"DL1").c_str());
 
     Wrap2(tauvec, [&](const xAOD::TauJet& tau) {
 	return tau.auxdata<int>("tagWeightBin");
