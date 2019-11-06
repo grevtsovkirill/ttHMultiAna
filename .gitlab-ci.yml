@@ -20,7 +20,7 @@ variables:
 .analysis_image: &image
   #image: lukasheinrich/recast_cvmfs_assisted:20161231
   #image: atlas/analysisbase:${ANALYSIS_TOP_VERSION}
-  image: atlas/centos7-atlasos:${ANALYSIS_TOP_VERSION}
+  image: atlas/centos7-atlasos
   tags:
     - cvmfs
   before_script:
