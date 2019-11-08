@@ -1,0 +1,29 @@
+setupATLAS
+#Let’s create a new directory for this analysis from where we will work.
+mkdir YourFancyDirectory
+cd YourFancyDirectory
+#With cmake we have several directories we work with;
+mkdir build run source
+cd source
+git clone https://:@gitlab.cern.ch:8443/atlasHTop/ttHMultiAna.git -b LQLQTaus
+
+cd ttHMultiAna/
+source setupScriptsAndPackages.sh
+cd     build
+cmake ../source
+cmake --build ./
+source */setup.sh
+
+
+cd ../run
+cp ../source/ttHMultiAna/share/generic_config_LQ_*txt .
+cp -r ../source/ttHMultiAna/scripts/Grid/ ./
+
+You might had better test production before submitting jobs on Grid.
+eg.
+echo /afs/cern.ch/work/y/yshimoga/public/mc16_13TeV/DAOD_TOPQ1.17829149._001503.pool.root.1 > infile_mc16a.txt
+
+## Nevent -> you should change NEvent to ~1000.
+top-xaod generic_config_LQ_sys_mc16a.txt infile_mc16a.txt
+
+It will crush while its running due to some errors about root or c++
