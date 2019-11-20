@@ -1318,13 +1318,102 @@ for (const auto& systvar : m_lep_trigger_sf_names) {
     std::string tauprefix = "m_tau_";
     if(!m_doSystematics) {
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.pt(); },          *systematicTree, std::string(tauprefix+"pt").c_str());
+      Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.ptFinalCalib(); },          *systematicTree, std::string(tauprefix+"ptFinalCalib").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.eta(); },         *systematicTree, std::string(tauprefix+"eta").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.phi(); },         *systematicTree, std::string(tauprefix+"phi").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.e(); },           *systematicTree, std::string(tauprefix+"E").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.charge(); },              *systematicTree, std::string(tauprefix+"charge").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nTracks(); },     *systematicTree, std::string(tauprefix+"numTrack").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.isAvailable<float>("width") ? tau.auxdata<float>("width") : -4; },     *systematicTree, std::string(tauprefix+"jetWidth").c_str());
-     // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
+      //ANTONIO POLICICCHIO FOR FTTF TOOL
+      Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+          float TrackWidthPt1000_PV = -999;
+          if(tau.isAvailable<std::vector<float>>("seedTrackWidthPt1000")) {
+            std::vector<float> vTrkWidth1000 = tau.auxdata<std::vector<float>>("seedTrackWidthPt1000");
+            int PV_index = 0;
+            for (const xAOD::Vertex* vtx : *m_vertices){
+              if(vtx->vertexType() == xAOD::VxType::PriVtx) {
+                TrackWidthPt1000_PV = vTrkWidth1000[PV_index];
+              }
+              PV_index++;
+            }
+          }
+          return TrackWidthPt1000_PV; },
+          *systematicTree, std::string(tauprefix+"TrackWidthPt1000PV").c_str());
+      Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+          float TrackWidthPt1000_TauV = -999;
+          if(tau.isAvailable<std::vector<float>>("seedTrackWidthPt1000")) {
+            std::vector<float> vTrkWidth1000 = tau.auxdata<std::vector<float>>("seedTrackWidthPt1000");
+            if (tau.nTracks() && tau.tauTrackLinks().size() && tau.tauTrackLinks().at(0).isValid()) {
+              const xAOD::TrackParticle* trackPart(NULL);
+              trackPart = (tau.track(0))->track();
+              if(trackPart->vertex()) {
+                int TauV_index = 0;
+                for (const xAOD::Vertex* vtx : *m_vertices){
+                  if(vtx->x()==trackPart->vertex()->x()) {
+                    TrackWidthPt1000_TauV = vTrkWidth1000[TauV_index];
+                    break; 
+                  }
+                  TauV_index++;
+                }
+              } else {
+                int PV_index = 0;
+                for (const xAOD::Vertex* vtx : *m_vertices){
+                  if(vtx->vertexType() == xAOD::VxType::PriVtx) {
+                    TrackWidthPt1000_TauV = vTrkWidth1000[PV_index];
+                  }
+                  PV_index++;
+                }
+              }
+            }
+          }
+          return TrackWidthPt1000_TauV; },
+          *systematicTree, std::string(tauprefix+"TrackWidthPt1000TauV").c_str());
+      Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+          float TrackWidthPt500_PV = -999;
+          if(tau.isAvailable<std::vector<float>>("seedTrackWidthPt500")) {
+            std::vector<float> vTrkWidth500 = tau.auxdata<std::vector<float>>("seedTrackWidthPt500");
+            int PV_index = 0;
+            for (const xAOD::Vertex* vtx : *m_vertices){
+              if(vtx->vertexType() == xAOD::VxType::PriVtx) {
+                TrackWidthPt500_PV = vTrkWidth500[PV_index];
+              }
+              PV_index++;
+            }
+          }
+          return TrackWidthPt500_PV; },
+          *systematicTree, std::string(tauprefix+"TrackWidthPt500PV").c_str());
+      Wrap2(tauvec, [=](const xAOD::TauJet& tau) {
+          float TrackWidthPt500_TauV = -999;
+          if(tau.isAvailable<std::vector<float>>("seedTrackWidthPt500")) {
+            std::vector<float> vTrkWidth500 = tau.auxdata<std::vector<float>>("seedTrackWidthPt500");
+            if (tau.nTracks() && tau.tauTrackLinks().size() && tau.tauTrackLinks().at(0).isValid()) {
+              const xAOD::TrackParticle* trackPart(NULL);
+              trackPart = (tau.track(0))->track();
+              if(trackPart->vertex()) {
+                int TauV_index = 0;
+                for (const xAOD::Vertex* vtx : *m_vertices){
+                  if(vtx->x()==trackPart->vertex()->x()) {
+                    TrackWidthPt500_TauV = vTrkWidth500[TauV_index];
+                    break; 
+                  }
+                  TauV_index++;
+                }
+              } else {
+                int PV_index = 0;
+                for (const xAOD::Vertex* vtx : *m_vertices){
+                  if(vtx->vertexType() == xAOD::VxType::PriVtx) {
+                    TrackWidthPt500_TauV = vTrkWidth500[PV_index];
+                  }
+                  PV_index++;
+                }
+              }
+            }
+          }
+          return TrackWidthPt500_TauV; },
+          *systematicTree, std::string(tauprefix+"TrackWidthPt500TauV").c_str());
+      //END ANTONIO
+      // Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (float) tau.nWideTracks(); }, *systematicTree, std::string(tauprefix+"numWideTrack").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScore); },         *systematicTree, std::string(tauprefix+"BDTJetScore").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return tau.discriminant(xAOD::TauJetParameters::TauID::BDTJetScoreSigTrans); }, *systematicTree, std::string(tauprefix+"BDTJetScoreSigTrans").c_str());
       Wrap2(tauvec, [](const xAOD::TauJet& tau) {return (int) tau.isTau(xAOD::TauJetParameters::IsTauFlag::JetBDTSigLoose); },   *systematicTree, std::string(tauprefix+"JetBDTSigLoose").c_str());
