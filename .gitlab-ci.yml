@@ -101,18 +101,18 @@ build:
 run_ttbar:
   <<: *run
   variables: 
-    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.19397112._000280.pool.root.1
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.19397146._000025.pool.root.1
     config_file: generic_config_mc16a.txt
     
 run_data:
   <<: *run
   variables:
-    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/data18_13TeV:DAOD_HIGG8D1.19406133._000440.pool.root.1
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/data18_13TeV:DAOD_HIGG8D1.19407296._000142.pool.root.1
     config_file: generic_config_data.txt
     
 run_sys:
   <<: *run
   variables:
-    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.19397112._000280.pool.root.1
+    eos_file: root://eosuser.cern.ch//eos/user/n/narayan/tthml_ci/DAOD_HIGG8D1/mc16_13TeV:DAOD_HIGG8D1.19397146._000025.pool.root.1
     config_file: generic_config_systmc16a.txt
 
