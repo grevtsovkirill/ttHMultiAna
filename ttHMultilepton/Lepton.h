@@ -121,9 +121,8 @@ namespace ttHML {
     char    isBrems;
    
     
-    float   chargeIDBDTLoose;
-    float   chargeIDBDTMedium;
-    float   chargeIDBDTTight;
+    char  chargeIDBDTLoose;
+    double chargeIDBDTResult;
     //float   promptLeptonIso_TagWeight;
 //    short   promptLeptonIso_sv1_jf_ntrkv;
 //    short   promptLeptonIso_TrackJetNTrack;
