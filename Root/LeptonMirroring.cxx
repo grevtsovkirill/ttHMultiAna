@@ -92,8 +92,7 @@ void ttHML::Lepton::BootstrapTree(std::shared_ptr<top::TreeManager> tree, int in
 
 
   CreateBranch(tree, &chargeIDBDTLoose, "lep_chargeIDBDTLoose_", index);
-  CreateBranch(tree, &chargeIDBDTMedium, "lep_chargeIDBDTMedium_", index);
-  CreateBranch(tree, &chargeIDBDTTight, "lep_chargeIDBDTTight_", index);
+  CreateBranch(tree, &chargeIDBDTResult, "lep_chargeIDBDTResult_", index);
 //  CreateBranch(tree, &promptLeptonIso_TagWeight, "lep_promptLeptonIso_TagWeight_", index);
 //  CreateBranch(tree, &promptLeptonIso_sv1_jf_ntrkv, "lep_promptLeptonIso_sv1_jf_ntrkv_", index);
 //  CreateBranch(tree, &promptLeptonIso_TrackJetNTrack, "lep_promptLeptonIso_TrackJetNTrack_", index);

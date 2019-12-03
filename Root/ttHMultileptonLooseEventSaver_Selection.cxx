@@ -492,14 +492,11 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 
 
 
-  static SG::AuxElement::Accessor<float> chargeIDBDTLoose("chargeIDBDTLoose");
+  static SG::AuxElement::Accessor<char> chargeIDBDTLoose("chargeIDBDTLoose");
   lep.chargeIDBDTLoose = ( chargeIDBDTLoose.isAvailable(el) ) ? chargeIDBDTLoose(el) : -99;
 
-  static SG::AuxElement::Accessor<float> chargeIDBDTMedium("chargeIDBDTMedium");
-  lep.chargeIDBDTMedium = ( chargeIDBDTMedium.isAvailable(el) ) ? chargeIDBDTMedium(el) : -99;
-
-  static SG::AuxElement::Accessor<float> chargeIDBDTTight("chargeIDBDTTight");
-  lep.chargeIDBDTTight = ( chargeIDBDTTight.isAvailable(el) ) ? chargeIDBDTTight(el) : -99;
+  static SG::AuxElement::Accessor<double> chargeIDBDTResult("chargeIDBDTResult");
+  lep.chargeIDBDTResult= ( chargeIDBDTResult.isAvailable(el) ) ? chargeIDBDTResult(el) : -99;
 
   static SG::AuxElement::Accessor<char> isTruthMatched("isTruthMatched");
   lep.isTruthMatched = ( isTruthMatched.isAvailable(el) ) ? isTruthMatched(el) : -1;

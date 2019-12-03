@@ -140,9 +140,8 @@ bool DecorateElectrons::apply(const top::Event & event) const{
       }
 
     
-    elItr->auxdecor<float>("chargeIDBDTLoose") = (float)m_electronChargeIDLoose.calculate(elItr);
-    elItr->auxdecor<float>("chargeIDBDTMedium") = (float)m_electronChargeIDMedium.calculate(elItr);
-    elItr->auxdecor<float>("chargeIDBDTTight") = (float)m_electronChargeIDTight.calculate(elItr);
+    elItr->auxdecor<char>("chargeIDBDTLoose")       =  elItr->auxdataConst<char>("DFCommonElectronsECIDS");
+    elItr->auxdecor<double>("chargeIDBDTResult")    =  elItr->auxdataConst<double>("DFCommonElectronsECIDSResult");
     
     // Tracks associated to the electron
 
