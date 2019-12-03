@@ -890,7 +890,6 @@ if (m_config->saveOnlySelectedEvents() && !event.m_saveEvent){
     CopyLeptons(*Electrons,*Muons);
     CopyJets(*Jets);
     //MakeJetIndices(*Jets,event.m_jets);
-    std::cout<<"aaaaaa"<<std::to_string(event.m_isLoose)<<std::endl;
     CopyTaus(*Taus);
     CopyHT(*Electrons,*Muons,*Jets,*Taus);
     CheckIsBlinded();
