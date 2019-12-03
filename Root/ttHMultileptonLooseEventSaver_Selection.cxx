@@ -492,7 +492,7 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
 
 
 
-  static SG::AuxElement::Accessor<float> chargeIDBDTLoose("chargeIDBDTLoose");
+  static SG::AuxElement::Accessor<char> chargeIDBDTLoose("chargeIDBDTLoose");
   lep.chargeIDBDTLoose = ( chargeIDBDTLoose.isAvailable(el) ) ? chargeIDBDTLoose(el) : -99;
 
   static SG::AuxElement::Accessor<double> chargeIDBDTResult("chargeIDBDTResult");
