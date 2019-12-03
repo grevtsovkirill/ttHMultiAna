@@ -39,9 +39,9 @@ bool SignalRegionPreselection::apply(const top::Event& event) const {
     const xAOD::MuonContainer* Muons(nullptr);
     const xAOD::TauJetContainer* Taus(nullptr);
 
-    if(!m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(m_event->m_hashValue) ) || 
-                !m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue) ) || 
-                !m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue) ) ){
+    if(!m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(m_event->m_hashValue) + "_" + std::to_string(event.m_isLoose)) || 
+                !m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose)) || 
+                !m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose)) ){
       std::cout<< "Failed to retrieve leptons, skip event" << std::endl;
 
       std::cout << "-----> more info: <params: " << m_params

@@ -238,20 +238,20 @@ jetItr->auxdataConst<char>("ttHpassTauOVR");
   }
 
 
-  std::string m_OR_electrons1 = m_OR_electrons + "_"+ m_config->systematicName(event.m_hashValue) ;
+  std::string m_OR_electrons1 = m_OR_electrons + "_"+ m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose) ;
   std::sort (tthevt->selected_OR_electrons->begin(), tthevt->selected_OR_electrons->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_OR_electrons, m_OR_electrons1),"Could not record Selected Electrons after overlap removal");
 
 
-  std::string m_OR_muons1 = m_OR_muons + "_"+ m_config->systematicName(event.m_hashValue) ;
+  std::string m_OR_muons1 = m_OR_muons + "_"+ m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose) ;
   std::sort (tthevt->selected_OR_muons->begin(), tthevt->selected_OR_muons->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_OR_muons, m_OR_muons1),"Could not record Selected Muons after overlap removal");
 
-  std::string m_OR_jets1 = m_OR_jets + "_"+ m_config->systematicName(event.m_hashValue) ;
+  std::string m_OR_jets1 = m_OR_jets + "_"+ m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose) ;
   std::sort (tthevt->selected_OR_jets->begin(), tthevt->selected_OR_jets->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_OR_jets, m_OR_jets1),"Could not record Selected Jets after overlap removal");
 
-  std::string m_OR_taus1 = m_OR_taus + "_"+ m_config->systematicName(event.m_hashValue) ;
+  std::string m_OR_taus1 = m_OR_taus + "_"+ m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose) ;
   std::sort (tthevt->selected_OR_taus->begin(), tthevt->selected_OR_taus->end(), ttHMLAsgHelper::pt_sort());
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_OR_taus, m_OR_taus1),"Could not record Selected Taus after overlap removal");
 

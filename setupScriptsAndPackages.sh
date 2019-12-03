@@ -5,7 +5,7 @@ echo "This must be run in the Base directory of ttHMultiAna. ie. GFW1/source/ttH
 #Setting up AnalysisTop release in source directory and copying patched packages
 cd ../
 source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-asetup AnalysisTop,21.2.96,here
+asetup AnalysisTop,21.2.99,here
 
 #Patching MuonEfficiencyCorrections
 echo "Patching ElectronPhotonSelectorTool..."

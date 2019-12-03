@@ -119,9 +119,9 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
 
 
   //nominal weights
-  tree->makeOutputVariable(lepSFTrigLoose[0], "lepSFTrigLoose");
+  //tree->makeOutputVariable(lepSFTrigLoose[0], "lepSFTrigLoose");
   tree->makeOutputVariable(lepSFTrigTight[0], "lepSFTrigTight");
-  tree->makeOutputVariable(lepSFTrigTightLoose[0], "lepSFTrigTightLoose");
+/*  tree->makeOutputVariable(lepSFTrigTightLoose[0], "lepSFTrigTightLoose");
   tree->makeOutputVariable(lepSFTrigLooseTight[0], "lepSFTrigLooseTight");
   tree->makeOutputVariable(lepEffTrigLoose[0], "lepEffTrigLoose");
   tree->makeOutputVariable(lepEffTrigTight[0], "lepEffTrigTight");
@@ -130,7 +130,7 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
   tree->makeOutputVariable(lepDataEffTrigLoose[0], "lepDataEffTrigLoose");
   tree->makeOutputVariable(lepDataEffTrigTight[0], "lepDataEffTrigTight");
   tree->makeOutputVariable(lepDataEffTrigTightLoose[0], "lepDataEffTrigTightLoose");
-  tree->makeOutputVariable(lepDataEffTrigLooseTight[0], "lepDataEffTrigLooseTight");
+  tree->makeOutputVariable(lepDataEffTrigLooseTight[0], "lepDataEffTrigLooseTight");*/
   tree->makeOutputVariable(lepSFObjLoose [top::topSFSyst::nominal], "lepSFObjLoose");
   tree->makeOutputVariable(lepSFObjTight [top::topSFSyst::nominal], "lepSFObjTight");
   tree->makeOutputVariable(tauSFTight    [top::topSFSyst::nominal], "tauSFTight");
@@ -143,9 +143,9 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
       ++nTrig;
       if( systvar.second == "nominal" ) continue; //nominal is done outside loop
       std::string thisname = "_" + systvar.second;
-      tree->makeOutputVariable(lepSFTrigLoose[nTrig], "lepSFTrigLoose" + thisname);
+     // tree->makeOutputVariable(lepSFTrigLoose[nTrig], "lepSFTrigLoose" + thisname);
       tree->makeOutputVariable(lepSFTrigTight[nTrig], "lepSFTrigTight" + thisname);
-      tree->makeOutputVariable(lepSFTrigTightLoose[nTrig], "lepSFTrigTightLoose" + thisname);
+      /*tree->makeOutputVariable(lepSFTrigTightLoose[nTrig], "lepSFTrigTightLoose" + thisname);
       tree->makeOutputVariable(lepSFTrigLooseTight[nTrig], "lepSFTrigLooseTight" + thisname);
       tree->makeOutputVariable(lepEffTrigLoose[nTrig], "lepEffTrigLoose" + thisname);
       tree->makeOutputVariable(lepEffTrigTight[nTrig], "lepEffTrigTight" + thisname);
@@ -154,7 +154,7 @@ void Variables::BootstrapTree(std::shared_ptr<top::TreeManager> tree,const ttHMu
       tree->makeOutputVariable(lepDataEffTrigLoose[nTrig], "lepDataEffTrigLoose" + thisname);
       tree->makeOutputVariable(lepDataEffTrigTight[nTrig], "lepDataEffTrigTight" + thisname);
       tree->makeOutputVariable(lepDataEffTrigTightLoose[nTrig], "lepDataEffTrigTightLoose" + thisname);
-      tree->makeOutputVariable(lepDataEffTrigLooseTight[nTrig], "lepDataEffTrigLooseTight" + thisname);
+      tree->makeOutputVariable(lepDataEffTrigLooseTight[nTrig], "lepDataEffTrigLooseTight" + thisname);*/
     }
   }
     if(doSFSystematics) {

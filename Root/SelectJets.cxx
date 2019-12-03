@@ -90,7 +90,7 @@ bool SelectJets::apply(const top::Event & event) const{
   //if(m_config->systematicName(event.m_hashValue)!="nominal"){
     //m_jets1 = m_jets + "_"+ m_config->systematicName(event.m_hashValue) ;
   //}
-  std::string m_jets1 = m_jets + "_"+ m_config->systematicName(event.m_hashValue) ;
+  std::string m_jets1 = m_jets + "_"+ m_config->systematicName(event.m_hashValue)  + "_" + std::to_string(event.m_isLoose);
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_jets,m_jets1), "recording Selected_jets failed.");
 
   //std::string jetname = m_config->sgKeyJets();

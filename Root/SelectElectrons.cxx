@@ -96,11 +96,7 @@ bool SelectElectrons::apply(const top::Event & event) const{
   std::sort (tthevt->selected_electrons->begin(), tthevt->selected_electrons->end(), ttHMLAsgHelper::pt_sort());
  // m_asgHelper->RecordElectrons(tthevt->selected_electrons,m_electrons);
   //top::check(m_asgHelper->evtStore()->record(tthevt->selected_electrons,"Selected_Electrons"), "recording Selected_Electrons failed.");
-  std::string m_electrons1;
-  m_electrons1 = m_electrons;
-  if(m_config->systematicName(event.m_hashValue)!="nominal"){
-    m_electrons1 = m_electrons + "_"+ m_config->systematicName(event.m_hashValue) ;
-  }
+  std::string m_electrons1 = m_electrons + "_"+ m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose);
 
   top::check(m_asgHelper->evtStore()->record(tthevt->selected_electrons,m_electrons1), "recording Selected_Electrons failed.");
 

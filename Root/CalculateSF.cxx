@@ -61,9 +61,9 @@ bool CalculateSF::apply(const top::Event& event) const {
 	const xAOD::MuonContainer* Muons(nullptr);
 	const xAOD::TauJetContainer* Taus(nullptr);
 	
-    top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Electrons");
-	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Muons");
-	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue)),"Failed to retrieve Taus"); 
+    top::check( m_asgHelper->evtStore()->retrieve(Electrons,"SelectedORElectrons_"+m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose)),"Failed to retrieve Electrons");
+	top::check( m_asgHelper->evtStore()->retrieve(Muons,"SelectedORMuons_"+m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose)),"Failed to retrieve Muons");
+	top::check( m_asgHelper->evtStore()->retrieve(Taus,"SelectedORTaus_"+m_config->systematicName(event.m_hashValue) + "_" + std::to_string(event.m_isLoose)),"Failed to retrieve Taus"); 
 
 
 

@@ -596,21 +596,21 @@ CopyElectron(const xAOD::Electron& el, ttHML::Lepton& lep) {
   for (const auto& systvar : m_lep_sf_names) {
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue; // break after doing nominal
-    lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false);
-    lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true);
-    lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false);
+ //   lep.SFIDLoose[ivar] = m_sfRetriever->electronSF_ID(el, ivar, false);
+  //  lep.SFIDTight[ivar] = m_sfRetriever->electronSF_ID(el, ivar, true);
+  //  lep.SFTrigLoose[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, false);
     lep.SFTrigTight[ivar] = m_sfRetriever->electronSF_Trigger(el, ivar, true);
-    if (lep.SFTrigLoose[ivar] == 0) lep.SFTrigLoose[ivar] = 1;
+ //   if (lep.SFTrigLoose[ivar] == 0) lep.SFTrigLoose[ivar] = 1;
     if (lep.SFTrigTight[ivar] == 0) lep.SFTrigTight[ivar] = 1;
-    lep.SFIsoLoose[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, false);
-    lep.SFIsoTight[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, true);
-    lep.SFReco[ivar] = m_sfRetriever->electronSF_Reco(el, ivar);
-    lep.SFTTVA[ivar] = 1;
+  //  lep.SFIsoLoose[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, false);
+  //  lep.SFIsoTight[ivar] = m_sfRetriever->electronSF_Isol(el, ivar, true);
+  //  lep.SFReco[ivar] = m_sfRetriever->electronSF_Reco(el, ivar);
+  //  lep.SFTTVA[ivar] = 1;
     // I know the loose/tight swap looks weird, but it's intentional
-    lep.EffTrigLoose[ivar] = electronEff_Trigger(el, m_config->electronID(), ivar);
-    lep.EffTrigTight[ivar] = electronEff_Trigger(el, m_config->electronIDLoose(), ivar);
+  //  lep.EffTrigLoose[ivar] = electronEff_Trigger(el, m_config->electronID(), ivar);
+  //  lep.EffTrigTight[ivar] = electronEff_Trigger(el, m_config->electronIDLoose(), ivar);
     // Everything except trigger
-    lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFReco[ivar];
+  //  lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFReco[ivar];
     lep.SFObjTight[ivar] = lep.SFIDTight[ivar]*lep.SFIsoTight[ivar]*lep.SFReco[ivar];
   }
 }
@@ -1038,18 +1038,18 @@ void ttHMultileptonLooseEventSaver::CopyMuon(const xAOD::Muon& mu,     ttHML::Le
     auto ivar = systvar.first;
     if( !m_doSFSystematics && ivar != 0 ) continue;
     // I know the loose/tight swap looks weird, but it's intentional
-    lep.SFIDLoose[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, false);
+  //  lep.SFIDLoose[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, false);
     lep.SFIDTight[ivar] = m_sfRetriever->muonSF_ID(mu, ivar, true);
-    lep.SFTrigLoose[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, false);
-    lep.SFTrigTight[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, true);
-    lep.SFIsoLoose[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, false);
-    lep.SFIsoTight[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, true);
-    lep.SFTTVA[ivar] = m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0;
-    lep.SFReco[ivar] = 1;
-    lep.EffTrigLoose[ivar] = muonEff_Trigger(mu, m_config->muonQuality(), ivar);
-    lep.EffTrigTight[ivar] = muonEff_Trigger(mu, m_config->muonQualityLoose(), ivar);
+  //  lep.SFTrigLoose[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, false);
+  //  lep.SFTrigTight[ivar] = m_sfRetriever->muonSF_Trigger(mu, ivar, true);
+  //  lep.SFIsoLoose[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, false);
+  //  lep.SFIsoTight[ivar] = m_sfRetriever->muonSF_Isol(mu, ivar, true);
+  //  lep.SFTTVA[ivar] = m_isMC ? m_sfRetriever->muonSF_TTVA(mu, ivar) : 1.0;
+  //  lep.SFReco[ivar] = 1;
+  //  lep.EffTrigLoose[ivar] = muonEff_Trigger(mu, m_config->muonQuality(), ivar);
+  //  lep.EffTrigTight[ivar] = muonEff_Trigger(mu, m_config->muonQualityLoose(), ivar);
   // Everything except trigger
-    lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFTTVA[ivar];
+  //  lep.SFObjLoose[ivar] = lep.SFIDLoose[ivar]*lep.SFIsoLoose[ivar]*lep.SFTTVA[ivar];
     lep.SFObjTight[ivar] = lep.SFIDTight[ivar]*lep.SFIsoTight[ivar]*lep.SFTTVA[ivar];
   }
 
@@ -1334,7 +1334,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	    m_ttHEvent->lepSFTrigTight[nTrig] = sf_tt;
 	  }
 
-	double dummy,eff_tt = 1.; //TightTight EFF
+/*	double dummy,eff_tt = 1.; //TightTight EFF
 	auto cc_Ett = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myParticles, dummy, eff_tt);
 	if(cc_Ett==CP::CorrectionCode::Ok)
 	  {
@@ -1429,14 +1429,14 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	    //std::cout << "2LSSLooseTight:TriggerEff is for sys " << systvar.second << " : " << eff_lt << std::endl;
 	  }
 	
-
+*/
       }
       
     }
     break;
   case 1:
     {
-      for (int ilep = 0; ilep < m_ttHEvent->total_leptons; ++ilep) {
+     /* for (int ilep = 0; ilep < m_ttHEvent->total_leptons; ++ilep) {
 	for (const auto& systvar : m_lep_sf_names) {
 	  auto ivar = systvar.first;
 	  oneMinusTrigEffLoose[ivar][0] *= (1-m_leptons[ilep].EffTrigLoose[ivar]);
@@ -1454,7 +1454,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	if (ivar == top::topSFSyst::nominal) continue;
 	m_ttHEvent->lepSFTrigLoose[ivar] = oneMinusTrigEffLoose[ivar][0] != 1 ? (1-oneMinusTrigEffLoose[ivar][1])/(1-oneMinusTrigEffLoose[ivar][0])/m_ttHEvent->lepSFTrigLoose[0] : 1;
 	m_ttHEvent->lepSFTrigTight[ivar] = oneMinusTrigEffTight[ivar][0] != 1 ? (1-oneMinusTrigEffTight[ivar][1])/(1-oneMinusTrigEffTight[ivar][0])/m_ttHEvent->lepSFTrigTight[0] : 1;
-      }
+      }*/
     }
     break;
   case 3:
@@ -1488,7 +1488,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	    //std::cout << "3LTight:TriggerScaleFactor is: " << sf_ltt << std::endl;
 	  }
 	
-	double dummy,eff_ltt = 1.; //TightTight EFF
+	/*double dummy,eff_ltt = 1.; //TightTight EFF
 	auto cc_Eltt = m_trigGlobEffCorr[nTrig]->getEfficiency(runNumber, myParticles, dummy, eff_ltt);
 	if(cc_Eltt==CP::CorrectionCode::Ok)
 	  {
@@ -1517,7 +1517,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	    m_ttHEvent->lepEffTrigLoose[nTrig] = eff_lll;
 	    m_ttHEvent->lepDataEffTrigLoose[nTrig] = dummy_2;
 	    //std::cout << "3LLooseLoose:TriggerEff is for sys " << systvar.second << " : " << eff_lll << std::endl;
-	  }
+	  }*/
 	}
   }
     break;
@@ -1535,7 +1535,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  }
 	}
 
-	double sf_tttt = 1.;
+/*	double sf_tttt = 1.;
 	auto cc_tttt = m_trigGlobEffCorr[nTrig]->getEfficiencyScaleFactor(runNumber, myParticles, sf_tttt);
 	if(cc_tttt==CP::CorrectionCode::Ok)
 	  {
@@ -1549,7 +1549,7 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
 	  {
 	    m_ttHEvent->lepSFTrigLoose[nTrig] = sf_llll;
 	    //std::cout << "4LLooseLoose:TriggerScaleFactor is: " << sf_llll << std::endl;
-	  }	
+	  }	*/
      }
 	}
     break;
@@ -1560,10 +1560,10 @@ ttHMultileptonLooseEventSaver::doEventTrigSFs(const xAOD::ElectronContainer& Ele
   //naaaaan
   for ( auto syst : m_lep_sf_names ) {
     auto ivar = syst.first;
-      if( m_ttHEvent->lepSFTrigLoose[ivar] != m_ttHEvent->lepSFTrigLoose[ivar] ) {
+     // if( m_ttHEvent->lepSFTrigLoose[ivar] != m_ttHEvent->lepSFTrigLoose[ivar] ) {
 	//std::cout<<"nanananana"<<std::endl;
-	m_ttHEvent->lepSFTrigLoose[ivar] = 1;
-      }
+	//m_ttHEvent->lepSFTrigLoose[ivar] = 1;
+    //  }
       if( m_ttHEvent->lepSFTrigTight[ivar] != m_ttHEvent->lepSFTrigTight[ivar] ) {
 	//std::cout<<"nanananana"<<std::endl;
 	m_ttHEvent->lepSFTrigTight[ivar] = 1;
